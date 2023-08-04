@@ -9,11 +9,11 @@ import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
-  title: 'Sign in to Luminar',
-  description: 'Sign in to your Luminar account.',
+  title: 'Sign up to Luminar',
+  description: 'Sign up for a new Luminar account.',
 };
 
-export default async function SignIn() {
+export default async function SignUp() {
   // Create a Supabase client configured to use cookies
   const supabase = createServerComponentClient({ cookies });
 
@@ -31,9 +31,9 @@ export default async function SignIn() {
     <div className='flex min-h-screen items-center justify-center'>
       <Card className='w-full max-w-md p-8'>
         <CardHeader className='flex flex-col items-center space-y-2'>
-          <CardTitle>Sign In</CardTitle>
+          <CardTitle>Sign up</CardTitle>
           <CardDescription className='text-center'>
-            Sign in with your email address to continue.
+            Sign up with your email address to continue.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -41,9 +41,9 @@ export default async function SignIn() {
         </CardContent>
         <CardFooter className='flex flex-col items-center'>
           <CardDescription className='text-center'>
-            Don&apos;t have an account?{' '}
-            <Link href='/signup' className='font-semibold hover:underline'>
-              Sign Up
+            Already have an account?{' '}
+            <Link href='/login' className='font-semibold hover:underline'>
+              Sign In
             </Link>
           </CardDescription>
         </CardFooter>
