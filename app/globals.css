@@ -5,28 +5,28 @@
 @layer base {
   :root {
     --background: 0 0% 100%; 
-    --foreground: 220 23% 5%;
+    --foreground: 220 26% 14%;
  
-    --muted: 220, 14%, 96%;
+    --muted: 210 38% 95%;
     --muted-foreground: 215.4 16.3% 46.9%;
  
     --popover: 0 0% 100%;
-    --popover-foreground: 220 23% 5%;
+    --popover-foreground: 220 26% 14%;
  
     --card: 0 0% 100%;
-    --card-foreground: 220 23% 5%;
+    --card-foreground: 220 26% 14%;
  
-    --border: 216, 12%, 84%;
-    --input: 216, 12%, 84%;
+    --border: 216 13% 84%;
+    --input: 216 13% 84%;
  
-    --primary: 220 23% 5%;
+    --primary: 220 26% 14%;
     --primary-foreground: 210 40% 98%;
  
-    --secondary: 220, 14%, 96%;
-    --secondary-foreground: 220 23% 5%;
+    --secondary: 214 32% 91%;
+    --secondary-foreground: 220 26% 14%;
  
-    --accent: 220, 14%, 96%;
-    --accent-foreground: 220 23% 5%;
+    --accent: 230 30% 96%;
+    --accent-foreground: 220 26% 14%;
  
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -40,7 +40,7 @@
     --background: 220 23% 5%; /* #0A0C10 */
     --foreground: 210 40% 98%; /* #D6D6D6 */
  
-    --muted: 220, 16%, 15%; /* #20242c */
+    --muted: 220 16% 15%; /* #20242c */
     --muted-foreground: 215 20.2% 65.1%;
  
     --popover: 220 23% 5%; /* #0A0C10 */
@@ -49,22 +49,22 @@
     --card: 220 23% 5%; /* #0A0C10 */
     --card-foreground: 210 40% 98%;
  
-    --border: 220, 16%, 15%; /* #20242c */
-    --input: 220, 16%, 15%; /* #20242c */
+    --border: 220 16% 15%; /* #20242c */
+    --input: 220 16% 15%; /* #20242c */
  
     --primary: 210 40% 98%;
     --primary-foreground: 220 23% 5%;
  
-    --secondary: 220, 16%, 15%; /* #20242c */
+    --secondary: 220 16% 15%; /* #20242c */
     --secondary-foreground: 210 40% 98%;
  
-    --accent: 220, 16%, 15%; /* #20242c */
+    --accent: 220 16% 15%; /* #20242c */
     --accent-foreground: 210 40% 98%;
  
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
  
-    --ring: 220, 16%, 15%; /* #20242c */
+    --ring: 220 16% 15%; /* #20242c */
   }
 }
  
