@@ -23,6 +23,12 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
     setProvider('email');
     setIsLoading(true);
 
+    if (!email) {
+      toast.error('Please enter your email!');
+      setIsLoading(false);
+      return;
+    }
+
     const { data, error } = await supabase.auth.signInWithOtp({
       email: email,
     });
@@ -91,7 +97,7 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         {isLoading && provider === 'github' ? (
           <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
         ) : (
-          <Icons.gitHub className='mr-2 h-4 w-4' />
+          <Icons.github className='mr-2 h-4 w-4' />
         )}{' '}
         Github
       </Button>
