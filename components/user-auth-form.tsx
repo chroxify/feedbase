@@ -19,9 +19,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   const supabase = createClientComponentClient();
 
   async function handleMailSignIn(event: React.SyntheticEvent) {
+    setIsLoading(true);
+
     event.preventDefault();
     setProvider('email');
-    setIsLoading(true);
 
     if (!email) {
       toast.error('Please enter your email!');
@@ -31,9 +32,10 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
 
     const { data, error } = await supabase.auth.signInWithOtp({
       email: email,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
     });
-
-    console.log(data, error);
 
     if (error) {
       toast.error(error.message);
@@ -45,15 +47,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   }
 
   async function handleGitHubSignIn(event: React.SyntheticEvent) {
+    setIsLoading(true);
+
     event.preventDefault();
     setProvider('github');
-    setIsLoading(true);
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
+      options: {
+        redirectTo: `${location.origin}/auth/callback`,
+      },
     });
-
-    console.log(data, error);
 
     if (error) {
       toast.error(error.message);

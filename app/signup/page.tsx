@@ -22,9 +22,9 @@ export default async function SignUp() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // If there is a session, redirect to the dashboard
+  // If there is a session, redirect to projects
   if (user) {
-    redirect('/dashboard');
+    redirect('/projects');
   }
 
   return (
