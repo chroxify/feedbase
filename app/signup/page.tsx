@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 
@@ -37,7 +36,7 @@ export default async function SignUp() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <UserAuthForm />
+          <UserAuthForm authType='sign-up' />
         </CardContent>
         <CardFooter className='flex flex-col items-center'>
           <CardDescription className='text-center'>

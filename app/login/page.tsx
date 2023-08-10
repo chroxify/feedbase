@@ -36,7 +36,7 @@ export default async function SignIn() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <UserAuthForm />
+          <UserAuthForm authType='sign-in' />
         </CardContent>
         <CardFooter className='flex flex-col items-center'>
           <CardDescription className='text-center'>
