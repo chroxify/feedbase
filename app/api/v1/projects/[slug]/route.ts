@@ -1,33 +1,60 @@
-import { withProjectAuth } from '@/lib/auth';
 import { NextResponse } from 'next/server';
+import { deleteProjectBySlug, getProjectBySlug, updateProjectBySlug } from '@/lib/api/projects';
 
 /*
     Get project by slug
     GET /api/v1/projects/[slug]
 */
-export const GET = withProjectAuth(
-  async (req, user, supabase, project, context: { params: { slug: string } }) => {
-    // Return project
-    return NextResponse.json(project, { status: 200 });
+export async function GET(req: Request, context: { params: { slug: string } }) {
+  const { data: project, error } = await getProjectBySlug(context.params.slug, 'route');
+  // If any errors thrown, return error
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: error.status });
   }
-);
+
+  // Return project
+  return NextResponse.json({ project }, { status: 200 });
+}
+
+/*
+    Update project by slug
+    PUT /api/v1/projects/[slug]
+*/
+export async function PUT(req: Request, context: { params: { slug: string } }) {
+  const { name, slug } = await req.json();
+
+  // Validate Request Body
+  if (!name || !slug) {
+    return NextResponse.json({ error: 'name and slug are required.' }, { status: 400 });
+  }
+
+  const { data: updatedProject, error } = await updateProjectBySlug(
+    context.params.slug,
+    { name, slug },
+    'route'
+  );
+
+  // If any errors thrown, return error
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: error.status });
+  }
+
+  // Return updated project
+  return NextResponse.json(updatedProject, { status: 200 });
+}
 
 /*
     Delete project by slug
     DELETE /api/v1/projects/[slug]
 */
-export const DELETE = withProjectAuth(
-  async (req, user, supabase, project, context: { params: { slug: string } }) => {
-    console.log(project);
-    // Delete project
-    const { error } = await supabase.from('projects').delete().eq('id', project.id);
+export async function DELETE(req: Request, context: { params: { slug: string } }) {
+  const { data, error } = await deleteProjectBySlug(context.params.slug, 'route');
 
-    // Check for errors
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    // Return no content response
-    return new Response(null, { status: 204 });
+  // If any errors thrown, return error
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: error.status });
   }
-);
+
+  // Return success
+  return NextResponse.json({ data }, { status: 200 });
+}
