@@ -7,10 +7,11 @@ import { ProjectProps, ErrorProps } from '@/lib/types';
 // Also returns the current user
 // cType: 'server' | 'route'
 async function createClient(cType: 'server' | 'route') {
+  const cookieStore = cookies();
   const supabase =
     cType === 'server'
-      ? await createServerComponentClient({ cookies })
-      : await createRouteHandlerClient({ cookies });
+      ? await createServerComponentClient({ cookies: () => cookieStore })
+      : await createRouteHandlerClient({ cookies: () => cookieStore });
   const user = await supabase.auth.getUser();
   return { supabase, user };
 }

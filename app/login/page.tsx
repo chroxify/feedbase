@@ -14,7 +14,8 @@ export const metadata: Metadata = {
 
 export default async function SignIn() {
   // Create a Supabase client configured to use cookies
-  const supabase = createServerComponentClient({ cookies });
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   // Retrieve possible session
   const {

@@ -36,7 +36,8 @@ const examples = [
 ];
 
 export default async function Index() {
-  const supabase = createServerComponentClient({ cookies });
+  const cookieStore = cookies();
+  const supabase = createServerComponentClient({ cookies: () => cookieStore });
 
   const {
     data: { user },
