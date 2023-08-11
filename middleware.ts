@@ -56,7 +56,15 @@ export async function middleware(req: NextRequest) {
         status: 301,
       });
     }
+
+    // Return response with pathname header
+    return NextResponse.next({
+      headers: {
+        'x-pathname': req.nextUrl.pathname,
+        'x-project': slug,
+      },
+    });
   }
 
-  return res;
+  return NextResponse.next();
 }

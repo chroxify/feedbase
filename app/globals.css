@@ -40,7 +40,7 @@
     --background: 220 23% 5%; /* #0A0C10 */
     --foreground: 210 40% 98%; /* #D6D6D6 */
  
-    --muted: 220 16% 15%; /* #20242c */
+    --muted: 210 20% 2%; /* #20242c */
     --muted-foreground: 215 20.2% 65.1%;
  
     --popover: 220 23% 5%; /* #0A0C10 */
@@ -73,6 +73,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-muted text-foreground;
   }
 }

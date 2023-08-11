@@ -13,10 +13,12 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { HelpCircle } from 'lucide-react';
+import { HelpCircle, Plus } from 'lucide-react';
 import { useState } from 'react';
+import { toast } from 'sonner';
+import { DropdownMenuItem } from '../ui/dropdown-menu';
 
-export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode }) {
+export default function AddProjectDialog() {
   const [name, setName] = useState<string>('');
   const [slug, setSlug] = useState<string>('');
 
@@ -27,15 +29,63 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
     setSlug(event.target.value);
   }
 
+  async function onCreateProject() {
+    const promise = new Promise((resolve, reject) => {
+      fetch(`/api/v1/projects`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name,
+          slug,
+        }),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            reject(data.error);
+          } else {
+            resolve(data);
+          }
+        })
+        .catch((err) => {
+          reject(err.message);
+        });
+    });
+
+    toast.promise(promise, {
+      loading: 'Creating project...',
+      success: `${name} was created successfully!`,
+      error: (err) => {
+        return err;
+      },
+    });
+
+    promise.then(() => {
+      window.location.href = `/projects/${slug}`;
+    });
+  }
+
   return (
     <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
+      <DialogTrigger asChild>
+        <DropdownMenuItem
+          onSelect={(event) => {
+            event.preventDefault();
+          }}>
+          <div className='flex flex-row items-center gap-2'>
+            <Plus className='h-4 w-4 text-foreground/60' />
+            New Project
+          </div>
+        </DropdownMenuItem>
+      </DialogTrigger>
       <DialogContent className='p-10 sm:max-w-[425px]'>
         <DialogHeader>
           <DialogTitle>Create a new project</DialogTitle>
           <DialogDescription>Create a new project to start collecting feedback.</DialogDescription>
         </DialogHeader>
-        <div className='flex flex-col gap-6'>
+        <div className='flex flex-col gap-3'>
           {/* Project Name */}
           <div className='flex flex-col gap-3'>
             <div className='flex flex-row items-center gap-2'>
@@ -44,7 +94,7 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               <TooltipProvider delayDuration={300}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <HelpCircle className='h-4 w-4 text-foreground/60' />
+                    <HelpCircle className='h-4 w-4 cursor-pointer text-foreground/60' />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>This is the name of your project on Luminar.</p>
@@ -69,7 +119,7 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               <TooltipProvider delayDuration={300}>
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <HelpCircle className='h-4 w-4 text-foreground/60' />
+                    <HelpCircle className='h-4 w-4 cursor-pointer text-foreground/60' />
                   </TooltipTrigger>
                   <TooltipContent>
                     <p>This is your project&apos;s unique slug on Luminar.</p>
@@ -88,7 +138,9 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
           </div>
         </div>
         <DialogFooter>
-          <Button type='submit'>Create Project</Button>
+          <Button type='submit' onClick={() => onCreateProject()}>
+            Create Project
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

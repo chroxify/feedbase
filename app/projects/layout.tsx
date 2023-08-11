@@ -1,7 +1,7 @@
 import LogoProvider from '@/components/logo-provider';
-import Sidebar from '@/components/sidebar';
+import Sidebar from '@/components/layout/sidebar';
 
-export default function DashLayout({ children }: { children: React.ReactNode }) {
+export default async function ProjectsLayout({ children }: { children: React.ReactNode }) {
   return (
     <main className='flex min-h-screen min-w-full justify-center bg-muted'>
       <div className='flex h-screen w-full flex-col items-center p-5 lg:max-w-screen-xl'>
