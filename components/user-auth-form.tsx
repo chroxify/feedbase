@@ -1,39 +1,58 @@
 'use client';
 
-import * as React from 'react';
-
-import { cn } from '@/lib/utils';
 import { Icons } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { useState } from 'react';
 import { toast } from 'sonner';
 
-interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
-
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
-  const [provider, setProvider] = React.useState<'github' | 'email'>('github');
-  const [email, setEmail] = React.useState<string>('');
+export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) {
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [provider, setProvider] = useState<'github' | 'email'>('github');
+  const [name, setName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
   const supabase = createClientComponentClient();
 
   async function handleMailSignIn(event: React.SyntheticEvent) {
-    event.preventDefault();
-    setProvider('email');
     setIsLoading(true);
 
-    if (!email) {
+    event.preventDefault();
+    setProvider('email');
+
+    if (!name && authType === 'sign-up') {
+      toast.error('Please enter your name!');
+      setIsLoading(false);
+      return;
+    } else if (!email) {
       toast.error('Please enter your email!');
       setIsLoading(false);
       return;
     }
 
-    const { data, error } = await supabase.auth.signInWithOtp({
-      email: email,
-    });
+    // Check if user exists
+    const { data: user } = await supabase.from('profiles').select('*').eq('email', email).single();
 
-    console.log(data, error);
+    if (user && authType === 'sign-up') {
+      toast.error('An account with this email address already exists.');
+      setIsLoading(false);
+      return;
+    } else if (!user && authType === 'sign-in') {
+      toast.error('No account found with this email address.');
+      setIsLoading(false);
+      return;
+    }
+
+    const { error } = await supabase.auth.signInWithOtp({
+      email: email,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+        data: {
+          full_name: name || user?.full_name,
+        },
+      },
+    });
 
     if (error) {
       toast.error(error.message);
@@ -45,15 +64,17 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   }
 
   async function handleGitHubSignIn(event: React.SyntheticEvent) {
-    event.preventDefault();
-    setProvider('github');
     setIsLoading(true);
 
-    const { data, error } = await supabase.auth.signInWithOAuth({
-      provider: 'github',
-    });
+    event.preventDefault();
+    setProvider('github');
 
-    console.log(data, error);
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'github',
+      options: {
+        redirectTo: `${location.origin}/auth/callback`,
+      },
+    });
 
     if (error) {
       toast.error(error.message);
@@ -61,10 +82,28 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
   }
 
   return (
-    <div className={cn('grid gap-4', className)} {...props}>
+    <div className='grid gap-4'>
       <form onSubmit={handleMailSignIn}>
         <div className='grid gap-3'>
-          <div className='gap- grid'>
+          <div className='gap- grid gap-2'>
+            {authType === 'sign-up' && (
+              <>
+                <Label className='sr-only' htmlFor='email'>
+                  Full Name
+                </Label>
+                <Input
+                  id='name'
+                  placeholder='Full Name'
+                  type='name'
+                  autoCapitalize='none'
+                  autoComplete='name'
+                  autoCorrect='off'
+                  disabled={isLoading}
+                  onChange={(event) => setName(event.currentTarget.value)}
+                />
+              </>
+            )}
+
             <Label className='sr-only' htmlFor='email'>
               Email
             </Label>

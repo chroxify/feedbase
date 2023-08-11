@@ -1,5 +1,4 @@
 import { Metadata } from 'next';
-import Image from 'next/image';
 import Link from 'next/link';
 import { cookies } from 'next/headers';
 
@@ -22,9 +21,9 @@ export default async function SignIn() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // If there is a session, redirect to the dashboard
+  // If there is a session, redirect to projects
   if (user) {
-    redirect('/dashboard');
+    redirect('/projects');
   }
 
   return (
@@ -37,7 +36,7 @@ export default async function SignIn() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <UserAuthForm />
+          <UserAuthForm authType='sign-in' />
         </CardContent>
         <CardFooter className='flex flex-col items-center'>
           <CardDescription className='text-center'>
