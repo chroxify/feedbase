@@ -6,6 +6,7 @@ import { getUserProjects } from '@/lib/api/projects';
 import ProjectDropdown from './project-dropdown';
 import { headers } from 'next/headers';
 import { ProjectProps } from '@/lib/types';
+import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
 
 export default async function Sidebar() {
   // Fetch the user's projects
@@ -31,9 +32,9 @@ export default async function Sidebar() {
         <div className='flex w-full flex-col'>
           <Button
             variant='secondary'
-            className='w-full items-center justify-start  gap-1 border border-transparent p-1 text-secondary-foreground/60 hover:bg-transparent hover:text-secondary-foreground/90'>
+            className='w-full items-center justify-start  gap-1 border border-transparent p-1 text-secondary-foreground/40 hover:bg-transparent hover:text-secondary-foreground/90'>
             <div className='flex flex-row items-center justify-center p-[6px]'>
-              <AlertCircle className='h-5 w-5' />
+              <ExclamationCircleIcon className='h-5 w-5' />
             </div>
             Give Feedback
           </Button>
@@ -41,7 +42,7 @@ export default async function Sidebar() {
           <form action='/auth/sign-out' method='post'>
             <Button
               variant='secondary'
-              className='w-full items-center justify-start  gap-1 border border-transparent p-1 text-secondary-foreground/60 hover:bg-transparent hover:text-secondary-foreground/90'>
+              className='w-full items-center justify-start  gap-1 border border-transparent p-1 text-secondary-foreground/40 hover:bg-transparent hover:text-secondary-foreground/90'>
               <div className='flex flex-row items-center justify-center p-[6px]'>
                 <LogOut className='h-5 w-5' />
               </div>
