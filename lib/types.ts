@@ -17,3 +17,11 @@ export interface ErrorProps {
   message: string;
   status: number;
 }
+
+export interface ChangelogProps {
+  id: string;
+  project_id: string;
+  title: string;
+  content: string;
+  created_at: string;
+}
