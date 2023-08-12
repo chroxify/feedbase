@@ -23,5 +23,8 @@ export interface ChangelogProps {
   project_id: string;
   title: string;
   content: string;
-  created_at: string;
+  image: string;
+  summary: string;
+  published_at: string;
+  published: boolean;
 }

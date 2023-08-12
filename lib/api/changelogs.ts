@@ -4,7 +4,7 @@ import { ChangelogProps, ErrorProps } from '../types';
 // Create Changelog
 export const createChangelog = (
   slug: string,
-  data: { title: string; content: string; published: boolean },
+  data: { title: string; content: string; published: boolean; summary: string; image?: string },
   cType: 'server' | 'route'
 ): Promise<{
   data: ChangelogProps | null;
@@ -24,6 +24,8 @@ export const createChangelog = (
         content: data.content,
         published: data.published,
         project_id: project!.id,
+        summary: data.summary,
+        image: data.image,
       })
       .select();
 
@@ -85,7 +87,7 @@ export const getChangelogByID = (id: string, slug: string, cType: 'server' | 'ro
 export const updateChangelog = (
   id: string,
   slug: string,
-  data: { title: string; content: string; published: boolean },
+  data: { title: string; content: string; published: boolean; summary: string; image?: string },
   cType: 'server' | 'route'
 ) =>
   withProjectAuth(async (user, supabase, project, error) => {
@@ -97,7 +99,13 @@ export const updateChangelog = (
     // Update Changelog
     const { data: changelog, error: changelogError } = await supabase
       .from('changelogs')
-      .update({ title: data.title, content: data.content, published: data.published })
+      .update({
+        title: data.title,
+        content: data.content,
+        published: data.published,
+        summary: data.summary,
+        image: data.image,
+      })
       .eq('id', id)
       .select();
 

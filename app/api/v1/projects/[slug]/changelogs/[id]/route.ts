@@ -11,12 +11,12 @@ import { NextResponse } from 'next/server';
     }
 */
 export async function PUT(req: Request, context: { params: { slug: string; id: string } }) {
-  const { title, content, published } = await req.json();
+  const { title, content, published, image, summary } = await req.json();
 
   // Validate Request Body
-  if (!title || !content || published === undefined) {
+  if (!title || !content || published === undefined || !summary) {
     return NextResponse.json(
-      { error: 'title, content, and published fields are required.' },
+      { error: 'title, content, published, and summary are required' },
       { status: 400 }
     );
   }
@@ -24,7 +24,7 @@ export async function PUT(req: Request, context: { params: { slug: string; id: s
   const { data: changelog, error } = await updateChangelog(
     context.params.id,
     context.params.slug,
-    { title, content, published },
+    { title, content, published, image, summary },
     'route'
   );
 
