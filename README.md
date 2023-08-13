@@ -6,15 +6,15 @@
     <a href="https://luminar.so"><strong>Learn more »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/chroxify/luminar/blob/main/README.md#introduction">Introduction</a>
+    <a href="https://github.com/chroxify/luminar/tree/main#introduction">Introduction</a>
     ·
-    <a href="https://github.com/chroxify/luminar/blob/main/README.md#tech-stack">Tech Stack</a>
+    <a href="https://github.com/chroxify/luminar/tree/main#tech-stack">Tech Stack</a>
     ·
-    <a href="https://github.com/chroxify/luminar/blob/main/README.md#deploy-your-own">Deploy Your Own</a>
+    <a href="https://github.com/chroxify/luminar/tree/main#deploy-your-own">Deploy Your Own</a>
     ·
-    <a href="https://github.com/chroxify/luminar/blob/main/README.md#roadmap">Roadmap</a>
+    <a href="https://github.com/chroxify/luminar/tree/main#roadmap">Roadmap</a>
     ·
-    <a href="https://github.com/chroxify/luminar/blob/main/README.md#contributing">Contributing</a>
+    <a href="https://github.com/chroxify/luminar/tree/main#contributing">Contributing</a>
   </p>
 </p>
 
@@ -37,7 +37,7 @@ Luminar is an open-source product management tool that helps products to enhance
 
 To deploy your own instance of Luminar, just click the button below and follow the instructions. You will need to create a Supabase project and a Vercel account.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://dub.sh/deploy) -->
+[![Deploy with Vercel](https://vercel.com/button)](https://luminar.so/deploy) -->
 This is currently not supported yet until we release the necessary migration scripts to make the backend work.
 
 ## Roadmap
