@@ -6,25 +6,20 @@ import { NextResponse } from 'next/server';
     PUT /api/v1/projects/[slug]/changelogs/[id]
     {
         title: string;
+        summary: string;
         content: string;
+        image?: string;
+        publish_date?: Date;
         published: boolean;
     }
 */
 export async function PUT(req: Request, context: { params: { slug: string; id: string } }) {
-  const { title, content, published, image, summary } = await req.json();
-
-  // Validate Request Body
-  if (!title || !content || published === undefined || !summary) {
-    return NextResponse.json(
-      { error: 'title, content, published, and summary are required' },
-      { status: 400 }
-    );
-  }
+  const { title, summary, content, image, publish_date, published } = await req.json();
 
   const { data: changelog, error } = await updateChangelog(
     context.params.id,
     context.params.slug,
-    { title, content, published, image, summary },
+    { title, summary, content, image, publish_date, published },
     'route'
   );
 

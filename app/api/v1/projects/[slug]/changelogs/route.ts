@@ -6,26 +6,29 @@ import { NextResponse } from 'next/server';
     POST /api/v1/projects/[slug]/changelogs
     {
         title: string;
-        content: string;
-        published: boolean;
         summary: string;
+        content: string;
         image?: string;
+        publish_date?: Date;
+        published: boolean;
     }
 */
 export async function POST(req: Request, context: { params: { slug: string } }) {
-  const { title, content, published, summary, image } = await req.json();
+  const { title, summary, content, image, publish_date, published } = await req.json();
 
   // Validate Request Body
-  if (!title || !content || published === undefined || !summary) {
-    return NextResponse.json(
-      { error: 'title, content, published, and summary are required' },
-      { status: 400 }
-    );
+  if (published) {
+    if (!title || !summary || !content || !published) {
+      return NextResponse.json(
+        { error: 'missing required fields. (title, summary, content, published)' },
+        { status: 400 }
+      );
+    }
   }
 
   const { data: changelog, error } = await createChangelog(
     context.params.slug,
-    { title, content, published, summary, image },
+    { title, summary, content, image, publish_date, published },
     'route'
   );
 

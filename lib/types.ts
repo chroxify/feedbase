@@ -20,11 +20,11 @@ export interface ErrorProps {
 
 export interface ChangelogProps {
   id: string;
-  project_id: string;
+  projectId: string;
   title: string;
   content: string;
-  image: string;
+  image: string | null;
   summary: string;
-  published_at: string;
+  publish_date: Date | undefined;
   published: boolean;
 }
