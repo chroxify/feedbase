@@ -1,48 +1,65 @@
-# Supabase Starter
+<p align="center" style="margin-top: 120px">
+  <h3 align="center">The Open-Source Product Management Tool
+   </h3>
 
-This starter configures Supabase Auth to use cookies, making the user's session available throughout the entire Next.js app - Client Components, Server Components, Route Handlers, Server Actions and Middleware.
+  <p align="center">
+    <a href="https://luminar.so"><strong>Learn more »</strong></a>
+    <br />
+    <br />
+    <a href="https://github.com/chroxify/luminar/blob/main/README.md#introduction">Introduction</a>
+    ·
+    <a href="https://github.com/chroxify/luminar/blob/main/README.md#tech-stack">Tech Stack</a>
+    ·
+    <a href="https://github.com/chroxify/luminar/blob/main/README.md#deploy-your-own">Deploy Your Own</a>
+    ·
+    <a href="https://github.com/chroxify/luminar/blob/main/README.md#roadmap">Roadmap</a>
+    ·
+    <a href="https://github.com/chroxify/luminar/blob/main/README.md#contributing">Contributing</a>
+  </p>
+</p>
 
-## Deploy your own
+## Introduction
 
-The Vercel deployment will guide you through creating a Supabase account and project. After installation of the Supabase integration, all relevant environment variables will be set up so that the project is usable immediately after deployment 🚀
+Luminar is an open-source product management tool that helps products to enhance customer relationships through its robust features. It enables efficient capturing, prioritization, and resolution of customer issues, while also providing valuable insights into your product's status.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/with-supabase&project-name=nextjs-with-supabase&repository-name=nextjs-with-supabase&integration-ids=oac_jUduyjQgOyzev1fjrW83NYOv)
+## Tech Stack
 
-## How to use
+- [Next.js](https://nextjs.org/) – Framework
+- [Typescript](https://www.typescriptlang.org/) – Language
+- [Tailwind](https://tailwindcss.com/) – CSS
+- [Shadcn/ui](https://ui.shadcn.com/) - Component Library
+- [Supabase](https://supabase.com/) – Database & Auth
+- [Vercel](https://vercel.com/) – Hosting
 
-1. Create a [new Supabase project](https://database.new)
-1. Run `npx create-next-app -e with-supabase` to create a Next.js app using the Supabase Starter template
-1. Use `cd` to change into the app's directory
-1. Run `npm install` to install dependencies
-1. Rename `.env.local.example` to `.env.local` and update the values for `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` from [your Supabase project's API settings](https://app.supabase.com/project/_/settings/api)
-1. Run `npm run dev` to start the local development server
+## Deploy Your Own
 
-> Check out [the docs for Local Development](https://supabase.com/docs/guides/getting-started/local-development) to also run Supabase locally.
+<!-- > Note: One-Click deployment isn't fully supported yet and there might be some issues with hard-coded values in the codebase.
 
-### Create a Supabase client
+To deploy your own instance of Luminar, just click the button below and follow the instructions. You will need to create a Supabase project and a Vercel account.
 
-Check out the [`/app/_examples`](./app/_examples/) folder for an example of creating a Supabase client in:
+[![Deploy with Vercel](https://vercel.com/button)](https://dub.sh/deploy) -->
+This is currently not supported yet until we release the necessary migration scripts to make the backend work.
 
-- [Client Components](./app/_examples/client-component/page.tsx)
-- [Server Components](./app/_examples/server-component/page.tsx)
-- [Route Handlers](./app/_examples/route-handler/route.ts)
-- [Server Actions](./app/_examples/server-action/page.tsx)
+## Roadmap
 
-### Create `todo` table and seed with data (optional)
+Luminar is currently in very early stages of development. Here's what we have planned for the future:
 
-Navigate to [your project's SQL Editor](https://app.supabase.com/project/_/sql), click `New query`, paste the contents of the [init.sql](./supabase/migrations/20230618024722_init.sql) file and click `RUN`.
+- [ ] Further customization of the public hub
+- [ ] Implementation of Roadmaps & Feature Requests
+- [ ] Integration with other tools like GitHub, Linear, etc.
+- [ ] Analytics & Insights options for the public hub
+- [ ] Blog & Users management
 
-This will create a basic `todos` table, enable Row Level Security (RLS), and write RLS policies enabling `select` and `insert` actions for `authenticated` users.
+and much much more, so stay tuned!
 
-To seed your `todos` table with some dummy data, run the contents of the [seed.sql](./supabase/seed.sql) file.
+## Contributing
 
-## Feedback and issues
+We would love to have your help in making Luminar better!
 
-Please file feedback and issues over on the [Supabase GitHub org](https://github.com/supabase/supabase/issues/new/choose).
+Here's how you can contribute:
+- [Report a bug](https://github.com/chroxify/luminar/issues/new?labels=bug) you found while using Luminar
+- [Request a feature](https://github.com/chroxify/luminar/issues/new?labels=enhancement) that you think will be useful
+- [Submit a pull request](https://github.com/chroxify/luminar/pulls) if you want to contribute with new features or bug fixes
 
-## More Supabase examples
-
-- [Next.js Subscription Payments Starter](https://github.com/vercel/nextjs-subscription-payments)
-- [Cookie-based Auth and the Next.js 13 App Router (free course)](https://youtube.com/playlist?list=PL5S4mPUpp4OtMhpnp93EFSo42iQ40XjbF)
-- [Supabase Auth and the Next.js App Router](https://github.com/supabase/supabase/tree/master/examples/auth/nextjs)
-- [Next.js Auth Helpers Docs](https://supabase.com/docs/guides/auth/auth-helpers/nextjs)
+## License
+Luminar is licensed under the [GNU Affero General Public License Version 3 (AGPLv3)](https://github.com/chroxify/luminar/blob/main/LICENSE) .
