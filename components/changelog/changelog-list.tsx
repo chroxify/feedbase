@@ -91,7 +91,7 @@ export default function ChangelogList({
                 <div className='absolute h-full w-full rounded-md'>
                   <Image
                     src={changelog.image}
-                    alt='Photo by Drew Beamer'
+                    alt='Preview Image'
                     fill
                     sizes='100%'
                     className='rounded-md object-cover'
