@@ -1,32 +1,31 @@
 'use client';
 
-import { BadgePlusIcon, Map, MessageCircle, Settings } from 'lucide-react';
-
 import { Button } from '@/components/ui/button';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { TagIcon, MapIcon, LightBulbIcon, Cog6ToothIcon } from '@heroicons/react/24/solid';
 
 const tabs = [
   {
     name: 'Changelogs',
-    icon: <BadgePlusIcon className='h-5 w-5' />,
+    icon: <TagIcon className='h-5 w-5' />,
     slug: 'changelog',
   },
   {
     name: 'Feedback',
-    icon: <MessageCircle className='h-5 w-5' />,
+    icon: <LightBulbIcon className='h-5 w-5' />,
     slug: 'feedback',
   },
   {
     name: 'Roadmap',
-    icon: <Map className='h-5 w-5' />,
+    icon: <MapIcon className='h-5 w-5' />,
     slug: 'roadmap',
   },
   {
     name: 'Settings',
-    icon: <Settings className='h-5 w-5' />,
+    icon: <Cog6ToothIcon className='h-5 w-5' />,
     slug: 'settings',
   },
 ];
@@ -60,7 +59,7 @@ export default function NavTabs() {
             onClick={() => setActiveTab(index)}>
             <div
               className={cn(
-                'flex flex-row items-center justify-center p-1 text-foreground/70',
+                'flex flex-row items-center justify-center p-1 text-foreground/40',
                 activeTab === index && 'text-foreground'
               )}>
               {tab.icon}

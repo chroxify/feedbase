@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -142,6 +143,7 @@ export default function AddProjectDialog() {
             Create Project
           </Button>
         </DialogFooter>
+        <DialogClose />
       </DialogContent>
     </Dialog>
   );
