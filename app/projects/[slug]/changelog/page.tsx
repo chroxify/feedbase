@@ -41,7 +41,7 @@ export default async function Changelog({ params }: { params: { slug: string } }
         {changelogs.length === 0 && (
           <div className='flex flex-col items-center justify-center gap-2 pt-32'>
             <div className='text-2xl font-bold'>No changelogs yet</div>
-            <div className='text-center text-lg text-gray-500'>
+            <div className='text-center text-lg text-foreground/60'>
               Provide your users with the latest updates via changelogs.
             </div>
             <AddChangelogModal

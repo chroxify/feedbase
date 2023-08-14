@@ -7,6 +7,7 @@ import ProjectDropdown from './project-dropdown';
 import { headers } from 'next/headers';
 import { ProjectProps } from '@/lib/types';
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
 
 export default async function Sidebar() {
   // Fetch the user's projects
@@ -30,14 +31,19 @@ export default async function Sidebar() {
         </div>
         {/* Footer Buttons */}
         <div className='flex w-full flex-col'>
-          <Button
-            variant='secondary'
-            className='w-full items-center justify-start  gap-1 border border-transparent p-1 text-secondary-foreground/40 hover:bg-transparent hover:text-secondary-foreground/90'>
-            <div className='flex flex-row items-center justify-center p-[6px]'>
-              <ExclamationCircleIcon className='h-5 w-5' />
-            </div>
-            Give Feedback
-          </Button>
+          <Link
+            href='https://github.com/chroxify/luminar/issues/new'
+            rel='noopener noreferrer'
+            target='_blank'>
+            <Button
+              variant='secondary'
+              className='w-full items-center justify-start  gap-1 border border-transparent p-1 text-secondary-foreground/40 hover:bg-transparent hover:text-secondary-foreground/90'>
+              <div className='flex flex-row items-center justify-center p-[6px]'>
+                <ExclamationCircleIcon className='h-5 w-5' />
+              </div>
+              Give Feedback
+            </Button>
+          </Link>
           <ToggleThemeButton />
           <form action='/auth/sign-out' method='post'>
             <Button

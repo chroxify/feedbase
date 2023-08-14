@@ -19,7 +19,7 @@ import { useState } from 'react';
 import { toast } from 'sonner';
 import { DropdownMenuItem } from '../ui/dropdown-menu';
 
-export default function AddProjectDialog() {
+export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode }) {
   const [name, setName] = useState<string>('');
   const [slug, setSlug] = useState<string>('');
 
@@ -70,21 +70,11 @@ export default function AddProjectDialog() {
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <DropdownMenuItem
-          onSelect={(event) => {
-            event.preventDefault();
-          }}>
-          <div className='flex flex-row items-center gap-2'>
-            <Plus className='h-4 w-4 text-foreground/60' />
-            New Project
-          </div>
-        </DropdownMenuItem>
-      </DialogTrigger>
+      <DialogTrigger asChild>{trigger}</DialogTrigger>
       <DialogContent className='p-10 sm:max-w-[425px]'>
         <DialogHeader>
           <DialogTitle>Create a new project</DialogTitle>
-          <DialogDescription>Create a new project to start collecting feedback.</DialogDescription>
+          <DialogDescription>Create a new project to get started.</DialogDescription>
         </DialogHeader>
         <div className='flex flex-col gap-3'>
           {/* Project Name */}

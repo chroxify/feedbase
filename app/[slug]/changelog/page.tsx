@@ -92,6 +92,10 @@ export default async function Changelog({ params }: { params: { slug: string } }
         {changelogs.length === 0 && (
           <div className='flex flex-col items-center justify-center gap-4'>
             <h1 className='text-3xl font-bold'>No changelogs yet!</h1>
+            <p className='text-lg text-foreground/70'>
+              There are currently no changelogs for{' '}
+              {params.slug.charAt(0).toUpperCase() + params.slug.slice(1)}. Make sure to check back later!
+            </p>
           </div>
         )}
       </div>

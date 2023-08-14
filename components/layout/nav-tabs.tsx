@@ -49,14 +49,20 @@ export default function NavTabs() {
   return (
     <div className='flex flex-col gap-2'>
       {tabs.map((tab, index) => (
-        <Link href={`/projects/${slug}/${tab.slug}`} key={index}>
+        // If feedback or roadmap, don't link to the page
+        <Link
+          href={tab.slug === 'feedback' || tab.slug === 'roadmap' ? '#' : `/projects/${slug}/${tab.slug}`}
+          key={index}
+          className={tab.slug === 'feedback' || tab.slug === 'roadmap' ? 'cursor-default' : ''}>
           <Button
             variant='secondary'
             className={cn(
               'h-fit w-full items-center justify-start gap-2 border border-transparent p-1 text-foreground/80 hover:text-foreground',
               activeTab === index && 'bg-secondary text-foreground'
             )}
-            onClick={() => setActiveTab(index)}>
+            onClick={() => setActiveTab(index)}
+            // If feedback or roadmap, disable the button
+            disabled={tab.slug === 'feedback' || tab.slug === 'roadmap'}>
             <div
               className={cn(
                 'flex flex-row items-center justify-center p-1 text-foreground/40',
@@ -64,8 +70,7 @@ export default function NavTabs() {
               )}>
               {tab.icon}
             </div>
-
-            {tab.name}
+            {tab.name} {tab.slug === 'feedback' || tab.slug === 'roadmap' ? '(Soon)' : ''}
           </Button>
         </Link>
       ))}

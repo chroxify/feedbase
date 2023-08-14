@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronsUpDownIcon, GlobeIcon } from 'lucide-react';
+import { ChevronsUpDownIcon, GlobeIcon, Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -43,7 +43,19 @@ export default function ProjectDropdown({
             <DropdownMenuItem onSelect={() => setSelectedProject(project)}>{project.name}</DropdownMenuItem>
           </Link>
         ))}
-        <AddProjectDialog />
+        <AddProjectDialog
+          trigger={
+            <DropdownMenuItem
+              onSelect={(event) => {
+                event.preventDefault();
+              }}>
+              <div className='flex flex-row items-center gap-2'>
+                <Plus className='h-4 w-4 text-foreground/60' />
+                New Project
+              </div>
+            </DropdownMenuItem>
+          }
+        />
       </DropdownMenuContent>
     </DropdownMenu>
   );

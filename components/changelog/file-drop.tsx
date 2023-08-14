@@ -50,7 +50,7 @@ export default function FileDrop({
           label='Image'
           tooltip='This image will be used as the preview image for your changelog.'
         />
-        {fileError && <p className='text-sm text-red-500'>{fileError}</p>}
+        {fileError && <p className='text-sm text-destructive'>{fileError}</p>}
       </div>
       {/* BUG: Fix this so that its not a fixed height but rather just takes over full height properly */}
       {/* As currently it is not on the same level as the other inputs */}
@@ -107,10 +107,10 @@ export default function FileDrop({
           <CloudArrowUpIcon
             className={`${
               dragActive ? 'scale-110' : 'scale-100'
-            } h-7 w-7 text-gray-500 transition-all duration-75 group-hover:scale-110 group-active:scale-95`}
+            } h-7 w-7 text-foreground/60 transition-all duration-75 group-hover:scale-110 group-active:scale-95`}
           />
-          <p className='mt-2 text-center text-sm text-gray-500'>Drag and drop or click to upload.</p>
-          <p className='mt-2 text-center text-sm text-gray-500'>Recommended: 1200 x 630 pixels</p>
+          <p className='mt-2 text-center text-sm text-foreground/60'>Drag and drop or click to upload.</p>
+          <p className='mt-2 text-center text-sm text-foreground/60'>Recommended: 1200 x 630 pixels</p>
           <span className='sr-only'>OG image upload</span>
         </div>
         {data.image && (
