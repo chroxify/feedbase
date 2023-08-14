@@ -14,7 +14,7 @@ export default function LogoProvider({
   const { theme } = useTheme();
 
   return (
-    <div className='flex flex-row items-center justify-start pb-4'>
+    <div className='flex flex-row items-center justify-start'>
       {theme === 'dark' || forceTheme === 'dark' ? (
         <Icons.logoLight className={cn('ml-1 w-32', className)} />
       ) : (

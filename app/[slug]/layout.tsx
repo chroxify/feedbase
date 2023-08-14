@@ -6,7 +6,7 @@ export default async function ProjectsLayout({ children }: { children: React.Rea
     <main className='flex min-h-screen min-w-full justify-center bg-background'>
       <div className='flex h-full w-full flex-col items-center py-5'>
         {/* Header with logo */}
-        <div className='w-full px-10 lg:max-w-screen-xl'>
+        <div className='w-full px-10 pb-5 lg:max-w-screen-xl'>
           <LogoProvider />
         </div>
 

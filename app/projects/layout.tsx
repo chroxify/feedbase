@@ -12,7 +12,7 @@ export default async function ProjectsLayout({ children }: { children: React.Rea
     <main className='flex min-h-screen min-w-full justify-center bg-muted'>
       <div className='flex h-screen w-full flex-col items-center p-5 lg:max-w-screen-xl'>
         {/* Header with logo and hub button */}
-        <div className='flex w-full flex-row items-center justify-between'>
+        <div className='flex w-full flex-row items-center justify-between pb-4'>
           <LogoProvider className='w-32' />
           <Link href={`/${projectSlug}`} rel='noopener noreferrer' target='_blank'>
             <Button variant='outline' size='sm'>

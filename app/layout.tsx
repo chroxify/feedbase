@@ -15,7 +15,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang='en' suppressHydrationWarning>
       <body>
         <ThemeProvider attribute='class' defaultTheme='light' enableSystem={false}>
-          <main className={cn('flex min-h-screen flex-col items-center bg-background', inter.className)}>
+          <main
+            className={cn('flex min-h-screen w-full flex-col items-center bg-background', inter.className)}>
             {children}
           </main>
         </ThemeProvider>

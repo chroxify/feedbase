@@ -67,13 +67,11 @@ export default async function Changelog({ params }: { params: { slug: string } }
                     alt='Thumbnail'
                     width={1200}
                     height={600}
-                    className='cursor-pointer rounded-lg'
+                    className='rounded-lg'
                   />
 
                   {/* Title */}
-                  <h1 className='cursor-pointer pb-4 pt-10 text-3xl font-bold hover:underline'>
-                    {changelog.title}
-                  </h1>
+                  <h1 className='cursor-default pb-4 pt-10 text-3xl font-bold'>{changelog.title}</h1>
 
                   {/* Content as html */}
                   <div
