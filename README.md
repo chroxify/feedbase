@@ -3,6 +3,13 @@
    </h3>
 
   <p align="center">
+  <i>
+  Note: Luminar is currently in early stages of development, therefore bugs and issues are expected. <br />
+  Please report any issues you find <a href="https://github.com/chroxify/luminar/issues/new">here</a>.
+  </i>
+  </p>
+  
+  <p align="center">
     <a href="https://luminar.so"><strong>Learn more »</strong></a>
     <br />
     <br />

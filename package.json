@@ -29,6 +29,7 @@
     "@tiptap/pm": "^2.0.4",
     "@tiptap/react": "^2.0.4",
     "@tiptap/starter-kit": "^2.0.4",
+    "@vercel/analytics": "^1.0.2",
     "autoprefixer": "10.4.14",
     "base64-arraybuffer": "^1.0.2",
     "class-variance-authority": "^0.7.0",
