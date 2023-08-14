@@ -2,16 +2,23 @@
 
 import { useTheme } from 'next-themes';
 import { Icons } from './icons';
+import { cn } from '@/lib/utils';
 
-export default function LogoProvider() {
+export default function LogoProvider({
+  forceTheme,
+  className,
+}: {
+  forceTheme?: 'dark' | 'light';
+  className?: string;
+}) {
   const { theme } = useTheme();
 
   return (
-    <div className='flex w-full flex-row items-center justify-start pb-4'>
-      {theme === 'dark' ? (
-        <Icons.logoLight className='ml-1 w-32' />
+    <div className={cn('flex w-full flex-row items-center justify-start pb-4', className)}>
+      {theme === 'dark' || forceTheme === 'dark' ? (
+        <Icons.logoLight className={cn('ml-1 w-32', className)} />
       ) : (
-        <Icons.logoDark className='ml-1 w-32' />
+        <Icons.logoDark className={cn('ml-1 w-32', className)} />
       )}
     </div>
   );
