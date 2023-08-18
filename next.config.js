@@ -1,11 +1,14 @@
+// Supabase url from .env file
+const hostPath = process.env.NEXT_PUBLIC_SUPABASE_URL.split(':');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'innmcibhgnhxpghxldrr.supabase.co',
-        port: '',
+        protocol: hostPath[0],
+        hostname: hostPath[1].replace('//', ''),
+        port: hostPath[2],
         pathname: '/storage/v1/object/public/changelog-images/**',
       },
     ],
