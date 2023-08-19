@@ -16,8 +16,8 @@ export function PublishDatePicker({
   setData,
 }: {
   className?: string;
-  data: ChangelogProps;
-  setData: React.Dispatch<React.SetStateAction<ChangelogProps>>;
+  data: ChangelogProps['Row'];
+  setData: React.Dispatch<React.SetStateAction<ChangelogProps['Row']>>;
 }) {
   return (
     <Popover>
@@ -30,15 +30,15 @@ export function PublishDatePicker({
             className
           )}>
           <CalendarIcon className='mr-2 h-4 w-4' />
-          {data.publish_date ? format(data.publish_date, 'P') : <span>Pick a date</span>}
+          {data.publish_date ? format(new Date(data.publish_date), 'P') : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className='w-auto p-0'>
         <Calendar
           mode='single'
-          selected={data.publish_date}
+          selected={new Date(data?.publish_date!) ?? undefined}
           onSelect={(date) => {
-            setData({ ...data, publish_date: date });
+            setData({ ...data, publish_date: date?.toISOString() ?? null });
           }}
         />
       </PopoverContent>

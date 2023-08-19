@@ -4,7 +4,11 @@ import { getUserProjects } from '@/lib/api/projects';
 import { redirect } from 'next/navigation';
 
 export default async function Projects() {
-  const { data: projects } = await getUserProjects('server');
+  const { data: projects, error } = await getUserProjects('server');
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
 
   // Redirect to the first project
   if (projects.length > 0) {

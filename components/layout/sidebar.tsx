@@ -1,30 +1,31 @@
-import { AlertCircle, LogOut } from 'lucide-react';
+import { LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ToggleThemeButton from './theme-button';
 import NavTabs from './nav-tabs';
 import { getUserProjects } from '@/lib/api/projects';
 import ProjectDropdown from './project-dropdown';
 import { headers } from 'next/headers';
-import { ProjectProps } from '@/lib/types';
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 
 export default async function Sidebar() {
   // Fetch the user's projects
-  const { data: projects } = await getUserProjects('server');
+  const { data: projects, error } = await getUserProjects('server');
   const headerList = headers();
 
+  if (error) {
+    return <div>{error.message}</div>;
+  }
+
   // Get the project with the current slug
-  const currentProject = projects.find(
-    (project: ProjectProps) => project.slug === headerList.get('x-project')
-  );
+  const currentProject = projects.find((project) => project.slug === headerList.get('x-project'));
 
   return (
     <>
       <div className='flex min-w-[200px] flex-col items-center justify-between'>
         <div className='flex w-full flex-col space-y-12'>
           {/* Projects */}
-          <ProjectDropdown projects={projects} activeProject={currentProject} />
+          <ProjectDropdown projects={projects} activeProject={currentProject!} />
 
           {/* Main Tabs */}
           <NavTabs />

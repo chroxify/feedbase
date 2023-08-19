@@ -1,6 +1,5 @@
 import { Separator } from '@/components/ui/separator';
 import { getPublicProjectChangelogs } from '@/lib/api/public';
-import { ChangelogProps } from '@/lib/types';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -10,22 +9,13 @@ export default async function Changelog({ params }: { params: { slug: string } }
   const { data: changelogs, error } = await getPublicProjectChangelogs(params.slug, 'server', true);
 
   // If error.status redirects to 404
-  if (error?.status === 404) {
+  if (error?.status === 404 || !changelogs) {
     notFound();
   }
 
-  // Format date
-  changelogs.forEach((changelog: ChangelogProps) => {
-    // Convert date to string
-    const dateString = changelog?.publish_date!.toString();
-
-    // Set publish_date to date object
-    changelog.publish_date = new Date(dateString);
-  });
-
   // Sort changelogs by publish_date (newest first)
-  changelogs.sort((a: ChangelogProps, b: ChangelogProps) => {
-    return b.publish_date!.getTime() - a.publish_date!.getTime();
+  changelogs.sort((a, b) => {
+    return new Date(b.publish_date!).getTime() - new Date(a.publish_date!).getTime();
   });
 
   return (
@@ -41,7 +31,7 @@ export default async function Changelog({ params }: { params: { slug: string } }
       <Separator className='bg-border/60' />
 
       <div className='flex h-full w-full flex-col items-center justify-center gap-20'>
-        {changelogs.map((changelog: ChangelogProps, i: number) => {
+        {changelogs.map((changelog, i: number) => {
           return (
             <>
               {/* Row Splitting up date and Content */}
@@ -49,7 +39,7 @@ export default async function Changelog({ params }: { params: { slug: string } }
                 {/* Date */}
                 <div className='flex w-1/4 flex-row'>
                   {/* Date in format Month Name day, year */}
-                  {changelog.publish_date?.toLocaleDateString('en-US', {
+                  {new Date(changelog.publish_date!).toLocaleDateString('en-US', {
                     year: 'numeric',
                     month: 'long',
                     day: 'numeric',
@@ -76,7 +66,9 @@ export default async function Changelog({ params }: { params: { slug: string } }
                   {/* Content as html */}
                   <div
                     className='prose text-lg dark:prose-invert'
-                    dangerouslySetInnerHTML={{ __html: changelog.content }}
+                    // TODO: Change this to not be html but markdown
+                    // => LUM-32
+                    dangerouslySetInnerHTML={{ __html: changelog.content! }}
                   />
                 </div>
               </div>

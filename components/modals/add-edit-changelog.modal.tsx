@@ -41,17 +41,17 @@ export function AddChangelogModal({
 }: {
   trigger: React.ReactNode;
   projectSlug: string;
-  changelogData?: ChangelogProps;
+  changelogData?: ChangelogProps['Row'];
   isEdit?: boolean;
 }) {
-  const [data, setData] = useState<ChangelogProps>({
+  const [data, setData] = useState<ChangelogProps['Row']>({
     id: changelogData?.id || '',
-    projectId: changelogData?.projectId || '',
+    project_id: changelogData?.project_id || '',
     title: changelogData?.title || '',
     content: changelogData?.content || '',
     summary: changelogData?.summary || '',
     image: changelogData?.image || null,
-    publish_date: changelogData?.publish_date || undefined,
+    publish_date: changelogData?.publish_date || null,
     published: changelogData?.published || false,
   });
 
@@ -197,7 +197,8 @@ export function AddChangelogModal({
                   placeholder='Changelog Summary'
                   className='min-h-[78px] w-full resize-none items-start justify-start text-start'
                   onChange={(e) => setData((prev) => ({ ...prev, summary: e.target.value }))}
-                  value={data.summary}
+                  // BUG: This should not need another || '' but it does for some reason
+                  value={data.summary || ''}
                 />
               </div>
             </div>

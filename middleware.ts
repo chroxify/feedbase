@@ -35,7 +35,7 @@ export async function middleware(req: NextRequest) {
     const { data: project, error } = await supabase.from('projects').select().eq('slug', slug).single();
 
     // If project doesn't exist, redirect to /projects
-    if (error || !project) {
+    if (error) {
       return NextResponse.redirect(`${requestUrl.origin}/projects`, {
         // a 301 status is required to redirect from a POST to a GET route
         status: 301,

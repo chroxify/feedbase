@@ -7,7 +7,11 @@ import { getAllProjectChangelogs } from '@/lib/api/changelogs';
 import { PlusCircleIcon } from 'lucide-react';
 
 export default async function Changelog({ params }: { params: { slug: string } }) {
-  const { data: changelogs } = await getAllProjectChangelogs(params.slug, 'server');
+  const { data: changelogs, error } = await getAllProjectChangelogs(params.slug, 'server');
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
 
   return (
     <div className='flex h-full w-full flex-col overflow-y-auto'>
