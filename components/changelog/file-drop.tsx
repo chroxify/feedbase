@@ -16,8 +16,8 @@ export default function FileDrop({
   data,
   setData,
 }: {
-  data: ChangelogProps;
-  setData: Dispatch<React.SetStateAction<ChangelogProps>>;
+  data: ChangelogProps['Row'];
+  setData: Dispatch<React.SetStateAction<ChangelogProps['Row']>>;
 }) {
   const [fileError, setFileError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);

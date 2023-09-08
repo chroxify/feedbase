@@ -3,7 +3,11 @@ import { TeamTable } from '@/components/settings/team-table';
 import { getProjectMembers } from '@/lib/api/projects';
 
 export default async function TeamSettings({ params }: { params: { slug: string } }) {
-  const { data: members } = await getProjectMembers(params.slug, 'server');
+  const { data: members, error } = await getProjectMembers(params.slug, 'server');
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
 
   return (
     <div className='flex h-full w-full flex-col space-y-6 overflow-y-auto'>

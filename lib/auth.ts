@@ -1,7 +1,8 @@
 import { SupabaseClient, UserMetadata } from '@supabase/supabase-js';
 import { createRouteHandlerClient, createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import { ProjectProps, ErrorProps } from '@/lib/types';
+import { ProjectProps, ErrorProps, ApiResponse } from '@/lib/types';
+import { Database } from '@/lib/supabase';
 
 // Create Supabase Client for needed client type
 // Also returns the current user
@@ -10,24 +11,24 @@ async function createClient(cType: 'server' | 'route') {
   const cookieStore = cookies();
   const supabase =
     cType === 'server'
-      ? await createServerComponentClient({ cookies: () => cookieStore })
-      : await createRouteHandlerClient({ cookies: () => cookieStore });
+      ? await createServerComponentClient<Database>({ cookies: () => cookieStore })
+      : await createRouteHandlerClient<Database>({ cookies: () => cookieStore });
   const user = await supabase.auth.getUser();
   return { supabase, user };
 }
-interface WithProjectAuthHandler {
+interface WithProjectAuthHandler<T> {
   (
     user: UserMetadata | null,
-    supabase: SupabaseClient,
-    project: ProjectProps | null,
+    supabase: SupabaseClient<Database>,
+    project: ProjectProps['Row'] | null,
     error: ErrorProps | null,
     allowPublic?: boolean
-  ): Promise<any>;
+  ): ApiResponse<T>;
 }
 
 // withProjectAuth is a helper function that can be used to wrap API routes
 // Ensures that the user is logged in and is a member of the project with the given slug
-export const withProjectAuth = (handler: WithProjectAuthHandler) => {
+export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
   return async (slug: string, cType: 'server' | 'route', allowPublic = false) => {
     // Get the user from the session
     const { supabase, user } = await createClient(cType);
@@ -67,13 +68,13 @@ export const withProjectAuth = (handler: WithProjectAuthHandler) => {
   };
 };
 
-interface WithUserAuthHandler {
-  (user: UserMetadata | null, supabase: SupabaseClient, error: ErrorProps | null): Promise<any>;
+interface WithUserAuthHandler<T> {
+  (user: UserMetadata | null, supabase: SupabaseClient<Database>, error: ErrorProps | null): ApiResponse<T>;
 }
 
 // withUserAuth is a helper function that can be used to wrap API routes
 // Ensures that the user is logged in
-export const withUserAuth = (handler: WithUserAuthHandler) => {
+export const withUserAuth = <T>(handler: WithUserAuthHandler<T>) => {
   return async (cType: 'server' | 'route') => {
     // Get the user from the session
     const { supabase, user } = await createClient(cType);

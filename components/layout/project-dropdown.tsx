@@ -18,10 +18,10 @@ export default function ProjectDropdown({
   projects,
   activeProject,
 }: {
-  projects: ProjectProps[];
-  activeProject: ProjectProps;
+  projects: ProjectProps['Row'][];
+  activeProject: ProjectProps['Row'] | null;
 }) {
-  const [selectedProject, setSelectedProject] = useState<ProjectProps | null>(activeProject);
+  const [selectedProject, setSelectedProject] = useState<ProjectProps['Row'] | null>(activeProject);
 
   return (
     <DropdownMenu>

@@ -10,9 +10,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { MoreVertical } from 'lucide-react';
 import { Button } from '../ui/button';
-import { ProfileProps } from '@/lib/types';
+import { TeamMemberProps } from '@/lib/types';
 
-export function TeamTable({ members }: { members: ProfileProps[] }) {
+export function TeamTable({ members }: { members: TeamMemberProps[] }) {
   function formatDate(dateString: string): string {
     const date = new Date(dateString);
     const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -43,7 +43,7 @@ export function TeamTable({ members }: { members: ProfileProps[] }) {
               <div className='flex flex-row items-center space-x-2'>
                 {/* Avatar */}
                 <Avatar>
-                  <AvatarImage src={member.avatar_url} alt='Profile Picture' />
+                  <AvatarImage src={member.avatar_url ?? ''} alt={member.full_name} />
                   <AvatarFallback>{member.full_name[0]}</AvatarFallback>
                 </Avatar>
 
@@ -59,7 +59,7 @@ export function TeamTable({ members }: { members: ProfileProps[] }) {
                 {/* Join Date */}
                 {/* TODO: Add Role Badge */}
                 <span className='text-xs font-semibold text-foreground/50'>
-                  {'Joined ' + formatDate(member.created_at)}
+                  {'Joined ' + formatDate(member.joined_at)}
                 </span>
 
                 {/* Actions */}

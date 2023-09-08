@@ -20,8 +20,8 @@ import { toast } from 'sonner';
 import { useState } from 'react';
 import { ProjectProps } from '@/lib/types';
 
-export default function GeneralConfigCards({ projectData }: { projectData: ProjectProps }) {
-  const [project, setProject] = useState<ProjectProps>(projectData);
+export default function GeneralConfigCards({ projectData }: { projectData: ProjectProps['Row'] }) {
+  const [project, setProject] = useState<ProjectProps['Row']>(projectData);
 
   function handleSlugChange(event: React.ChangeEvent<HTMLInputElement>) {
     // Replace spaces with dashes

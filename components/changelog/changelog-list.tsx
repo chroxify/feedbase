@@ -19,32 +19,10 @@ export default function ChangelogList({
   changelogs,
   projectSlug,
 }: {
-  changelogs: ChangelogProps[];
+  changelogs: ChangelogProps['Row'][];
   projectSlug: string;
 }) {
-  function formatDate(date: Date) {
-    // Convert date to string
-    const dateString = date?.toString();
-
-    // Create date object from string
-    const dateObject = new Date(dateString);
-
-    return new Date(dateObject).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-  }
-
-  function formatData(data: ChangelogProps) {
-    if (!data?.publish_date) return data;
-
-    // Convert date to string
-    const dateString = data?.publish_date!.toString();
-
-    return {
-      ...data,
-      publish_date: new Date(dateString),
-    };
-  }
-
-  async function onDeleteChangelog(changelog: ChangelogProps) {
+  async function onDeleteChangelog(changelog: ChangelogProps['Row']) {
     const promise = new Promise((resolve, reject) => {
       fetch(`/api/v1/projects/${projectSlug}/changelogs/${changelog.id}`, {
         method: 'DELETE',
@@ -80,7 +58,7 @@ export default function ChangelogList({
 
   return (
     <div className='flex flex-col gap-4'>
-      {changelogs.map((changelog: ChangelogProps) => (
+      {changelogs.map((changelog) => (
         <div
           className='flex h-48 gap-5 rounded-lg border bg-card p-3 text-card-foreground shadow-sm'
           key={changelog.id}>
@@ -123,7 +101,10 @@ export default function ChangelogList({
                 {/* If date is not undefined, show date */}
                 {changelog.publish_date && (
                   <Badge size='default' variant='secondary' className='self-start'>
-                    {formatDate(changelog.publish_date)}
+                    {new Date(changelog.publish_date).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                    })}
                   </Badge>
                 )}
               </div>
@@ -159,7 +140,7 @@ export default function ChangelogList({
                         Edit
                       </DropdownMenuItem>
                     }
-                    changelogData={formatData(changelog)}
+                    changelogData={changelog}
                     isEdit
                   />
 

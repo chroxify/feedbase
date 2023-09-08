@@ -1,27 +1,28 @@
 import { withProjectAuth, withUserAuth } from '@/lib/auth';
 import { isSlugValid } from '@/lib/utils';
-import { ErrorProps, ProjectProps } from '../types';
+import { ErrorProps, ProfileProps, ProjectProps, TeamMemberProps } from '../types';
 
 // Get Project
-export const getProjectBySlug = withProjectAuth(async (user, supabase, project, error) => {
-  // If any errors, return error
-  if (error) {
-    return { data: null, error: error };
-  }
+export const getProjectBySlug = withProjectAuth<ProjectProps['Row']>(
+  async (user, supabase, project, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error: error };
+    }
 
-  // Return project
-  return { data: project, error: null };
-});
+    // Check if project exists
+    if (!project) {
+      return { data: null, error: { message: 'project not found.', status: 404 } };
+    }
+
+    // Return project
+    return { data: project, error: null };
+  }
+);
 
 // Create Project
-export const createProject = (
-  data: { name: string; slug: string },
-  cType: 'server' | 'route'
-): Promise<{
-  data: ProjectProps | null;
-  error: ErrorProps | null;
-}> =>
-  withUserAuth(async (user, supabase, error) => {
+export const createProject = (data: ProjectProps['Insert'], cType: 'server' | 'route') =>
+  withUserAuth<ProjectProps['Row']>(async (user, supabase, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error: error };
@@ -59,15 +60,8 @@ export const createProject = (
   })(cType);
 
 // Update Project by slug
-export const updateProjectBySlug = (
-  slug: string,
-  data: { name: string; slug: string },
-  cType: 'server' | 'route'
-): Promise<{
-  data: ProjectProps | null;
-  error: ErrorProps | null;
-}> =>
-  withProjectAuth(async (user, supabase, project, error) => {
+export const updateProjectBySlug = (slug: string, data: ProjectProps['Update'], cType: 'server' | 'route') =>
+  withProjectAuth<ProjectProps['Row']>(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error: error };
@@ -90,26 +84,32 @@ export const updateProjectBySlug = (
   })(slug, cType);
 
 // Delete Project by slug
-export const deleteProjectBySlug = withProjectAuth(async (user, supabase, project, error) => {
-  // If any errors, return error
-  if (error) {
-    return { data: null, error: error };
+export const deleteProjectBySlug = withProjectAuth<ProjectProps['Row']>(
+  async (user, supabase, project, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error: error };
+    }
+
+    // Delete project
+    const { data: deletedProject, error: deleteError } = await supabase
+      .from('projects')
+      .delete()
+      .eq('id', project!.id)
+      .select();
+
+    // Check for errors
+    if (deleteError) {
+      return { data: null, error: { message: deleteError.message, status: 500 } };
+    }
+
+    // Return success
+    return { data: deletedProject[0], error: null };
   }
+);
 
-  // Delete project
-  const { error: deleteError } = await supabase.from('projects').delete().eq('id', project!.id);
-
-  // Check for errors
-  if (deleteError) {
-    return { data: null, error: { message: deleteError.message, status: 500 } };
-  }
-
-  // Return success
-  return { data: { success: true }, error: null };
-});
-
-// Get all user projects
-export const getUserProjects = withUserAuth(async (user, supabase, error) => {
+// Get all projects for an user
+export const getUserProjects = withUserAuth<ProjectProps['Row'][]>(async (user, supabase, error) => {
   // If any errors, return error
   if (error) {
     return { data: null, error: error };
@@ -127,38 +127,43 @@ export const getUserProjects = withUserAuth(async (user, supabase, error) => {
   }
 
   // Restructure projects data
-  const restructuredData = projects.map((item) => ('projects' in item ? item.projects : item));
+  const restructuredData = projects.map((item) =>
+    'projects' in item ? item.projects : item
+  ) as ProjectProps['Row'][];
 
   // Return projects
   return { data: restructuredData, error: null };
 });
 
 // Get all project members by slug
-export const getProjectMembers = withProjectAuth(async (user, supabase, project, error) => {
-  // If any errors, return error
-  if (error) {
-    return { data: null, error: error };
+export const getProjectMembers = withProjectAuth<TeamMemberProps[]>(
+  async (user, supabase, project, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error: error };
+    }
+
+    // Get all members for project
+    const { data: members, error: membersError } = await supabase
+      .from('project_members')
+      .select('profiles (*), created_at')
+      .eq('project_id', project!.id);
+
+    // Check for errors
+    if (membersError) {
+      return { data: null, error: { message: membersError.message, status: 500 } };
+    }
+
+    // Map members data and add joined_at field to each member
+    const restructuredData = members.map((item) => {
+      const profileData = item.profiles;
+      return {
+        ...profileData,
+        joined_at: item.created_at,
+      };
+    }) as TeamMemberProps[];
+
+    // Return members
+    return { data: restructuredData, error: null };
   }
-
-  // Get all members for project
-  const { data: members, error: membersError } = await supabase
-    .from('project_members')
-    .select('profiles (*), created_at')
-    .eq('project_id', project!.id);
-
-  // Check for errors
-  if (membersError) {
-    return { data: null, error: { message: membersError.message, status: 500 } };
-  }
-
-  // Restructure members data and merge created_at field
-  const restructuredData = members.map((item) => {
-    return {
-      ...item.profiles,
-      created_at: item.created_at,
-    };
-  });
-
-  // Return members
-  return { data: restructuredData, error: null };
-});
+);

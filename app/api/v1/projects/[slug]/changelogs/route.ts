@@ -1,4 +1,5 @@
 import { createChangelog, getAllProjectChangelogs } from '@/lib/api/changelogs';
+import { ChangelogProps } from '@/lib/types';
 import { NextResponse } from 'next/server';
 
 /* 
@@ -14,13 +15,14 @@ import { NextResponse } from 'next/server';
     }
 */
 export async function POST(req: Request, context: { params: { slug: string } }) {
-  const { title, summary, content, image, publish_date, published } = await req.json();
+  const { title, summary, content, image, publish_date, published } =
+    (await req.json()) as ChangelogProps['Insert'];
 
   // Validate Request Body
   if (published) {
-    if (!title || !summary || !content || !published) {
+    if (!title || !summary || !content) {
       return NextResponse.json(
-        { error: 'missing required fields. (title, summary, content, published)' },
+        { error: 'title, summary, and content are required when publishing a changelog.' },
         { status: 400 }
       );
     }
@@ -28,7 +30,15 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
 
   const { data: changelog, error } = await createChangelog(
     context.params.slug,
-    { title, summary, content, image, publish_date, published },
+    {
+      title: title || '',
+      summary: summary || '',
+      content: content || '',
+      image: image || '',
+      publish_date: publish_date || null,
+      published: published || false,
+      project_id: 'dummy-id',
+    },
     'route'
   );
 

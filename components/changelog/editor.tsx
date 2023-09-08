@@ -12,8 +12,8 @@ export default function RichTextEditor({
   data,
   setData,
 }: {
-  data: ChangelogProps;
-  setData: React.Dispatch<React.SetStateAction<ChangelogProps>>;
+  data: ChangelogProps['Row'];
+  setData: React.Dispatch<React.SetStateAction<ChangelogProps['Row']>>;
 }) {
   const editor = useEditor({
     extensions: [StarterKit, Highlight, Typography],

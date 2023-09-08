@@ -3,7 +3,11 @@ import { getProjectBySlug } from '@/lib/api/projects';
 
 export default async function GeneralSettings({ params }: { params: { slug: string } }) {
   // Fetch project data
-  const { data: project } = await getProjectBySlug(params.slug, 'server');
+  const { data: project, error } = await getProjectBySlug(params.slug, 'server');
+
+  if (error) {
+    return <div>{error.message}</div>;
+  }
 
   return (
     <div className='flex h-full w-full flex-col space-y-6 overflow-y-auto'>
