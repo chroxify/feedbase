@@ -33,7 +33,7 @@ const tabs = [
 export default function NavTabs() {
   const [activeTab, setActiveTab] = useState(0);
   const pathname = usePathname();
-  const slug = pathname.split('/')[2];
+  const slug = pathname.split('/')[1];
 
   // Check current active tab based on url
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function NavTabs() {
       {tabs.map((tab, index) => (
         // If feedback or roadmap, don't link to the page
         <Link
-          href={tab.slug === 'feedback' || tab.slug === 'roadmap' ? '#' : `/projects/${slug}/${tab.slug}`}
+          href={tab.slug === 'feedback' || tab.slug === 'roadmap' ? '#' : `/${slug}/${tab.slug}`}
           key={index}
           className={tab.slug === 'feedback' || tab.slug === 'roadmap' ? 'cursor-default' : ''}>
           <Button

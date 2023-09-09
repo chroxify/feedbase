@@ -42,7 +42,7 @@ export default function SettingsTabs({ params }: { params: { slug: string } }) {
   return (
     <div className='bg-blue flex h-10 w-full flex-row items-center gap-4'>
       {tabs.map((tab) => (
-        <Link href={`/projects/${params.slug}/settings/${tab.slug}`} key={tab.slug}>
+        <Link href={`/${params.slug}/settings/${tab.slug}`} key={tab.slug}>
           <Button
             variant='secondary'
             className={cn(

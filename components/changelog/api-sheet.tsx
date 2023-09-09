@@ -45,11 +45,17 @@ export function ApiSheet({ projectSlug }: { projectSlug: string }) {
           {/* Endpoint */}
           <div className='flex flex-col gap-2'>
             <Label>Public Endpoint</Label>
-            <Input value={`https://luminar.so/api/v1/${projectSlug}/changelogs`} readOnly tabIndex={-1} />
+            <Input
+              value={`${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/api/v1/${projectSlug}/changelogs`}
+              readOnly
+              tabIndex={-1}
+            />
             <Button
               variant='default'
               onClick={(event) => {
-                navigator.clipboard.writeText(`https://luminar.so/api/v1/${projectSlug}/changelogs`);
+                navigator.clipboard.writeText(
+                  `${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/api/v1/${projectSlug}/changelogs`
+                );
                 toast.success('Copied to clipboard');
               }}>
               Copy Endpoint

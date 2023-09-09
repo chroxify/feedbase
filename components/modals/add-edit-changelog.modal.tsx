@@ -101,7 +101,7 @@ export function AddChangelogModal({
     });
 
     promise.then(() => {
-      window.location.href = `/projects/${projectSlug}/changelog`;
+      window.location.href = `/${projectSlug}/changelog`;
     });
   }
 
@@ -151,7 +151,7 @@ export function AddChangelogModal({
     });
 
     promise.then(() => {
-      window.location.href = `/projects/${projectSlug}/changelog`;
+      window.location.href = `/${projectSlug}/changelog`;
     });
   }
 
