@@ -3,6 +3,7 @@ import Sidebar from '@/components/layout/sidebar';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { headers } from 'next/headers';
+import { APP_DOMAIN } from '@/lib/constants';
 
 export default async function ProjectsLayout({ children }: { children: React.ReactNode }) {
   const headerList = headers();
@@ -14,7 +15,7 @@ export default async function ProjectsLayout({ children }: { children: React.Rea
         {/* Header with logo and hub button */}
         <div className='flex w-full flex-row items-center justify-between pb-4'>
           <LogoProvider className='w-32' />
-          <Link href={`/${projectSlug}`} rel='noopener noreferrer' target='_blank'>
+          <Link href={APP_DOMAIN.replace('app', projectSlug!)} rel='noopener noreferrer' target='_blank'>
             <Button variant='outline' size='sm'>
               Public Hub
             </Button>

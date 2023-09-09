@@ -80,7 +80,7 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
     });
 
     promise.then(() => {
-      window.location.href = '/projects';
+      window.location.href = '/';
     });
   }
 
@@ -117,7 +117,7 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
     promise.then(() => {
       // If the slug has changed, redirect to the new slug
       if (project.slug !== projectData.slug) {
-        window.location.href = `/projects/${project.slug}/settings/general`;
+        window.location.href = `/${project.slug}/settings/general`;
       } else {
         window.location.reload();
       }

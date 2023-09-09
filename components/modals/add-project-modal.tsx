@@ -14,10 +14,9 @@ import {
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { HelpCircle, Plus } from 'lucide-react';
+import { HelpCircle } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { DropdownMenuItem } from '../ui/dropdown-menu';
 
 export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode }) {
   const [name, setName] = useState<string>('');
@@ -64,7 +63,7 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
     });
 
     promise.then(() => {
-      window.location.href = `/projects/${slug}`;
+      window.location.href = `/${slug}`;
     });
   }
 

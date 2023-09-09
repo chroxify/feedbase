@@ -24,7 +24,7 @@ export default async function SignUp() {
 
   // If there is a session, redirect to projects
   if (user) {
-    redirect('/projects');
+    redirect('/');
   }
 
   return (

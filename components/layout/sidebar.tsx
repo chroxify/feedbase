@@ -7,6 +7,7 @@ import ProjectDropdown from './project-dropdown';
 import { headers } from 'next/headers';
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
+import { redirect } from 'next/navigation';
 
 export default async function Sidebar() {
   // Fetch the user's projects
@@ -19,6 +20,11 @@ export default async function Sidebar() {
 
   // Get the project with the current slug
   const currentProject = projects.find((project) => project.slug === headerList.get('x-project'));
+
+  // If currentProject is undefined, redirect to the first project
+  if (!currentProject) {
+    return redirect(`/${projects[0].slug}`);
+  }
 
   return (
     <>

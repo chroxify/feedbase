@@ -12,9 +12,10 @@ export default async function Projects() {
 
   // Redirect to the first project
   if (projects.length > 0) {
-    return redirect(`/projects/${projects[0].slug}`);
+    return redirect(`/${projects[0].slug}`);
   }
 
+  // TODO: Improve this and make this redirect to an onboarding page if the user has no projects
   return (
     <div className='flex h-full w-full flex-col overflow-y-auto'>
       {/* Big Title */}
