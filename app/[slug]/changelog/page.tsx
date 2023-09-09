@@ -50,10 +50,7 @@ export default async function Changelog({ params }: { params: { slug: string } }
                 <div className='flex w-3/4 flex-col'>
                   {/* Image */}
                   <Image
-                    src={
-                      changelog.image ||
-                      'https://innmcibhgnhxpghxldrr.supabase.co/storage/v1/object/public/changelog-images/rave/vqltte'
-                    }
+                    src={changelog.image || ''}
                     alt='Thumbnail'
                     width={1200}
                     height={600}
