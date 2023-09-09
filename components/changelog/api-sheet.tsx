@@ -46,7 +46,7 @@ export function ApiSheet({ projectSlug }: { projectSlug: string }) {
           <div className='flex flex-col gap-2'>
             <Label>Public Endpoint</Label>
             <Input
-              value={`${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/api/v1/${projectSlug}/changelogs`}
+              value={`https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/api/v1/${projectSlug}/changelogs`}
               readOnly
               tabIndex={-1}
             />
@@ -54,7 +54,7 @@ export function ApiSheet({ projectSlug }: { projectSlug: string }) {
               variant='default'
               onClick={(event) => {
                 navigator.clipboard.writeText(
-                  `${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/api/v1/${projectSlug}/changelogs`
+                  `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/api/v1/${projectSlug}/changelogs`
                 );
                 toast.success('Copied to clipboard');
               }}>
