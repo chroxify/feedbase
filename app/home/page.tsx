@@ -13,7 +13,10 @@ export default function Landing() {
 
   return (
     <Background>
-      <div className={'flex h-screen w-full flex-col items-center selection:bg-cyan-400/10'}>
+      <div
+        className={
+          'flex h-screen w-full flex-col items-center selection:bg-teal-700/20 selection:text-teal-400'
+        }>
         <div className='flex h-full w-full flex-col items-center p-5 sm:p-10 lg:max-w-screen-xl'>
           {/* Header */}
           <div className='flex w-full flex-row items-center justify-between'>
@@ -40,8 +43,8 @@ export default function Landing() {
             {/* Title */}
             <div className='max-w-3xl sm:shrink-0'>
               {/* Badge */}
-              <Badge className='w-fit select-none bg-cyan-400/20 font-light text-cyan-400 hover:cursor-default hover:bg-cyan-400/20'>
-                Coming Soon
+              <Badge className='w-fit select-none bg-rose-400/10 font-light text-rose-400 hover:cursor-default hover:bg-rose-400/20'>
+                Currently in private beta
               </Badge>
 
               {/* Title */}
