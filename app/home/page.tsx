@@ -1,52 +1,93 @@
-import LogoProvider from '@/components/logo-provider';
-import { Background } from '@/components/ui/background/background';
+'use client';
+
+import { Icons } from '@/components/icons';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import Link from 'next/link';
+import { WaitlistModal } from '@/components/modals/add-waitlist-modal';
+import { Background } from '@/components/ui/background/background';
+import { useState } from 'react';
 
-export default async function Landing() {
+export default function Landing() {
+  const [open, setOpen] = useState<boolean>(false);
+
   return (
-    <div className='flex h-screen w-full flex-col items-center bg-[#0A0C10]'>
-      <div className='flex h-full w-full flex-col items-center lg:max-w-screen-xl'>
-        {/* Header */}
-        <div className='z-50 flex w-full flex-row items-center justify-between p-5'>
-          <LogoProvider forceTheme='dark' className='w-36 pb-0' />
-          <Link
-            href='/login'
-            className='inline-flex h-10 items-center justify-center rounded-md bg-[#7855FF] px-4 py-2 text-sm font-medium text-[#f8fafc] hover:bg-[#7855FF]/90 sm:text-base'>
-            Login
-          </Link>
-        </div>
+    <Background>
+      <div className={'flex h-screen w-full flex-col items-center selection:bg-cyan-400/10'}>
+        <div className='flex h-full w-full flex-col items-center p-5 sm:p-10 lg:max-w-screen-xl'>
+          {/* Header */}
+          <div className='flex w-full flex-row items-center justify-between'>
+            {/* Logo */}
+            <Icons.logoText className='w-24 text-white' />
 
-        {/* Main Content */}
-        <div className='z-50 mb-28 flex h-full w-full flex-col items-center justify-center gap-10'>
-          <div className='flex flex-col gap-5'>
-            <h1 className='text-center text-4xl font-bold text-[#f8fafc] sm:text-5xl md:text-6xl lg:text-7xl'>
-              Supercharge Product
-              <br />
-              <span className='text-[#7855FF]'>Engagement</span> and{' '}
-              <span className='text-[#7855FF]'>Insights</span>
-            </h1>
-            <p className='text-center text-[#f8fafc]/80 sm:text-lg md:text-xl lg:text-2xl'>
-              Open-source tool for smooth feedback management,
-              <br /> empowering your customer relationships.
-            </p>
+            {/* Buttons */}
+            <WaitlistModal open={open} setOpen={setOpen}>
+              <Button className='hidden border border-background sm:inline-flex'>Request access</Button>
+            </WaitlistModal>
+            <div className='flex flex-row gap-4 pt-2 sm:hidden'>
+              <Link href='/github'>
+                <Icons.github className='h-[22px] w-[22px] text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
+              </Link>
+
+              <Link href='/twitter'>
+                <Icons.twitter className='h-[22px] w-[22px] text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
+              </Link>
+            </div>
           </div>
 
-          {/* Buttons */}
-          <div className='flex flex-row items-center justify-center gap-4'>
-            <Link
-              href='/signup'
-              className='inline-flex h-10 items-center justify-center rounded-md bg-[#7855FF] px-4 py-2 text-sm font-medium text-[#f8fafc] hover:bg-[#7855FF]/90 sm:text-base'>
-              Get Started
-            </Link>
-            <Link
-              href='/github'
-              className='inline-flex h-10 items-center justify-center rounded-md px-4 py-2 text-sm font-medium text-[#f8fafc] hover:underline sm:text-base'>
-              Star on Github
-            </Link>
+          {/* Content */}
+          <div className='flex h-full w-full flex-col justify-center'>
+            {/* Title */}
+            <div className='max-w-3xl sm:shrink-0'>
+              {/* Badge */}
+              <Badge className='w-fit select-none bg-cyan-400/20 font-light text-cyan-400 hover:cursor-default hover:bg-cyan-400/20'>
+                Coming Soon
+              </Badge>
+
+              {/* Title */}
+              <h1 className='md:tex-6xl mt-2 bg-gradient-to-br from-white to-white/30 bg-clip-text py-1 text-4xl font-bold text-transparent sm:text-5xl'>
+                Supercharge Product Engagement and Insights
+              </h1>
+
+              {/* Description */}
+              <p className='mb-8 mt-4 text-base font-extralight text-white/50 sm:text-lg'>
+                Create changelogs, roadmaps, and collect feedback with ease. Luminar provides the best user
+                and team experience, allowing you to focus on building your product.
+              </p>
+
+              {/* Access Button Desktop */}
+              <WaitlistModal keyListener open={open} setOpen={setOpen}>
+                <button className='group hidden select-none items-center gap-2 text-sm font-normal text-white/50 outline-none transition duration-200 ease-in-out hover:text-white sm:inline-flex'>
+                  Press
+                  <kbd className='inline-flex h-6 w-6 select-none items-center justify-center rounded border border-white/20 bg-[#18191E] text-xs uppercase text-white/50 transition duration-200 ease-in-out group-hover:bg-white/10 group-hover:text-white'>
+                    L
+                  </kbd>
+                  to request access
+                </button>
+              </WaitlistModal>
+
+              {/* Access Button Mobile */}
+              <WaitlistModal open={open} setOpen={setOpen}>
+                <Button className='border border-background sm:hidden'>Request access</Button>
+              </WaitlistModal>
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className='flex w-full flex-col items-start justify-start gap-2 pb-5 sm:pb-0'>
+            {/* Socials */}
+            <div className='hidden flex-row gap-4 pt-2 sm:flex'>
+              <Link href='/github'>
+                <Icons.github className='h-5 w-5 text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
+              </Link>
+
+              <Link href='/twitter'>
+                <Icons.twitter className='h-5 w-5 text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
+              </Link>
+            </div>
           </div>
         </div>
-        <Background />
       </div>
-    </div>
+    </Background>
   );
 }

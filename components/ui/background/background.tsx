@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import styles from './background.module.css';
 
-export function Background() {
-  return <div className={clsx(styles.gradient, 'fixed bottom-0 left-0 w-full ')} />;
+export function Background({ children }: { children: React.ReactNode }) {
+  return <div className={clsx(styles.background, 'h-screen w-full')}>{children}</div>;
 }
