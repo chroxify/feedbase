@@ -126,6 +126,27 @@ export interface Database {
         };
         Relationships: [];
       };
+      waitlist: {
+        Row: {
+          created_at: string;
+          email: string;
+          id: number;
+          name: string;
+        };
+        Insert: {
+          created_at?: string;
+          email: string;
+          id?: number;
+          name: string;
+        };
+        Update: {
+          created_at?: string;
+          email?: string;
+          id?: number;
+          name?: string;
+        };
+        Relationships: [];
+      };
     };
     Views: {
       [_ in never]: never;
