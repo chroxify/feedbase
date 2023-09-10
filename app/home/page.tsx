@@ -77,15 +77,15 @@ export default function Landing() {
           </div>
 
           {/* Footer */}
-          <div className='flex w-full flex-col items-start justify-start gap-2 pb-5 sm:pb-0'>
+          <div className='hidden w-full flex-col items-start justify-start gap-2 pt-2 sm:flex sm:pb-5'>
             {/* Socials */}
-            <div className='hidden flex-row gap-4 pt-2 sm:flex'>
+            <div className='flex flex-row gap-4'>
               <Link href='/github'>
-                <Icons.github className='h-5 w-5 text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
+                <Icons.github className='h-[22px] w-[22px] text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
               </Link>
 
               <Link href='/twitter'>
-                <Icons.twitter className='h-5 w-5 text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
+                <Icons.twitter className='h-[22px] w-[22px] text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
               </Link>
             </div>
           </div>
