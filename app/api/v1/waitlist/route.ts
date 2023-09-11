@@ -25,7 +25,7 @@ export async function POST(req: Request) {
   const supabase = await createRouteHandlerClient<Database>({ cookies: () => cookieStore });
 
   // Insert into Waitlist
-  const { data, error } = await supabase.from('waitlist').insert({ name, email }).select();
+  const { error } = await supabase.from('waitlist').insert({ name, email });
 
   // Check for errors
   if (error) {
@@ -38,5 +38,5 @@ export async function POST(req: Request) {
   }
 
   // Return data
-  return NextResponse.json({ data });
+  return NextResponse.json({ success: true });
 }

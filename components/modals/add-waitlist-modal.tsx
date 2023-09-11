@@ -104,7 +104,7 @@ export function WaitlistModal({
   return (
     <Dialog onOpenChange={(open) => setOpen(open)} open={open}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className='max-w-sm rounded-lg p-9 selection:bg-cyan-400/10 '>
+      <DialogContent className='max-w-sm rounded-lg p-9 selection:bg-teal-700/20 selection:text-teal-400'>
         <DialogHeader className='flex flex-col items-center pb-2 pt-5'>
           <DialogTitle className='pb-2 font-normal'>Request Access</DialogTitle>
           <DialogDescription className='text-center font-extralight text-white/50'>
