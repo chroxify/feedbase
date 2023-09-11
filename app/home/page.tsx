@@ -15,7 +15,7 @@ export default function Landing() {
     <Background>
       <div
         className={
-          'flex h-screen w-full flex-col items-center selection:bg-teal-700/20 selection:text-teal-400'
+          'flex h-full w-full flex-col items-center selection:bg-teal-700/20 selection:text-teal-400'
         }>
         <div className='flex h-full w-full flex-col items-center p-5 sm:p-10 lg:max-w-screen-xl'>
           {/* Header */}

@@ -37,7 +37,7 @@
   }
  
   .dark {
-    --background: 0 0% 3%; /* #0A0C10 */ 
+    --background: 0 0% 2%; /* #0A0C10 | #060606*/ 
     --foreground: 210 40% 98%; /* #D6D6D6 */
  
     --muted: 210 20% 2%; /* #20242c */

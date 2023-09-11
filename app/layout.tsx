@@ -4,12 +4,14 @@ import { cn } from '@/lib/utils';
 import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/react';
 import { headers } from 'next/headers';
+import { Metadata } from 'next';
 
 const inter = Inter({ subsets: ['latin'] });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: 'Luminar',
   description: 'Collect feedback & communicating updates with ease.',
+  viewport: 'width=device-width, initial-scale=1, maximum-scale=1', // Prevents auto-zoom on mobile
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
