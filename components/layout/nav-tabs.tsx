@@ -5,40 +5,24 @@ import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
-import { TagIcon, MapIcon, LightBulbIcon, Cog6ToothIcon } from '@heroicons/react/24/solid';
+import { NavbarTabProps } from '@/lib/types';
 
-const tabs = [
-  {
-    name: 'Changelogs',
-    icon: <TagIcon className='h-5 w-5' />,
-    slug: 'changelog',
-  },
-  {
-    name: 'Feedback',
-    icon: <LightBulbIcon className='h-5 w-5' />,
-    slug: 'feedback',
-  },
-  {
-    name: 'Roadmap',
-    icon: <MapIcon className='h-5 w-5' />,
-    slug: 'roadmap',
-  },
-  {
-    name: 'Settings',
-    icon: <Cog6ToothIcon className='h-5 w-5' />,
-    slug: 'settings',
-  },
-];
-
-export default function NavTabs() {
-  const [activeTab, setActiveTab] = useState(0);
+export default function NavTabs({
+  tabs,
+  initialTabIndex,
+  projectSlug,
+}: {
+  tabs: NavbarTabProps[];
+  initialTabIndex: number;
+  projectSlug: string;
+}) {
+  const [activeTab, setActiveTab] = useState(initialTabIndex);
   const pathname = usePathname();
-  const slug = pathname.split('/')[1];
 
   // Check current active tab based on url
   useEffect(() => {
     // Check if any of the tab slugs are in the pathname
-    const currentTab = tabs.findIndex((tab) => pathname.includes(tab.slug));
+    const currentTab = tabs.findIndex((tab) => pathname.split('/')[2] === tab.slug);
 
     // If tab is found, set it as active
     if (currentTab !== -1) {
@@ -51,7 +35,7 @@ export default function NavTabs() {
       {tabs.map((tab, index) => (
         // If feedback or roadmap, don't link to the page
         <Link
-          href={tab.slug === 'feedback' || tab.slug === 'roadmap' ? '#' : `/${slug}/${tab.slug}`}
+          href={tab.slug === 'feedback' || tab.slug === 'roadmap' ? '#' : `/${projectSlug}/${tab.slug}`}
           key={index}
           className={tab.slug === 'feedback' || tab.slug === 'roadmap' ? 'cursor-default' : ''}>
           <Button
@@ -60,7 +44,6 @@ export default function NavTabs() {
               'h-fit w-full items-center justify-start gap-2 border border-transparent p-1 text-foreground/80 hover:text-foreground',
               activeTab === index && 'bg-secondary text-foreground'
             )}
-            onClick={() => setActiveTab(index)}
             // If feedback or roadmap, disable the button
             disabled={tab.slug === 'feedback' || tab.slug === 'roadmap'}>
             <div
