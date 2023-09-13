@@ -126,7 +126,7 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
 
   return (
     <>
-      <Card className='flex w-full flex-col border-none'>
+      <Card className='flex w-full flex-col '>
         <CardHeader>
           <CardTitle>General</CardTitle>
           <CardDescription>Configure your project&apos;s general settings.</CardDescription>

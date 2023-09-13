@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Icons } from '@/components/icons';
-import { WaitlistModal } from '@/components/modals/add-waitlist-modal';
+import { Icons } from '@/components/shared/icons';
+import { WaitlistModal } from '@/components/dashboard/modals/add-waitlist-modal';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { Badge } from '@/components/ui/badge';

@@ -1,7 +1,7 @@
 'use client';
 
 import { useTheme } from 'next-themes';
-import { Icons } from './icons';
+import { Icons } from '@/components/shared/icons';
 import { cn } from '@/lib/utils';
 
 export default function LogoProvider({

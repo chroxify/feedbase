@@ -2,16 +2,16 @@
 
 import { ChangelogProps } from '@/lib/types';
 import Image from 'next/image';
-import { Badge } from '../ui/badge';
+import { Badge } from '@/components/ui/badge';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Button } from '../ui/button';
+import { Button } from '@/components/ui/button';
 import { MoreVertical } from 'lucide-react';
-import { AddChangelogModal } from '../modals/add-edit-changelog.modal';
+import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';
 import { toast } from 'sonner';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 

@@ -9,9 +9,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { useState } from 'react';
-import AddProjectDialog from '@/components/modals/add-project-modal';
+import AddProjectDialog from '@/components/dashboard/modals/add-project-modal';
 import { ProjectProps } from '@/lib/types';
-import { Skeleton } from '../ui/skeleton';
+import { Skeleton } from '@/components/ui/skeleton';
 import Link from 'next/link';
 
 export default function ProjectDropdown({

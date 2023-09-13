@@ -5,7 +5,7 @@ import StarterKit from '@tiptap/starter-kit';
 import Highlight from '@tiptap/extension-highlight';
 import Typography from '@tiptap/extension-typography';
 import React from 'react';
-import TooltipLabel from '../ui/tooltip-label';
+import TooltipLabel from '@/components/ui/tooltip-label';
 import { ChangelogProps } from '@/lib/types';
 
 export default function RichTextEditor({

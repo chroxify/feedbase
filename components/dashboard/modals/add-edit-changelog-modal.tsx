@@ -22,13 +22,13 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
 import { Input } from '@/components/ui/input';
-import { PublishDatePicker } from '../changelog/date-picker';
+import { PublishDatePicker } from '@/components/dashboard/changelogs/date-picker';
 import { X } from 'lucide-react';
 import { DialogClose } from '@radix-ui/react-dialog';
-import FileDrop from '../changelog/file-drop';
-import { Textarea } from '../ui/textarea';
-import Editor from '../changelog/editor';
-import TooltipLabel from '../ui/tooltip-label';
+import FileDrop from '@/components/dashboard/changelogs/image-upload';
+import { Textarea } from '@/components/ui/textarea';
+import Editor from '@/components/dashboard/changelogs/content-editor';
+import TooltipLabel from '@/components/ui/tooltip-label';
 import { useState } from 'react';
 import { ChangelogProps } from '@/lib/types';
 import { toast } from 'sonner';

@@ -1,9 +1,9 @@
 import { LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import ToggleThemeButton from './theme-button';
-import NavTabs from './nav-tabs';
+import ToggleThemeButton from '@/components/layout/theme-button';
+import NavTabs from '@/components/layout/nav-tabs';
 import { getUserProjects } from '@/lib/api/projects';
-import ProjectDropdown from './project-dropdown';
+import ProjectDropdown from '@/components/layout/project-dropdown';
 import { headers } from 'next/headers';
 import { ExclamationCircleIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
