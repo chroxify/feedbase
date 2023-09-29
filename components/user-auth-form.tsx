@@ -1,6 +1,6 @@
 'use client';
 
-import { Icons } from '@/components/shared/icons';
+import { Icons } from '@/components/shared/icons/icons-static';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -129,7 +129,7 @@ export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) 
           <span className='w-full border-t' />
         </div>
         <div className='relative flex justify-center text-xs uppercase'>
-          <span className='bg-background px-2 text-muted-foreground'>Or continue with</span>
+          <span className='bg-root px-2 text-muted-foreground'>Or continue with</span>
         </div>
       </div>
       <Button variant='outline' type='button' disabled={isLoading} onClick={handleGitHubSignIn}>

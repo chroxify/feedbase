@@ -126,7 +126,6 @@ export function WaitlistModal({
               tabIndex={-1}
               value={name}
               onChange={(event) => setName(event.target.value)}
-              className='col-span-3 font-extralight placeholder:font-extralight placeholder:text-white/50 focus-visible:ring-white/10'
             />
           </div>
 
@@ -145,7 +144,6 @@ export function WaitlistModal({
               value={email}
               tabIndex={-1}
               onChange={(event) => setEmail(event.target.value)}
-              className='col-span-3 font-extralight placeholder:font-extralight placeholder:text-white/50 focus-visible:ring-white/10'
             />
           </div>
         </div>

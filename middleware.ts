@@ -61,5 +61,10 @@ export default async function middleware(req: NextRequest) {
   }
 
   // rewrite everything else to `/[sub-domain]/[path] dynamic route
-  return NextResponse.rewrite(new URL(`/${hostname.split('.')[0]}${path}`, req.url));
+  return NextResponse.rewrite(new URL(`/${hostname.split('.')[0]}${path}`, req.url), {
+    headers: {
+      'x-pathname': path,
+      'x-project': hostname.split('.')[0],
+    },
+  });
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Icons } from '@/components/shared/icons';
+import { Icons } from '@/components/shared/icons/icons-static';
 import { WaitlistModal } from '@/components/dashboard/modals/add-waitlist-modal';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
@@ -15,7 +15,7 @@ export default function HomeContent() {
       {/* Header */}
       <div className='flex w-full flex-row items-center justify-between'>
         {/* Logo */}
-        <Icons.logoText className='w-24 text-white' />
+        <Icons.logoText className='w-24 fill-white' />
 
         {/* Buttons */}
         <WaitlistModal open={open} setOpen={setOpen}>

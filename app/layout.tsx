@@ -25,11 +25,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Analytics />
         <ThemeProvider
           attribute='class'
-          defaultTheme='light'
+          defaultTheme='dark'
           enableSystem={false}
           forcedTheme={host === process.env.NEXT_PUBLIC_ROOT_DOMAIN && pathname === '/' ? 'dark' : undefined}>
-          <main
-            className={cn('flex min-h-screen w-full flex-col items-center bg-background', inter.className)}>
+          <main className={cn('flex min-h-screen w-full flex-col items-center bg-root', inter.className)}>
             {children}
           </main>
         </ThemeProvider>

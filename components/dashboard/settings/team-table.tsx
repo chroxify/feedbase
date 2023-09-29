@@ -49,16 +49,16 @@ export function TeamTable({ members }: { members: TeamMemberProps[] }) {
 
                 {/* Name and Email */}
                 <div className='flex flex-col'>
-                  <span className='text-sm font-semibold text-foreground/70'>{member.full_name}</span>
+                  <span className='text-sm text-foreground/70'>{member.full_name}</span>
 
-                  <span className='text-xs font-semibold text-foreground/50'>{member.email}</span>
+                  <span className='text-xs font-light text-foreground/50'>{member.email}</span>
                 </div>
               </div>
 
               <div className='flex flex-row items-center space-x-2'>
                 {/* Join Date */}
                 {/* TODO: Add Role Badge */}
-                <span className='text-xs font-semibold text-foreground/50'>
+                <span className='hidden text-xs font-light text-foreground/50 md:block'>
                   {'Joined ' + formatDate(member.joined_at)}
                 </span>
 
@@ -72,7 +72,7 @@ export function TeamTable({ members }: { members: TeamMemberProps[] }) {
                       <MoreVertical className='h-5 w-5' />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className=' justify-between'>
+                  <DropdownMenuContent className=' justify-between' align='end'>
                     {/* TODO: Add logic for removing */}
                     <DropdownMenuItem className='text-destructive focus:text-destructive/90' disabled>
                       Remove
@@ -86,9 +86,7 @@ export function TeamTable({ members }: { members: TeamMemberProps[] }) {
       </TabsContent>
       <TabsContent value='invites'>
         <div className='flex h-full w-full flex-col items-center rounded-md border p-3'>
-          <span className='text-sm font-semibold text-foreground/70'>
-            Section currently under development.
-          </span>
+          <span className='text-sm text-foreground/70'>Section currently under development.</span>
         </div>
       </TabsContent>
     </Tabs>

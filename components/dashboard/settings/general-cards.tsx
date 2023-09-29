@@ -12,13 +12,13 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@radix-ui/react-label';
 import { toast } from 'sonner';
 import { useState } from 'react';
 import { ProjectProps } from '@/lib/types';
+import DefaultTooltip from '@/components/shared/tooltip';
 
 export default function GeneralConfigCards({ projectData }: { projectData: ProjectProps['Row'] }) {
   const [project, setProject] = useState<ProjectProps['Row']>(projectData);
@@ -135,14 +135,14 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
           {/* Name & Slug Config */}
           <div className='flex h-full w-full flex-col space-y-3'>
             <div className='space-y-1'>
-              <Label className='text-sm font-semibold text-foreground/70'>Name</Label>
+              <Label className='text-sm font-light text-foreground/70'>Name</Label>
               <div className='flex h-10 w-full flex-row space-x-2'>
                 <Input className='w-full max-w-xs' value={project.name} onChange={handleNameChange} />
               </div>
             </div>
 
             <div className='space-y-1'>
-              <Label className='text-sm font-semibold text-foreground/70'>Slug</Label>
+              <Label className='text-sm font-light text-foreground/70'>Slug</Label>
 
               <div className='flex h-10 w-full flex-row space-x-2'>
                 <Input className='w-full max-w-xs' value={project.slug} onChange={handleSlugChange} />
@@ -151,8 +151,8 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
           </div>
         </CardContent>
         <CardFooter>
+          {/* <Separator className='w-full' /> */}
           <Button
-            variant='default'
             className='w-32'
             disabled={
               (project.name === projectData.name && project.slug === projectData.slug) ||
@@ -160,12 +160,12 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
               !project.slug
             }
             onClick={handleSaveProject}>
-            Save Changes
+            Save changes
           </Button>
         </CardFooter>
       </Card>
       {/* API Access Card */}
-      <Card className='flex w-full flex-col border-none'>
+      <Card className='flex w-full flex-col'>
         <CardHeader>
           <CardTitle>API Access</CardTitle>
           <CardDescription>Configure your project&apos;s API access.</CardDescription>
@@ -174,32 +174,25 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
           {/* API Key */}
           <div className='flex h-full w-full flex-col space-y-4'>
             <div className='space-y-1'>
-              <Label className='text-sm font-semibold text-foreground/70'>API Key</Label>
+              <Label className='text-sm font-light text-foreground/70'>API Key</Label>
               <div className='flex h-10 w-full flex-row space-x-2'>
-                <TooltipProvider delayDuration={300}>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Input className='w-full max-w-xs' placeholder='Coming Soon' disabled />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <span className='text-xs font-semibold text-foreground/50'>
-                        API Keys are currently in early testing and will be available soon.
-                      </span>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-
-                <Button variant='default' className='w-32' disabled>
-                  Generate Key
-                </Button>
+                <DefaultTooltip content='API Keys are currently in early testing and will be available soon.'>
+                  <Input className='w-full max-w-xs' placeholder='Coming Soon' disabled />
+                </DefaultTooltip>
               </div>
             </div>
           </div>
         </CardContent>
+
+        <CardFooter>
+          <Button variant='default' className='w-32' disabled>
+            Generate key
+          </Button>
+        </CardFooter>
       </Card>
 
       {/* Delete Project Card */}
-      <Card className='flex w-full flex-col border-transparent hover:border hover:border-destructive'>
+      <Card className='flex w-full flex-col transition-colors duration-300 hover:border-destructive'>
         <CardHeader>
           <CardTitle>Danger Zone</CardTitle>
           <CardDescription>Delete your project and all of its data.</CardDescription>
@@ -212,7 +205,7 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant='destructive' className='w-32'>
-                      Delete Project
+                      Delete project
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
@@ -228,7 +221,7 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
                       <AlertDialogAction
                         className='bg-destructive hover:bg-destructive/90 dark:text-foreground'
                         onClick={handleDeleteProject}>
-                        Continue
+                        Yes, delete
                       </AlertDialogAction>
                     </AlertDialogFooter>
                   </AlertDialogContent>

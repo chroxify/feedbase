@@ -24,7 +24,10 @@ export type ApiResponse<T, E extends ErrorProps | null = ErrorProps | null> = Pr
 
 export interface NavbarTabProps {
   name: string;
-  icon: React.ReactNode;
+  icon: {
+    dark: Record<string, unknown> | string;
+    light: Record<string, unknown> | string;
+  };
   slug: string;
 }
 

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
+  DialogCloseWrapper,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -11,10 +12,8 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { HelpCircle } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 
@@ -70,27 +69,16 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
   return (
     <Dialog>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className='p-10 sm:max-w-[425px]'>
+      <DialogContent className='sm:max-w-[425px]'>
         <DialogHeader>
           <DialogTitle>Create a new project</DialogTitle>
           <DialogDescription>Create a new project to get started.</DialogDescription>
         </DialogHeader>
-        <div className='flex flex-col gap-3'>
+        <div className='flex flex-col gap-4'>
           {/* Project Name */}
-          <div className='flex flex-col gap-3'>
+          <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center gap-2'>
               <Label htmlFor='name'>Project Name</Label>
-
-              <TooltipProvider delayDuration={300}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <HelpCircle className='h-4 w-4 cursor-pointer text-foreground/60' />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>This is the name of your project on Luminar.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
             </div>
 
             <Input
@@ -102,20 +90,9 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
             />
           </div>
           {/* Project Slug */}
-          <div className='flex flex-col gap-3'>
+          <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center gap-2'>
               <Label htmlFor='slug'>Project Slug</Label>
-
-              <TooltipProvider delayDuration={300}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <HelpCircle className='h-4 w-4 cursor-pointer text-foreground/60' />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>This is your project&apos;s unique slug on Luminar.</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
             </div>
 
             <Input
@@ -128,7 +105,17 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
           </div>
         </div>
         <DialogFooter>
-          <Button type='submit' onClick={() => onCreateProject()}>
+          <DialogCloseWrapper>
+            <Button
+              variant='secondary'
+              onClick={() => {
+                setName('');
+                setSlug('');
+              }}>
+              Cancel
+            </Button>
+          </DialogCloseWrapper>
+          <Button type='submit' onClick={() => onCreateProject()} disabled={name === '' || slug === ''}>
             Create Project
           </Button>
         </DialogFooter>

@@ -6,6 +6,7 @@ import { cn } from '@/lib/utils';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { NavbarTabProps } from '@/lib/types';
+import LottiePlayer from '@/components/shared/lottie-player';
 
 export default function NavTabs({
   tabs,
@@ -17,6 +18,7 @@ export default function NavTabs({
   projectSlug: string;
 }) {
   const [activeTab, setActiveTab] = useState(initialTabIndex);
+  const [isHover, setIsHover] = useState('');
   const pathname = usePathname();
 
   // Check current active tab based on url
@@ -40,20 +42,19 @@ export default function NavTabs({
           className={tab.slug === 'feedback' || tab.slug === 'roadmap' ? 'cursor-default' : ''}>
           <Button
             variant='secondary'
+            onMouseEnter={() => setIsHover(tab.slug)}
+            onMouseLeave={() => setIsHover('')}
             className={cn(
-              'h-fit w-full items-center justify-start gap-2 border border-transparent p-1 text-foreground/80 hover:text-foreground',
-              activeTab === index && 'bg-secondary text-foreground'
-            )}
-            // If feedback or roadmap, disable the button
-            disabled={tab.slug === 'feedback' || tab.slug === 'roadmap'}>
-            <div
-              className={cn(
-                'flex flex-row items-center justify-center p-1 text-foreground/40',
-                activeTab === index && 'text-foreground'
-              )}>
-              {tab.icon}
+              'w-full items-center justify-start gap-1 border border-transparent p-1 font-light text-foreground/[85%] hover:text-foreground',
+              activeTab === index && 'bg-secondary text-foreground hover:bg-secondary'
+            )}>
+            {/* Icon */}
+            <div className='flex transform-none flex-row items-center justify-center p-1'>
+              <LottiePlayer lottieSrc={tab.icon} animate={isHover === tab.slug} className='h-5 w-5' />
             </div>
-            {tab.name} {tab.slug === 'feedback' || tab.slug === 'roadmap' ? '(Soon)' : ''}
+
+            {/* Title */}
+            {tab.name}
           </Button>
         </Link>
       ))}

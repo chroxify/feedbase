@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { CategoryTabProps } from '@/lib/types';
 
-export default function SettingsTabs({
+export default function CategoryTabs({
   tabs,
   initialTabIndex,
   projectSlug,
@@ -36,8 +36,8 @@ export default function SettingsTabs({
           <Button
             variant='secondary'
             className={cn(
-              'inline-flex h-fit items-center rounded-full px-4 py-1 font-semibold text-foreground/70',
-              activeTab === index && 'bg-secondary text-foreground'
+              'inline-flex h-fit items-center rounded-lg px-2 py-1 text-sm font-normal text-foreground/70',
+              activeTab === index && 'bg-secondary text-foreground hover:bg-secondary'
             )}>
             {tab.name}
           </Button>

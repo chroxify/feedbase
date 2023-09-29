@@ -42,7 +42,7 @@ export default async function SignIn() {
         <CardFooter className='flex flex-col items-center'>
           <CardDescription className='text-center'>
             Don&apos;t have an account?{' '}
-            <Link href='/signup' className='font-semibold hover:underline'>
+            <Link href='/signup' className='font-medium hover:underline'>
               Sign Up
             </Link>
           </CardDescription>

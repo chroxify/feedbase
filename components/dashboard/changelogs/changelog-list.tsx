@@ -60,7 +60,7 @@ export default function ChangelogList({
     <div className='flex flex-col gap-4'>
       {changelogs.map((changelog) => (
         <div
-          className='flex h-48 gap-5 rounded-lg border bg-card p-3 text-card-foreground shadow-sm'
+          className='flex h-36 gap-5 rounded-lg border bg-card p-3 text-card-foreground shadow-sm md:h-40'
           key={changelog.id}>
           {/* Image */}
           <div className='flex h-full w-full max-w-xs flex-col items-center justify-center'>
@@ -110,9 +110,9 @@ export default function ChangelogList({
               </div>
 
               {/* Title and Summary */}
-              <div className='text-2xl font-semibold'>{changelog.title ? changelog.title : 'Untitled'}</div>
-              <div className='text-sm text-foreground/70'>
-                {changelog.summary ? changelog.summary : 'No summary provided.'}
+              <div className='text-1xl font-medium'>{changelog.title ? changelog.title : 'Untitled'}</div>
+              <div className='text-sm font-light text-foreground/60'>
+                {changelog.summary ? changelog.summary : 'No changelog summary provided.'}
               </div>
             </div>
 
@@ -128,7 +128,7 @@ export default function ChangelogList({
                     <MoreVertical className='h-5 w-5' />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className=' justify-between'>
+                <DropdownMenuContent className=' justify-between' align='end'>
                   <AddChangelogModal
                     projectSlug={projectSlug}
                     trigger={

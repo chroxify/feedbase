@@ -12,22 +12,29 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
-
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-
-import { Code } from 'lucide-react';
 import { toast } from 'sonner';
+import { useState } from 'react';
+import LottiePlayer from '@/components/shared/lottie-player';
+import { CodeIcon } from '@/components/shared/icons/icons-animated';
 
 export function ApiSheet({ projectSlug }: { projectSlug: string }) {
+  const [isHover, setIsHover] = useState<boolean>(false);
+
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant='outline' className='flex items-center gap-2'>
-          <Code className='inline-flex h-4 w-4' />
+        <Button
+          variant='outline'
+          size='sm'
+          onMouseEnter={() => setIsHover(true)}
+          onMouseLeave={() => setIsHover(false)}
+          className='flex items-center gap-2 font-light'>
+          <LottiePlayer lottieSrc={CodeIcon} animate={isHover} className='-ml-[2px] h-5 w-5' />
           API
         </Button>
       </SheetTrigger>
-      <SheetContent className='w-full'>
+      <SheetContent className=''>
         <SheetHeader className='pt-4'>
           <Alert variant='destructive' className='mb-4'>
             <AlertTitle>Early Feature</AlertTitle>

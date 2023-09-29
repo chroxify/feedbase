@@ -1,4 +1,4 @@
-import SettingsTabs from '@/components/dashboard/settings/category-tabs';
+import CategoryTabs from '@/components/dashboard/settings/category-tabs';
 import { headers } from 'next/headers';
 
 const tabs = [
@@ -31,12 +31,9 @@ export default function SettingsLayout({
   const activeTabIndex = tabs.findIndex((tab) => pathname?.split('/')[3] === tab.slug);
 
   return (
-    <main className='flex h-full w-full flex-col overflow-y-auto'>
-      {/* Big Title */}
-      <div className='pb-3 text-3xl font-bold'>Settings</div>
-
+    <main className='flex h-full w-full flex-col overflow-y-auto '>
       {/* Navigation tabs */}
-      <SettingsTabs tabs={tabs} initialTabIndex={activeTabIndex} projectSlug={params.slug} />
+      <CategoryTabs tabs={tabs} initialTabIndex={activeTabIndex} projectSlug={params.slug} />
 
       {/* Content */}
       <div className='flex h-full w-full flex-1 flex-col'>{children}</div>

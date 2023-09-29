@@ -7,7 +7,7 @@
 */
 
 import { Dispatch, useCallback, useState } from 'react';
-import TooltipLabel from '@/components/ui/tooltip-label';
+import TooltipLabel from '@/components/shared/tooltip-label';
 import Image from 'next/image';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { ChangelogProps } from '@/lib/types';
