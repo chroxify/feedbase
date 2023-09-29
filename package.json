@@ -7,7 +7,7 @@
     "prepare": "husky install"
   },
   "dependencies": {
-    "@dotlottie/react-player": "^1.6.1",
+    "@dotlottie/react-player": "^1.5.0",
     "@heroicons/react": "^2.0.18",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-aspect-ratio": "^1.0.3",

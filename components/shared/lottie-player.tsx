@@ -9,6 +9,8 @@ interface LottieSrc {
   light: Record<string, unknown> | string;
 }
 
+// TODO: switch to player-component
+// https://docs.lottiefiles.com/dotlottie-players/components/player-component/usage/next
 export default function LottiePlayer({
   lottieSrc,
   className,
@@ -54,7 +56,7 @@ export default function LottiePlayer({
 
           // Change color of svg
           if (initialColor) {
-            lottiePlayerSvg?.querySelectorAll('path').forEach((path) => {
+            lottiePlayerSvg?.querySelectorAll('path').forEach((path: SVGPathElement) => {
               path.style.fill = initialColor;
 
               // Incase stroke is used in initial svg
@@ -72,7 +74,7 @@ export default function LottiePlayer({
 
           // Change color of svg
           if (animationColor) {
-            lottiePlayerSvg?.querySelectorAll('path').forEach((path) => {
+            lottiePlayerSvg?.querySelectorAll('path').forEach((path: SVGPathElement) => {
               path.style.fill = animationColor;
 
               // Incase stroke is used in animation
@@ -90,7 +92,7 @@ export default function LottiePlayer({
           const lottiePlayerSvg = lottieRef.current?.getContainer()?.querySelector('svg');
 
           // Reset color of svg
-          lottiePlayerSvg?.querySelectorAll('path').forEach((path) => {
+          lottiePlayerSvg?.querySelectorAll('path').forEach((path: SVGPathElement) => {
             path.style.fill = initialColor ?? '';
 
             // Incase stroke is used in initial svg

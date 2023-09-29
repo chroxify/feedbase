@@ -6,8 +6,8 @@ settings:
 
 dependencies:
   '@dotlottie/react-player':
-    specifier: ^1.6.1
-    version: 1.6.1(react@18.2.0)
+    specifier: ^1.5.0
+    version: 1.5.0(react@18.2.0)
   '@heroicons/react':
     specifier: ^2.0.18
     version: 2.0.18(react@18.2.0)
@@ -177,8 +177,8 @@ packages:
       regenerator-runtime: 0.14.0
     dev: false
 
-  /@dotlottie/react-player@1.6.1(react@18.2.0):
-    resolution: {integrity: sha512-ngZQYQ5w248ZW0SG4+tOfWU4ed44d94YVrwSWeCQDri1EtwZNG7tsaX34nvN6N+CzN1Et+wsQepsbOmvG85GXg==}
+  /@dotlottie/react-player@1.5.0(react@18.2.0):
+    resolution: {integrity: sha512-CdgHa8vUIbrie2yHVIwrAlZxV5JHtrhOKklyDcpOzlYRK69v7czRw8w85FNFtE5ZgebP3RB4rmAv+6zJ73p7Ww==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
     dependencies:
