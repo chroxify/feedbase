@@ -30,7 +30,7 @@ export default function NavTabs({
     if (currentTab !== -1) {
       setActiveTab(currentTab);
     }
-  }, [pathname]);
+  }, [pathname, tabs]);
 
   return (
     <div className='flex flex-col gap-2'>

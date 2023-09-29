@@ -27,7 +27,7 @@ export default function CategoryTabs({
     if (currentTab !== -1) {
       setActiveTab(currentTab);
     }
-  }, [pathname]);
+  }, [pathname, tabs]);
 
   return (
     <div className='bg-blue flex h-10 w-full flex-row items-center gap-4'>

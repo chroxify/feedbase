@@ -50,7 +50,7 @@ export default function NavbarMobile({
     if (currentTab !== -1) {
       setActiveTab(currentTab);
     }
-  }, [pathname]);
+  }, [pathname, tabs]);
 
   return (
     <div className='fixed bottom-0 z-10 flex h-16 w-full flex-row items-center justify-evenly gap-5 overflow-hidden border-t bg-root px-5 md:hidden'>
