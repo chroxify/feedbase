@@ -1,4 +1,4 @@
-import AddProjectDialog from '@/components/modals/add-project-modal';
+import AddProjectDialog from '@/components/dashboard/modals/add-project-modal';
 import { Button } from '@/components/ui/button';
 import { getUserProjects } from '@/lib/api/projects';
 import { redirect } from 'next/navigation';

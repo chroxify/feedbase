@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { TeamTable } from '@/components/settings/team-table';
+import { TeamTable } from '@/components/dashboard/settings/team-table';
 import { getProjectMembers } from '@/lib/api/projects';
 
 export default async function TeamSettings({ params }: { params: { slug: string } }) {
@@ -10,8 +10,8 @@ export default async function TeamSettings({ params }: { params: { slug: string 
   }
 
   return (
-    <div className='flex h-full w-full flex-col space-y-6 overflow-y-auto'>
-      <Card className='flex w-full flex-col border-none'>
+    <div className='flex h-full w-full flex-col overflow-y-auto'>
+      <Card className='flex w-full flex-col'>
         <CardHeader>
           <CardTitle>Team</CardTitle>
           <CardDescription>Add or remove users that have access to this project.</CardDescription>

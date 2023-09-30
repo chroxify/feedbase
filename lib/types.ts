@@ -21,3 +21,17 @@ export interface ErrorProps {
 export type ApiResponse<T, E extends ErrorProps | null = ErrorProps | null> = Promise<
   E extends null ? { data: T; error: null } : { data: null; error: E }
 >;
+
+export interface NavbarTabProps {
+  name: string;
+  icon: {
+    dark: Record<string, unknown> | string;
+    light: Record<string, unknown> | string;
+  };
+  slug: string;
+}
+
+export interface CategoryTabProps {
+  name: string;
+  slug: string;
+}
