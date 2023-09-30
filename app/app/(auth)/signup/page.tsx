@@ -29,7 +29,7 @@ export default async function SignUp() {
 
   return (
     <div className='flex min-h-screen items-center justify-center'>
-      <Card className='w-full max-w-md p-8'>
+      <Card className='w-full max-w-md p-5 sm:p-8'>
         <CardHeader className='flex flex-col items-center space-y-2'>
           <CardTitle>Sign up</CardTitle>
           <CardDescription className='text-center'>

@@ -34,9 +34,11 @@ const navTabs = [
 export default function NavbarMobile({
   tabs,
   activeTabIndex,
+  currentProject,
 }: {
   tabs: NavbarTabProps[];
   activeTabIndex: number;
+  currentProject: ProjectProps['Row'];
 }) {
   const [activeTab, setActiveTab] = useState(activeTabIndex);
   const pathname = usePathname();
@@ -57,7 +59,9 @@ export default function NavbarMobile({
       {navTabs.map((tab, index) => (
         // If feedback or roadmap, don't link to the page
         <Link
-          href={tab.slug === 'feedback' || tab.slug === 'roadmap' ? {} : `/x/${tab.slug}`}
+          href={
+            tab.slug === 'feedback' || tab.slug === 'roadmap' ? {} : `/${currentProject.slug}/${tab.slug}`
+          }
           key={index}
           className='dr h-full w-full p-3 transition-all duration-150 active:scale-[80%]'>
           <Button

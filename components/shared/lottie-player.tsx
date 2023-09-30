@@ -87,7 +87,6 @@ export default function LottiePlayer({
             });
           }
         } else if (event === 'stop') {
-          console.log('stop');
           // Get svg element
           const lottiePlayerSvg = lottieRef.current?.getContainer()?.querySelector('svg');
 

@@ -29,7 +29,7 @@ export default async function SignIn() {
 
   return (
     <div className='flex min-h-screen items-center justify-center'>
-      <Card className='w-full max-w-md p-8'>
+      <Card className='w-full p-5 sm:max-w-md sm:p-8'>
         <CardHeader className='flex flex-col items-center space-y-2'>
           <CardTitle>Sign In</CardTitle>
           <CardDescription className='text-center'>

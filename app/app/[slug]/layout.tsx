@@ -104,17 +104,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
             />
             {children}
           </div>
-
-          {/* <NavbarMobile 
-            tabs={tabs}
-            projects={projects}
-            activeTabIndex={activeTabIndex}
-            currentProject={currentProject}
-          /> */}
         </div>
 
         {/* Navbar (mobile) */}
-        <NavbarMobile tabs={tabs} activeTabIndex={activeTabIndex} />
+        <NavbarMobile tabs={tabs} activeTabIndex={activeTabIndex} currentProject={currentProject} />
       </div>
     </main>
   );

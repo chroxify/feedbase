@@ -16,9 +16,6 @@ export default async function Changelog({ params }: { params: { slug: string } }
 
   return (
     <div className='flex h-full w-full flex-col overflow-y-auto'>
-      {/* Big Title */}
-      {/* <div className='pb-[34px] text-3xl font-bold'>Changelog</div> */}
-
       {/* Content */}
       <div className='flex h-full w-full flex-col gap-2'>
         {/* Header Row */}
@@ -46,7 +43,7 @@ export default async function Changelog({ params }: { params: { slug: string } }
         {/* Changelog List */}
         {/* If there is no changelog, show empty text in the center */}
         {changelogs.length === 0 && (
-          <Card className='mt-10 flex w-full flex-col items-center justify-center p-20'>
+          <Card className='mt-10 flex w-full flex-col items-center justify-center p-10 sm:p-20'>
             <CardHeader className='items-center text-center '>
               <CardTitle className='text-2xl font-medium'>No changelogs yet</CardTitle>
               <CardDescription className='font-light'>

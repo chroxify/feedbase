@@ -244,8 +244,6 @@ export function AddChangelogModal({
                 <DialogClose>
                   <AlertDialogCancel
                     onClick={() => {
-                      console.log(changelogData);
-                      console.log(data);
                       setData({
                         id: changelogData?.id || '',
                         project_id: changelogData?.project_id || '',
