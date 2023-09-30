@@ -25,12 +25,15 @@ export function PublishDatePicker({
         <Button
           variant='outline'
           className={cn(
-            'w-[280px] justify-start text-left font-normal',
+            'w-[280px] justify-start overflow-hidden bg-root text-left font-normal',
             !data.publish_date && 'text-muted-foreground',
             className
           )}>
-          <CalendarIcon className='mr-2 h-4 w-4' />
-          {data.publish_date ? format(new Date(data.publish_date), 'P') : <span>Pick a date</span>}
+          {data.publish_date ? (
+            <span className='font-extralight'>{format(new Date(data.publish_date), 'P')}</span>
+          ) : (
+            <span className='font-extralight text-foreground/50'>Pick a date</span>
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className='w-auto p-0'>

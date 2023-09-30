@@ -11,9 +11,18 @@ import LottiePlayer from '../shared/lottie-player';
 import { LogoutIcon, ProfileIcon } from '../shared/icons/icons-animated';
 import { useState } from 'react';
 import { UserMetadata } from '@supabase/supabase-js';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
 
 export default function UserDropdown({ user }: { user: UserMetadata }) {
   const [isHover, setIsHover] = useState<string>('');
+  const supabase = createClientComponentClient();
+
+  function handleLogout() {
+    supabase.auth.signOut();
+
+    // Redirect to login page
+    window.location.href = '/login';
+  }
 
   return (
     <DropdownMenu>
@@ -40,7 +49,8 @@ export default function UserDropdown({ user }: { user: UserMetadata }) {
         <DropdownMenuItem
           className='flex flex-row items-center justify-start gap-2 hover:cursor-pointer'
           onMouseEnter={() => setIsHover('Logout')}
-          onMouseLeave={() => setIsHover('')}>
+          onMouseLeave={() => setIsHover('')}
+          onClick={handleLogout}>
           <LottiePlayer lottieSrc={LogoutIcon} animate={isHover === 'Logout'} className='h-5 w-5' />
 
           <div className='pb-[2px] text-foreground/[85%]'>Logout</div>

@@ -76,7 +76,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
         {/* Header with logo and hub button */}
         {/* BUG: Find a way to solve issue of scroll bar getting removed on avatar dialog open */}
         {/* https://github.com/radix-ui/primitives/discussions/1100 */}
-        <div className='fixed top-0 flex h-16 w-full flex-row items-center justify-between overflow-y-auto bg-root px-5 lg:max-w-screen-xl'>
+        <div className='fixed top-0 z-50 flex h-16 w-full flex-row items-center justify-between overflow-y-auto bg-root px-5 lg:max-w-screen-xl'>
           {/* Logo */}
           <Icons.logoText className='hidden h-9 fill-foreground pl-1 md:block' />
           <TitleProvider

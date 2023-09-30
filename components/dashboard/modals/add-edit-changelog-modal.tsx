@@ -44,11 +44,14 @@ export function AddChangelogModal({
   changelogData?: ChangelogProps['Row'];
   isEdit?: boolean;
 }) {
+  const defaultEditorContent =
+    '<p>Write <em>styled</em> <mark>markdown</mark> in <strong>here</strong>.</p><p>Examples:</p><ul><li><p><code>#</code>, <code>##</code>, <code>###</code>, <code>####</code>, <code>#####</code>, <code>######</code> for different headings</p></li></ul><ul><li><p><code>==highlight==</code> for <mark>highlighted text</mark></p></li><li><p> <code>**bold**, *italic* and ~~strike~~</code> for <strong>bold</strong>,  <em>italic and <s>strike</s></em></p></li><li><p>and much more like  <code>(c)</code>, <code>-&gt;</code>, <code>&gt;&gt;</code>, <code>1/2</code>, <code>!=</code>, or <code>--</code></p></li></ul>';
+
   const [data, setData] = useState<ChangelogProps['Row']>({
     id: changelogData?.id || '',
     project_id: changelogData?.project_id || '',
     title: changelogData?.title || '',
-    content: changelogData?.content || '',
+    content: changelogData?.content || defaultEditorContent,
     summary: changelogData?.summary || '',
     image: changelogData?.image || null,
     publish_date: changelogData?.publish_date || null,
@@ -176,7 +179,7 @@ export function AddChangelogModal({
                   <TooltipLabel label='Title' tooltip='The title of your changelog.' />
                   <Input
                     placeholder='Changelog Title'
-                    className='w-full'
+                    className='w-full bg-root'
                     onChange={(e) => setData((prev) => ({ ...prev, title: e.target.value }))}
                     value={data.title}
                   />
@@ -184,7 +187,7 @@ export function AddChangelogModal({
 
                 {/* Date */}
                 <div className='flex w-1/2 flex-col gap-2'>
-                  <TooltipLabel label='Publish Date' tooltip='The publish date of the changelog.' />
+                  <TooltipLabel label='Date' tooltip='The publish date of the changelog.' />
                   <PublishDatePicker className='w-full' data={data} setData={setData} />
                 </div>
               </div>
@@ -192,10 +195,9 @@ export function AddChangelogModal({
               {/* Summary */}
               <div className='flex h-full flex-col gap-2'>
                 <TooltipLabel label='Summary' tooltip='A short summary of the changelog.' />
-                {/* <Input placeholder="Changelog Summary" className="w-full items-start justify-start text-start" /> */}
                 <Textarea
                   placeholder='Changelog Summary'
-                  className='min-h-[78px] w-full resize-none items-start justify-start text-start'
+                  className='h-20 w-full resize-none items-start justify-start bg-root text-start'
                   onChange={(e) => setData((prev) => ({ ...prev, summary: e.target.value }))}
                   // BUG: This should not need another || '' but it does for some reason
                   value={data.summary || ''}
@@ -213,12 +215,15 @@ export function AddChangelogModal({
           <Editor data={data} setData={setData} />
         </div>
         {/* isEdit or no data changed yet from default */}
-        {isEdit ? (
-          <DialogClose>
-            <button className='absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100'>
-              <X className='h-4 w-4' />
-              <span className='sr-only'>Close</span>
-            </button>
+        {isEdit ||
+        (!data.title &&
+          !data.summary &&
+          !data.image &&
+          !data.publish_date &&
+          data.content === defaultEditorContent) ? (
+          <DialogClose className='absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100'>
+            <X className='h-4 w-4' />
+            <span className='sr-only'>Close</span>
           </DialogClose>
         ) : (
           <AlertDialog>
@@ -237,7 +242,23 @@ export function AddChangelogModal({
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <DialogClose>
-                  <AlertDialogCancel>Discard</AlertDialogCancel>
+                  <AlertDialogCancel
+                    onClick={() => {
+                      console.log(changelogData);
+                      console.log(data);
+                      setData({
+                        id: changelogData?.id || '',
+                        project_id: changelogData?.project_id || '',
+                        title: changelogData?.title || '',
+                        content: changelogData?.content || defaultEditorContent,
+                        summary: changelogData?.summary || '',
+                        image: changelogData?.image || null,
+                        publish_date: changelogData?.publish_date || null,
+                        published: changelogData?.published || false,
+                      });
+                    }}>
+                    Discard
+                  </AlertDialogCancel>
                 </DialogClose>
                 <AlertDialogAction
                   onClick={() => {
@@ -279,7 +300,15 @@ export function AddChangelogModal({
                 } else {
                   onCreateChangelog('publish');
                 }
-              }}>
+              }}
+              disabled={
+                data.title === '' ||
+                data.summary === '' ||
+                data.content === '' ||
+                data.content === defaultEditorContent ||
+                data.image === null ||
+                data.publish_date === null
+              }>
               {isEdit ? 'Update & Publish' : 'Publish'}
             </Button>
           )}

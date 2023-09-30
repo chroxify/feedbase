@@ -9,6 +9,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
 import { MoreVertical } from 'lucide-react';
 import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';
@@ -144,11 +155,34 @@ export default function ChangelogList({
                     isEdit
                   />
 
-                  <DropdownMenuItem
-                    className='text-destructive focus:text-destructive/90'
-                    onSelect={() => onDeleteChangelog(changelog)}>
-                    Delete
-                  </DropdownMenuItem>
+                  <AlertDialog>
+                    <AlertDialogTrigger asChild>
+                      <DropdownMenuItem
+                        onSelect={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                        }}
+                        className='text-destructive focus:text-destructive/90'>
+                        Delete
+                      </DropdownMenuItem>
+                    </AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Delete Changlog</AlertDialogTitle>
+                        <AlertDialogDescription>
+                          Are you sure you want to delete this changelog? This action cannot be undone.
+                        </AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          className='bg-destructive hover:bg-destructive/90 dark:text-foreground'
+                          onClick={() => onDeleteChangelog(changelog)}>
+                          Yes, delete
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

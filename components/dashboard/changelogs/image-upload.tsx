@@ -44,19 +44,19 @@ export default function FileDrop({
   );
 
   return (
-    <div className='h-full'>
+    <div className='flex h-full flex-col gap-1'>
       <div className='flex items-center justify-between'>
         <TooltipLabel
           label='Image'
           tooltip='This image will be used as the preview image for your changelog.'
         />
-        {fileError && <p className='text-sm text-destructive'>{fileError}</p>}
+        {fileError && <p className='text-sm font-extralight text-destructive'>{fileError}</p>}
       </div>
       {/* BUG: Fix this so that its not a fixed height but rather just takes over full height properly */}
       {/* As currently it is not on the same level as the other inputs */}
       <label
         htmlFor='image'
-        className='group relative mt-1 flex h-[10rem] cursor-pointer flex-col items-center justify-center rounded-md border border-input bg-background shadow-sm transition-all hover:bg-accent'>
+        className='group relative mt-1 flex h-40 cursor-pointer flex-col items-center justify-center rounded-md border border-input bg-root shadow-sm transition-all hover:bg-accent'>
         <div
           className='absolute z-[5] h-full w-full rounded-md'
           onDragOver={(e) => {
@@ -100,24 +100,28 @@ export default function FileDrop({
         />
         <div
           className={`${
-            dragActive ? 'cursor-copy border-2 border-foreground bg-background opacity-100' : ''
-          } absolute z-[3] flex h-full w-full flex-col items-center justify-center rounded-md bg-background transition-all ${
+            dragActive ? 'cursor-copy border-2 border-foreground bg-root opacity-100' : ''
+          } absolute z-[3] flex h-full w-full flex-col items-center justify-center rounded-md bg-root transition-all ${
             data.image ? 'opacity-0 group-hover:opacity-100' : 'group-hover:bg-accent'
           }`}>
           <CloudArrowUpIcon
             className={`${
               dragActive ? 'scale-110' : 'scale-100'
-            } h-7 w-7 text-foreground/60 transition-all duration-75 group-hover:scale-110 group-active:scale-95`}
+            } h-7 w-7 font-extralight text-foreground/50 transition-all duration-75 group-hover:scale-110 group-active:scale-95`}
           />
-          <p className='mt-2 text-center text-sm text-foreground/60'>Drag and drop or click to upload.</p>
-          <p className='mt-2 text-center text-sm text-foreground/60'>Recommended: 1200 x 630 pixels</p>
+          <p className='mt-2 text-center text-sm font-extralight text-foreground/50'>
+            Drag and drop or click to upload.
+          </p>
+          <p className='mt-2 text-center text-sm font-extralight text-foreground/50'>
+            Recommended: 1200 x 630 pixels
+          </p>
           <span className='sr-only'>OG image upload</span>
         </div>
         {data.image && (
           <Image src={data.image} alt='Preview' fill className='h-full w-full rounded-md object-cover' />
         )}
       </label>
-      <div className='mt-1 flex rounded-md shadow-sm'>
+      <div className='flex rounded-md shadow-sm'>
         <input
           id='image'
           name='image'
