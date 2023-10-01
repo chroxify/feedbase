@@ -9,6 +9,12 @@ export type TeamMemberProps = Database['public']['Tables']['profiles']['Row'] & 
 
 export type ChangelogProps = Database['public']['Tables']['changelogs'];
 
+export type FeedbackProps = Database['public']['Tables']['feedback'];
+
+export type FeedbackWithUserProps = Database['public']['Tables']['feedback']['Row'] & {
+  user: ProfileProps['Row'];
+};
+
 export type ProfileProps = Database['public']['Tables']['profiles'];
 
 // Helper Types

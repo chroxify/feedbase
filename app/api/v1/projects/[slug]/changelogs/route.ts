@@ -56,7 +56,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
     GET /api/v1/projects/[slug]/changelogs
 */
 export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: changelogs, error } = await getAllProjectChangelogs(context.params.slug, 'route', true);
+  const { data: changelogs, error } = await getAllProjectChangelogs(context.params.slug, 'route', false);
 
   // If any errors thrown, return error
   if (error) {

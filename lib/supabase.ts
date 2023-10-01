@@ -43,6 +43,55 @@ export interface Database {
           },
         ];
       };
+      feedback: {
+        Row: {
+          created_at: string;
+          description: string | null;
+          id: string;
+          project_id: string;
+          status: string | null;
+          tags: string[] | null;
+          title: string;
+          upvotes: number;
+          user_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          project_id: string;
+          status?: string | null;
+          tags?: string[] | null;
+          title: string;
+          upvotes?: number;
+          user_id: string;
+        };
+        Update: {
+          created_at?: string;
+          description?: string | null;
+          id?: string;
+          project_id?: string;
+          status?: string | null;
+          tags?: string[] | null;
+          title?: string;
+          upvotes?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'feedback_project_id_fkey';
+            columns: ['project_id'];
+            referencedRelation: 'projects';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'feedback_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       profiles: {
         Row: {
           avatar_url: string | null;
