@@ -11,9 +11,14 @@ export type ChangelogProps = Database['public']['Tables']['changelogs'];
 
 export type FeedbackProps = Database['public']['Tables']['feedback'];
 
+export type FeedbackTagProps = Database['public']['Tables']['feedback_tags'];
+
 export type FeedbackWithUserProps = Database['public']['Tables']['feedback']['Row'] & {
   user: ProfileProps['Row'];
+  tags: { name: string; color: string }[];
 };
+
+export type FeedbackCommentProps = Database['public']['Tables']['feedback_comments'];
 
 export type ProfileProps = Database['public']['Tables']['profiles'];
 

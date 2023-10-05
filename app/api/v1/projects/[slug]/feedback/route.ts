@@ -1,5 +1,5 @@
 import { createFeedback, getAllProjectFeedback } from '@/lib/api/feedback';
-import { FeedbackProps } from '@/lib/types';
+import { FeedbackProps, FeedbackWithUserProps } from '@/lib/types';
 import { NextResponse } from 'next/server';
 
 /*
@@ -9,11 +9,14 @@ import { NextResponse } from 'next/server';
         title: string;
         description: string;
         status: string;
-        tags: string[];
+        tags: {
+            name: string;
+            color: string;
+        }[];
     }
 */
 export async function POST(req: Request, context: { params: { slug: string } }) {
-  const { title, description, status, tags } = (await req.json()) as FeedbackProps['Insert'];
+  const { title, description, status, tags } = (await req.json()) as FeedbackWithUserProps;
 
   // Validate Request Body
   if (!title) {
@@ -26,7 +29,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
       title: title || '',
       description: description || '',
       status: status || '',
-      tags: tags || [],
+      raw_tags: tags || [],
       project_id: 'dummy-id',
       user_id: 'dummy-id',
     },
