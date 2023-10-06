@@ -49,8 +49,8 @@ export interface Database {
           description: string | null;
           id: string;
           project_id: string;
+          raw_tags: Json[] | null;
           status: string | null;
-          tags: string[] | null;
           title: string;
           upvotes: number;
           user_id: string;
@@ -60,8 +60,8 @@ export interface Database {
           description?: string | null;
           id?: string;
           project_id: string;
+          raw_tags?: Json[] | null;
           status?: string | null;
-          tags?: string[] | null;
           title: string;
           upvotes?: number;
           user_id: string;
@@ -71,8 +71,8 @@ export interface Database {
           description?: string | null;
           id?: string;
           project_id?: string;
+          raw_tags?: Json[] | null;
           status?: string | null;
-          tags?: string[] | null;
           title?: string;
           upvotes?: number;
           user_id?: string;
@@ -88,6 +88,74 @@ export interface Database {
             foreignKeyName: 'feedback_user_id_fkey';
             columns: ['user_id'];
             referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      feedback_comments: {
+        Row: {
+          content: string;
+          created_at: string;
+          feedback_id: string;
+          id: number;
+          user_id: string;
+        };
+        Insert: {
+          content: string;
+          created_at?: string;
+          feedback_id: string;
+          id?: number;
+          user_id: string;
+        };
+        Update: {
+          content?: string;
+          created_at?: string;
+          feedback_id?: string;
+          id?: number;
+          user_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'feedback_comments_feedback_id_fkey';
+            columns: ['feedback_id'];
+            referencedRelation: 'feedback';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'feedback_comments_user_id_fkey';
+            columns: ['user_id'];
+            referencedRelation: 'project_members';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      feedback_tags: {
+        Row: {
+          color: string;
+          created_at: string;
+          id: string;
+          name: string;
+          project_id: string;
+        };
+        Insert: {
+          color: string;
+          created_at?: string;
+          id?: string;
+          name: string;
+          project_id: string;
+        };
+        Update: {
+          color?: string;
+          created_at?: string;
+          id?: string;
+          name?: string;
+          project_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'feedback_tags_project_id_fkey';
+            columns: ['project_id'];
+            referencedRelation: 'projects';
             referencedColumns: ['id'];
           },
         ];
