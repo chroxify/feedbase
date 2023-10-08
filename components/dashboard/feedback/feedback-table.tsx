@@ -93,7 +93,8 @@ export default function FeedbackTable({
           {/* Tags & User */}
           <div className='mr-2 flex flex-shrink-0 items-center gap-2'>
             {/* Tags */}
-            {feedback.tags.length > 0 &&
+            {feedback.tags &&
+              feedback.tags.length > 0 &&
               feedback.tags.map((tag) => (
                 <div
                   className='group/tag hidden flex-shrink-0 flex-wrap items-center gap-2 rounded-full border px-3 py-1 transition-colors hover:cursor-pointer hover:border-foreground/20 hover:bg-accent/50 md:flex'

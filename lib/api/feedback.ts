@@ -1,16 +1,67 @@
 import { withFeedbackAuth, withProjectAuth } from '../auth';
-import { FeedbackProps, FeedbackTagProps, FeedbackWithUserProps, ProfileProps } from '../types';
+import { FeedbackProps, FeedbackTagProps, FeedbackWithUserInputProps, FeedbackWithUserProps } from '../types';
 
 // Create a feedback post
 export const createFeedback = (
   projectSlug: string,
-  data: FeedbackProps['Insert'],
+  data: FeedbackWithUserInputProps,
   cType: 'server' | 'route'
 ) =>
   withProjectAuth<FeedbackProps['Row']>(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error: error };
+    }
+
+    // Check if tags exist
+    if (data.tags && data.tags.length > 0) {
+      // Get all feedback tags for project
+      const { data: projectTags, error: tagsError } = await supabase
+        .from('feedback_tags')
+        .select()
+        .eq('project_id', project!.id);
+
+      // Check for errors
+      if (tagsError) {
+        return { data: null, error: { message: tagsError.message, status: 500 } };
+      }
+
+      // If no tags, return error
+      if (!projectTags || projectTags.length === 0) {
+        return { data: null, error: { message: 'no tags found for project.', status: 404 } };
+      }
+
+      // Check if all tags are valid
+      const invalidTags: string[] = [];
+
+      // Loop through tags
+      data.tags.forEach((tag) => {
+        // Check if tag exists
+        const tagExists = projectTags.find((t) => t.id === tag);
+
+        // If tag doesn't exist, add to invalid tags
+        if (!tagExists) {
+          invalidTags.push(tag);
+        }
+      });
+
+      // If invalid tags, return error
+      if (invalidTags.length > 0) {
+        return {
+          data: null,
+          error: {
+            message: `invalid tag(s): ${invalidTags.join(', ')}`,
+            status: 400,
+          },
+        };
+      }
+
+      // Convert tags into raw tags json array objects: [{name: name, color: color}]
+      data.raw_tags = projectTags
+        .filter((tag) => data.tags!.includes(tag.id))
+        .map((tag) => {
+          return { name: tag.name, color: tag.color };
+        });
     }
 
     // Insert feedback
@@ -40,7 +91,7 @@ export const createFeedback = (
 export const updateFeedbackByID = (
   id: string,
   projectSlug: string,
-  data: FeedbackProps['Update'],
+  data: FeedbackWithUserInputProps,
   cType: 'server' | 'route'
 ) =>
   withFeedbackAuth<FeedbackProps['Row']>(async (user, supabase, feedback, project, error) => {
@@ -49,14 +100,65 @@ export const updateFeedbackByID = (
       return { data: null, error: error };
     }
 
+    // Check if tags exist
+    if (data.tags && data.tags.length > 0) {
+      // Get all feedback tags for project
+      const { data: projectTags, error: tagsError } = await supabase
+        .from('feedback_tags')
+        .select()
+        .eq('project_id', project!.id);
+
+      // Check for errors
+      if (tagsError) {
+        return { data: null, error: { message: tagsError.message, status: 500 } };
+      }
+
+      // If no tags, return error
+      if (!projectTags || projectTags.length === 0) {
+        return { data: null, error: { message: 'no tags found for project.', status: 404 } };
+      }
+
+      // Check if all tags are valid
+      const invalidTags: string[] = [];
+
+      // Loop through tags
+      data.tags.forEach((tag) => {
+        // Check if tag exists
+        const tagExists = projectTags.find((t) => t.id === tag);
+
+        // If tag doesn't exist, add to invalid tags
+        if (!tagExists) {
+          invalidTags.push(tag);
+        }
+      });
+
+      // If invalid tags, return error
+      if (invalidTags.length > 0) {
+        return {
+          data: null,
+          error: {
+            message: `invalid tag(s): ${invalidTags.join(', ')}`,
+            status: 400,
+          },
+        };
+      }
+
+      // Convert tags into raw tags json array objects: [{name: name, color: color}]
+      data.raw_tags = projectTags
+        .filter((tag) => data.tags!.includes(tag.id))
+        .map((tag) => {
+          return { name: tag.name, color: tag.color };
+        });
+    }
+
     // Update feedback
     const { data: updatedFeedback, error: updatedFeedbackError } = await supabase
       .from('feedback')
       .update({
-        title: data.title,
-        description: data.description,
-        status: data.status,
-        raw_tags: data.raw_tags,
+        title: data.title ? data.title : feedback!.title,
+        description: data.description ? data.description : feedback!.description,
+        status: data.status ? data.status : feedback!.status,
+        raw_tags: data.raw_tags ? data.raw_tags : feedback!.raw_tags,
       })
       .eq('id', feedback!.id)
       .select()

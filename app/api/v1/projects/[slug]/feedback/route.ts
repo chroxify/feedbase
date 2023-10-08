@@ -1,5 +1,5 @@
 import { createFeedback, getAllProjectFeedback } from '@/lib/api/feedback';
-import { FeedbackProps, FeedbackWithUserProps } from '@/lib/types';
+import { FeedbackProps, FeedbackWithUserInputProps, FeedbackWithUserProps } from '@/lib/types';
 import { NextResponse } from 'next/server';
 
 /*
@@ -9,14 +9,11 @@ import { NextResponse } from 'next/server';
         title: string;
         description: string;
         status: string;
-        tags: {
-            name: string;
-            color: string;
-        }[];
+        tags: [id, id, id]
     }
 */
 export async function POST(req: Request, context: { params: { slug: string } }) {
-  const { title, description, status, tags } = (await req.json()) as FeedbackWithUserProps;
+  const { title, description, status, tags } = (await req.json()) as FeedbackWithUserInputProps;
 
   // Validate Request Body
   if (!title) {
@@ -29,9 +26,9 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
       title: title || '',
       description: description || '',
       status: status || '',
-      raw_tags: tags || [],
       project_id: 'dummy-id',
       user_id: 'dummy-id',
+      tags: tags || [],
     },
     'route'
   );

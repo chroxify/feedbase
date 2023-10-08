@@ -18,6 +18,10 @@ export type FeedbackWithUserProps = Database['public']['Tables']['feedback']['Ro
   tags: { name: string; color: string }[];
 };
 
+export type FeedbackWithUserInputProps = Database['public']['Tables']['feedback']['Insert'] & {
+  tags?: string[];
+};
+
 export type FeedbackCommentProps = Database['public']['Tables']['feedback_comments'];
 
 export type ProfileProps = Database['public']['Tables']['profiles'];

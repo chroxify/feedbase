@@ -93,12 +93,11 @@ export default function FeedbackModal({
   async function onUpdateStatus(status: string) {
     const promise = new Promise((resolve, reject) => {
       fetch(`/api/v1/projects/${projectSlug}/feedback/${feedback.id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...feedback,
           status: status,
         }),
       })
@@ -141,13 +140,12 @@ export default function FeedbackModal({
 
     const promise = new Promise((resolve, reject) => {
       fetch(`/api/v1/projects/${projectSlug}/feedback/${feedback.id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...feedback,
-          tags: tagObj ? [tagObj] : [],
+          tags: tagObj ? [tagObj.id] : [],
         }),
       })
         .then((res) => res.json())

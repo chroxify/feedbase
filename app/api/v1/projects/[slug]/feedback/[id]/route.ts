@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { deleteFeedbackByID, getFeedbackByID, updateFeedbackByID } from '@/lib/api/feedback';
-import { FeedbackProps, FeedbackWithUserProps } from '@/lib/types';
+import { FeedbackProps, FeedbackWithUserInputProps, FeedbackWithUserProps } from '@/lib/types';
 
 /*
     Get Project Feedback by ID
@@ -28,8 +28,8 @@ export async function GET(req: Request, context: { params: { slug: string; id: s
         tags: string[];
     }
 */
-export async function PUT(req: Request, context: { params: { slug: string; id: string } }) {
-  const { title, description, status, tags } = (await req.json()) as FeedbackWithUserProps;
+export async function PATCH(req: Request, context: { params: { slug: string; id: string } }) {
+  const { title, description, status, tags } = (await req.json()) as FeedbackWithUserInputProps;
 
   const { data: feedback, error } = await updateFeedbackByID(
     context.params.id,
@@ -38,7 +38,9 @@ export async function PUT(req: Request, context: { params: { slug: string; id: s
       title: title || '',
       description: description || '',
       status: status || '',
-      raw_tags: tags || [],
+      project_id: 'dummy-id',
+      user_id: 'dummy-id',
+      tags: tags || [],
     },
     'route'
   );
