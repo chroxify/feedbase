@@ -17,13 +17,14 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { FeedbackTagProps, FeedbackWithUserProps } from '@/lib/types';
-import { Hash, Link2Icon, MoreVertical, Trash, User } from 'lucide-react';
+import { MoreVertical } from 'lucide-react';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import CommentEditor from '../feedback/comment-editor';
 import { usePathname, useRouter } from 'next/navigation';
 import { TagCombobox } from '../feedback/tag-combobox';
 import { StatusCombobox } from '../feedback/status-combobox';
+import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function FeedbackModal({
   tags,
@@ -243,13 +244,14 @@ export default function FeedbackModal({
               <MoreVertical className='h-4 w-4' />
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align='end'>
+          <DropdownMenuContent align='end' className='w-[160px]'>
             <DropdownMenuItem
               className='flex flex-row items-center gap-2 font-extralight'
               onClick={() => {
                 copyToClipboard('id', feedback.id);
               }}>
-              <Hash className='h-4 w-4' />
+              {/* <Hash className='h-4 w-4' /> */}
+              <Icons.hashtag className='h-4 w-4 fill-white stroke-white stroke-[0.5px]' />
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -260,7 +262,7 @@ export default function FeedbackModal({
                   `https://${projectSlug}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/feedback/${feedback.id}`
                 );
               }}>
-              <Link2Icon className='h-4 w-4' />
+              <Icons.link className='h-4 w-4 stroke-white stroke-2' />
               Copy Link
             </DropdownMenuItem>
 
@@ -272,14 +274,14 @@ export default function FeedbackModal({
                   `mailto:${feedback.user.email}?subject=Your Feedback Submission (${feedback.id})&body=Hi ${feedback.user.full_name},%0D%0A%0D%0AWe have received your recent feedback and had some follow up questions about it.%0D%0A%0D%0A${feedback.description}%0D%0A%0D%0AIf you could get back to us as soon as possible, that would be great!%0D%0A%0D%0AThanks!`
                 );
               }}>
-              <User className='h-4 w-4' />
+              <Icons.profile className='h-4 w-4 fill-white' />
               Email submitter
             </DropdownMenuItem>
 
             <DropdownMenuItem
               className='flex flex-row items-center gap-2 font-extralight'
               onClick={onDeleteFeedback}>
-              <Trash className='h-4 w-4' />
+              <Icons.trash className='h-4 w-4 fill-white' />
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>

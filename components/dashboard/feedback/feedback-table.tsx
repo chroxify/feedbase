@@ -10,7 +10,6 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import FeedbackModal from '../modals/view-feedback-modal';
 import { statusOptions } from './status-combobox';
 import useCreateQueryString from '@/lib/hooks/use-create-query';
-import { cn } from '@/lib/utils';
 
 export default function FeedbackTable({
   fetchedFeedback,

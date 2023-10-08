@@ -13,6 +13,7 @@ import {
   CircleDot,
   CircleDotDashed,
   CircleSlash,
+  XCircle,
 } from 'lucide-react';
 
 export const statusOptions = [
@@ -34,7 +35,7 @@ export const statusOptions = [
   },
   {
     label: 'Rejected',
-    icon: CircleSlash,
+    icon: XCircle,
   },
 ];
 
