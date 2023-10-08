@@ -70,26 +70,28 @@ export default function FeedbackTable({
           className='jusify-between group flex h-14 flex-row items-center border border-b-0 p-1 transition-all hover:bg-accent/30 [&:first-child]:rounded-t-md [&:last-child]:rounded-b-md [&:last-child]:border-b'
           key={feedback.id}>
           {/* Upvotes & Title */}
-          <FeedbackModal
-            tags={tags}
-            feedbackList={feedbackList}
-            setFeedbackList={setFeedbackList}
-            key={feedback.id}
-            feedback={feedbackList.find((fb) => fb.id === feedback.id) || feedback}>
-            <div className='flex w-full min-w-0 cursor-pointer flex-row  items-center'>
-              {/* Upvotes */}
-              <Button
-                variant='secondary'
-                size='sm'
-                className='flex h-11 flex-col items-center rounded-sm py-1 hover:bg-transparent'>
-                <ChevronUp className='h-5 w-5 stroke-2 text-foreground/60 transition-colors group-hover:text-foreground' />
-                <div className='text-sm font-light text-foreground/60 transition-colors group-hover:text-foreground'>
-                  {feedback.upvotes}
-                </div>
-              </Button>
+          <div className='flex h-full w-full min-w-0 flex-row items-center'>
+            {/* Upvotes */}
+            <Button
+              variant='secondary'
+              size='sm'
+              className='flex h-11 flex-col items-center rounded-sm py-1 hover:bg-transparent'>
+              <ChevronUp className='h-5 w-5 stroke-2 text-foreground/60 transition-colors group-hover:text-foreground' />
+              <div className='text-sm font-light text-foreground/60 transition-colors group-hover:text-foreground'>
+                {feedback.upvotes}
+              </div>
+            </Button>
+
+            <FeedbackModal
+              tags={tags}
+              feedbackList={feedbackList}
+              setFeedbackList={setFeedbackList}
+              key={feedback.id}
+              feedback={feedbackList.find((fb) => fb.id === feedback.id) || feedback}
+              className='flex h-full w-full cursor-pointer items-center text-start'>
               <span className='line-clamp-1 font-light text-foreground/95'>{feedback.title}</span>
-            </div>
-          </FeedbackModal>
+            </FeedbackModal>
+          </div>
 
           {/* Tags & User */}
           <div className='mr-2 flex flex-shrink-0 items-center gap-2'>
@@ -146,7 +148,7 @@ export default function FeedbackTable({
             })()}
 
             {/* Date */}
-            <div className='text-center text-xs font-extralight text-foreground/50'>
+            <div className='cursor-default select-none text-center text-xs font-extralight text-foreground/50'>
               {formatDate(new Date(feedback.created_at))}
             </div>
 

@@ -32,12 +32,14 @@ export default function FeedbackModal({
   feedbackList,
   setFeedbackList,
   children,
+  className,
 }: {
   tags: FeedbackTagProps['Row'][];
   feedback: FeedbackWithUserProps;
   children: React.ReactNode;
   setFeedbackList: React.Dispatch<React.SetStateAction<FeedbackWithUserProps[]>>;
   feedbackList: FeedbackWithUserProps[];
+  className?: string;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -236,7 +238,7 @@ export default function FeedbackModal({
 
   return (
     <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogTrigger className={className}>{children}</DialogTrigger>
       <DialogContent className='sm:min-w-[425px]'>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
