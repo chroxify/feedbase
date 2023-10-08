@@ -9,20 +9,20 @@ import { Check, ChevronDown } from 'lucide-react';
 import { useCommandState } from 'cmdk';
 
 interface TagComboboxProps {
-  tags: {
+  projectTags: {
     value: string;
     label: string;
     color?: string;
   }[];
-  initialValue?: string | null;
-  onSelect?: (value: string) => void;
+  initialValue?: string[] | null;
+  onSelect?: (value: string[]) => void;
   triggerClassName?: string;
   showDropdownIcon?: boolean;
   align?: 'start' | 'end';
 }
 
 export function TagCombobox({
-  tags,
+  projectTags,
   initialValue,
   onSelect,
   triggerClassName,
@@ -30,7 +30,7 @@ export function TagCombobox({
   align = 'end',
 }: TagComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [tag, setTag] = React.useState(initialValue || '');
+  const [tags, setTags] = React.useState(initialValue || []);
 
   const EmptyItem = (props: any) => {
     const search = useCommandState((state) => state.search);
@@ -43,13 +43,13 @@ export function TagCombobox({
     );
   };
 
-  const currentTag = tags.find((item) => item.value.toLowerCase() === tag.toLowerCase());
+  const currentTags = projectTags.filter((item) => tags.includes(item.value.toLowerCase()));
 
   // Use effect on initial value change
   React.useEffect(() => {
-    setTag(initialValue || '');
+    setTags(initialValue || []);
   }, [initialValue]);
-
+  console.log(initialValue);
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -61,17 +61,37 @@ export function TagCombobox({
             triggerClassName
           )}
           size='sm'>
-          {tag ? (
-            <div className='flex flex-row items-center gap-2 font-extralight'>
-              {/* Tag color */}
-              <div
-                className='h-2 w-2 rounded-full'
-                style={{
-                  backgroundColor: tags.find((item) => item.value.toLowerCase() === tag.toLowerCase())?.color,
-                }}></div>
-              {/* Tag name */}
-              {tags.find((item) => item.value.toLowerCase() === tag.toLowerCase())?.label}
-            </div>
+          {tags && tags.length > 0 ? (
+            tags.length == 1 ? (
+              <div className='mt-[1px] flex flex-row items-center gap-2 font-extralight '>
+                {/* Tag color */}
+                <div
+                  className='h-2 w-2 rounded-full'
+                  style={{
+                    backgroundColor: projectTags.find(
+                      (item) => item.value.toLowerCase() === tags[0].toLowerCase()
+                    )?.color,
+                  }}></div>
+                {/* Tag name */}
+                {projectTags.find((item) => item.value.toLowerCase() === tags[0].toLowerCase())?.label}
+              </div>
+            ) : (
+              <div className='flex flex-row items-center gap-2 font-extralight'>
+                {/* Tag colors */}
+                <div className='mt-[1px] flex flex-row items-center space-x-[-1.5px]'>
+                  {currentTags.map((tag) => (
+                    <div
+                      className={'h-2 w-2 rounded-full'}
+                      key={tag.value}
+                      style={{
+                        backgroundColor: tag.color,
+                      }}></div>
+                  ))}
+                </div>
+                {/* Tag name */}
+                <span className='font-extralight text-foreground/60'>{currentTags.length} Tags</span>
+              </div>
+            )
           ) : (
             'Tags'
           )}
@@ -98,13 +118,22 @@ export function TagCombobox({
           }}>
           <CommandInput placeholder='Search tags...' className='h-9 font-extralight' />
           <CommandGroup>
-            {tags.map((item) => (
+            {projectTags.map((item) => (
               <CommandItem
                 key={item.value}
                 onSelect={(currentValue) => {
-                  setTag(currentValue === tag ? '' : currentValue);
-                  setOpen(false);
-                  onSelect?.(currentTag?.label.toLowerCase() === currentValue ? '' : currentValue);
+                  setTags((prev) => {
+                    if (prev.includes(currentValue)) return prev.filter((tag) => tag !== currentValue);
+                    return [...prev, currentValue];
+                  });
+                  // onSelect?.(currentTags?.label.toLowerCase() === currentValue ? '' : currentValue);
+                  onSelect?.(
+                    currentTags?.map((tag) => tag.value.toLowerCase())?.includes(currentValue)
+                      ? currentTags
+                          ?.map((tag) => tag.value.toLowerCase())
+                          ?.filter((tag) => tag !== currentValue)
+                      : [...currentTags?.map((tag) => tag.value.toLowerCase()), currentValue]
+                  );
                 }}
                 className='flex flex-row items-center gap-2 font-extralight'>
                 {/* Tag color */}
@@ -115,7 +144,7 @@ export function TagCombobox({
                 <Check
                   className={cn(
                     'ml-auto h-4 w-4',
-                    tag.toLowerCase() === item.value.toLowerCase() ? 'opacity-100' : 'opacity-0'
+                    tags.includes(item.value.toLowerCase()) ? 'opacity-100' : 'opacity-0'
                   )}
                 />
               </CommandItem>

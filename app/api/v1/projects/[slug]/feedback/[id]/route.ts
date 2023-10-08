@@ -40,7 +40,7 @@ export async function PATCH(req: Request, context: { params: { slug: string; id:
       status: status || '',
       project_id: 'dummy-id',
       user_id: 'dummy-id',
-      tags: tags || [],
+      tags: tags || undefined,
     },
     'route'
   );

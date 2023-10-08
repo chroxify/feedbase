@@ -101,7 +101,7 @@ export const updateFeedbackByID = (
     }
 
     // Check if tags exist
-    if (data.tags && data.tags.length > 0) {
+    if (data.tags !== undefined) {
       // Get all feedback tags for project
       const { data: projectTags, error: tagsError } = await supabase
         .from('feedback_tags')

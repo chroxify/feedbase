@@ -59,9 +59,9 @@ export default function FeedbackHeader({ tags }: { tags: FeedbackTagProps['Row']
 
         {/* Tags */}
         <TagCombobox
-          tags={comboTags}
-          initialValue={searchParams.get('tag')}
-          onSelect={(tag) => router.push(`${pathname}?${createQueryString('tag', tag)}`)}
+          projectTags={comboTags}
+          initialValue={searchParams.get('tags')?.split(',')}
+          onSelect={(tag) => router.push(`${pathname}?${createQueryString('tags', tag.join(','))}`)}
         />
       </div>
     </div>

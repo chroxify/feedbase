@@ -10,6 +10,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import FeedbackModal from '../modals/view-feedback-modal';
 import { statusOptions } from './status-combobox';
 import useCreateQueryString from '@/lib/hooks/use-create-query';
+import { cn } from '@/lib/utils';
 
 export default function FeedbackTable({
   fetchedFeedback,
@@ -25,7 +26,7 @@ export default function FeedbackTable({
   const [feedbackList, setFeedbackList] = useState<FeedbackWithUserProps[]>(fetchedFeedback);
 
   // Query params
-  const tag = searchParams.get('tag') || '';
+  const tag = searchParams.get('tags') || '';
   const status = searchParams.get('status') || '';
   const search = searchParams.get('search') || '';
 
@@ -34,8 +35,9 @@ export default function FeedbackTable({
     // Filter by search
     if (search && !feedback.title.toLowerCase().includes(search.toLowerCase())) return false;
 
-    // Filter by tag
-    if (tag && !feedback.tags?.some((tg) => tg.name.toLowerCase() === tag)) return false;
+    // Filter by tag/tags, if tags are multiple then they are separated by comma
+    if (tag && !tag.split(',').some((t) => feedback.tags?.some((ft) => ft.name.toLowerCase() === t)))
+      return false;
 
     // Filter by status
     if (status && !feedback.status?.toLowerCase().includes(status.toLowerCase())) return false;
@@ -101,12 +103,12 @@ export default function FeedbackTable({
                   key={tag.name.toLowerCase()}
                   onClick={() => {
                     // If already selected, remove the tag
-                    if (tag.name.toLowerCase() === searchParams.get('tag')) {
-                      router.push(`${pathname}?${createQueryString('tag', '')}`);
+                    if (tag.name.toLowerCase() === searchParams.get('tags')) {
+                      router.push(`${pathname}?${createQueryString('tags', '')}`);
                       return;
                     }
 
-                    router.push(`${pathname}?${createQueryString('tag', tag.name)}`);
+                    router.push(`${pathname}?${createQueryString('tags', tag.name)}`);
                   }}>
                   {/* Tag color */}
                   <div className='h-2 w-2 rounded-full' style={{ backgroundColor: tag.color }}></div>
@@ -129,7 +131,7 @@ export default function FeedbackTable({
                   <div
                     className='group/tag hidden flex-shrink-0 flex-wrap items-center gap-2 rounded-full border p-1 transition-colors hover:cursor-pointer hover:border-foreground/20 hover:bg-accent/50 md:flex'
                     onClick={() => {
-                      // If already selected, remove the tag
+                      // If already selected, remove the status
                       if (currentStatus.label.toLowerCase() === searchParams.get('status')) {
                         router.push(`${pathname}?${createQueryString('status', '')}`);
                         return;

@@ -134,9 +134,17 @@ export default function FeedbackModal({
   }
 
   // Update tag
-  async function onUpdateTag(tag: string) {
+  async function onUpdateTag(tag: string[]) {
     // Get tag object
-    const tagObj = tags.find((tg) => tg.name.toLowerCase() === tag.toLowerCase());
+    const tagObjArray = [] as FeedbackTagProps['Row'][];
+
+    tag.forEach((tag) => {
+      const tagObj = tags.find((t) => t.name.toLowerCase() === tag.toLowerCase());
+
+      if (tagObj) {
+        tagObjArray.push(tagObj);
+      }
+    });
 
     const promise = new Promise((resolve, reject) => {
       fetch(`/api/v1/projects/${projectSlug}/feedback/${feedback.id}`, {
@@ -145,7 +153,7 @@ export default function FeedbackModal({
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          tags: tagObj ? [tagObj.id] : [],
+          tags: tagObjArray.map((tag) => tag.id),
         }),
       })
         .then((res) => res.json())
@@ -170,9 +178,7 @@ export default function FeedbackModal({
         const newFeedbackList = [...feedbackList];
 
         // Update feedback tags
-        newFeedbackList[index].tags = tagObj
-          ? [{ name: tagObj?.name, color: tagObj?.color } as FeedbackTagProps['Row']]
-          : [];
+        newFeedbackList[index].tags = tagObjArray;
 
         // Update feedbackList state
         setFeedbackList(newFeedbackList);
@@ -314,10 +320,10 @@ export default function FeedbackModal({
 
           {/* Tags */}
           <TagCombobox
-            tags={tags.map((tag) => ({ value: tag.name, label: tag.name, color: tag.color }))}
+            projectTags={tags.map((tag) => ({ value: tag.name, label: tag.name, color: tag.color }))}
             triggerClassName='bg-transparent w-fit h-fit py-1 px-3 hover:bg-secondary/80'
             showDropdownIcon={false}
-            initialValue={feedback.tags?.[0]?.name || ''}
+            initialValue={feedback.tags.map((tag) => tag.name.toLowerCase())}
             onSelect={onUpdateTag}
             align='start'
           />
