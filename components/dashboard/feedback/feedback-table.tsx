@@ -10,6 +10,8 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import FeedbackModal from '../modals/view-feedback-modal';
 import { statusOptions } from './status-combobox';
 import useCreateQueryString from '@/lib/hooks/use-create-query';
+import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
 
 export default function FeedbackTable({
   fetchedFeedback,
@@ -21,6 +23,7 @@ export default function FeedbackTable({
   const searchParams = useSearchParams();
   const createQueryString = useCreateQueryString(searchParams);
   const pathname = usePathname();
+  const projectSlug = pathname.split('/')[1];
   const router = useRouter();
   const [feedbackList, setFeedbackList] = useState<FeedbackWithUserProps[]>(fetchedFeedback);
 
@@ -50,6 +53,50 @@ export default function FeedbackTable({
     return `${day} ${month}`;
   };
 
+  // Upvote feedback
+  function onUpvoteTag(feedback: FeedbackWithUserProps) {
+    const promise = new Promise((resolve, reject) => {
+      fetch(`/api/v1/projects/${projectSlug}/feedback/${feedback.id}/upvotes`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            reject(data.error);
+          } else {
+            resolve(data);
+          }
+        })
+        .catch((err) => {
+          reject(err.message);
+        });
+    });
+
+    promise
+      .then(() => {
+        // Get index of feedback
+        const index = feedbackList.findIndex((fb) => fb.id === feedback.id);
+
+        // Update feedbackList
+        const newFeedbackList = [...feedbackList];
+
+        // Update feedback
+        newFeedbackList[index].has_upvoted = !feedback.has_upvoted;
+
+        // Update upvotes
+        newFeedbackList[index].upvotes = feedback.upvotes + (feedback.has_upvoted ? 1 : -1);
+
+        // Set feedbackList
+        setFeedbackList(newFeedbackList);
+      })
+      .catch((err) => {
+        toast.error(err);
+      });
+  }
+
   return (
     <div className='flex w-full flex-col overflow-y-auto'>
       {/* If filteredFeedback is empty */}
@@ -75,9 +122,24 @@ export default function FeedbackTable({
             <Button
               variant='secondary'
               size='sm'
-              className='flex h-11 flex-col items-center rounded-sm py-1 hover:bg-transparent'>
-              <ChevronUp className='h-5 w-5 stroke-2 text-foreground/60 transition-colors group-hover:text-foreground' />
-              <div className='text-sm font-light text-foreground/60 transition-colors group-hover:text-foreground'>
+              className='flex h-11 flex-col items-center rounded-sm py-1 transition-all duration-150 hover:bg-transparent active:scale-[85%]'
+              onClick={() => {
+                onUpvoteTag(feedback);
+              }}>
+              {/* Arrow */}
+              <ChevronUp
+                className={cn(
+                  'text-sm font-light transition-colors group-hover:text-foreground',
+                  feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
+                )}
+              />
+
+              {/* Upvotes */}
+              <div
+                className={cn(
+                  'text-sm font-light transition-colors group-hover:text-foreground',
+                  feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
+                )}>
                 {feedback.upvotes}
               </div>
             </Button>

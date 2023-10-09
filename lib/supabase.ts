@@ -160,6 +160,40 @@ export interface Database {
           },
         ];
       };
+      feedback_upvoters: {
+        Row: {
+          created_at: string;
+          feedback_id: string;
+          id: string;
+          profile_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          feedback_id: string;
+          id?: string;
+          profile_id: string;
+        };
+        Update: {
+          created_at?: string;
+          feedback_id?: string;
+          id?: string;
+          profile_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'feedback_upvoters_feedback_id_fkey';
+            columns: ['feedback_id'];
+            referencedRelation: 'feedback';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'feedback_upvoters_profile_id_fkey';
+            columns: ['profile_id'];
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       profiles: {
         Row: {
           avatar_url: string | null;

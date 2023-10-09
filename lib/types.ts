@@ -16,6 +16,7 @@ export type FeedbackTagProps = Database['public']['Tables']['feedback_tags'];
 export type FeedbackWithUserProps = Database['public']['Tables']['feedback']['Row'] & {
   user: ProfileProps['Row'];
   tags: { name: string; color: string }[];
+  has_upvoted: boolean;
 };
 
 export type FeedbackWithUserInputProps = Database['public']['Tables']['feedback']['Insert'] & {

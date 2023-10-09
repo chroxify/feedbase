@@ -1,5 +1,11 @@
 import { withFeedbackAuth, withProjectAuth } from '../auth';
-import { FeedbackProps, FeedbackTagProps, FeedbackWithUserInputProps, FeedbackWithUserProps } from '../types';
+import {
+  FeedbackProps,
+  FeedbackTagProps,
+  FeedbackWithUserInputProps,
+  FeedbackWithUserProps,
+  ProfileProps,
+} from '../types';
 
 // Create a feedback post
 export const createFeedback = (
@@ -181,11 +187,28 @@ export const getFeedbackByID = withFeedbackAuth<FeedbackWithUserProps>(
       return { data: null, error: error };
     }
 
+    // Get upvoters
+    const { data: upvoters, error: upvotersError } = await supabase
+      .from('feedback_upvoters')
+      .select()
+      .eq('feedback_id', feedback!.id);
+
+    // Check for errors
+    if (upvotersError) {
+      return { data: null, error: { message: upvotersError.message, status: 500 } };
+    }
+
+    // Check if user has upvoted
+    const hasUpvoted = upvoters.find((upvoter) => upvoter.profile_id === user!.id);
+
     // Convert feedback to unknown type and then to test type
     const feedbackData = feedback as unknown as FeedbackWithUserProps;
 
     // Convert raw tags to tags
     feedbackData.tags = feedbackData.raw_tags as unknown as FeedbackTagProps['Row'][];
+
+    // Add has upvoted
+    feedbackData.has_upvoted = hasUpvoted ? true : false;
 
     // Return feedback
     return { data: feedbackData, error: null };
@@ -218,6 +241,36 @@ export const deleteFeedbackByID = withFeedbackAuth<FeedbackProps['Row']>(
   }
 );
 
+// Get feedback upvoters
+export const getFeedbackUpvotersById = withFeedbackAuth<ProfileProps['Row'][]>(
+  async (user, supabase, feedback, project, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error: error };
+    }
+
+    // Get feedback upvoters
+    const { data: upvoters, error: upvotersError } = await supabase
+      .from('feedback_upvoters')
+      .select('profiles (*), created_at')
+      .eq('feedback_id', feedback!.id)
+      .order('created_at', { ascending: false });
+
+    // Check for errors
+    if (upvotersError) {
+      return { data: null, error: { message: upvotersError.message, status: 500 } };
+    }
+
+    // Restructure upvoters
+    const restructuredData = upvoters.map((item) => {
+      return item.profiles;
+    }) as ProfileProps['Row'][];
+
+    // Return upvoters
+    return { data: restructuredData, error: null };
+  }
+);
+
 // Upvote feedback by ID
 export const upvoteFeedbackByID = withFeedbackAuth<FeedbackProps['Row']>(
   async (user, supabase, feedback, project, error) => {
@@ -226,19 +279,69 @@ export const upvoteFeedbackByID = withFeedbackAuth<FeedbackProps['Row']>(
       return { data: null, error: error };
     }
 
-    // Update feedback
-    const { data: updatedFeedback, error: updatedFeedbackError } = await supabase
+    // Get user profile
+    const { data: userProfile, error: profileError } = await supabase
+      .from('profiles')
+      .select()
+      .eq('id', user!.id)
+      .single();
+
+    // Check for errors
+    if (profileError) {
+      return { data: null, error: { message: profileError.message, status: 500 } };
+    }
+
+    // Check if user has already upvoted
+    const { data: upvoter, error: upvoterErrorCheck } = await supabase
+      .from('feedback_upvoters')
+      .select()
+      .eq('profile_id', userProfile!.id)
+      .eq('feedback_id', feedback!.id);
+
+    // Check for errors
+    if (upvoterErrorCheck) {
+      return { data: null, error: { message: upvoterErrorCheck.message, status: 500 } };
+    }
+
+    // Check if upvoter exists
+    if (upvoter && upvoter.length > 0) {
+      // Delete upvoter
+      const { data: deletedUpvoter, error: deleteError } = await supabase
+        .from('feedback_upvoters')
+        .delete()
+        .eq('id', upvoter![0].id)
+        .select()
+        .single();
+
+      // Check for errors
+      if (deleteError) {
+        return { data: null, error: { message: deleteError.message, status: 500 } };
+      }
+    } else {
+      // Create upvoter
+      const { error: upvoterError } = await supabase
+        .from('feedback_upvoters')
+        .insert({ profile_id: userProfile.id, feedback_id: feedback!.id })
+        .select()
+        .single();
+
+      // Check for errors
+      if (upvoterError) {
+        return { data: null, error: { message: upvoterError.message, status: 500 } };
+      }
+    }
+
+    // Update feedback upvotes
+    const { data: updatedFeedback, error: updateError } = await supabase
       .from('feedback')
-      .update({
-        upvotes: feedback!.upvotes + 1,
-      })
+      .update({ upvotes: feedback!.upvotes + (upvoter && upvoter.length > 0 ? -1 : 1) })
       .eq('id', feedback!.id)
       .select()
       .single();
 
     // Check for errors
-    if (updatedFeedbackError) {
-      return { data: null, error: { message: updatedFeedbackError.message, status: 500 } };
+    if (updateError) {
+      return { data: null, error: { message: updateError.message, status: 500 } };
     }
 
     // Return feedback
@@ -265,13 +368,34 @@ export const getAllProjectFeedback = withProjectAuth<FeedbackWithUserProps[]>(
       return { data: null, error: { message: feedbackError.message, status: 500 } };
     }
 
+    // Get upvoters
+    const { data: userUpvotes, error: userUpvotesError } = await supabase
+      .from('feedback_upvoters')
+      .select()
+      .eq('profile_id', user!.id);
+
+    // Check for errors
+    if (userUpvotesError) {
+      return { data: null, error: { message: userUpvotesError.message, status: 500 } };
+    }
+
     // Convert feedback to unknown type and then to test type
     const feedbackData = feedback as unknown as FeedbackWithUserProps[];
 
-    // Convert raw tags to tags
+    // Convert raw tags to tags and remove raw tags
     feedbackData.forEach((feedback) => {
       feedback.tags = feedback.raw_tags as unknown as FeedbackTagProps['Row'][];
     });
+
+    // Get array of upvoted feedback ids
+    const upvotedFeedbackIds = userUpvotes.map((upvoter) => upvoter.feedback_id);
+
+    // Add has upvoted
+    if (upvotedFeedbackIds.length > 0) {
+      feedbackData.forEach((feedback) => {
+        feedback.has_upvoted = upvotedFeedbackIds.includes(feedback.id);
+      });
+    }
 
     // Return feedback
     return { data: feedbackData, error: null };
