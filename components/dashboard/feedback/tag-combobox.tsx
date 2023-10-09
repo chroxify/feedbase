@@ -49,7 +49,7 @@ export function TagCombobox({
   React.useEffect(() => {
     setTags(initialValue || []);
   }, [initialValue]);
-  console.log(initialValue);
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>

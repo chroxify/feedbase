@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
+  DialogCloseWrapper,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -240,7 +241,7 @@ export default function FeedbackModal({
     <Dialog>
       <DialogTrigger className={className}>{children}</DialogTrigger>
       <DialogContent className='sm:min-w-[425px]'>
-        <DropdownMenu>
+        <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <div className='fixed right-8 top-7 rounded-sm p-1 opacity-80 transition-all hover:cursor-pointer hover:bg-secondary hover:opacity-100'>
               <MoreVertical className='h-4 w-4' />
@@ -280,12 +281,14 @@ export default function FeedbackModal({
               Email submitter
             </DropdownMenuItem>
 
-            <DropdownMenuItem
-              className='flex flex-row items-center gap-2 font-extralight'
-              onClick={onDeleteFeedback}>
-              <Icons.trash className='h-4 w-4 fill-white' />
-              Delete
-            </DropdownMenuItem>
+            <DialogCloseWrapper className='w-full'>
+              <DropdownMenuItem
+                className='flex flex-row items-center gap-2 font-extralight'
+                onClick={onDeleteFeedback}>
+                <Icons.trash className='h-4 w-4 fill-white' />
+                Delete
+              </DropdownMenuItem>
+            </DialogCloseWrapper>
           </DropdownMenuContent>
         </DropdownMenu>
 
