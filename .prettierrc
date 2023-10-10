@@ -1,9 +1,12 @@
 {
-  "arrowParens": "always",
-  "endOfLine": "lf",
-  "singleQuote": false,
-  "tabWidth": 2,
+  "bracketSpacing": true,
+  "bracketSameLine": true,
+  "singleQuote": true,
+  "jsxSingleQuote": true,
   "trailingComma": "es5",
+  "semi": true,
+  "printWidth": 110,
+  "arrowParens": "always",
   "importOrder": [
     "^(react/(.*)$)|^(react$)",
     "^(next/(.*)$)|^(next$)",
@@ -17,5 +20,8 @@
     "^@/app/(.*)$",
     "^[./]"
   ],
-  "plugins": ["@ianvs/prettier-plugin-sort-imports"]
+  "plugins": [
+    "@ianvs/prettier-plugin-sort-imports",
+    "prettier-plugin-tailwindcss"
+  ]
 }

@@ -11,7 +11,7 @@
   ],
   "pipeline": {
     "build": {
-      "dependsOn": ["^db:generate", "^build"],
+      "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
     },
     "topo": {
@@ -24,7 +24,6 @@
       "dependsOn": ["topo"]
     },
     "dev": {
-      "dependsOn": ["^db:generate"],
       "cache": false,
       "persistent": true
     },
