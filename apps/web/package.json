@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "dotenv -e ../../.env.local next dev",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -57,7 +57,7 @@
     "@types/react-dom": "18.2.8",
     "encoding": "^0.1.13",
     "eslint-config-custom": "workspace:*",
-    "tailwind-config": "workspace:*",
+    "@luminar/tailwind-config": "workspace:*",
     "tsconfig": "workspace:*",
     "typescript": "5.1.3"
   }

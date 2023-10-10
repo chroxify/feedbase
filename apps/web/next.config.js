@@ -1,4 +1,8 @@
 // Supabase url from .env file
+if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+  throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_URL');
+}
+
 const hostPath = process.env.NEXT_PUBLIC_SUPABASE_URL.split(':');
 
 /** @type {import('next').NextConfig} */
