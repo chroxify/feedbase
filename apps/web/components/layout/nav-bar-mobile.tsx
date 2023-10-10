@@ -11,23 +11,23 @@ import { usePathname } from 'next/navigation';
 const navTabs = [
   {
     slug: 'changelog',
-    outline: Icons.tagOutline,
-    solid: Icons.tagSolid,
+    outline: Icons.TagOutline,
+    solid: Icons.TagSolid,
   },
   {
     slug: 'roadmap',
-    outline: Icons.calendarOutline,
-    solid: Icons.calendarSolid,
+    outline: Icons.CalendarOutline,
+    solid: Icons.CalendarSolid,
   },
   {
     slug: 'feedback',
-    outline: Icons.feedbackOutline,
-    solid: Icons.feedbackSolid,
+    outline: Icons.FeedbackOutline,
+    solid: Icons.FeedbackSolid,
   },
   {
     slug: 'settings',
-    outline: Icons.settingsOutline,
-    solid: Icons.settingsSolid,
+    outline: Icons.SettingsOutline,
+    solid: Icons.SettingsSolid,
   },
 ];
 
@@ -62,7 +62,7 @@ export default function NavbarMobile({
           href={
             tab.slug === 'feedback' || tab.slug === 'roadmap' ? {} : `/${currentProject.slug}/${tab.slug}`
           }
-          key={index}
+          key={tab.slug}
           className='dr h-full w-full p-3 transition-all duration-150 active:scale-[80%]'>
           <Button
             variant='ghost'

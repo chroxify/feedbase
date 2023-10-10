@@ -15,7 +15,7 @@ export default function HomeContent() {
       {/* Header */}
       <div className='flex w-full flex-row items-center justify-between'>
         {/* Logo */}
-        <Icons.logoText className='w-24 fill-white' />
+        <Icons.LogoText className='w-24 fill-white' />
 
         {/* Buttons */}
         <WaitlistModal open={open} setOpen={setOpen}>
@@ -23,11 +23,11 @@ export default function HomeContent() {
         </WaitlistModal>
         <div className='flex flex-row gap-4 pt-2 sm:hidden'>
           <Link href='/github'>
-            <Icons.github className='h-[22px] w-[22px] text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
+            <Icons.Github className='h-[22px] w-[22px] text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
           </Link>
 
           <Link href='/twitter'>
-            <Icons.twitter className='h-[22px] w-[22px] text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
+            <Icons.Twitter className='h-[22px] w-[22px] text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
           </Link>
         </div>
       </div>
@@ -54,7 +54,7 @@ export default function HomeContent() {
 
           {/* Access Button Desktop */}
           <WaitlistModal keyListener open={open} setOpen={setOpen}>
-            <button className='group hidden select-none items-center gap-2 text-sm font-normal text-white/60 outline-none transition duration-200 ease-in-out hover:text-white sm:inline-flex'>
+            <button className='group hidden select-none items-center gap-2 text-sm font-normal text-white/60 outline-none transition duration-200 ease-in-out hover:text-white sm:inline-flex' type='button'>
               Press
               <kbd className='inline-flex h-6 w-6 select-none items-center justify-center rounded border border-white/20 bg-[#18191E] text-xs uppercase text-white/60 transition duration-200 ease-in-out group-hover:bg-white/10 group-hover:text-white'>
                 L
@@ -75,11 +75,11 @@ export default function HomeContent() {
         {/* Socials */}
         <div className='flex flex-row gap-4'>
           <Link href='/github'>
-            <Icons.github className='h-[22px] w-[22px] text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
+            <Icons.Github className='h-[22px] w-[22px] text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
           </Link>
 
           <Link href='/twitter'>
-            <Icons.twitter className='h-[22px] w-[22px] text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
+            <Icons.Twitter className='h-[22px] w-[22px] text-white/60 transition duration-200 ease-in-out hover:text-white/90' />
           </Link>
         </div>
       </div>

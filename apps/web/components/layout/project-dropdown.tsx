@@ -44,9 +44,9 @@ export default function ProjectDropdown({
       </DropdownMenuTrigger>
       <DropdownMenuContent className={cn('w-[200px] justify-between', className)}>
         {projects.map((project, index) => (
-          <Link href={`/${project.slug}`} key={index}>
+          <Link href={`/${project.slug}`} key={project.id}>
             <DropdownMenuItem
-              onSelect={() => setSelectedProject(project)}
+              onSelect={() => { setSelectedProject(project); }}
               className='flex flex-row items-center gap-2'>
               <GlobeIcon className='h-4 w-4 text-foreground/70' />
               {project.name}

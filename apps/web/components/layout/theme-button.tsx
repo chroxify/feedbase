@@ -15,7 +15,7 @@ export default function ToggleThemeButton() {
     <Button
       variant='secondary'
       className='w-full items-center justify-start  gap-1 border border-transparent p-1 text-secondary-foreground/40 hover:bg-transparent hover:text-secondary-foreground/90'
-      onClick={() => toggleTheme()}>
+      onClick={() => { toggleTheme(); }}>
       <div className='flex flex-row items-center justify-center p-[6px]'>
         {theme === 'dark' ? <SunIcon className='h-5 w-5' /> : <MoonIcon className='h-5 w-5' />}
       </div>

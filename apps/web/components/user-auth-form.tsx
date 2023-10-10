@@ -45,7 +45,7 @@ export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) 
     }
 
     const { error } = await supabase.auth.signInWithOtp({
-      email: email,
+      email,
       options: {
         emailRedirectTo: `${location.origin}/auth/callback`,
         data: {
@@ -99,7 +99,7 @@ export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) 
                   autoComplete='name'
                   autoCorrect='off'
                   disabled={isLoading}
-                  onChange={(event) => setName(event.currentTarget.value)}
+                  onChange={(event) => { setName(event.currentTarget.value); }}
                 />
               </>
             )}
@@ -115,11 +115,11 @@ export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) 
               autoComplete='email'
               autoCorrect='off'
               disabled={isLoading}
-              onChange={(event) => setEmail(event.currentTarget.value)}
+              onChange={(event) => { setEmail(event.currentTarget.value); }}
             />
           </div>
           <Button disabled={isLoading}>
-            {isLoading && provider === 'email' && <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />}
+            {isLoading && provider === 'email' ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
             Continue with Email
           </Button>
         </div>
@@ -134,9 +134,9 @@ export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) 
       </div>
       <Button variant='outline' type='button' disabled={isLoading} onClick={handleGitHubSignIn}>
         {isLoading && provider === 'github' ? (
-          <Icons.spinner className='mr-2 h-4 w-4 animate-spin' />
+          <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' />
         ) : (
-          <Icons.github className='mr-2 h-4 w-4' />
+          <Icons.Github className='mr-2 h-4 w-4' />
         )}{' '}
         Github
       </Button>

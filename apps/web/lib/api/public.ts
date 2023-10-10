@@ -6,7 +6,7 @@ export const getPublicProjectChangelogs = withProjectAuth<ChangelogProps['Row'][
   async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
-      return { data: null, error: error };
+      return { data: null, error };
     }
 
     // Get Changelogs

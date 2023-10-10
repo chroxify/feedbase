@@ -35,7 +35,7 @@ export default async function middleware(req: NextRequest) {
   const path = url.pathname;
 
   // rewrites for app pages
-  if (hostname == `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+  if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     // protect all app pages with authentication except for /login and /signup
     if (!session.data.session && path !== '/login' && path !== '/signup') {
       return NextResponse.redirect(new URL('/login', req.url));

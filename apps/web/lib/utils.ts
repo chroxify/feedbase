@@ -6,10 +6,8 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function isSlugValid(slug: string) {
-  slug = slug.toLowerCase();
-
   // check if slug contains invalid characters
-  if (!slug.match(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)) {
+  if (!(/^[a-z0-9]+(?:-[a-z0-9]+)*$/.exec(slug.toLowerCase()))) {
     return false;
   }
 

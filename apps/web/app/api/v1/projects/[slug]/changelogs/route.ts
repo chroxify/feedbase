@@ -15,7 +15,7 @@ import { NextResponse } from 'next/server';
     }
 */
 export async function POST(req: Request, context: { params: { slug: string } }) {
-  const { title, summary, content, image, publish_date, published } =
+  const { title, summary, content, image, publish_date:publishDate, published } =
     (await req.json()) as ChangelogProps['Insert'];
 
   // Validate Request Body
@@ -35,7 +35,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
       summary: summary || '',
       content: content || '',
       image: image || '',
-      publish_date: publish_date || null,
+      publish_date: publishDate || null,
       published: published || false,
       project_id: 'dummy-id',
     },

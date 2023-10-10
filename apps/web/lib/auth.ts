@@ -16,15 +16,13 @@ async function createClient(cType: 'server' | 'route') {
   const user = await supabase.auth.getUser();
   return { supabase, user };
 }
-interface WithProjectAuthHandler<T> {
-  (
+type WithProjectAuthHandler<T> = (
     user: UserMetadata | null,
     supabase: SupabaseClient<Database>,
     project: ProjectProps['Row'] | null,
     error: ErrorProps | null,
     allowPublic?: boolean
-  ): ApiResponse<T>;
-}
+  ) => ApiResponse<T>;
 
 // withProjectAuth is a helper function that can be used to wrap API routes
 // Ensures that the user is logged in and is a member of the project with the given slug
@@ -68,9 +66,7 @@ export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
   };
 };
 
-interface WithUserAuthHandler<T> {
-  (user: UserMetadata | null, supabase: SupabaseClient<Database>, error: ErrorProps | null): ApiResponse<T>;
-}
+type WithUserAuthHandler<T> = (user: UserMetadata | null, supabase: SupabaseClient<Database>, error: ErrorProps | null) => ApiResponse<T>;
 
 // withUserAuth is a helper function that can be used to wrap API routes
 // Ensures that the user is logged in

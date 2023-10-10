@@ -9,7 +9,7 @@ export default async function Sidebar({
   currentProject,
 }: {
   tabs: NavbarTabProps[];
-  projects: any;
+  projects: ProjectProps['Row'][];
   activeTabIndex: number;
   currentProject: ProjectProps['Row'];
 }) {
@@ -17,7 +17,7 @@ export default async function Sidebar({
     <div className='fixed z-50 hidden h-full min-w-[200px] flex-col items-center justify-between md:flex'>
       <div className='flex w-full flex-col gap-y-10'>
         {/* Projects */}
-        <ProjectDropdown projects={projects} activeProject={currentProject!} />
+        <ProjectDropdown projects={projects} activeProject={currentProject} />
 
         {/* Main Tabs */}
         <NavTabs tabs={tabs} initialTabIndex={activeTabIndex} projectSlug={currentProject.slug} />

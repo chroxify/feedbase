@@ -1,6 +1,6 @@
-interface IconObject {
-  dark: any;
-  light: any;
+export interface IconObject {
+  dark: Record<string, unknown> | string;
+  light: Record<string, unknown> | string;
 }
 
 function createIconObject(iconName: string): IconObject {

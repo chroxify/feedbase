@@ -1,9 +1,9 @@
 'use client';
 
 import { EditorContent, useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Highlight from '@tiptap/extension-highlight';
-import Typography from '@tiptap/extension-typography';
+import { StarterKit } from '@tiptap/starter-kit';
+import { Highlight } from '@tiptap/extension-highlight';
+import { Typography } from '@tiptap/extension-typography';
 import React from 'react';
 import TooltipLabel from '@/components/shared/tooltip-label';
 import { ChangelogProps } from '@/lib/types';

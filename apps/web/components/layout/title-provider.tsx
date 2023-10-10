@@ -1,11 +1,12 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import { IconObject } from '@/components/shared/icons/icons-animated';
 
 interface TitleProviderProps {
   tabs: {
     name: string;
-    icon: any;
+    icon: IconObject;
     slug: string;
   }[];
   initialTitle: string;

@@ -110,14 +110,12 @@ export default function ChangelogList({
                 </Badge>
 
                 {/* If date is not undefined, show date */}
-                {changelog.publish_date && (
-                  <Badge size='default' variant='secondary' className='self-start'>
+                {changelog.publish_date ? <Badge size='default' variant='secondary' className='self-start'>
                     {new Date(changelog.publish_date).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
                     })}
-                  </Badge>
-                )}
+                  </Badge> : null}
               </div>
 
               {/* Title and Summary */}

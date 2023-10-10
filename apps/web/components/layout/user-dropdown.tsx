@@ -38,8 +38,8 @@ export default function UserDropdown({ user }: { user: UserMetadata }) {
         {/* Profile */}
         <DropdownMenuItem
           className='flex flex-row items-center justify-start gap-2 hover:cursor-pointer'
-          onMouseEnter={() => setIsHover('Profile')}
-          onMouseLeave={() => setIsHover('')}>
+          onMouseEnter={() => { setIsHover('Profile'); }}
+          onMouseLeave={() => { setIsHover(''); }}>
           <LottiePlayer lottieSrc={ProfileIcon} animate={isHover === 'Profile'} className='h-5 w-5' />
 
           <div className='pb-[2px] text-foreground/[85%]'>Profile</div>
@@ -48,8 +48,8 @@ export default function UserDropdown({ user }: { user: UserMetadata }) {
         {/* Logout */}
         <DropdownMenuItem
           className='flex flex-row items-center justify-start gap-2 hover:cursor-pointer'
-          onMouseEnter={() => setIsHover('Logout')}
-          onMouseLeave={() => setIsHover('')}
+          onMouseEnter={() => { setIsHover('Logout'); }}
+          onMouseLeave={() => { setIsHover(''); }}
           onClick={handleLogout}>
           <LottiePlayer lottieSrc={LogoutIcon} animate={isHover === 'Logout'} className='h-5 w-5' />
 

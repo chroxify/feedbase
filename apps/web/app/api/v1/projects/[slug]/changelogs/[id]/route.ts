@@ -14,12 +14,12 @@ import { NextResponse } from 'next/server';
     }
 */
 export async function PUT(req: Request, context: { params: { slug: string; id: string } }) {
-  const { title, summary, content, image, publish_date, published } = await req.json();
+  const { title, summary, content, image, publishDate, published } = await req.json();
 
   const { data: changelog, error } = await updateChangelog(
     context.params.id,
     context.params.slug,
-    { title, summary, content, image, publish_date, published },
+    { title, summary, content, image, publish_date:publishDate, published },
     'route'
   );
 

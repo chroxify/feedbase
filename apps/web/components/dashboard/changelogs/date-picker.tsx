@@ -38,7 +38,7 @@ export function PublishDatePicker({
       <PopoverContent className='w-auto p-0'>
         <Calendar
           mode='single'
-          selected={new Date(data?.publish_date!) ?? undefined}
+          selected={data.publish_date ? new Date(data.publish_date) : undefined}
           onSelect={(date) => {
             setData({ ...data, publish_date: date?.toISOString() ?? null });
           }}

@@ -10,7 +10,7 @@ export default async function Header() {
 
   // Get the project
   const { data: project, error } = await getProjectBySlug(projectSlug!, 'server', true);
-  console.log(error, project);
+  // console.log(error, project);
 
   //   If the project doesn't exist, redirect to the homepage
   if (error || !project) {

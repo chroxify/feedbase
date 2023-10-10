@@ -35,7 +35,7 @@ export default async function Changelog({ params }: { params: { slug: string } }
           return (
             <>
               {/* Row Splitting up date and Content */}
-              <div className='flex h-full w-full flex-row px-20' key={i}>
+              <div className='flex h-full w-full flex-row px-20' key={changelog.id}>
                 {/* Date */}
                 <div className='flex w-1/4 flex-row'>
                   {/* Date in format Month Name day, year */}

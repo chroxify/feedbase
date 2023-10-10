@@ -79,7 +79,7 @@ export function AddChangelogModal({
           content: data.content || '',
           image: data.image || null,
           publish_date: data.publish_date || null,
-          published: createType === 'publish' ? true : false,
+          published: createType === 'publish',
         }),
       })
         .then((res) => res.json())
@@ -129,7 +129,7 @@ export function AddChangelogModal({
           content: data.content || '',
           image: data.image || null,
           publish_date: data.publish_date || null,
-          published: updateType === 'publish' ? true : false,
+          published: updateType === 'publish',
         }),
       })
         .then((res) => res.json())
@@ -180,7 +180,7 @@ export function AddChangelogModal({
                   <Input
                     placeholder='Changelog Title'
                     className='w-full bg-root'
-                    onChange={(e) => setData((prev) => ({ ...prev, title: e.target.value }))}
+                    onChange={(e) => { setData((prev) => ({ ...prev, title: e.target.value })); }}
                     value={data.title}
                   />
                 </div>
@@ -198,7 +198,7 @@ export function AddChangelogModal({
                 <Textarea
                   placeholder='Changelog Summary'
                   className='h-20 w-full resize-none items-start justify-start bg-root text-start'
-                  onChange={(e) => setData((prev) => ({ ...prev, summary: e.target.value }))}
+                  onChange={(e) => { setData((prev) => ({ ...prev, summary: e.target.value })); }}
                   // BUG: This should not need another || '' but it does for some reason
                   value={data.summary || ''}
                 />
@@ -228,7 +228,7 @@ export function AddChangelogModal({
         ) : (
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <button className='absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100'>
+              <button className='absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100' type='button'>
                 <X className='h-4 w-4' />
                 <span className='sr-only'>Close</span>
               </button>

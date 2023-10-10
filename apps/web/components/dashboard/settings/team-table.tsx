@@ -25,9 +25,9 @@ export function TeamTable({ members }: { members: TeamMemberProps[] }) {
 
     if (year === dateYear) {
       return `${month} ${day}`;
-    } else {
+    } 
       return `${month} ${day}, ${dateYear}`;
-    }
+    
   }
 
   return (
@@ -59,7 +59,7 @@ export function TeamTable({ members }: { members: TeamMemberProps[] }) {
                 {/* Join Date */}
                 {/* TODO: Add Role Badge */}
                 <span className='hidden text-xs font-light text-foreground/50 md:block'>
-                  {'Joined ' + formatDate(member.joined_at)}
+                  {`Joined ${  formatDate(member.joined_at)}`}
                 </span>
 
                 {/* Actions */}

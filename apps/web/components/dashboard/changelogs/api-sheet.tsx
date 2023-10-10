@@ -27,8 +27,8 @@ export function ApiSheet({ projectSlug }: { projectSlug: string }) {
         <Button
           variant='outline'
           size='sm'
-          onMouseEnter={() => setIsHover(true)}
-          onMouseLeave={() => setIsHover(false)}
+          onMouseEnter={() => { setIsHover(true); }}
+          onMouseLeave={() => { setIsHover(false); }}
           className='flex items-center gap-2 font-light'>
           <LottiePlayer lottieSrc={CodeIcon} animate={isHover} className='-ml-[2px] h-5 w-5' />
           API
@@ -69,7 +69,7 @@ export function ApiSheet({ projectSlug }: { projectSlug: string }) {
             </Button>
           </div>
         </div>
-        <SheetFooter></SheetFooter>
+        <SheetFooter />
       </SheetContent>
     </Sheet>
   );

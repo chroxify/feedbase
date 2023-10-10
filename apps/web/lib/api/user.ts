@@ -5,7 +5,7 @@ import { withUserAuth } from '../auth';
 export const getCurrentUser = withUserAuth<UserMetadata | null>(async (user, supabase, error) => {
   // If any errors, return error
   if (error) {
-    return { data: null, error: error };
+    return { data: null, error };
   }
 
   if (!user) {

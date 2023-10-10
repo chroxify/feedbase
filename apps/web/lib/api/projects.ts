@@ -7,7 +7,7 @@ export const getProjectBySlug = withProjectAuth<ProjectProps['Row']>(
   async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
-      return { data: null, error: error };
+      return { data: null, error };
     }
 
     // Check if project exists
@@ -25,7 +25,7 @@ export const createProject = (data: ProjectProps['Insert'], cType: 'server' | 'r
   withUserAuth<ProjectProps['Row']>(async (user, supabase, error) => {
     // If any errors, return error
     if (error) {
-      return { data: null, error: error };
+      return { data: null, error };
     }
 
     // Check if slug is valid
@@ -47,7 +47,7 @@ export const createProject = (data: ProjectProps['Insert'], cType: 'server' | 'r
     // Create Project Member for Project
     const { error: projectMemberError } = await supabase
       .from('project_members')
-      .insert({ member_id: user!.id, project_id: project![0].id })
+      .insert({ member_id: user!.id, project_id: project[0].id })
       .select();
 
     // Check for errors
@@ -64,7 +64,7 @@ export const updateProjectBySlug = (slug: string, data: ProjectProps['Update'], 
   withProjectAuth<ProjectProps['Row']>(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
-      return { data: null, error: error };
+      return { data: null, error };
     }
 
     // Update project
@@ -80,7 +80,7 @@ export const updateProjectBySlug = (slug: string, data: ProjectProps['Update'], 
     }
 
     // Return updated project
-    return { data: updatedProject![0], error: null };
+    return { data: updatedProject[0], error: null };
   })(slug, cType);
 
 // Delete Project by slug
@@ -88,7 +88,7 @@ export const deleteProjectBySlug = withProjectAuth<ProjectProps['Row']>(
   async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
-      return { data: null, error: error };
+      return { data: null, error };
     }
 
     // Delete project
@@ -112,7 +112,7 @@ export const deleteProjectBySlug = withProjectAuth<ProjectProps['Row']>(
 export const getUserProjects = withUserAuth<ProjectProps['Row'][]>(async (user, supabase, error) => {
   // If any errors, return error
   if (error) {
-    return { data: null, error: error };
+    return { data: null, error };
   }
 
   // Get all projects for user
@@ -140,7 +140,7 @@ export const getProjectMembers = withProjectAuth<TeamMemberProps[]>(
   async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
-      return { data: null, error: error };
+      return { data: null, error };
     }
 
     // Get all members for project

@@ -85,7 +85,7 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               id='name'
               placeholder='Luminar'
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={(event) => { setName(event.target.value); }}
               className='col-span-3'
             />
           </div>
@@ -115,7 +115,7 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               Cancel
             </Button>
           </DialogCloseWrapper>
-          <Button type='submit' onClick={() => onCreateProject()} disabled={name === '' || slug === ''}>
+          <Button type='submit' onClick={onCreateProject} disabled={name === '' || slug === ''}>
             Create Project
           </Button>
         </DialogFooter>

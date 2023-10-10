@@ -55,7 +55,7 @@ export function WaitlistModal({
     event.preventDefault();
 
     // Validate email address
-    const emailRegex = new RegExp('^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,4})+$');
+    const emailRegex = /^\w+(?:[.-]?\w+)*@\w+(?:[.-]?\w+)*(?:\.\w{2,4})+$/;
     if (!emailRegex.test(email)) {
       toast.error('Please enter a valid email address.');
       return;
@@ -102,7 +102,7 @@ export function WaitlistModal({
   };
 
   return (
-    <Dialog onOpenChange={(open) => setOpen(open)} open={open}>
+    <Dialog onOpenChange={(open) => { setOpen(open); }} open={open}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='max-w-sm rounded-lg p-9 selection:bg-teal-700/20 selection:text-teal-400'>
         <DialogHeader className='flex flex-col items-center pb-2 pt-5'>
@@ -125,7 +125,7 @@ export function WaitlistModal({
               placeholder='Enter your name'
               tabIndex={-1}
               value={name}
-              onChange={(event) => setName(event.target.value)}
+              onChange={(event) => { setName(event.target.value); }}
             />
           </div>
 
@@ -143,7 +143,7 @@ export function WaitlistModal({
               type='email'
               value={email}
               tabIndex={-1}
-              onChange={(event) => setEmail(event.target.value)}
+              onChange={(event) => { setEmail(event.target.value); }}
             />
           </div>
         </div>

@@ -23,6 +23,7 @@ export default function FileDrop({
   const [dragActive, setDragActive] = useState(false);
 
   const onChangePicture = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (e: any) => {
       setFileError(null);
       const file = e.target.files[0];
@@ -50,7 +51,7 @@ export default function FileDrop({
           label='Image'
           tooltip='This image will be used as the preview image for your changelog.'
         />
-        {fileError && <p className='text-sm font-extralight text-destructive'>{fileError}</p>}
+        {fileError ? <p className='text-sm font-extralight text-destructive'>{fileError}</p> : null}
       </div>
       {/* BUG: Fix this so that its not a fixed height but rather just takes over full height properly */}
       {/* As currently it is not on the same level as the other inputs */}
@@ -79,6 +80,7 @@ export default function FileDrop({
             e.stopPropagation();
             setDragActive(false);
             setFileError(null);
+            // eslint-disable-next-line @typescript-eslint/prefer-optional-chain
             const file = e.dataTransfer.files && e.dataTransfer.files[0];
             if (file) {
               if (file.size / 1024 / 1024 > 5) {
@@ -117,9 +119,7 @@ export default function FileDrop({
           </p>
           <span className='sr-only'>OG image upload</span>
         </div>
-        {data.image && (
-          <Image src={data.image} alt='Preview' fill className='h-full w-full rounded-md object-cover' />
-        )}
+        {data.image ? <Image src={data.image} alt='Preview' fill className='h-full w-full rounded-md object-cover' /> : null}
       </label>
       <div className='flex rounded-md shadow-sm'>
         <input

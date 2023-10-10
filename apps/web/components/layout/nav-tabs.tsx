@@ -38,12 +38,12 @@ export default function NavTabs({
         // If feedback or roadmap, don't link to the page
         <Link
           href={tab.slug === 'feedback' || tab.slug === 'roadmap' ? '#' : `/${projectSlug}/${tab.slug}`}
-          key={index}
+          key={tab.slug}
           className={tab.slug === 'feedback' || tab.slug === 'roadmap' ? 'cursor-default' : ''}>
           <Button
             variant='secondary'
-            onMouseEnter={() => setIsHover(tab.slug)}
-            onMouseLeave={() => setIsHover('')}
+            onMouseEnter={() => { setIsHover(tab.slug); }}
+            onMouseLeave={() => { setIsHover(''); }}
             className={cn(
               'w-full items-center justify-start gap-1 border border-transparent p-1 font-light text-foreground/[85%] hover:text-foreground',
               activeTab === index && 'bg-secondary text-foreground hover:bg-secondary'

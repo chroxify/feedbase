@@ -7,7 +7,7 @@ export const createChangelog = (slug: string, data: ChangelogProps['Insert'], cT
   withProjectAuth<ChangelogProps['Row']>(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
-      return { data: null, error: error };
+      return { data: null, error };
     }
 
     // If theres an image, upload it
@@ -67,7 +67,7 @@ export const getAllProjectChangelogs = withProjectAuth<ChangelogProps['Row'][]>(
   async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
-      return { data: null, error: error };
+      return { data: null, error };
     }
 
     // Get Changelogs
@@ -91,7 +91,7 @@ export const getChangelogByID = (id: string, slug: string, cType: 'server' | 'ro
   withProjectAuth<ChangelogProps['Row']>(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
-      return { data: null, error: error };
+      return { data: null, error };
     }
 
     // Get Changelog
@@ -119,7 +119,7 @@ export const updateChangelog = (
   withProjectAuth<ChangelogProps['Row']>(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
-      return { data: null, error: error };
+      return { data: null, error };
     }
 
     // If theres an image, which is a base64 string, upload it
@@ -180,7 +180,7 @@ export const deleteChangelog = (id: string, slug: string, cType: 'server' | 'rou
   withProjectAuth<ChangelogProps['Row']>(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
-      return { data: null, error: error };
+      return { data: null, error };
     }
 
     // Delete Changelog
