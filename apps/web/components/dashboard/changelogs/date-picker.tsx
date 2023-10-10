@@ -2,12 +2,11 @@
 
 import * as React from 'react';
 import { format } from 'date-fns';
-
-import { cn } from '@/lib/utils';
 import { Button } from 'ui/components/ui/button';
 import { Calendar } from 'ui/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from 'ui/components/ui/popover';
 import { ChangelogProps } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 export function PublishDatePicker({
   className,
@@ -24,14 +23,14 @@ export function PublishDatePicker({
         <Button
           variant='outline'
           className={cn(
-            'w-[280px] justify-start overflow-hidden bg-root text-left font-normal',
+            'bg-root w-[280px] justify-start overflow-hidden text-left font-normal',
             !data.publish_date && 'text-muted-foreground',
             className
           )}>
           {data.publish_date ? (
             <span className='font-extralight'>{format(new Date(data.publish_date), 'P')}</span>
           ) : (
-            <span className='font-extralight text-foreground/50'>Pick a date</span>
+            <span className='text-foreground/50 font-extralight'>Pick a date</span>
           )}
         </Button>
       </PopoverTrigger>

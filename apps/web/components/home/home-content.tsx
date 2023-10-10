@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Icons } from '@/components/shared/icons/icons-static';
-import { WaitlistModal } from '@/components/dashboard/modals/add-waitlist-modal';
-import { Button } from 'ui/components/ui/button';
 import Link from 'next/link';
 import { Badge } from 'ui/components/ui/badge';
+import { Button } from 'ui/components/ui/button';
+import { WaitlistModal } from '@/components/dashboard/modals/add-waitlist-modal';
+import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function HomeContent() {
   const [open, setOpen] = useState<boolean>(false);
@@ -19,7 +19,7 @@ export default function HomeContent() {
 
         {/* Buttons */}
         <WaitlistModal open={open} setOpen={setOpen}>
-          <Button className='hidden border border-background sm:inline-flex'>Request access</Button>
+          <Button className='border-background hidden border sm:inline-flex'>Request access</Button>
         </WaitlistModal>
         <div className='flex flex-row gap-4 pt-2 sm:hidden'>
           <Link href='/github'>
@@ -54,7 +54,9 @@ export default function HomeContent() {
 
           {/* Access Button Desktop */}
           <WaitlistModal keyListener open={open} setOpen={setOpen}>
-            <button className='group hidden select-none items-center gap-2 text-sm font-normal text-white/60 outline-none transition duration-200 ease-in-out hover:text-white sm:inline-flex' type='button'>
+            <button
+              className='group hidden select-none items-center gap-2 text-sm font-normal text-white/60 outline-none transition duration-200 ease-in-out hover:text-white sm:inline-flex'
+              type='button'>
               Press
               <kbd className='inline-flex h-6 w-6 select-none items-center justify-center rounded border border-white/20 bg-[#18191E] text-xs uppercase text-white/60 transition duration-200 ease-in-out group-hover:bg-white/10 group-hover:text-white'>
                 L
@@ -65,7 +67,7 @@ export default function HomeContent() {
 
           {/* Access Button Mobile */}
           <WaitlistModal open={open} setOpen={setOpen}>
-            <Button className='border border-background sm:hidden'>Request access</Button>
+            <Button className='border-background border sm:hidden'>Request access</Button>
           </WaitlistModal>
         </div>
       </div>

@@ -1,5 +1,5 @@
-import { Label } from 'ui/components/ui/label';
 import { HelpCircle } from 'lucide-react';
+import { Label } from 'ui/components/ui/label';
 import DefaultTooltip from './tooltip';
 
 export default function TooltipLabel({ label, tooltip }: { label: string; tooltip: string }) {
@@ -8,7 +8,7 @@ export default function TooltipLabel({ label, tooltip }: { label: string; toolti
       <Label htmlFor='name'>{label}</Label>
 
       <DefaultTooltip content={tooltip}>
-        <HelpCircle className='h-4 w-4 cursor-pointer text-foreground/50' />
+        <HelpCircle className='text-foreground/50 h-4 w-4 cursor-pointer' />
       </DefaultTooltip>
     </div>
   );

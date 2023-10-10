@@ -1,5 +1,8 @@
 'use client';
 
+import { MoreVertical } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
+import { Button } from 'ui/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,9 +10,6 @@ import {
   DropdownMenuTrigger,
 } from 'ui/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/ui/tabs';
-import { Avatar, AvatarImage, AvatarFallback } from 'ui/components/ui/avatar';
-import { MoreVertical } from 'lucide-react';
-import { Button } from 'ui/components/ui/button';
 import { TeamMemberProps } from '@/lib/types';
 
 export function TeamTable({ members }: { members: TeamMemberProps[] }) {
@@ -25,9 +25,8 @@ export function TeamTable({ members }: { members: TeamMemberProps[] }) {
 
     if (year === dateYear) {
       return `${month} ${day}`;
-    } 
-      return `${month} ${day}, ${dateYear}`;
-    
+    }
+    return `${month} ${day}, ${dateYear}`;
   }
 
   return (
@@ -49,17 +48,17 @@ export function TeamTable({ members }: { members: TeamMemberProps[] }) {
 
                 {/* Name and Email */}
                 <div className='flex flex-col'>
-                  <span className='text-sm text-foreground/70'>{member.full_name}</span>
+                  <span className='text-foreground/70 text-sm'>{member.full_name}</span>
 
-                  <span className='text-xs font-light text-foreground/50'>{member.email}</span>
+                  <span className='text-foreground/50 text-xs font-light'>{member.email}</span>
                 </div>
               </div>
 
               <div className='flex flex-row items-center space-x-2'>
                 {/* Join Date */}
                 {/* TODO: Add Role Badge */}
-                <span className='hidden text-xs font-light text-foreground/50 md:block'>
-                  {`Joined ${  formatDate(member.joined_at)}`}
+                <span className='text-foreground/50 hidden text-xs font-light md:block'>
+                  {`Joined ${formatDate(member.joined_at)}`}
                 </span>
 
                 {/* Actions */}
@@ -68,7 +67,7 @@ export function TeamTable({ members }: { members: TeamMemberProps[] }) {
                     <Button
                       variant='secondary'
                       size='icon'
-                      className='h-8 w-5 text-foreground/50 hover:text-foreground'>
+                      className='text-foreground/50 hover:text-foreground h-8 w-5'>
                       <MoreVertical className='h-5 w-5' />
                     </Button>
                   </DropdownMenuTrigger>
@@ -86,7 +85,7 @@ export function TeamTable({ members }: { members: TeamMemberProps[] }) {
       </TabsContent>
       <TabsContent value='invites'>
         <div className='flex h-full w-full flex-col items-center rounded-md border p-3'>
-          <span className='text-sm text-foreground/70'>Section currently under development.</span>
+          <span className='text-foreground/70 text-sm'>Section currently under development.</span>
         </div>
       </TabsContent>
     </Tabs>

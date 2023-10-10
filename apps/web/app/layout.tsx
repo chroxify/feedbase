@@ -1,10 +1,10 @@
 import './globals.css';
-import { ThemeProvider } from '@/components/theme-provider';
-import { cn } from '@/lib/utils';
-import { Inter } from 'next/font/google';
-import { Analytics } from '@vercel/analytics/react';
-import { headers } from 'next/headers';
 import { Metadata } from 'next';
+import { Inter } from 'next/font/google';
+import { headers } from 'next/headers';
+import { Analytics } from '@vercel/analytics/react';
+import { cn } from '@/lib/utils';
+import { ThemeProvider } from '@/components/theme-provider';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,7 +28,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           defaultTheme='dark'
           enableSystem={false}
           forcedTheme={host === process.env.NEXT_PUBLIC_ROOT_DOMAIN && pathname === '/' ? 'dark' : undefined}>
-          <main className={cn('flex min-h-screen w-full flex-col items-center bg-root', inter.className)}>
+          <main className={cn('bg-root flex min-h-screen w-full flex-col items-center', inter.className)}>
             {children}
           </main>
         </ThemeProvider>

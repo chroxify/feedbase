@@ -1,5 +1,7 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
 import {
   Dialog,
@@ -13,8 +15,6 @@ import {
 } from 'ui/components/ui/dialog';
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
 
 export function WaitlistModal({
   children,
@@ -102,7 +102,11 @@ export function WaitlistModal({
   };
 
   return (
-    <Dialog onOpenChange={(open) => { setOpen(open); }} open={open}>
+    <Dialog
+      onOpenChange={(open) => {
+        setOpen(open);
+      }}
+      open={open}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className='max-w-sm rounded-lg p-9 selection:bg-teal-700/20 selection:text-teal-400'>
         <DialogHeader className='flex flex-col items-center pb-2 pt-5'>
@@ -125,7 +129,9 @@ export function WaitlistModal({
               placeholder='Enter your name'
               tabIndex={-1}
               value={name}
-              onChange={(event) => { setName(event.target.value); }}
+              onChange={(event) => {
+                setName(event.target.value);
+              }}
             />
           </div>
 
@@ -143,7 +149,9 @@ export function WaitlistModal({
               type='email'
               value={email}
               tabIndex={-1}
-              onChange={(event) => { setEmail(event.target.value); }}
+              onChange={(event) => {
+                setEmail(event.target.value);
+              }}
             />
           </div>
         </div>

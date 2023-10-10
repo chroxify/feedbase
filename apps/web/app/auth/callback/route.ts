@@ -1,7 +1,7 @@
-import { APP_DOMAIN } from '@/lib/constants';
-import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { APP_DOMAIN } from '@/lib/constants';
 
 export const dynamic = 'force-dynamic';
 

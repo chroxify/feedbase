@@ -1,6 +1,6 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'ui/components/ui/card';
-import { TeamTable } from '@/components/dashboard/settings/team-table';
 import { getProjectMembers } from '@/lib/api/projects';
+import { TeamTable } from '@/components/dashboard/settings/team-table';
 
 export default async function TeamSettings({ params }: { params: { slug: string } }) {
   const { data: members, error } = await getProjectMembers(params.slug, 'server');

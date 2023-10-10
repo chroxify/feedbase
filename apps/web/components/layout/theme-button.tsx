@@ -1,8 +1,8 @@
 'use client';
 
-import { Button } from 'ui/components/ui/button';
 import { MoonIcon, SunIcon } from '@heroicons/react/24/solid';
 import { useTheme } from 'next-themes';
+import { Button } from 'ui/components/ui/button';
 
 export default function ToggleThemeButton() {
   const { theme, setTheme } = useTheme();
@@ -14,8 +14,10 @@ export default function ToggleThemeButton() {
   return (
     <Button
       variant='secondary'
-      className='w-full items-center justify-start  gap-1 border border-transparent p-1 text-secondary-foreground/40 hover:bg-transparent hover:text-secondary-foreground/90'
-      onClick={() => { toggleTheme(); }}>
+      className='text-secondary-foreground/40 hover:text-secondary-foreground/90 w-full  items-center justify-start gap-1 border border-transparent p-1 hover:bg-transparent'
+      onClick={() => {
+        toggleTheme();
+      }}>
       <div className='flex flex-row items-center justify-center p-[6px]'>
         {theme === 'dark' ? <SunIcon className='h-5 w-5' /> : <MoonIcon className='h-5 w-5' />}
       </div>

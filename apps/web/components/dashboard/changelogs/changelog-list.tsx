@@ -1,14 +1,9 @@
 'use client';
 
-import { ChangelogProps } from '@/lib/types';
 import Image from 'next/image';
-import { Badge } from 'ui/components/ui/badge';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from 'ui/components/ui/dropdown-menu';
+import { PhotoIcon } from '@heroicons/react/24/outline';
+import { MoreVertical } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,11 +15,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from 'ui/components/ui/alert-dialog';
+import { Badge } from 'ui/components/ui/badge';
 import { Button } from 'ui/components/ui/button';
-import { MoreVertical } from 'lucide-react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from 'ui/components/ui/dropdown-menu';
+import { ChangelogProps } from '@/lib/types';
 import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';
-import { toast } from 'sonner';
-import { PhotoIcon } from '@heroicons/react/24/outline';
 
 export default function ChangelogList({
   changelogs,
@@ -71,12 +71,12 @@ export default function ChangelogList({
     <div className='flex flex-col gap-4'>
       {changelogs.map((changelog) => (
         <div
-          className='flex h-36 gap-5 rounded-lg border bg-card p-3 text-card-foreground shadow-sm md:h-40'
+          className='bg-card text-card-foreground flex h-36 gap-5 rounded-lg border p-3 shadow-sm md:h-40'
           key={changelog.id}>
           {/* Image */}
           <div className='flex h-full w-full max-w-xs flex-col items-center justify-center'>
             {changelog.image ? (
-              <div className='group relative mt-1 flex h-full w-full flex-col items-center justify-center rounded-md border border-input bg-background shadow-sm transition-all hover:bg-accent'>
+              <div className='border-input bg-background hover:bg-accent group relative mt-1 flex h-full w-full flex-col items-center justify-center rounded-md border shadow-sm transition-all'>
                 <div className='absolute h-full w-full rounded-md'>
                   <Image
                     src={changelog.image}
@@ -88,11 +88,11 @@ export default function ChangelogList({
                 </div>
               </div>
             ) : (
-              <div className='group relative mt-1 flex h-full w-full flex-col items-center justify-center rounded-md border border-input bg-background shadow-sm transition-all hover:bg-accent'>
-                <div className='absolute flex h-full w-full items-center justify-center rounded-md bg-background'>
+              <div className='border-input bg-background hover:bg-accent group relative mt-1 flex h-full w-full flex-col items-center justify-center rounded-md border shadow-sm transition-all'>
+                <div className='bg-background absolute flex h-full w-full items-center justify-center rounded-md'>
                   <div className='flex flex-col items-center justify-center'>
-                    <PhotoIcon className='h-8 w-8 text-foreground/50' />
-                    <p className='text-sm text-foreground/50'>No image</p>
+                    <PhotoIcon className='text-foreground/50 h-8 w-8' />
+                    <p className='text-foreground/50 text-sm'>No image</p>
                   </div>
                 </div>
               </div>
@@ -110,17 +110,19 @@ export default function ChangelogList({
                 </Badge>
 
                 {/* If date is not undefined, show date */}
-                {changelog.publish_date ? <Badge size='default' variant='secondary' className='self-start'>
+                {changelog.publish_date ? (
+                  <Badge size='default' variant='secondary' className='self-start'>
                     {new Date(changelog.publish_date).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
                     })}
-                  </Badge> : null}
+                  </Badge>
+                ) : null}
               </div>
 
               {/* Title and Summary */}
               <div className='text-1xl font-medium'>{changelog.title ? changelog.title : 'Untitled'}</div>
-              <div className='text-sm font-light text-foreground/60'>
+              <div className='text-foreground/60 text-sm font-light'>
                 {changelog.summary ? changelog.summary : 'No changelog summary provided.'}
               </div>
             </div>
@@ -133,7 +135,7 @@ export default function ChangelogList({
                   <Button
                     variant='secondary'
                     size='icon'
-                    className='h-8 w-5 text-foreground/50 hover:text-foreground'>
+                    className='text-foreground/50 hover:text-foreground h-8 w-5'>
                     <MoreVertical className='h-5 w-5' />
                   </Button>
                 </DropdownMenuTrigger>

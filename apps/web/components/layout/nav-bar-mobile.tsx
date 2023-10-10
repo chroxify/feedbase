@@ -1,12 +1,12 @@
 'use client';
 
-import { NavbarTabProps, ProjectProps } from '@/lib/types';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { Button } from 'ui/components/ui/button';
+import { NavbarTabProps, ProjectProps } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { Icons } from '../shared/icons/icons-static';
-import { usePathname } from 'next/navigation';
 
 const navTabs = [
   {
@@ -55,7 +55,7 @@ export default function NavbarMobile({
   }, [pathname, tabs]);
 
   return (
-    <div className='fixed bottom-0 z-10 flex h-16 w-full flex-row items-center justify-evenly gap-5 overflow-hidden border-t bg-root px-5 md:hidden'>
+    <div className='bg-root fixed bottom-0 z-10 flex h-16 w-full flex-row items-center justify-evenly gap-5 overflow-hidden border-t px-5 md:hidden'>
       {navTabs.map((tab, index) => (
         // If feedback or roadmap, don't link to the page
         <Link

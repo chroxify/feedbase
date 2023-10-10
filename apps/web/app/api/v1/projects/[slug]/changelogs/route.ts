@@ -1,6 +1,6 @@
+import { NextResponse } from 'next/server';
 import { createChangelog, getAllProjectChangelogs } from '@/lib/api/changelogs';
 import { ChangelogProps } from '@/lib/types';
-import { NextResponse } from 'next/server';
 
 /* 
     Create Changelog
@@ -15,8 +15,14 @@ import { NextResponse } from 'next/server';
     }
 */
 export async function POST(req: Request, context: { params: { slug: string } }) {
-  const { title, summary, content, image, publish_date:publishDate, published } =
-    (await req.json()) as ChangelogProps['Insert'];
+  const {
+    title,
+    summary,
+    content,
+    image,
+    publish_date: publishDate,
+    published,
+  } = (await req.json()) as ChangelogProps['Insert'];
 
   // Validate Request Body
   if (published) {

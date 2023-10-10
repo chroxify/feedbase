@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+import Link from 'next/link';
 import { ChevronsUpDownIcon, GlobeIcon, Plus } from 'lucide-react';
 import { Button } from 'ui/components/ui/button';
 import {
@@ -8,12 +10,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from 'ui/components/ui/dropdown-menu';
-import { useState } from 'react';
-import AddProjectDialog from '@/components/dashboard/modals/add-project-modal';
-import { ProjectProps } from '@/lib/types';
 import { Skeleton } from 'ui/components/ui/skeleton';
-import Link from 'next/link';
+import { ProjectProps } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import AddProjectDialog from '@/components/dashboard/modals/add-project-modal';
 
 export default function ProjectDropdown({
   projects,
@@ -31,24 +31,26 @@ export default function ProjectDropdown({
       <DropdownMenuTrigger asChild>
         <Button variant='outline' className={cn('h-9 w-full justify-between p-1', className)}>
           <div className='flex flex-row items-center justify-start gap-2'>
-            <div className='flex flex-row items-center justify-center rounded-sm bg-accent p-[6px]'>
-              <GlobeIcon className='h-4 w-4 text-foreground/70' />
+            <div className='bg-accent flex flex-row items-center justify-center rounded-sm p-[6px]'>
+              <GlobeIcon className='text-foreground/70 h-4 w-4' />
             </div>
             {/* While selected project is null (incase of unexpected error), show skeleton */}
             <span className='text-sm font-normal'>
               {selectedProject ? selectedProject.name : <Skeleton className='h-4 w-20' />}
             </span>
           </div>
-          <ChevronsUpDownIcon className='h-4 w-4 text-foreground/70' />
+          <ChevronsUpDownIcon className='text-foreground/70 h-4 w-4' />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className={cn('w-[200px] justify-between', className)}>
         {projects.map((project, index) => (
           <Link href={`/${project.slug}`} key={project.id}>
             <DropdownMenuItem
-              onSelect={() => { setSelectedProject(project); }}
+              onSelect={() => {
+                setSelectedProject(project);
+              }}
               className='flex flex-row items-center gap-2'>
-              <GlobeIcon className='h-4 w-4 text-foreground/70' />
+              <GlobeIcon className='text-foreground/70 h-4 w-4' />
               {project.name}
             </DropdownMenuItem>
           </Link>
@@ -60,7 +62,7 @@ export default function ProjectDropdown({
                 event.preventDefault();
               }}>
               <div className='flex flex-row items-center gap-2'>
-                <Plus className='h-4 w-4 text-foreground/70' />
+                <Plus className='text-foreground/70 h-4 w-4' />
                 New Project
               </div>
             </DropdownMenuItem>

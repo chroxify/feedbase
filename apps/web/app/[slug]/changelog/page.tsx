@@ -1,8 +1,8 @@
-import { Separator } from 'ui/components/ui/separator';
-import { getPublicProjectChangelogs } from '@/lib/api/public';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { Separator } from 'ui/components/ui/separator';
+import { getPublicProjectChangelogs } from '@/lib/api/public';
 
 export default async function Changelog({ params }: { params: { slug: string } }) {
   // Get changelogs
@@ -22,7 +22,7 @@ export default async function Changelog({ params }: { params: { slug: string } }
     <div className='flex h-full w-full flex-col gap-10 overflow-y-auto lg:px-10'>
       <div className='flex flex-col items-center justify-center gap-4 px-10'>
         <h1 className='text-5xl font-bold'>Changelog</h1>
-        <p className='text-lg text-foreground/70'>
+        <p className='text-foreground/70 text-lg'>
           All the latest updates, improvements, and fixes to{' '}
           {params.slug.charAt(0).toUpperCase() + params.slug.slice(1)}.
         </p>
@@ -62,7 +62,7 @@ export default async function Changelog({ params }: { params: { slug: string } }
 
                   {/* Content as html */}
                   <div
-                    className='prose text-lg dark:prose-invert'
+                    className='prose dark:prose-invert text-lg'
                     // TODO: Change this to not be html but markdown
                     // => LUM-32
                     dangerouslySetInnerHTML={{ __html: changelog.content! }}
@@ -79,7 +79,7 @@ export default async function Changelog({ params }: { params: { slug: string } }
         {changelogs.length === 0 && (
           <div className='flex flex-col items-center justify-center gap-4'>
             <h1 className='text-3xl font-bold'>No changelogs yet!</h1>
-            <p className='text-lg text-foreground/70'>
+            <p className='text-foreground/70 text-lg'>
               There are currently no changelogs for{' '}
               {params.slug.charAt(0).toUpperCase() + params.slug.slice(1)}. Make sure to check back later!
             </p>

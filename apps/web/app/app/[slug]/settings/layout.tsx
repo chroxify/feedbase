@@ -1,5 +1,5 @@
-import CategoryTabs from '@/components/dashboard/settings/category-tabs';
 import { headers } from 'next/headers';
+import CategoryTabs from '@/components/dashboard/settings/category-tabs';
 
 const tabs = [
   {

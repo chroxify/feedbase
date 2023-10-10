@@ -1,7 +1,7 @@
-import DefaultTooltip from '@/components/shared/tooltip';
 import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
 import { Button } from 'ui/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'ui/components/ui/card';
+import DefaultTooltip from '@/components/shared/tooltip';
 
 export default function IntegrationsSettings() {
   return (
@@ -24,9 +24,9 @@ export default function IntegrationsSettings() {
 
                 {/* Name and Description */}
                 <div className='flex flex-col'>
-                  <span className='text-sm text-foreground/70'>Github</span>
+                  <span className='text-foreground/70 text-sm'>Github</span>
 
-                  <span className='text-xs font-light text-foreground/50'>
+                  <span className='text-foreground/50 text-xs font-light'>
                     Automate Changelogs, Roadmaps and more with Github.
                   </span>
                 </div>
@@ -34,10 +34,10 @@ export default function IntegrationsSettings() {
 
               <div className='flex flex-row items-center justify-between px-5 py-4'>
                 <div className='flex flex-col'>
-                  <span className='text-xs text-foreground/50'>Status</span>
+                  <span className='text-foreground/50 text-xs'>Status</span>
 
                   <DefaultTooltip content='This integration is currently still in active development.'>
-                    <span className='cursor-pointer text-sm text-foreground/70'>Coming Soon</span>
+                    <span className='text-foreground/70 cursor-pointer text-sm'>Coming Soon</span>
                   </DefaultTooltip>
                 </div>
 
@@ -57,9 +57,9 @@ export default function IntegrationsSettings() {
 
                 {/* Name and Description */}
                 <div className='flex flex-col'>
-                  <span className='text-sm text-foreground/70'>Linear</span>
+                  <span className='text-foreground/70 text-sm'>Linear</span>
 
-                  <span className='text-xs font-light text-foreground/50'>
+                  <span className='text-foreground/50 text-xs font-light'>
                     Connect Roadmap, Changelogs, Issues and more.
                   </span>
                 </div>
@@ -67,10 +67,10 @@ export default function IntegrationsSettings() {
 
               <div className='flex flex-row items-center justify-between px-5 py-4'>
                 <div className='flex flex-col'>
-                  <span className='text-xs text-foreground/50'>Status</span>
+                  <span className='text-foreground/50 text-xs'>Status</span>
 
                   <DefaultTooltip content='This integration is currently still in active development.'>
-                    <span className='cursor-pointer text-sm text-foreground/70'>Coming Soon</span>
+                    <span className='text-foreground/70 cursor-pointer text-sm'>Coming Soon</span>
                   </DefaultTooltip>
                 </div>
                 <Button variant='outline' size='sm' disabled>

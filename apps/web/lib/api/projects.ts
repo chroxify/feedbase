@@ -1,6 +1,6 @@
 import { withProjectAuth, withUserAuth } from '@/lib/auth';
-import { isSlugValid } from '@/lib/utils';
 import { ProjectProps, TeamMemberProps } from '@/lib/types';
+import { isSlugValid } from '@/lib/utils';
 
 // Get Project
 export const getProjectBySlug = withProjectAuth<ProjectProps['Row']>(

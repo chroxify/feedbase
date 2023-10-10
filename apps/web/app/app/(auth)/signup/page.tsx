@@ -1,11 +1,10 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
 import { cookies } from 'next/headers';
-
-import { UserAuthForm } from '@/components/user-auth-form';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/ui/card';
-import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/ui/card';
+import { UserAuthForm } from '@/components/user-auth-form';
 
 export const metadata: Metadata = {
   title: 'Sign up to Luminar',

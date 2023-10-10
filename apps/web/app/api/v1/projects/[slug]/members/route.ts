@@ -1,5 +1,5 @@
-import { getProjectMembers } from '@/lib/api/projects';
 import { NextResponse } from 'next/server';
+import { getProjectMembers } from '@/lib/api/projects';
 
 /*
     Get all members of a project

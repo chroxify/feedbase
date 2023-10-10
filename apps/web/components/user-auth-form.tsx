@@ -1,12 +1,12 @@
 'use client';
 
-import { Icons } from '@/components/shared/icons/icons-static';
+import { useState } from 'react';
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
-import { useState } from 'react';
-import { toast } from 'sonner';
+import { Icons } from '@/components/shared/icons/icons-static';
 
 export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -99,7 +99,9 @@ export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) 
                   autoComplete='name'
                   autoCorrect='off'
                   disabled={isLoading}
-                  onChange={(event) => { setName(event.currentTarget.value); }}
+                  onChange={(event) => {
+                    setName(event.currentTarget.value);
+                  }}
                 />
               </>
             )}
@@ -115,11 +117,15 @@ export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) 
               autoComplete='email'
               autoCorrect='off'
               disabled={isLoading}
-              onChange={(event) => { setEmail(event.currentTarget.value); }}
+              onChange={(event) => {
+                setEmail(event.currentTarget.value);
+              }}
             />
           </div>
           <Button disabled={isLoading}>
-            {isLoading && provider === 'email' ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
+            {isLoading && provider === 'email' ? (
+              <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' />
+            ) : null}
             Continue with Email
           </Button>
         </div>
@@ -129,7 +135,7 @@ export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) 
           <span className='w-full border-t' />
         </div>
         <div className='relative flex justify-center text-xs uppercase'>
-          <span className='bg-root px-2 text-muted-foreground'>Or continue with</span>
+          <span className='bg-root text-muted-foreground px-2'>Or continue with</span>
         </div>
       </div>
       <Button variant='outline' type='button' disabled={isLoading} onClick={handleGitHubSignIn}>

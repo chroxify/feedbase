@@ -1,7 +1,7 @@
-import { getProjectBySlug } from '@/lib/api/projects';
-import { redirect } from 'next/navigation';
-import LogoProvider from '@/components/logo-provider';
 import { headers } from 'next/headers';
+import { redirect } from 'next/navigation';
+import { getProjectBySlug } from '@/lib/api/projects';
+import LogoProvider from '@/components/logo-provider';
 
 export default async function Header() {
   // Headers

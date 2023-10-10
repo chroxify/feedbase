@@ -1,11 +1,11 @@
 'use client';
 
-import { Button } from 'ui/components/ui/button';
 import { useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
-import { usePathname } from 'next/navigation';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Button } from 'ui/components/ui/button';
 import { NavbarTabProps } from '@/lib/types';
+import { cn } from '@/lib/utils';
 import LottiePlayer from '@/components/shared/lottie-player';
 
 export default function NavTabs({
@@ -42,10 +42,14 @@ export default function NavTabs({
           className={tab.slug === 'feedback' || tab.slug === 'roadmap' ? 'cursor-default' : ''}>
           <Button
             variant='secondary'
-            onMouseEnter={() => { setIsHover(tab.slug); }}
-            onMouseLeave={() => { setIsHover(''); }}
+            onMouseEnter={() => {
+              setIsHover(tab.slug);
+            }}
+            onMouseLeave={() => {
+              setIsHover('');
+            }}
             className={cn(
-              'w-full items-center justify-start gap-1 border border-transparent p-1 font-light text-foreground/[85%] hover:text-foreground',
+              'text-foreground/[85%] hover:text-foreground w-full items-center justify-start gap-1 border border-transparent p-1 font-light',
               activeTab === index && 'bg-secondary text-foreground hover:bg-secondary'
             )}>
             {/* Icon */}

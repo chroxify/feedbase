@@ -1,6 +1,6 @@
+import { NavbarTabProps, ProjectProps } from '@/lib/types';
 import NavTabs from '@/components/layout/nav-tabs';
 import ProjectDropdown from '@/components/layout/project-dropdown';
-import { NavbarTabProps, ProjectProps } from '@/lib/types';
 
 export default async function Sidebar({
   tabs,

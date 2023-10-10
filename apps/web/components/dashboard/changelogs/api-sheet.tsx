@@ -1,5 +1,8 @@
 'use client';
 
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { Alert, AlertDescription, AlertTitle } from 'ui/components/ui/alert';
 import { Button } from 'ui/components/ui/button';
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
@@ -12,11 +15,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from 'ui/components/ui/sheet';
-import { Alert, AlertDescription, AlertTitle } from 'ui/components/ui/alert';
-import { toast } from 'sonner';
-import { useState } from 'react';
-import LottiePlayer from '@/components/shared/lottie-player';
 import { CodeIcon } from '@/components/shared/icons/icons-animated';
+import LottiePlayer from '@/components/shared/lottie-player';
 
 export function ApiSheet({ projectSlug }: { projectSlug: string }) {
   const [isHover, setIsHover] = useState<boolean>(false);
@@ -27,8 +27,12 @@ export function ApiSheet({ projectSlug }: { projectSlug: string }) {
         <Button
           variant='outline'
           size='sm'
-          onMouseEnter={() => { setIsHover(true); }}
-          onMouseLeave={() => { setIsHover(false); }}
+          onMouseEnter={() => {
+            setIsHover(true);
+          }}
+          onMouseLeave={() => {
+            setIsHover(false);
+          }}
           className='flex items-center gap-2 font-light'>
           <LottiePlayer lottieSrc={CodeIcon} animate={isHover} className='-ml-[2px] h-5 w-5' />
           API

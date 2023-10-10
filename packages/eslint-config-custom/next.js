@@ -1,7 +1,7 @@
-const { resolve } = require("node:path");
-const rules = require("./rules");
+const { resolve } = require('node:path');
+const rules = require('./rules');
 
-const project = resolve(process.cwd(), "tsconfig.json");
+const project = resolve(process.cwd(), 'tsconfig.json');
 
 /*
  * This is a custom ESLint configuration for use with
@@ -14,14 +14,14 @@ const project = resolve(process.cwd(), "tsconfig.json");
 
 module.exports = {
   extends: [
-    "@vercel/style-guide/eslint/node",
-    "@vercel/style-guide/eslint/typescript",
-    "@vercel/style-guide/eslint/browser",
-    "@vercel/style-guide/eslint/react",
-    "@vercel/style-guide/eslint/next",
+    '@vercel/style-guide/eslint/node',
+    '@vercel/style-guide/eslint/typescript',
+    '@vercel/style-guide/eslint/browser',
+    '@vercel/style-guide/eslint/react',
+    '@vercel/style-guide/eslint/next',
     // turborepo custom eslint configuration configures the following rules:
     //  - https://github.com/vercel/turbo/blob/main/packages/eslint-plugin-turbo/docs/rules/no-undeclared-env-vars.md
-    "eslint-config-turbo",
+    'eslint-config-turbo',
   ].map(require.resolve),
   parserOptions: {
     project,
@@ -31,12 +31,12 @@ module.exports = {
     JSX: true,
   },
   settings: {
-    "import/resolver": {
+    'import/resolver': {
       typescript: {
         project,
       },
     },
   },
-  ignorePatterns: ["node_modules/", "dist/"],
+  ignorePatterns: ['node_modules/', 'dist/'],
   rules,
 };

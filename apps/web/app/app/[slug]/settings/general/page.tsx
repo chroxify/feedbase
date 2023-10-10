@@ -1,5 +1,5 @@
-import GeneralConfigCards from '@/components/dashboard/settings/general-cards';
 import { getProjectBySlug } from '@/lib/api/projects';
+import GeneralConfigCards from '@/components/dashboard/settings/general-cards';
 
 export default async function GeneralSettings({ params }: { params: { slug: string } }) {
   // Fetch project data

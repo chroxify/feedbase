@@ -1,7 +1,7 @@
-import AddProjectDialog from '@/components/dashboard/modals/add-project-modal';
+import { redirect } from 'next/navigation';
 import { Button } from 'ui/components/ui/button';
 import { getUserProjects } from '@/lib/api/projects';
-import { redirect } from 'next/navigation';
+import AddProjectDialog from '@/components/dashboard/modals/add-project-modal';
 
 export default async function Projects() {
   const { data: projects, error } = await getUserProjects('server');
@@ -26,7 +26,7 @@ export default async function Projects() {
         {/* No Projects */}
         <div className='flex flex-col items-center justify-center gap-2 pt-32'>
           <div className='text-2xl font-bold'>No projects yet</div>
-          <div className='text-center text-lg text-foreground/60'>
+          <div className='text-foreground/60 text-center text-lg'>
             Create your first project to get started.
           </div>
 

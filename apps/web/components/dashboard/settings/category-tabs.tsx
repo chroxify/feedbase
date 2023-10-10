@@ -1,11 +1,11 @@
 'use client';
 
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from 'ui/components/ui/button';
-import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
 import { CategoryTabProps } from '@/lib/types';
+import { cn } from '@/lib/utils';
 
 export default function CategoryTabs({
   tabs,
@@ -36,7 +36,7 @@ export default function CategoryTabs({
           <Button
             variant='secondary'
             className={cn(
-              'inline-flex h-fit items-center rounded-lg px-2 py-1 text-sm font-normal text-foreground/70',
+              'text-foreground/70 inline-flex h-fit items-center rounded-lg px-2 py-1 text-sm font-normal',
               activeTab === index && 'bg-secondary text-foreground hover:bg-secondary'
             )}>
             {tab.name}

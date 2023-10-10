@@ -1,5 +1,5 @@
-import { deleteChangelog, updateChangelog } from '@/lib/api/changelogs';
 import { NextResponse } from 'next/server';
+import { deleteChangelog, updateChangelog } from '@/lib/api/changelogs';
 
 /*
     Update project changelog
@@ -19,7 +19,7 @@ export async function PUT(req: Request, context: { params: { slug: string; id: s
   const { data: changelog, error } = await updateChangelog(
     context.params.id,
     context.params.slug,
-    { title, summary, content, image, publish_date:publishDate, published },
+    { title, summary, content, image, publish_date: publishDate, published },
     'route'
   );
 

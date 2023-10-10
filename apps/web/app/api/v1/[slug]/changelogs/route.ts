@@ -1,5 +1,5 @@
-import { getPublicProjectChangelogs } from '@/lib/api/public';
 import { NextResponse } from 'next/server';
+import { getPublicProjectChangelogs } from '@/lib/api/public';
 
 /*
     Get project changelogs

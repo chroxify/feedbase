@@ -1,6 +1,6 @@
+import { decode } from 'base64-arraybuffer';
 import { withProjectAuth } from '@/lib/auth';
 import { ChangelogProps } from '@/lib/types';
-import { decode } from 'base64-arraybuffer';
 
 // Create Changelog
 export const createChangelog = (slug: string, data: ChangelogProps['Insert'], cType: 'server' | 'route') =>

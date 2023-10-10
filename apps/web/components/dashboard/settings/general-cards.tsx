@@ -1,6 +1,8 @@
 'use client';
 
-import { Button } from 'ui/components/ui/button';
+import { useState } from 'react';
+import { Label } from '@radix-ui/react-label';
+import { toast } from 'sonner';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -12,11 +14,9 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from 'ui/components/ui/alert-dialog';
+import { Button } from 'ui/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/ui/card';
 import { Input } from 'ui/components/ui/input';
-import { Label } from '@radix-ui/react-label';
-import { toast } from 'sonner';
-import { useState } from 'react';
 import { ProjectProps } from '@/lib/types';
 import DefaultTooltip from '@/components/shared/tooltip';
 
@@ -135,14 +135,14 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
           {/* Name & Slug Config */}
           <div className='flex h-full w-full flex-col space-y-3'>
             <div className='space-y-1'>
-              <Label className='text-sm font-light text-foreground/70'>Name</Label>
+              <Label className='text-foreground/70 text-sm font-light'>Name</Label>
               <div className='flex h-10 w-full flex-row space-x-2'>
                 <Input className='w-full max-w-xs' value={project.name} onChange={handleNameChange} />
               </div>
             </div>
 
             <div className='space-y-1'>
-              <Label className='text-sm font-light text-foreground/70'>Slug</Label>
+              <Label className='text-foreground/70 text-sm font-light'>Slug</Label>
 
               <div className='flex h-10 w-full flex-row space-x-2'>
                 <Input className='w-full max-w-xs' value={project.slug} onChange={handleSlugChange} />
@@ -174,7 +174,7 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
           {/* API Key */}
           <div className='flex h-full w-full flex-col space-y-4'>
             <div className='space-y-1'>
-              <Label className='text-sm font-light text-foreground/70'>API Key</Label>
+              <Label className='text-foreground/70 text-sm font-light'>API Key</Label>
               <div className='flex h-10 w-full flex-row space-x-2'>
                 <DefaultTooltip content='API Keys are currently in early testing and will be available soon.'>
                   <Input className='w-full max-w-xs' placeholder='Coming Soon' disabled />
@@ -192,7 +192,7 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
       </Card>
 
       {/* Delete Project Card */}
-      <Card className='flex w-full flex-col transition-colors duration-300 hover:border-destructive'>
+      <Card className='hover:border-destructive flex w-full flex-col transition-colors duration-300'>
         <CardHeader>
           <CardTitle>Danger Zone</CardTitle>
           <CardDescription>Delete your project and all of its data.</CardDescription>

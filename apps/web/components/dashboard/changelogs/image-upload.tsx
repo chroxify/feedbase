@@ -5,12 +5,11 @@
   Big shoutout to him for making this component open source!
   Credits: https://github.com/steven-tey/dub/blob/23cea302493a2e240fb31a75d3bf0da3979a0abc/components/app/modals/add-edit-link-modal/og-section.tsx#L4
 */
-
 import { Dispatch, useCallback, useState } from 'react';
-import TooltipLabel from '@/components/shared/tooltip-label';
 import Image from 'next/image';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
 import { ChangelogProps } from '@/lib/types';
+import TooltipLabel from '@/components/shared/tooltip-label';
 
 export default function FileDrop({
   data,
@@ -51,13 +50,13 @@ export default function FileDrop({
           label='Image'
           tooltip='This image will be used as the preview image for your changelog.'
         />
-        {fileError ? <p className='text-sm font-extralight text-destructive'>{fileError}</p> : null}
+        {fileError ? <p className='text-destructive text-sm font-extralight'>{fileError}</p> : null}
       </div>
       {/* BUG: Fix this so that its not a fixed height but rather just takes over full height properly */}
       {/* As currently it is not on the same level as the other inputs */}
       <label
         htmlFor='image'
-        className='group relative mt-1 flex h-40 cursor-pointer flex-col items-center justify-center rounded-md border border-input bg-root shadow-sm transition-all hover:bg-accent'>
+        className='border-input bg-root hover:bg-accent group relative mt-1 flex h-40 cursor-pointer flex-col items-center justify-center rounded-md border shadow-sm transition-all'>
         <div
           className='absolute z-[5] h-full w-full rounded-md'
           onDragOver={(e) => {
@@ -102,24 +101,26 @@ export default function FileDrop({
         />
         <div
           className={`${
-            dragActive ? 'cursor-copy border-2 border-foreground bg-root opacity-100' : ''
-          } absolute z-[3] flex h-full w-full flex-col items-center justify-center rounded-md bg-root transition-all ${
+            dragActive ? 'border-foreground bg-root cursor-copy border-2 opacity-100' : ''
+          } bg-root absolute z-[3] flex h-full w-full flex-col items-center justify-center rounded-md transition-all ${
             data.image ? 'opacity-0 group-hover:opacity-100' : 'group-hover:bg-accent'
           }`}>
           <CloudArrowUpIcon
             className={`${
               dragActive ? 'scale-110' : 'scale-100'
-            } h-7 w-7 font-extralight text-foreground/50 transition-all duration-75 group-hover:scale-110 group-active:scale-95`}
+            } text-foreground/50 h-7 w-7 font-extralight transition-all duration-75 group-hover:scale-110 group-active:scale-95`}
           />
-          <p className='mt-2 text-center text-sm font-extralight text-foreground/50'>
+          <p className='text-foreground/50 mt-2 text-center text-sm font-extralight'>
             Drag and drop or click to upload.
           </p>
-          <p className='mt-2 text-center text-sm font-extralight text-foreground/50'>
+          <p className='text-foreground/50 mt-2 text-center text-sm font-extralight'>
             Recommended: 1200 x 630 pixels
           </p>
           <span className='sr-only'>OG image upload</span>
         </div>
-        {data.image ? <Image src={data.image} alt='Preview' fill className='h-full w-full rounded-md object-cover' /> : null}
+        {data.image ? (
+          <Image src={data.image} alt='Preview' fill className='h-full w-full rounded-md object-cover' />
+        ) : null}
       </label>
       <div className='flex rounded-md shadow-sm'>
         <input

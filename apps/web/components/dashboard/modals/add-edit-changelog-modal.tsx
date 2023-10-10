@@ -1,15 +1,9 @@
 'use client';
 
-import { Button } from 'ui/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'ui/components/ui/dialog';
+import { useState } from 'react';
+import { DialogClose } from '@radix-ui/react-dialog';
+import { X } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -21,17 +15,23 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from 'ui/components/ui/alert-dialog';
+import { Button } from 'ui/components/ui/button';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from 'ui/components/ui/dialog';
 import { Input } from 'ui/components/ui/input';
-import { PublishDatePicker } from '@/components/dashboard/changelogs/date-picker';
-import { X } from 'lucide-react';
-import { DialogClose } from '@radix-ui/react-dialog';
-import FileDrop from '@/components/dashboard/changelogs/image-upload';
 import { Textarea } from 'ui/components/ui/textarea';
-import Editor from '@/components/dashboard/changelogs/content-editor';
-import TooltipLabel from '@/components/shared/tooltip-label';
-import { useState } from 'react';
 import { ChangelogProps } from '@/lib/types';
-import { toast } from 'sonner';
+import Editor from '@/components/dashboard/changelogs/content-editor';
+import { PublishDatePicker } from '@/components/dashboard/changelogs/date-picker';
+import FileDrop from '@/components/dashboard/changelogs/image-upload';
+import TooltipLabel from '@/components/shared/tooltip-label';
 
 export function AddChangelogModal({
   trigger,
@@ -179,8 +179,10 @@ export function AddChangelogModal({
                   <TooltipLabel label='Title' tooltip='The title of your changelog.' />
                   <Input
                     placeholder='Changelog Title'
-                    className='w-full bg-root'
-                    onChange={(e) => { setData((prev) => ({ ...prev, title: e.target.value })); }}
+                    className='bg-root w-full'
+                    onChange={(e) => {
+                      setData((prev) => ({ ...prev, title: e.target.value }));
+                    }}
                     value={data.title}
                   />
                 </div>
@@ -197,8 +199,10 @@ export function AddChangelogModal({
                 <TooltipLabel label='Summary' tooltip='A short summary of the changelog.' />
                 <Textarea
                   placeholder='Changelog Summary'
-                  className='h-20 w-full resize-none items-start justify-start bg-root text-start'
-                  onChange={(e) => { setData((prev) => ({ ...prev, summary: e.target.value })); }}
+                  className='bg-root h-20 w-full resize-none items-start justify-start text-start'
+                  onChange={(e) => {
+                    setData((prev) => ({ ...prev, summary: e.target.value }));
+                  }}
                   // BUG: This should not need another || '' but it does for some reason
                   value={data.summary || ''}
                 />
@@ -228,7 +232,9 @@ export function AddChangelogModal({
         ) : (
           <AlertDialog>
             <AlertDialogTrigger asChild>
-              <button className='absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100' type='button'>
+              <button
+                className='absolute right-4 top-4 rounded-sm opacity-70 hover:opacity-100'
+                type='button'>
                 <X className='h-4 w-4' />
                 <span className='sr-only'>Close</span>
               </button>

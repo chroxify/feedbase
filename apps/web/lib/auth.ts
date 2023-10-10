@@ -1,8 +1,8 @@
-import { SupabaseClient, UserMetadata } from '@supabase/supabase-js';
-import { createRouteHandlerClient, createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import { ProjectProps, ErrorProps, ApiResponse } from '@/lib/types';
+import { createRouteHandlerClient, createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { SupabaseClient, UserMetadata } from '@supabase/supabase-js';
 import { Database } from '@/lib/supabase';
+import { ApiResponse, ErrorProps, ProjectProps } from '@/lib/types';
 
 // Create Supabase Client for needed client type
 // Also returns the current user
@@ -17,12 +17,12 @@ async function createClient(cType: 'server' | 'route') {
   return { supabase, user };
 }
 type WithProjectAuthHandler<T> = (
-    user: UserMetadata | null,
-    supabase: SupabaseClient<Database>,
-    project: ProjectProps['Row'] | null,
-    error: ErrorProps | null,
-    allowPublic?: boolean
-  ) => ApiResponse<T>;
+  user: UserMetadata | null,
+  supabase: SupabaseClient<Database>,
+  project: ProjectProps['Row'] | null,
+  error: ErrorProps | null,
+  allowPublic?: boolean
+) => ApiResponse<T>;
 
 // withProjectAuth is a helper function that can be used to wrap API routes
 // Ensures that the user is logged in and is a member of the project with the given slug
@@ -66,7 +66,11 @@ export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
   };
 };
 
-type WithUserAuthHandler<T> = (user: UserMetadata | null, supabase: SupabaseClient<Database>, error: ErrorProps | null) => ApiResponse<T>;
+type WithUserAuthHandler<T> = (
+  user: UserMetadata | null,
+  supabase: SupabaseClient<Database>,
+  error: ErrorProps | null
+) => ApiResponse<T>;
 
 // withUserAuth is a helper function that can be used to wrap API routes
 // Ensures that the user is logged in

@@ -1,7 +1,7 @@
 module.exports = {
   root: true,
-  extends: ["custom/next"],
+  extends: ['custom/next'],
   globals: {
-    Messages: "readonly",
+    Messages: 'readonly',
   },
 };

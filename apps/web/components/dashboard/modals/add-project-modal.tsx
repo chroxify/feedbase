@@ -1,5 +1,7 @@
 'use client';
 
+import { useState } from 'react';
+import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
 import {
   Dialog,
@@ -14,8 +16,6 @@ import {
 } from 'ui/components/ui/dialog';
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
-import { useState } from 'react';
-import { toast } from 'sonner';
 
 export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode }) {
   const [name, setName] = useState<string>('');
@@ -85,7 +85,9 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               id='name'
               placeholder='Luminar'
               value={name}
-              onChange={(event) => { setName(event.target.value); }}
+              onChange={(event) => {
+                setName(event.target.value);
+              }}
               className='col-span-3'
             />
           </div>

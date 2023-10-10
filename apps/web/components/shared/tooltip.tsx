@@ -12,7 +12,7 @@ export default function DefaultTooltip({
       <Tooltip>
         <TooltipTrigger asChild>{children}</TooltipTrigger>
         <TooltipContent>
-          <span className='text-xs font-normal text-foreground/50'>{content}</span>
+          <span className='text-foreground/50 text-xs font-normal'>{content}</span>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

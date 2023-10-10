@@ -1,11 +1,11 @@
+import { Plus } from 'lucide-react';
+import { Button } from 'ui/components/ui/button';
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/ui/card';
+import { Separator } from 'ui/components/ui/separator';
+import { getAllProjectChangelogs } from '@/lib/api/changelogs';
 import { ApiSheet } from '@/components/dashboard/changelogs/api-sheet';
 import ChangelogList from '@/components/dashboard/changelogs/changelog-list';
 import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';
-import { Button } from 'ui/components/ui/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from 'ui/components/ui/card';
-import { Separator } from 'ui/components/ui/separator';
-import { getAllProjectChangelogs } from '@/lib/api/changelogs';
-import { Plus } from 'lucide-react';
 
 export default async function Changelog({ params }: { params: { slug: string } }) {
   const { data: changelogs, error } = await getAllProjectChangelogs(params.slug, 'server');

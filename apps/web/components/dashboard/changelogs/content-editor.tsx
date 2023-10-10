@@ -1,12 +1,12 @@
 'use client';
 
-import { EditorContent, useEditor } from '@tiptap/react';
-import { StarterKit } from '@tiptap/starter-kit';
+import React from 'react';
 import { Highlight } from '@tiptap/extension-highlight';
 import { Typography } from '@tiptap/extension-typography';
-import React from 'react';
-import TooltipLabel from '@/components/shared/tooltip-label';
+import { EditorContent, useEditor } from '@tiptap/react';
+import { StarterKit } from '@tiptap/starter-kit';
 import { ChangelogProps } from '@/lib/types';
+import TooltipLabel from '@/components/shared/tooltip-label';
 
 export default function RichTextEditor({
   data,
