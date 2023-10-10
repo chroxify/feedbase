@@ -1,10 +1,11 @@
 {
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "prepare": "husky install"
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint --filter=web --filter=ui",
+    "format": "prettier --write \"**/*.{js,jsx,ts,tsx,md,mdx}\"",
+    "ts": "turbo run ts"
   },
   "dependencies": {
     "@dotlottie/react-player": "^1.5.0",
@@ -58,7 +59,20 @@
     "encoding": "^0.1.13",
     "husky": "^8.0.3",
     "lint-staged": "^13.3.0",
-    "prettier-plugin-tailwindcss": "^0.4.1"
+    "prettier-plugin-tailwindcss": "^0.4.1",
+    "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
+    "eslint": "^8.48.0",
+    "eslint-config-custom": "workspace:*",
+    "prettier": "3.0.3",
+    "turbo": "^1.10.14"
+  },
+  "packageManager": "pnpm@8.8.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "engines": {
+    "node": "18.16"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
