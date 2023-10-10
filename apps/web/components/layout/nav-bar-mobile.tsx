@@ -3,7 +3,7 @@
 import { NavbarTabProps, ProjectProps } from '@/lib/types';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Button } from '../ui/button';
+import { Button } from 'ui/components/ui/button';
 import { cn } from '@/lib/utils';
 import { Icons } from '../shared/icons/icons-static';
 import { usePathname } from 'next/navigation';

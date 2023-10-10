@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'ui/components/ui/card';
 import { TeamTable } from '@/components/dashboard/settings/team-table';
 import { getProjectMembers } from '@/lib/api/projects';
 

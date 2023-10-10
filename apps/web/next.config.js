@@ -3,6 +3,8 @@ const hostPath = process.env.NEXT_PUBLIC_SUPABASE_URL.split(':');
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  reactStrictMode: true,
+  transpilePackages: ['ui'],
   images: {
     remotePatterns: [
       {

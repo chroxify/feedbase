@@ -2,7 +2,7 @@ import { ApiSheet } from '@/components/dashboard/changelogs/api-sheet';
 import ChangelogList from '@/components/dashboard/changelogs/changelog-list';
 import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';
 import { Button } from 'ui/components/ui/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from 'ui/components/ui/card';
+import { Card, CardHeader, CardTitle, CardDescription, CardFooter } from 'ui/components/ui/card';
 import { Separator } from 'ui/components/ui/separator';
 import { getAllProjectChangelogs } from '@/lib/api/changelogs';
 import { Plus } from 'lucide-react';
