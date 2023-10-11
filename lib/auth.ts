@@ -1,7 +1,7 @@
 import { SupabaseClient, UserMetadata } from '@supabase/supabase-js';
 import { createRouteHandlerClient, createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
-import { ProjectProps, ErrorProps, ApiResponse } from '@/lib/types';
+import { ProjectProps, ErrorProps, ApiResponse, FeedbackProps } from '@/lib/types';
 import { Database } from '@/lib/supabase';
 
 // Create Supabase Client for needed client type
@@ -28,13 +28,15 @@ interface WithProjectAuthHandler<T> {
 
 // withProjectAuth is a helper function that can be used to wrap API routes
 // Ensures that the user is logged in and is a member of the project with the given slug
+// allowAnonAccess = true bypasses complete user auth and project auth checks
+// requireLogin = true requires the user to be logged in, even if allowAnonAccess is true
 export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
-  return async (slug: string, cType: 'server' | 'route', allowPublic = false) => {
+  return async (slug: string, cType: 'server' | 'route', allowAnonAccess = false, requireLogin = true) => {
     // Get the user from the session
     const { supabase, user } = await createClient(cType);
 
     // If user.error is not null, then the user is likely not logged in
-    if (user.error !== null && !allowPublic) {
+    if (user.error !== null && requireLogin) {
       return handler(user.data.user, supabase, null, {
         message: 'unauthorized, login required.',
         status: 401,
@@ -50,7 +52,7 @@ export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
     }
 
     // Check if user is a member of the project
-    if (!allowPublic) {
+    if (!allowAnonAccess) {
       const { error: projectMemberError } = await supabase
         .from('project_members')
         .select()
@@ -64,7 +66,61 @@ export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
       }
     }
 
-    return handler(user.data.user, supabase, project, null, allowPublic);
+    return handler(user.data.user, supabase, project, null, allowAnonAccess);
+  };
+};
+
+interface WithFeedbackAuthHandler<T> {
+  (
+    user: UserMetadata | null,
+    supabase: SupabaseClient<Database>,
+    feedback: FeedbackProps['Row'] | null,
+    project: ProjectProps['Row'] | null,
+    error: ErrorProps | null
+  ): ApiResponse<T>;
+}
+
+// withFeedbackAuth is a helper function that can be used to wrap API routes
+// Ensures that the user is logged in and is authorized to access the feedback post with the given id
+export const withFeedbackAuth = <T>(handler: WithFeedbackAuthHandler<T>) => {
+  return async (id: string, slug: string, cType: 'server' | 'route', requireLogin = true) => {
+    // Get the user from the session
+    const { supabase, user } = await createClient(cType);
+
+    // If user.error is not null, then the user is likely not logged in
+    if (user.error !== null && requireLogin) {
+      return handler(user.data.user, supabase, null, null, {
+        message: 'unauthorized, login required.',
+        status: 401,
+      });
+    }
+
+    // Get project from database
+    const { data: project, error } = await supabase.from('projects').select().eq('slug', slug).single();
+
+    // If error is not null, then the project does not exist
+    if (error) {
+      return handler(user.data.user, supabase, null, project, { message: 'project not found.', status: 404 });
+    }
+
+    // Check if feedback exists
+    const { data: feedback, error: feedbackError } = await supabase
+      .from('feedback')
+      .select('*, user:user_id (*)')
+      .eq('id', id)
+      .eq('project_id', project.id)
+      .single();
+
+    // If not null, feedback does not exist
+    if (feedbackError) {
+      return handler(user.data.user, supabase, null, project, {
+        message: 'feedback not found.',
+        status: 404,
+      });
+    }
+
+    // Return feedback
+    return handler(user.data.user, supabase, feedback, project, null);
   };
 };
 

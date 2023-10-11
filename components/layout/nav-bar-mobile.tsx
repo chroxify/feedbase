@@ -15,14 +15,14 @@ const navTabs = [
     solid: Icons.tagSolid,
   },
   {
-    slug: 'roadmap',
-    outline: Icons.calendarOutline,
-    solid: Icons.calendarSolid,
-  },
-  {
     slug: 'feedback',
     outline: Icons.feedbackOutline,
     solid: Icons.feedbackSolid,
+  },
+  {
+    slug: 'roadmap',
+    outline: Icons.calendarOutline,
+    solid: Icons.calendarSolid,
   },
   {
     slug: 'settings',
@@ -57,11 +57,9 @@ export default function NavbarMobile({
   return (
     <div className='fixed bottom-0 z-10 flex h-16 w-full flex-row items-center justify-evenly gap-5 overflow-hidden border-t bg-root px-5 md:hidden'>
       {navTabs.map((tab, index) => (
-        // If feedback or roadmap, don't link to the page
+        // If roadmap, don't link to the page
         <Link
-          href={
-            tab.slug === 'feedback' || tab.slug === 'roadmap' ? {} : `/${currentProject.slug}/${tab.slug}`
-          }
+          href={tab.slug === 'roadmap' ? {} : `/${currentProject.slug}/${tab.slug}`}
           key={index}
           className='dr h-full w-full p-3 transition-all duration-150 active:scale-[80%]'>
           <Button

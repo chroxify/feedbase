@@ -41,7 +41,7 @@ export default function IntegrationsSettings() {
                   </DefaultTooltip>
                 </div>
 
-                <Button variant='outline' size='sm' disabled>
+                <Button variant='outline' disabled>
                   Connect
                 </Button>
               </div>
@@ -73,7 +73,7 @@ export default function IntegrationsSettings() {
                     <span className='cursor-pointer text-sm text-foreground/70'>Coming Soon</span>
                   </DefaultTooltip>
                 </div>
-                <Button variant='outline' size='sm' disabled>
+                <Button variant='outline' disabled>
                   Connect
                 </Button>
               </div>

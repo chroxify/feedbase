@@ -1,7 +1,7 @@
 import Sidebar from '@/components/layout/sidebar';
 import { headers } from 'next/headers';
 import { APP_DOMAIN } from '@/lib/constants';
-import { getUserProjects } from '@/lib/api/projects';
+import { getUserProjects } from '@/lib/api/user';
 import { redirect } from 'next/navigation';
 import {
   CalendarIcon,

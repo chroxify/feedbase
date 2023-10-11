@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createProject, getUserProjects } from '@/lib/api/projects';
+import { createProject } from '@/lib/api/projects';
+import { getUserProjects } from '@/lib/api/user';
 
 /*
     Create Project

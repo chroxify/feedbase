@@ -1,6 +1,6 @@
 import AddProjectDialog from '@/components/dashboard/modals/add-project-modal';
 import { Button } from '@/components/ui/button';
-import { getUserProjects } from '@/lib/api/projects';
+import { getUserProjects } from '@/lib/api/user';
 import { redirect } from 'next/navigation';
 
 export default async function Projects() {
