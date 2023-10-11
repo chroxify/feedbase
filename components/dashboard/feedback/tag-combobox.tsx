@@ -4,9 +4,9 @@ import * as React from 'react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Command, CommandGroup, CommandInput, CommandItem } from '@/components/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Check, ChevronDown } from 'lucide-react';
-import { useCommandState } from 'cmdk';
+import { CreateTagModal } from '../modals/add-tag-modal';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 interface TagComboboxProps {
   projectTags: {
@@ -31,15 +31,28 @@ export function TagCombobox({
 }: TagComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [tags, setTags] = React.useState(initialValue || []);
+  const [openColorDialog, setOpenColorDialog] = React.useState(false);
+  const [search, setSearch] = React.useState('');
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const EmptyItem = (props: any) => {
-    const search = useCommandState((state) => state.search);
-
     if (!search) return null;
+
     return (
-      <CommandItem {...props} key={search} value={search} className='font-extralight'>
-        Create tag:&nbsp;<span className='font-extralight text-foreground/60'>&quot;{search}&quot;</span>
-      </CommandItem>
+      <>
+        <CreateTagModal open={openColorDialog} setOpen={setOpenColorDialog} tagName={search} />
+        <CommandItem
+          className='flex flex-row items-center gap-2 font-extralight'
+          {...props}
+          key={search}
+          value={search}
+          onSelect={() => {
+            // Close the dropdown
+            setOpenColorDialog(true);
+          }}>
+          Create tag:&nbsp;<span className='font-extralight text-foreground/60'>&quot;{search}&quot;</span>
+        </CommandItem>
+      </>
     );
   };
 
@@ -47,12 +60,21 @@ export function TagCombobox({
 
   // Use effect on initial value change
   React.useEffect(() => {
+    // Set tags to initial value
     setTags(initialValue || []);
-  }, [initialValue]);
+
+    if (openColorDialog === false) {
+      // Clear search
+      setSearch('');
+
+      // Force focus again
+      inputRef.current?.focus();
+    }
+  }, [initialValue, openColorDialog]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+    <DropdownMenu open={open} onOpenChange={setOpen}>
+      <DropdownMenuTrigger asChild>
         <Button
           aria-expanded={open}
           variant='outline'
@@ -99,8 +121,8 @@ export function TagCombobox({
           {/* Icon */}
           {showDropdownIcon && <ChevronDown className='h-4 w-4 text-foreground/60' />}
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className='w-[200px] p-0' align={align}>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent className='w-[200px] p-0' align={align}>
         <Command
           filter={(value, search) => {
             // If whitespace in search, split and search for each word
@@ -116,7 +138,14 @@ export function TagCombobox({
 
             return 0;
           }}>
-          <CommandInput placeholder='Search tags...' className='h-9 font-extralight' />
+          <CommandInput
+            placeholder='Search tags...'
+            className='h-9 font-extralight'
+            value={search}
+            onValueChange={setSearch}
+            autoFocus
+            ref={inputRef}
+          />
           <CommandGroup>
             {projectTags.map((item) => (
               <CommandItem
@@ -152,7 +181,7 @@ export function TagCombobox({
             <EmptyItem />
           </CommandGroup>
         </Command>
-      </PopoverContent>
-    </Popover>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

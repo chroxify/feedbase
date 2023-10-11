@@ -38,7 +38,7 @@ export default function FeedbackTable({
     if (search && !feedback.title.toLowerCase().includes(search.toLowerCase())) return false;
 
     // Filter by tag/tags, if tags are multiple then they are separated by comma
-    if (tag && !tag.split(',').some((t) => feedback.tags?.some((ft) => ft.name.toLowerCase() === t)))
+    if (tag && !tag.split(',').every((t) => feedback.tags?.some((ft) => ft.name.toLowerCase() === t)))
       return false;
 
     // Filter by status
