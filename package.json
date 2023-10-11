@@ -4,7 +4,7 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
+    "lint": "turbo run lint --",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\"",
     "ts": "turbo run ts",
     "prepare": "husky install"

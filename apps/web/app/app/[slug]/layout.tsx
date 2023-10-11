@@ -1,7 +1,6 @@
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { getUserProjects } from '@/lib/api/projects';
-import { getCurrentUser } from '@/lib/api/user';
+import { getCurrentUser, getUserProjects } from '@/lib/api/user';
 import { APP_DOMAIN } from '@/lib/constants';
 import NavbarMobile from '@/components/layout/nav-bar-mobile';
 import Sidebar from '@/components/layout/sidebar';

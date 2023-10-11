@@ -17,3 +17,4 @@ export const TagLabelIcon = createIconObject('tag-label');
 export const CodeIcon = createIconObject('code');
 export const LogoutIcon = createIconObject('logout');
 export const ProfileIcon = createIconObject('profile');
+export const SearchIcon = createIconObject('search');

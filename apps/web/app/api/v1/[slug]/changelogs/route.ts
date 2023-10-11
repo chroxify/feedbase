@@ -6,7 +6,7 @@ import { getPublicProjectChangelogs } from '@/lib/api/public';
     GET /api/v1/projects/[slug]/changelogs
 */
 export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: changelogs, error } = await getPublicProjectChangelogs(context.params.slug, 'route', true);
+  const { data: changelogs, error } = await getPublicProjectChangelogs(context.params.slug, 'route', false);
 
   // If any errors thrown, return error
   if (error) {

@@ -31,4 +31,6 @@ module.exports = {
   '@typescript-eslint/await-thenable': 'off',
   '@typescript-eslint/no-misused-promises': 'off',
   '@typescript-eslint/no-floating-promises': 'off',
+  'jsx-a11y/no-autofocus': 'off',
+  'no-nested-ternary': 'off',
 };
