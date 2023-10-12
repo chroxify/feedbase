@@ -12,6 +12,16 @@ export const metadata: Metadata = {
   title: 'Luminar',
   description: 'Collect feedback & communicating updates with ease.',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1', // Prevents auto-zoom on mobile
+
+  // PWA
+  themeColor: '#05060A',
+  manifest: '/manifest.json',
+  icons: [
+    {
+      rel: 'apple-touch-icon',
+      url: '/favicon.ico',
+    },
+  ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

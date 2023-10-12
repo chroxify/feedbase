@@ -1,3 +1,5 @@
+/** @type {import('next').NextConfig} */
+
 // Supabase url from .env file
 if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
   throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_URL');
@@ -5,7 +7,13 @@ if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
 
 const hostPath = process.env.NEXT_PUBLIC_SUPABASE_URL.split(':');
 
-/** @type {import('next').NextConfig} */
+const withPWA = require('next-pwa')({
+  dest: 'public',
+  register: true,
+  skipWaiting: true,
+  disable: process.env.NODE_ENV === 'development',
+});
+
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['ui'],
@@ -24,4 +32,4 @@ const nextConfig = {
   },
 };
 
-module.exports = nextConfig;
+module.exports = withPWA(nextConfig);
