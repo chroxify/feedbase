@@ -15,14 +15,14 @@ const navTabs = [
     solid: Icons.TagSolid,
   },
   {
-    slug: 'roadmap',
-    outline: Icons.CalendarOutline,
-    solid: Icons.CalendarSolid,
-  },
-  {
     slug: 'feedback',
     outline: Icons.FeedbackOutline,
     solid: Icons.FeedbackSolid,
+  },
+  {
+    slug: 'roadmap',
+    outline: Icons.CalendarOutline,
+    solid: Icons.CalendarSolid,
   },
   {
     slug: 'settings',
