@@ -1,6 +1,7 @@
 import { decode } from 'base64-arraybuffer';
 import { withProjectAuth } from '@/lib/auth';
 import { ChangelogProps } from '@/lib/types';
+import { isSlugValid } from '../utils';
 
 // Create Changelog
 export const createChangelog = (slug: string, data: ChangelogProps['Insert'], cType: 'server' | 'route') =>
@@ -39,11 +40,22 @@ export const createChangelog = (slug: string, data: ChangelogProps['Insert'], cT
       data.image = publicUrlData.publicUrl;
     }
 
+    // Convert title to slug
+    if (data.title && !isSlugValid(data.title)) {
+      // Remove invalid characters
+      data.slug = data.title
+        .toLowerCase()
+        .replace(/[^a-z0-9 ]/g, '')
+        .replace(/ /g, '-');
+    }
+
     // Create Changelog
     const { data: changelog, error: changelogError } = await supabase
       .from('changelogs')
       .insert({
         project_id: project!.id,
+        slug: data.slug,
+        author: user!.id,
         title: data.title,
         summary: data.summary,
         content: data.content,
@@ -150,11 +162,21 @@ export const updateChangelog = (
       data.image = publicUrlData.publicUrl;
     }
 
+    // Convert title to slug
+    if (data.title && !isSlugValid(data.title)) {
+      // Remove invalid characters
+      data.slug = data.title
+        .toLowerCase()
+        .replace(/[^a-z0-9 ]/g, '')
+        .replace(/ /g, '-');
+    }
+
     // Update Changelog
     const { data: changelog, error: changelogError } = await supabase
       .from('changelogs')
       .update({
         title: data.title,
+        slug: data.slug,
         summary: data.summary,
         content: data.content,
         image: data.image,

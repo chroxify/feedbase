@@ -5,36 +5,48 @@ export interface Database {
     Tables: {
       changelogs: {
         Row: {
+          author: string;
           content: string | null;
           id: string;
           image: string | null;
           project_id: string;
           publish_date: string | null;
           published: boolean;
+          slug: string;
           summary: string | null;
           title: string;
         };
         Insert: {
+          author: string;
           content?: string | null;
           id?: string;
           image?: string | null;
           project_id: string;
           publish_date?: string | null;
           published: boolean;
+          slug?: string;
           summary?: string | null;
           title?: string;
         };
         Update: {
+          author?: string;
           content?: string | null;
           id?: string;
           image?: string | null;
           project_id?: string;
           publish_date?: string | null;
           published?: boolean;
+          slug?: string;
           summary?: string | null;
           title?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: 'changelogs_author_fkey';
+            columns: ['author'];
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
           {
             foreignKeyName: 'changelogs_project_id_fkey';
             columns: ['project_id'];

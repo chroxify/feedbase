@@ -56,6 +56,8 @@ export function AddChangelogModal({
     image: changelogData?.image || null,
     publish_date: changelogData?.publish_date || null,
     published: changelogData?.published || false,
+    slug: 'dummy-slug',
+    author: 'dummy-author',
   });
 
   async function onCreateChangelog(createType: 'draft' | 'publish') {
@@ -259,6 +261,8 @@ export function AddChangelogModal({
                         image: changelogData?.image || null,
                         publish_date: changelogData?.publish_date || null,
                         published: changelogData?.published || false,
+                        slug: 'dummy-slug',
+                        author: 'dummy-author',
                       });
                     }}>
                     Discard

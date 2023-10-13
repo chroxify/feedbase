@@ -68,6 +68,11 @@ export const updateProjectBySlug = (slug: string, data: ProjectProps['Update'], 
       return { data: null, error };
     }
 
+    // Check if slug is valid
+    if (data.slug && !isSlugValid(data.slug)) {
+      return { data: null, error: { message: 'slug is invalid.', status: 400 } };
+    }
+
     // If image is provided, upload to storage
     if (data.icon) {
       // Create unique image path
