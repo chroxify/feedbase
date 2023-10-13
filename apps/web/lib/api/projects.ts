@@ -1,3 +1,4 @@
+import { decode } from 'base64-arraybuffer';
 import { withProjectAuth, withUserAuth } from '@/lib/auth';
 import { ProjectProps, TeamMemberProps } from '@/lib/types';
 import { isSlugValid } from '@/lib/utils';
@@ -67,10 +68,60 @@ export const updateProjectBySlug = (slug: string, data: ProjectProps['Update'], 
       return { data: null, error };
     }
 
+    // If image is provided, upload to storage
+    if (data.icon) {
+      // Create unique image path
+      const imagePath = `${project!.slug}/logo/${Date.now()}.png`;
+
+      // Get current image path
+      if (project!.icon) {
+        const { data: currentImage } = supabase.storage.from('projects').getPublicUrl(project!.icon);
+
+        // Get current image path (get last 3 segments of url)
+        const currentImagePath = currentImage.publicUrl.split('/').slice(-3).join('/');
+
+        // Delete current image
+        const { error: deleteError } = await supabase.storage.from('projects').remove([currentImagePath]);
+
+        // Check for errors
+        if (deleteError) {
+          return { data: null, error: { message: deleteError.message, status: 500 } };
+        }
+      }
+
+      // Upload image to storage
+      const { error: uploadError } = await supabase.storage
+        .from('projects')
+        .upload(imagePath, decode(data.icon.replace(/^data:image\/\w+;base64,/, '')), {
+          contentType: 'image/png',
+        });
+
+      // Check for errors
+      if (uploadError) {
+        return { data: null, error: { message: uploadError.message, status: 500 } };
+      }
+
+      // Get public url for image
+      const { data: publicUrlData } = supabase.storage.from('projects').getPublicUrl(imagePath);
+
+      // Check for errors
+      if (!publicUrlData) {
+        return { data: null, error: { message: 'issue uploading image', status: 500 } };
+      }
+
+      // Set icon to public URL
+      data.icon = publicUrlData.publicUrl;
+    }
+
     // Update project
     const { data: updatedProject, error: updateError } = await supabase
       .from('projects')
-      .update({ name: data.name, slug: data.slug })
+      .update({
+        name: data.name || project!.name,
+        slug: data.slug || project!.slug,
+        icon: data.icon || project!.icon,
+        icon_radius: data.icon_radius || project!.icon_radius,
+      })
       .eq('id', project!.id)
       .select();
 

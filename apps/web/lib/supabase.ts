@@ -259,18 +259,24 @@ export interface Database {
       projects: {
         Row: {
           created_at: string | null;
+          icon: string | null;
+          icon_radius: string | null;
           id: string;
           name: string;
           slug: string;
         };
         Insert: {
           created_at?: string | null;
+          icon?: string | null;
+          icon_radius?: string | null;
           id?: string;
           name: string;
           slug: string;
         };
         Update: {
           created_at?: string | null;
+          icon?: string | null;
+          icon_radius?: string | null;
           id?: string;
           name?: string;
           slug?: string;
