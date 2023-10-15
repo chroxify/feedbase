@@ -57,7 +57,7 @@ export function AddChangelogModal({
     publish_date: changelogData?.publish_date || null,
     published: changelogData?.published || false,
     slug: 'dummy-slug',
-    author: 'dummy-author',
+    author_id: 'dummy-author',
   });
 
   async function onCreateChangelog(createType: 'draft' | 'publish') {
@@ -262,7 +262,7 @@ export function AddChangelogModal({
                         publish_date: changelogData?.publish_date || null,
                         published: changelogData?.published || false,
                         slug: 'dummy-slug',
-                        author: 'dummy-author',
+                        author_id: 'dummy-author',
                       });
                     }}>
                     Discard

@@ -9,6 +9,10 @@ export type TeamMemberProps = Database['public']['Tables']['profiles']['Row'] & 
 
 export type ChangelogProps = Database['public']['Tables']['changelogs'];
 
+export type ChangelogWithAuthorProps = Database['public']['Tables']['changelogs']['Row'] & {
+  author: ProfileProps['Row'];
+};
+
 export type FeedbackProps = Database['public']['Tables']['feedback'];
 
 export type FeedbackTagProps = Database['public']['Tables']['feedback_tags'];

@@ -5,7 +5,7 @@ export interface Database {
     Tables: {
       changelogs: {
         Row: {
-          author: string;
+          author_id: string;
           content: string | null;
           id: string;
           image: string | null;
@@ -17,7 +17,7 @@ export interface Database {
           title: string;
         };
         Insert: {
-          author: string;
+          author_id: string;
           content?: string | null;
           id?: string;
           image?: string | null;
@@ -29,7 +29,7 @@ export interface Database {
           title?: string;
         };
         Update: {
-          author?: string;
+          author_id?: string;
           content?: string | null;
           id?: string;
           image?: string | null;
@@ -42,8 +42,8 @@ export interface Database {
         };
         Relationships: [
           {
-            foreignKeyName: 'changelogs_author_fkey';
-            columns: ['author'];
+            foreignKeyName: 'changelogs_author_id_fkey';
+            columns: ['author_id'];
             referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
