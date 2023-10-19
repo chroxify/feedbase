@@ -15,14 +15,14 @@ const navTabs = [
     solid: Icons.TagSolid,
   },
   {
-    slug: 'roadmap',
-    outline: Icons.CalendarOutline,
-    solid: Icons.CalendarSolid,
-  },
-  {
     slug: 'feedback',
     outline: Icons.FeedbackOutline,
     solid: Icons.FeedbackSolid,
+  },
+  {
+    slug: 'roadmap',
+    outline: Icons.CalendarOutline,
+    solid: Icons.CalendarSolid,
   },
   {
     slug: 'settings',
@@ -55,7 +55,14 @@ export default function NavbarMobile({
   }, [pathname, tabs]);
 
   return (
-    <div className='bg-root fixed bottom-0 z-10 flex h-16 w-full flex-row items-center justify-evenly gap-5 overflow-hidden border-t px-5 md:hidden'>
+    <div
+      className={cn(
+        'bg-root fixed bottom-0 z-10 flex h-16 w-full flex-row items-center justify-evenly gap-5 overflow-hidden border-t px-5 md:hidden',
+        // If PWA and ios, add margin bottom
+        window.matchMedia('(display-mode: standalone)').matches &&
+          window.navigator.userAgent.includes('iPhone') &&
+          'mb-6'
+      )}>
       {navTabs.map((tab, index) => (
         // If roadmap, don't link to the page
         <Link
