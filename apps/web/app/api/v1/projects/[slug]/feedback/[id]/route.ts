@@ -37,7 +37,7 @@ export async function PATCH(req: Request, context: { params: { slug: string; id:
     {
       title: title || '',
       description: description || '',
-      status: status || '',
+      status: status,
       project_id: 'dummy-id',
       user_id: 'dummy-id',
       tags: tags || undefined,

@@ -163,7 +163,7 @@ export const updateFeedbackByID = (
       .update({
         title: data.title ? data.title : feedback!.title,
         description: data.description ? data.description : feedback!.description,
-        status: data.status ? data.status : feedback!.status,
+        status: data.status !== undefined ? data.status : feedback!.status,
         raw_tags: data.raw_tags ? data.raw_tags : feedback!.raw_tags,
       })
       .eq('id', feedback!.id)
