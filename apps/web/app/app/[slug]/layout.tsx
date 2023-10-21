@@ -5,7 +5,6 @@ import { APP_DOMAIN } from '@/lib/constants';
 import NavbarMobile from '@/components/layout/nav-bar-mobile';
 import Sidebar from '@/components/layout/sidebar';
 import TitleProvider from '@/components/layout/title-provider';
-import UserDropdown from '@/components/layout/user-dropdown';
 import {
   CalendarIcon,
   FeedbackIcon,
@@ -13,6 +12,7 @@ import {
   TagLabelIcon,
 } from '@/components/shared/icons/icons-animated';
 import { Icons } from '@/components/shared/icons/icons-static';
+import UserDropdown from '@/components/shared/user-dropdown';
 
 const tabs = [
   {

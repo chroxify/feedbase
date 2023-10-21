@@ -22,8 +22,9 @@ import {
   DropdownMenuTrigger,
 } from 'ui/components/ui/dropdown-menu';
 import { FeedbackTagProps, FeedbackWithUserProps } from '@/lib/types';
+import { formatRootUrl } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
-import CommentEditor from '../feedback/comment-editor';
+import CommentEditor from '../../shared/tiptap-editor';
 import { StatusCombobox } from '../feedback/status-combobox';
 import { TagCombobox } from '../feedback/tag-combobox';
 
@@ -260,10 +261,7 @@ export default function FeedbackModal({
             <DropdownMenuItem
               className='flex flex-row items-center gap-2 font-extralight'
               onClick={() => {
-                copyToClipboard(
-                  'link',
-                  `https://${projectSlug}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/feedback/${feedback.id}`
-                );
+                copyToClipboard('link', formatRootUrl(projectSlug, `/feedback/${feedback.id}`));
               }}>
               <Icons.Link className='h-4 w-4 stroke-white stroke-2' />
               Copy Link
@@ -300,7 +298,11 @@ export default function FeedbackModal({
         {/* Write Comment Text Area */}
         <div className='prose-invert flex w-full flex-col items-center justify-end rounded-sm border p-4'>
           {/* Editable Comment div with placeholder */}
-          <CommentEditor content={commentContent} setContent={setCommentContent} />
+          <CommentEditor
+            content={commentContent}
+            setContent={setCommentContent}
+            placeholder='Write your comment here...'
+          />
 
           {/* Bottom Row */}
           <div className='flex w-full flex-row items-center justify-end'>

@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { cn } from '@ui/lib/utils';
 import { Button } from 'ui/components/ui/button';
 import { CategoryTabProps } from '@/lib/types';
-import { cn } from '@/lib/utils';
 
 export default function CategoryTabs({
   tabs,

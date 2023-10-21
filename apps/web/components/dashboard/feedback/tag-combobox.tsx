@@ -1,11 +1,11 @@
 'use client';
 
 import * as React from 'react';
+import { cn } from '@ui/lib/utils';
 import { Check, ChevronDown } from 'lucide-react';
 import { Button } from 'ui/components/ui/button';
 import { Command, CommandGroup, CommandInput, CommandItem } from 'ui/components/ui/command';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from 'ui/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
 import { CreateTagModal } from '../modals/add-tag-modal';
 
 interface TagComboboxProps {

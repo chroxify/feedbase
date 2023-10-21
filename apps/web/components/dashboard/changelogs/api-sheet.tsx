@@ -15,6 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from 'ui/components/ui/sheet';
+import { formatRootUrl } from '@/lib/utils';
 import { CodeIcon } from '@/components/shared/icons/icons-animated';
 import LottiePlayer from '@/components/shared/lottie-player';
 
@@ -56,17 +57,11 @@ export function ApiSheet({ projectSlug }: { projectSlug: string }) {
           {/* Endpoint */}
           <div className='flex flex-col gap-2'>
             <Label>Public Endpoint</Label>
-            <Input
-              value={`https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/api/v1/${projectSlug}/changelogs`}
-              readOnly
-              tabIndex={-1}
-            />
+            <Input value={formatRootUrl('', `/api/v1/${projectSlug}/changelogs`)} readOnly tabIndex={-1} />
             <Button
               variant='default'
               onClick={(event) => {
-                navigator.clipboard.writeText(
-                  `https://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}/api/v1/${projectSlug}/changelogs`
-                );
+                navigator.clipboard.writeText(formatRootUrl('', `/api/v1/${projectSlug}/changelogs`));
                 toast.success('Copied to clipboard');
               }}>
               Copy Endpoint
