@@ -68,9 +68,7 @@ export default function Header({
         {/* Login */}
         {!user ? (
           <AuthModal projectSlug={project?.slug || ''}>
-            <Button variant='outline' className='text-foreground/90 '>
-              Login
-            </Button>
+            <Button variant='default'>Login</Button>
           </AuthModal>
         ) : (
           <UserDropdown user={user} />

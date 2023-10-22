@@ -46,19 +46,20 @@ export default async function Changelogs({ params }: { params: { project: string
           {/* Buttons */}
           <div className='flex select-none flex-row items-center gap-4 text-sm'>
             {/* Twitter */}
-            {projectConfig.changelog_twitter_handle ?? (
-              <>
-                <Link
-                  href={`https://x.com/${projectConfig.changelog_twitter_handle}`}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='hover:text-foreground/95 text-[#8F9EFF] transition-colors duration-200'>
-                  Follow us on Twitter
-                </Link>
+            {projectConfig.changelog_twitter_handle !== null &&
+              projectConfig.changelog_twitter_handle !== '' && (
+                <>
+                  <Link
+                    href={`https://x.com/${projectConfig.changelog_twitter_handle}`}
+                    target='_blank'
+                    rel='noopener noreferrer'
+                    className='hover:text-foreground/95 text-[#8F9EFF] transition-colors duration-200'>
+                    Follow us on Twitter
+                  </Link>
 
-                <span className='text-foreground/70'>·</span>
-              </>
-            )}
+                  <span className='text-foreground/70'>·</span>
+                </>
+              )}
 
             {/* RRS Update Feed */}
             <Link
