@@ -1,6 +1,6 @@
 import { decode } from 'base64-arraybuffer';
 import { withProjectAuth, withUserAuth } from '@/lib/auth';
-import { ProjectProps, TeamMemberProps } from '@/lib/types';
+import { ProjectConfigProps, ProjectProps, TeamMemberProps } from '@/lib/types';
 import { isSlugValid } from '@/lib/utils';
 
 // Get Project
@@ -54,6 +54,17 @@ export const createProject = (data: ProjectProps['Insert'], cType: 'server' | 'r
     // Check for errors
     if (projectMemberError) {
       return { data: null, error: { message: projectMemberError.message, status: 500 } };
+    }
+
+    // Create Project Config for Project
+    const { error: projectConfigError } = await supabase
+      .from('project_configs')
+      .insert({ project_id: project[0].id })
+      .select();
+
+    // Check for errors
+    if (projectConfigError) {
+      return { data: null, error: { message: projectConfigError.message, status: 500 } };
     }
 
     // Return project
@@ -196,3 +207,73 @@ export const getProjectMembers = withProjectAuth<TeamMemberProps[]>(
     return { data: restructuredData, error: null };
   }
 );
+
+// Get project config by slug
+export const getProjectConfigBySlug = withProjectAuth<ProjectConfigProps['Row']>(
+  async (user, supabase, project, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error };
+    }
+
+    // Get project config
+    const { data: config, error: configError } = await supabase
+      .from('project_configs')
+      .select()
+      .eq('project_id', project!.id);
+
+    // Check for errors
+    if (configError) {
+      return { data: null, error: { message: configError.message, status: 500 } };
+    }
+
+    // Return config
+    return { data: config[0], error: null };
+  }
+);
+
+// Update project config by slug
+export const updateProjectConfigBySlug = (
+  slug: string,
+  data: ProjectConfigProps['Update'],
+  cType: 'server' | 'route'
+) =>
+  withProjectAuth<ProjectConfigProps['Row']>(async (user, supabase, project, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error };
+    }
+
+    // Get project config
+    const { data: config, error: configError } = await supabase
+      .from('project_configs')
+      .select()
+      .eq('project_id', project!.id)
+      .single();
+
+    // Check for errors
+    if (configError) {
+      return { data: null, error: { message: configError.message, status: 500 } };
+    }
+
+    // Update project config
+    const { data: updatedConfig, error: updateError } = await supabase
+      .from('project_configs')
+      .update({
+        changelog_preview_style: data.changelog_preview_style || config.changelog_preview_style,
+        changelog_twitter_handle:
+          data.changelog_twitter_handle !== undefined
+            ? data.changelog_twitter_handle
+            : config.changelog_twitter_handle,
+      })
+      .eq('id', config.id)
+      .select();
+
+    // Check for errors
+    if (updateError) {
+      return { data: null, error: { message: updateError.message, status: 500 } };
+    }
+
+    // Return updated config
+    return { data: updatedConfig[0], error: null };
+  })(slug, cType);

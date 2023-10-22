@@ -1,8 +1,7 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import { Label } from '@radix-ui/react-label';
-import { cn } from '@ui/lib/utils';
 import { toast } from 'sonner';
 import {
   AlertDialog,
@@ -18,7 +17,6 @@ import {
 import { Button } from 'ui/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/ui/card';
 import { Input } from 'ui/components/ui/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'ui/components/ui/select';
 import { ProjectProps } from '@/lib/types';
 import DefaultTooltip from '@/components/shared/tooltip';
 
@@ -97,8 +95,6 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
         body: JSON.stringify({
           name: project.name !== projectData.name ? project.name : undefined,
           slug: project.slug !== projectData.slug ? project.slug : undefined,
-          icon: project.icon !== projectData.icon ? project.icon : undefined,
-          icon_radius: project.icon_radius !== projectData.icon_radius ? project.icon_radius : undefined,
         }),
       })
         .then((res) => res.json())
@@ -131,28 +127,6 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
       }
     });
   }
-
-  const onChangePicture = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (e: any) => {
-      // setFileError(null);
-      const file = e.target.files[0];
-      if (file) {
-        if (file.size / 1024 / 1024 > 5) {
-          // setFileError('File size too big (max 5MB)');
-        } else if (file.type !== 'image/png' && file.type !== 'image/jpeg') {
-          // setFileError('File type not supported.');
-        } else {
-          const reader = new FileReader();
-          reader.onload = (e) => {
-            setProject((prev) => ({ ...prev, icon: e.target?.result as string }));
-          };
-          reader.readAsDataURL(file);
-        }
-      }
-    },
-    [setProject]
-  );
 
   return (
     <>
@@ -200,98 +174,6 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
               (project.name === projectData.name && project.slug === projectData.slug) ||
               !project.name ||
               !project.slug
-            }
-            onClick={handleSaveProject}>
-            Save changes
-          </Button>
-        </CardFooter>
-      </Card>
-
-      {/* Theme Card */}
-      <Card className='flex w-full flex-col '>
-        <CardHeader>
-          <CardTitle>Branding</CardTitle>
-          <CardDescription>Configure your project&apos;s branding.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {/* Name & Slug Config */}
-          <div className='flex h-full w-full flex-col space-y-3'>
-            {/* Project Logo */}
-            <div className='flex h-full w-full flex-col space-y-4'>
-              <div className='space-y-1'>
-                <Label className='text-foreground/70 text-sm font-light'>Logo</Label>
-
-                {/* File Upload */}
-                <div className='group flex h-16 w-16 items-center justify-center transition-all'>
-                  <label
-                    htmlFor='dropzone-file'
-                    className={cn(
-                      'bg-background hover:bg-background/90 group-hover:bg-background/90 flex h-full w-full cursor-pointer flex-col items-center justify-center border',
-                      project.icon_radius
-                    )}>
-                    <p className='absolute hidden text-xs text-gray-500 group-hover:block group-hover:transition-all group-hover:duration-300 dark:text-gray-400'>
-                      Upload
-                    </p>
-                    {/* <Image src='/favicon.ico' alt='Logo' width={40} height={40} className='h-full w-full rounded-md object-cover group-hover:opacity-0' /> */}
-                    {/* TODO: Find a way to disable caching for next/image and use that */}
-                    {project.icon ? (
-                      <img
-                        src={project.icon}
-                        alt='Preview'
-                        width={40}
-                        height={40}
-                        className={cn(
-                          'h-full w-full object-cover group-hover:opacity-0',
-                          project.icon_radius
-                        )}
-                      />
-                    ) : (
-                      <p className='absolute text-xs text-gray-500 group-hover:hidden dark:text-gray-400'>
-                        Upload
-                      </p>
-                    )}
-                    <input id='dropzone-file' type='file' className='hidden' onChange={onChangePicture} />
-                  </label>
-                </div>
-
-                <Label className='text-foreground/50 text-xs font-extralight'>
-                  Recommended size is 256x256.
-                </Label>
-              </div>
-            </div>
-
-            <div className='space-y-1'>
-              <Label className='text-foreground/70 text-sm font-light'>Logo Radius</Label>
-              <div className='flex h-10 w-full flex-row space-x-2'>
-                <Select
-                  defaultValue={project.icon_radius || 'rounded-md'}
-                  onValueChange={(value) => {
-                    setProject((prev) => ({ ...prev, icon_radius: value }));
-                  }}>
-                  <SelectTrigger className='w-[160px] text-sm font-extralight'>
-                    <SelectValue placeholder='Select a radius' />
-                  </SelectTrigger>
-                  <SelectContent className='font-light'>
-                    <SelectItem value='rounded-md'>Rounded</SelectItem>
-                    <SelectItem value='rounded-none'>Square</SelectItem>
-                    <SelectItem value='rounded-full'>Circle</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <Label className='text-foreground/50 text-xs font-extralight'>
-                This is the radius of your logo.
-              </Label>
-            </div>
-          </div>
-        </CardContent>
-        <CardFooter>
-          <Button
-            className='w-32'
-            disabled={
-              (project.icon === projectData.icon && project.icon_radius === projectData.icon_radius) ||
-              !project.icon ||
-              !project.icon_radius
             }
             onClick={handleSaveProject}>
             Save changes

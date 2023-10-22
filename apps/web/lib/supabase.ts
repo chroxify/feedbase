@@ -252,6 +252,37 @@ export interface Database {
           },
         ];
       };
+      project_configs: {
+        Row: {
+          changelog_preview_style: string;
+          changelog_twitter_handle: string | null;
+          created_at: string;
+          id: string;
+          project_id: string;
+        };
+        Insert: {
+          changelog_preview_style?: string;
+          changelog_twitter_handle?: string | null;
+          created_at?: string;
+          id?: string;
+          project_id: string;
+        };
+        Update: {
+          changelog_preview_style?: string;
+          changelog_twitter_handle?: string | null;
+          created_at?: string;
+          id?: string;
+          project_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'project_configs_project_id_fkey';
+            columns: ['project_id'];
+            referencedRelation: 'projects';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       project_members: {
         Row: {
           created_at: string | null;

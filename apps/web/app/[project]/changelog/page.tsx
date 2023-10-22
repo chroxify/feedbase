@@ -1,7 +1,9 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
+import { fontMono } from '@ui/styles/fonts';
 import { Separator } from 'ui/components/ui/separator';
+import { getProjectConfigBySlug } from '@/lib/api/projects';
 import { getPublicProjectChangelogs } from '@/lib/api/public';
 
 export default async function Changelogs({ params }: { params: { project: string } }) {
@@ -18,6 +20,19 @@ export default async function Changelogs({ params }: { params: { project: string
     return new Date(b.publish_date!).getTime() - new Date(a.publish_date!).getTime();
   });
 
+  // Get project config
+  const { data: projectConfig, error: projectConfigError } = await getProjectConfigBySlug(
+    params.project,
+    'server',
+    true,
+    false
+  );
+
+  // If error.status redirects to 404
+  if (projectConfigError?.status === 404 || !projectConfig) {
+    notFound();
+  }
+
   return (
     <div className='flex h-full w-full flex-col gap-10 selection:bg-[#8F9EFF]/20 selection:text-[#8F9EFF]'>
       <div className='flex items-center px-5 sm:px-10 md:px-10 lg:px-20'>
@@ -29,16 +44,23 @@ export default async function Changelogs({ params }: { params: { project: string
           </p>
 
           {/* Buttons */}
-          <div className='text-foreground/70 flex select-none flex-row items-center gap-4 text-sm'>
+          <div className='flex select-none flex-row items-center gap-4 text-sm'>
             {/* Twitter */}
-            <Link
-              href='https://twitter.com/luminar_app'
-              target='_blank'
-              rel='noopener noreferrer'
-              className='hover:text-foreground/95 text-[#8F9EFF] transition-colors duration-200'>
-              Follow us on Twitter
-            </Link>
-            ·{/* RRS Update Feed */}
+            {projectConfig.changelog_twitter_handle ?? (
+              <>
+                <Link
+                  href={`https://x.com/${projectConfig.changelog_twitter_handle}`}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='hover:text-foreground/95 text-[#8F9EFF] transition-colors duration-200'>
+                  Follow us on Twitter
+                </Link>
+
+                <span className='text-foreground/70'>·</span>
+              </>
+            )}
+
+            {/* RRS Update Feed */}
             <Link
               href={`/api/v1/${params.project}/atom`}
               target='_blank'
@@ -105,16 +127,18 @@ export default async function Changelogs({ params }: { params: { project: string
                   </div>
 
                   {/* Summary */}
-                  <p className='text-foreground/70 cursor-default pb-4 text-base font-extralight'>
-                    {changelog.summary}
-                  </p>
+                  {projectConfig.changelog_preview_style === 'summary' && (
+                    <p className='text-foreground/70 cursor-default pb-4 text-base font-extralight'>
+                      {changelog.summary}
+                    </p>
+                  )}
 
-                  {/* Content as html */}
-                  {/* TODO: Make be optional via settings */}
-                  {/* <div
-                className={`${fontMono.variable} prose prose-invert prose-p:font-extralight prose-zinc text-foreground/70 font-light prose-headings:font-medium prose-headings:text-foreground/80 prose-strong:text-foreground/80 prose-strong:font-normal prose-code:text-foreground/70 prose-code:font-light prose-code:bg-foreground/10 prose-code:rounded-md prose-code:px-1 prose-code:py-0.5 prose-code:font-monospace prose-blockquote:text-foreground/80 prose-blockquote:font-normal`}
-                dangerouslySetInnerHTML={{ __html: changelog.content! }}
-              /> */}
+                  {projectConfig.changelog_preview_style === 'content' && (
+                    <div
+                      className={`${fontMono.variable} prose prose-invert prose-p:font-extralight prose-zinc text-foreground/70 prose-headings:font-medium prose-headings:text-foreground/80 prose-strong:text-foreground/80 prose-strong:font-normal prose-code:text-foreground/70 prose-code:font-light prose-code:bg-foreground/10 prose-code:rounded-md prose-code:px-1 prose-code:py-0.5 prose-code:font-monospace prose-blockquote:text-foreground/80 prose-blockquote:font-normal font-light`}
+                      dangerouslySetInnerHTML={{ __html: changelog.content! }}
+                    />
+                  )}
                 </div>
               </div>
 

@@ -3,6 +3,8 @@ import { Database } from '@/lib/supabase';
 // DB Types
 export type ProjectProps = Database['public']['Tables']['projects'];
 
+export type ProjectConfigProps = Database['public']['Tables']['project_configs'];
+
 export type TeamMemberProps = Database['public']['Tables']['profiles']['Row'] & {
   joined_at: string;
 };
