@@ -332,7 +332,7 @@ export default function FeedbackModal({
             projectTags={tags.map((tag) => ({ value: tag.name, label: tag.name, color: tag.color }))}
             triggerClassName='bg-transparent w-fit h-fit py-1 px-3 hover:bg-secondary/80'
             showDropdownIcon={false}
-            initialValue={feedback.tags.map((tag) => tag.name.toLowerCase())}
+            initialValue={feedback.tags ? feedback.tags.map((tag) => tag.name.toLowerCase()) : []}
             onSelect={onUpdateTag}
             align='start'
           />

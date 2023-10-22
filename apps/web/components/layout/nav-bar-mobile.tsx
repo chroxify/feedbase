@@ -57,17 +57,18 @@ export default function NavbarMobile({
   return (
     <div
       className={cn(
-        'bg-root fixed bottom-0 z-10 flex h-16 w-full flex-row items-center justify-evenly gap-5 overflow-hidden border-t px-5 md:hidden'
-        // If PWA and ios, add margin bottom
-        // window !== undefined &&
-        // window.matchMedia('(display-mode: standalone)').matches &&
-        //   window.navigator.userAgent.includes('iPhone') &&
-        //   'h-[88px] pb-6'
+        'bg-root fixed bottom-0 z-10 flex h-16 w-full flex-row items-center justify-evenly gap-5 overflow-hidden border-t px-5 md:hidden',
+        // If iOS and PWA, add padding to bottom
+        typeof window !== 'undefined' &&
+          window.matchMedia('(display-mode: standalone)').matches &&
+          window.navigator.userAgent.includes('iPhone')
+          ? 'h-[88px] pb-6'
+          : ''
       )}>
       {navTabs.map((tab, index) => (
         // If roadmap, don't link to the page
         <Link
-          href={tab.slug === 'roadmap' ? {} : `/${currentProject.slug}/${tab.slug}`}
+          href={tab.slug === 'roadmap' ? '#' : `/${currentProject.slug}/${tab.slug}`}
           key={tab.slug}
           className='dr h-full w-full p-3 transition-all duration-150 active:scale-[80%]'>
           <Button

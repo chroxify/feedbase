@@ -204,7 +204,7 @@ export default function CommentsList({
         {/* Empty State */}
         {feedbackComments?.length === 0 && (
           <div className='flex h-full w-full flex-col items-center justify-center pt-10'>
-            <p className='text-foreground/60 text-sm font-light'>No comments yet</p>
+            <p className='text-foreground/60 pb-10 text-sm font-light'>No comments yet</p>
           </div>
         )}
       </div>
