@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { cn } from '@ui/lib/utils';
 import { Button } from 'ui/components/ui/button';
 import { NavbarTabProps, ProjectProps } from '@/lib/types';
-import { cn } from '@/lib/utils';
 import { Icons } from '../shared/icons/icons-static';
 
 const navTabs = [
@@ -41,6 +41,7 @@ export default function NavbarMobile({
   currentProject: ProjectProps['Row'];
 }) {
   const [activeTab, setActiveTab] = useState(activeTabIndex);
+  const [isPWA, setIsPWA] = useState(false);
   const pathname = usePathname();
 
   // Check current active tab based on url
@@ -54,19 +55,24 @@ export default function NavbarMobile({
     }
   }, [pathname, tabs]);
 
+  // Detect if iOS and PWA
+  useEffect(() => {
+    setIsPWA(
+      window.matchMedia('(display-mode: standalone)').matches && window.navigator.userAgent.includes('iPhone')
+    );
+  }, []);
+
   return (
     <div
       className={cn(
         'bg-root fixed bottom-0 z-10 flex h-16 w-full flex-row items-center justify-evenly gap-5 overflow-hidden border-t px-5 md:hidden',
-        // If PWA and ios, add margin bottom
-        window.matchMedia('(display-mode: standalone)').matches &&
-          window.navigator.userAgent.includes('iPhone') &&
-          'mb-6'
+        // If iOS and PWA, add padding to bottom
+        isPWA ? 'h-[88px] pb-6' : ''
       )}>
       {navTabs.map((tab, index) => (
         // If roadmap, don't link to the page
         <Link
-          href={tab.slug === 'roadmap' ? {} : `/${currentProject.slug}/${tab.slug}`}
+          href={tab.slug === 'roadmap' ? '#' : `/${currentProject.slug}/${tab.slug}`}
           key={tab.slug}
           className='dr h-full w-full p-3 transition-all duration-150 active:scale-[80%]'>
           <Button

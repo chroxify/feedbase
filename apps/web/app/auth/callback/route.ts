@@ -1,7 +1,6 @@
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
-import { APP_DOMAIN } from '@/lib/constants';
 
 export const dynamic = 'force-dynamic';
 
@@ -12,6 +11,7 @@ export async function GET(request: Request) {
   const cookieStore = cookies();
   const requestUrl = new URL(request.url);
   const code = requestUrl.searchParams.get('code');
+  const redirect = requestUrl.searchParams.get('successRedirect');
 
   if (code) {
     const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
@@ -19,5 +19,5 @@ export async function GET(request: Request) {
   }
 
   // URL to redirect to after sign in process completes
-  return NextResponse.redirect(APP_DOMAIN);
+  return NextResponse.redirect(new URL(redirect || '/', requestUrl.origin));
 }

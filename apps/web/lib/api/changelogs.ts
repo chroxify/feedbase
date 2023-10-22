@@ -1,6 +1,7 @@
 import { decode } from 'base64-arraybuffer';
 import { withProjectAuth } from '@/lib/auth';
-import { ChangelogProps } from '@/lib/types';
+import { ChangelogProps, ChangelogWithAuthorProps } from '@/lib/types';
+import { isSlugValid } from '../utils';
 
 // Create Changelog
 export const createChangelog = (slug: string, data: ChangelogProps['Insert'], cType: 'server' | 'route') =>
@@ -39,11 +40,22 @@ export const createChangelog = (slug: string, data: ChangelogProps['Insert'], cT
       data.image = publicUrlData.publicUrl;
     }
 
+    // Convert title to slug
+    if (data.title && !isSlugValid(data.title)) {
+      // Remove invalid characters
+      data.slug = data.title
+        .toLowerCase()
+        .replace(/[^a-z0-9 ]/g, '')
+        .replace(/ /g, '-');
+    }
+
     // Create Changelog
     const { data: changelog, error: changelogError } = await supabase
       .from('changelogs')
       .insert({
         project_id: project!.id,
+        slug: data.slug,
+        author_id: user!.id,
         title: data.title,
         summary: data.summary,
         content: data.content,
@@ -63,7 +75,7 @@ export const createChangelog = (slug: string, data: ChangelogProps['Insert'], cT
   })(slug, cType);
 
 // Get All Project Changelogs
-export const getAllProjectChangelogs = withProjectAuth<ChangelogProps['Row'][]>(
+export const getAllProjectChangelogs = withProjectAuth<ChangelogWithAuthorProps[]>(
   async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
@@ -73,7 +85,7 @@ export const getAllProjectChangelogs = withProjectAuth<ChangelogProps['Row'][]>(
     // Get Changelogs
     const { data: changelogs, error: changelogsError } = await supabase
       .from('changelogs')
-      .select()
+      .select('*, profiles (*)')
       .eq('project_id', project!.id);
 
     // Check for errors
@@ -81,14 +93,30 @@ export const getAllProjectChangelogs = withProjectAuth<ChangelogProps['Row'][]>(
       return { data: null, error: { message: changelogsError.message, status: 500 } };
     }
 
+    // Restructure data
+    const restructuredData = changelogs.map((changelog) => {
+      // Destructure profiles from changelog
+      const { profiles, ...restOfChangelog } = changelog;
+
+      return {
+        ...restOfChangelog,
+        author: {
+          id: changelog.profiles?.id,
+          email: changelog.profiles?.email,
+          full_name: changelog.profiles?.full_name,
+          avatar_url: changelog.profiles?.avatar_url,
+        },
+      };
+    }) as ChangelogWithAuthorProps[];
+
     // Return changelogs
-    return { data: changelogs, error: null };
+    return { data: restructuredData, error: null };
   }
 );
 
 // Get Changelog by ID
 export const getChangelogByID = (id: string, slug: string, cType: 'server' | 'route') =>
-  withProjectAuth<ChangelogProps['Row']>(async (user, supabase, project, error) => {
+  withProjectAuth<ChangelogWithAuthorProps>(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -97,16 +125,31 @@ export const getChangelogByID = (id: string, slug: string, cType: 'server' | 'ro
     // Get Changelog
     const { data: changelog, error: changelogError } = await supabase
       .from('changelogs')
-      .select()
-      .eq('id', id);
+      .select('*, profiles (*)')
+      .eq('id', id)
+      .single();
 
     // Check for errors
     if (changelogError) {
       return { data: null, error: { message: changelogError.message, status: 500 } };
     }
 
+    // Destructure profiles from changelog
+    const { profiles, ...restOfChangelog } = changelog;
+
+    // Restructure data
+    const restructuredData = {
+      ...restOfChangelog,
+      author: {
+        id: changelog.profiles?.id,
+        email: changelog.profiles?.email,
+        full_name: changelog.profiles?.full_name,
+        avatar_url: changelog.profiles?.avatar_url,
+      },
+    } as ChangelogWithAuthorProps;
+
     // Return changelog
-    return { data: changelog[0], error: null };
+    return { data: restructuredData, error: null };
   })(slug, cType);
 
 // Update Changelog
@@ -150,11 +193,21 @@ export const updateChangelog = (
       data.image = publicUrlData.publicUrl;
     }
 
+    // Convert title to slug
+    if (data.title && !isSlugValid(data.title)) {
+      // Remove invalid characters
+      data.slug = data.title
+        .toLowerCase()
+        .replace(/[^a-z0-9 ]/g, '')
+        .replace(/ /g, '-');
+    }
+
     // Update Changelog
     const { data: changelog, error: changelogError } = await supabase
       .from('changelogs')
       .update({
         title: data.title,
+        slug: data.slug,
         summary: data.summary,
         content: data.content,
         image: data.image,

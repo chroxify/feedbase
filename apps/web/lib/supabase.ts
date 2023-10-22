@@ -5,36 +5,48 @@ export interface Database {
     Tables: {
       changelogs: {
         Row: {
+          author_id: string;
           content: string | null;
           id: string;
           image: string | null;
           project_id: string;
           publish_date: string | null;
           published: boolean;
+          slug: string;
           summary: string | null;
           title: string;
         };
         Insert: {
+          author_id: string;
           content?: string | null;
           id?: string;
           image?: string | null;
           project_id: string;
           publish_date?: string | null;
           published: boolean;
+          slug?: string;
           summary?: string | null;
           title?: string;
         };
         Update: {
+          author_id?: string;
           content?: string | null;
           id?: string;
           image?: string | null;
           project_id?: string;
           publish_date?: string | null;
           published?: boolean;
+          slug?: string;
           summary?: string | null;
           title?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: 'changelogs_author_id_fkey';
+            columns: ['author_id'];
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
           {
             foreignKeyName: 'changelogs_project_id_fkey';
             columns: ['project_id'];
@@ -45,8 +57,9 @@ export interface Database {
       };
       feedback: {
         Row: {
+          comment_count: number;
           created_at: string;
-          description: string | null;
+          description: string;
           id: string;
           project_id: string;
           raw_tags: Json[] | null;
@@ -56,8 +69,9 @@ export interface Database {
           user_id: string;
         };
         Insert: {
+          comment_count?: number;
           created_at?: string;
-          description?: string | null;
+          description: string;
           id?: string;
           project_id: string;
           raw_tags?: Json[] | null;
@@ -67,8 +81,9 @@ export interface Database {
           user_id: string;
         };
         Update: {
+          comment_count?: number;
           created_at?: string;
-          description?: string | null;
+          description?: string;
           id?: string;
           project_id?: string;
           raw_tags?: Json[] | null;
@@ -97,21 +112,30 @@ export interface Database {
           content: string;
           created_at: string;
           feedback_id: string;
-          id: number;
+          id: string;
+          reply_to_id: string | null;
+          upvoters: string[] | null;
+          upvotes: number;
           user_id: string;
         };
         Insert: {
           content: string;
           created_at?: string;
           feedback_id: string;
-          id?: number;
+          id?: string;
+          reply_to_id?: string | null;
+          upvoters?: string[] | null;
+          upvotes?: number;
           user_id: string;
         };
         Update: {
           content?: string;
           created_at?: string;
           feedback_id?: string;
-          id?: number;
+          id?: string;
+          reply_to_id?: string | null;
+          upvoters?: string[] | null;
+          upvotes?: number;
           user_id?: string;
         };
         Relationships: [
@@ -122,9 +146,15 @@ export interface Database {
             referencedColumns: ['id'];
           },
           {
+            foreignKeyName: 'feedback_comments_reply_to_id_fkey';
+            columns: ['reply_to_id'];
+            referencedRelation: 'feedback_comments';
+            referencedColumns: ['id'];
+          },
+          {
             foreignKeyName: 'feedback_comments_user_id_fkey';
             columns: ['user_id'];
-            referencedRelation: 'project_members';
+            referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
         ];
@@ -222,6 +252,37 @@ export interface Database {
           },
         ];
       };
+      project_configs: {
+        Row: {
+          changelog_preview_style: string;
+          changelog_twitter_handle: string | null;
+          created_at: string;
+          id: string;
+          project_id: string;
+        };
+        Insert: {
+          changelog_preview_style?: string;
+          changelog_twitter_handle?: string | null;
+          created_at?: string;
+          id?: string;
+          project_id: string;
+        };
+        Update: {
+          changelog_preview_style?: string;
+          changelog_twitter_handle?: string | null;
+          created_at?: string;
+          id?: string;
+          project_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'project_configs_project_id_fkey';
+            columns: ['project_id'];
+            referencedRelation: 'projects';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       project_members: {
         Row: {
           created_at: string | null;
@@ -259,18 +320,24 @@ export interface Database {
       projects: {
         Row: {
           created_at: string | null;
+          icon: string | null;
+          icon_radius: string | null;
           id: string;
           name: string;
           slug: string;
         };
         Insert: {
           created_at?: string | null;
+          icon?: string | null;
+          icon_radius?: string | null;
           id?: string;
           name: string;
           slug: string;
         };
         Update: {
           created_at?: string | null;
+          icon?: string | null;
+          icon_radius?: string | null;
           id?: string;
           name?: string;
           slug?: string;

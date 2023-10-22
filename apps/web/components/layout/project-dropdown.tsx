@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { cn } from '@ui/lib/utils';
 import { ChevronsUpDownIcon, GlobeIcon, Plus } from 'lucide-react';
 import { Button } from 'ui/components/ui/button';
 import {
@@ -12,7 +13,6 @@ import {
 } from 'ui/components/ui/dropdown-menu';
 import { Skeleton } from 'ui/components/ui/skeleton';
 import { ProjectProps } from '@/lib/types';
-import { cn } from '@/lib/utils';
 import AddProjectDialog from '@/components/dashboard/modals/add-project-modal';
 
 export default function ProjectDropdown({

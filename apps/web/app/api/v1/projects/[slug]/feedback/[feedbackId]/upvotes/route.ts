@@ -5,8 +5,12 @@ import { getFeedbackByID, getFeedbackUpvotersById, upvoteFeedbackByID } from '@/
   Get feedback upvotes
   GET /api/v1/projects/[slug]/feedback/[id]/upvote
 */
-export async function GET(req: Request, context: { params: { slug: string; id: string } }) {
-  const { data: feedback, error } = await getFeedbackByID(context.params.id, context.params.slug, 'route');
+export async function GET(req: Request, context: { params: { slug: string; feedbackId: string } }) {
+  const { data: feedback, error } = await getFeedbackByID(
+    context.params.feedbackId,
+    context.params.slug,
+    'route'
+  );
 
   // If any errors thrown, return error
   if (error) {
@@ -15,7 +19,7 @@ export async function GET(req: Request, context: { params: { slug: string; id: s
 
   // Get feedback upvoters
   const { data: upvoters, error: upvotersError } = await getFeedbackUpvotersById(
-    context.params.id,
+    context.params.feedbackId,
     context.params.slug,
     'route'
   );
@@ -39,8 +43,12 @@ export async function GET(req: Request, context: { params: { slug: string; id: s
     Upvote a feedback
     POST /api/v1/projects/[slug]/feedback/[id]/upvote
 */
-export async function POST(req: Request, context: { params: { slug: string; id: string } }) {
-  const { data: feedback, error } = await upvoteFeedbackByID(context.params.id, context.params.slug, 'route');
+export async function POST(req: Request, context: { params: { slug: string; feedbackId: string } }) {
+  const { data: feedback, error } = await upvoteFeedbackByID(
+    context.params.feedbackId,
+    context.params.slug,
+    'route'
+  );
 
   // If any errors thrown, return error
   if (error) {

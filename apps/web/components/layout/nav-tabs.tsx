@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { cn } from '@ui/lib/utils';
 import { Button } from 'ui/components/ui/button';
 import { NavbarTabProps } from '@/lib/types';
-import { cn } from '@/lib/utils';
 import LottiePlayer from '@/components/shared/lottie-player';
 
 export default function NavTabs({

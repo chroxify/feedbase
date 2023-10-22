@@ -3,11 +3,17 @@ import { Database } from '@/lib/supabase';
 // DB Types
 export type ProjectProps = Database['public']['Tables']['projects'];
 
+export type ProjectConfigProps = Database['public']['Tables']['project_configs'];
+
 export type TeamMemberProps = Database['public']['Tables']['profiles']['Row'] & {
   joined_at: string;
 };
 
 export type ChangelogProps = Database['public']['Tables']['changelogs'];
+
+export type ChangelogWithAuthorProps = Database['public']['Tables']['changelogs']['Row'] & {
+  author: ProfileProps['Row'];
+};
 
 export type FeedbackProps = Database['public']['Tables']['feedback'];
 
@@ -24,6 +30,12 @@ export type FeedbackWithUserInputProps = Database['public']['Tables']['feedback'
 };
 
 export type FeedbackCommentProps = Database['public']['Tables']['feedback_comments'];
+
+export type FeedbackCommentWithUserProps = Database['public']['Tables']['feedback_comments']['Row'] & {
+  user: ProfileProps['Row'];
+  has_upvoted: boolean;
+  replies: FeedbackCommentWithUserProps[];
+};
 
 export type ProfileProps = Database['public']['Tables']['profiles'];
 

@@ -7,6 +7,10 @@ const tabs = [
     slug: 'general',
   },
   {
+    name: 'Hub',
+    slug: 'hub',
+  },
+  {
     name: 'Team',
     slug: 'team',
   },

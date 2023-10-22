@@ -7,13 +7,18 @@ import { Placeholder } from '@tiptap/extension-placeholder';
 import { Typography } from '@tiptap/extension-typography';
 import { EditorContent, useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
+import { cn } from '@ui/lib/utils';
 
 export default function RichTextEditor({
   content,
   setContent,
+  placeholder,
+  className,
 }: {
   content: string;
   setContent: React.Dispatch<React.SetStateAction<string>>;
+  placeholder?: string;
+  className?: string;
 }) {
   const editor = useEditor({
     extensions: [
@@ -21,7 +26,7 @@ export default function RichTextEditor({
       Highlight,
       Typography,
       Placeholder.configure({
-        placeholder: 'Type your comment here...',
+        placeholder: placeholder || 'Write something...',
       }),
     ],
     content,
@@ -36,5 +41,10 @@ export default function RichTextEditor({
     },
   });
 
-  return <EditorContent editor={editor} className='h-full w-full p-0 text-sm font-light outline-none' />;
+  return (
+    <EditorContent
+      editor={editor}
+      className={cn('h-full w-full p-0 text-sm font-light outline-none', className)}
+    />
+  );
 }

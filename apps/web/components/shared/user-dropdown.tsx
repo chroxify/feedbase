@@ -10,10 +10,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from 'ui/components/ui/dropdown-menu';
-import { LogoutIcon, ProfileIcon } from '../shared/icons/icons-animated';
-import LottiePlayer from '../shared/lottie-player';
+import { LogoutIcon, ProfileIcon } from './icons/icons-animated';
+import LottiePlayer from './lottie-player';
 
-export default function UserDropdown({ user }: { user: UserMetadata }) {
+export default function UserDropdown({
+  user,
+  rediretOnLogout,
+}: {
+  user: UserMetadata;
+  rediretOnLogout?: string;
+}) {
   const [isHover, setIsHover] = useState<string>('');
   const supabase = createClientComponentClient();
 
@@ -21,7 +27,7 @@ export default function UserDropdown({ user }: { user: UserMetadata }) {
     supabase.auth.signOut();
 
     // Redirect to login page
-    window.location.href = '/login';
+    window.location.href = rediretOnLogout || location.origin;
   }
 
   return (

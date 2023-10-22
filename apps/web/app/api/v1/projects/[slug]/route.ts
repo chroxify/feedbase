@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { deleteProjectBySlug, getProjectBySlug, updateProjectBySlug } from '@/lib/api/projects';
+import { ProjectProps } from '@/lib/types';
 
 /*
     Get project by slug
@@ -20,17 +21,12 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
     Update project by slug
     PUT /api/v1/projects/[slug]
 */
-export async function PUT(req: Request, context: { params: { slug: string } }) {
-  const { name, slug } = await req.json();
-
-  // Validate Request Body
-  if (!name || !slug) {
-    return NextResponse.json({ error: 'name and slug are required.' }, { status: 400 });
-  }
+export async function PATCH(req: Request, context: { params: { slug: string } }) {
+  const { name, slug, icon, icon_radius: iconRadius } = (await req.json()) as ProjectProps['Update'];
 
   const { data: updatedProject, error } = await updateProjectBySlug(
     context.params.slug,
-    { name, slug },
+    { name, slug, icon, icon_radius: iconRadius },
     'route'
   );
 

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { cn } from '@ui/lib/utils';
 import { ChevronUp } from 'lucide-react';
 import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
@@ -9,7 +10,6 @@ import { Button } from 'ui/components/ui/button';
 import { Card, CardDescription, CardHeader, CardTitle } from 'ui/components/ui/card';
 import useCreateQueryString from '@/lib/hooks/use-create-query';
 import { FeedbackTagProps, FeedbackWithUserProps } from '@/lib/types';
-import { cn } from '@/lib/utils';
 import FeedbackModal from '../modals/view-feedback-modal';
 import { statusOptions } from './status-combobox';
 
@@ -54,7 +54,22 @@ export default function FeedbackTable({
   };
 
   // Upvote feedback
-  function onUpvoteTag(feedback: FeedbackWithUserProps) {
+  function onUpvote(feedback: FeedbackWithUserProps) {
+    // Get index of feedback
+    const index = feedbackList.findIndex((fb) => fb.id === feedback.id);
+
+    // Update feedbackList
+    const newFeedbackList = [...feedbackList];
+
+    // Update feedback
+    newFeedbackList[index].has_upvoted = !feedback.has_upvoted;
+
+    // Update upvotes
+    newFeedbackList[index].upvotes = feedback.upvotes + (feedback.has_upvoted ? 1 : -1);
+
+    // Set feedbackList
+    setFeedbackList(newFeedbackList);
+
     const promise = new Promise((resolve, reject) => {
       fetch(`/api/v1/projects/${projectSlug}/feedback/${feedback.id}/upvotes`, {
         method: 'POST',
@@ -75,26 +90,18 @@ export default function FeedbackTable({
         });
     });
 
-    promise
-      .then(() => {
-        // Get index of feedback
-        const index = feedbackList.findIndex((fb) => fb.id === feedback.id);
+    promise.catch((err) => {
+      toast.error(err);
 
-        // Update feedbackList
-        const newFeedbackList = [...feedbackList];
+      // Update upvotes
+      newFeedbackList[index].upvotes = feedback.upvotes;
 
-        // Update feedback
-        newFeedbackList[index].has_upvoted = !feedback.has_upvoted;
+      // Update feedback
+      newFeedbackList[index].has_upvoted = feedback.has_upvoted;
 
-        // Update upvotes
-        newFeedbackList[index].upvotes = feedback.upvotes + (feedback.has_upvoted ? 1 : -1);
-
-        // Set feedbackList
-        setFeedbackList(newFeedbackList);
-      })
-      .catch((err) => {
-        toast.error(err);
-      });
+      // Set feedbackList
+      setFeedbackList(newFeedbackList);
+    });
   }
 
   return (
@@ -124,7 +131,7 @@ export default function FeedbackTable({
               size='sm'
               className='flex h-11 flex-col items-center rounded-sm py-1 transition-all duration-150 hover:bg-transparent active:scale-[85%]'
               onClick={() => {
-                onUpvoteTag(feedback);
+                onUpvote(feedback);
               }}>
               {/* Arrow */}
               <ChevronUp

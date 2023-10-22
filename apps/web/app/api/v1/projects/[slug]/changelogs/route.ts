@@ -44,6 +44,8 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
       publish_date: publishDate || null,
       published: published || false,
       project_id: 'dummy-id',
+      slug: 'dummy-slug',
+      author_id: 'dummy-author',
     },
     'route'
   );

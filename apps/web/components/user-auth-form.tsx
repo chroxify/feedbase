@@ -8,11 +8,28 @@ import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
 import { Icons } from '@/components/shared/icons/icons-static';
 
-export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) {
+export function UserAuthForm({
+  authType,
+  successRedirect,
+  buttonsClassname,
+}: {
+  authType: 'sign-in' | 'sign-up';
+  successRedirect?: string;
+  buttonsClassname?: string;
+}) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [provider, setProvider] = useState<'github' | 'email'>('github');
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  // TODO: Figure out issue with cookieOptions setting and set at root level instead of individually like rn
+  // {
+  //   cookieOptions: {
+  //     path: '/',
+  //     domain: 'localhost',
+  //     sameSite: 'lax',
+  //     secure: false,
+  //   }
+  // }
   const supabase = createClientComponentClient();
 
   async function handleMailSignIn(event: React.SyntheticEvent) {
@@ -47,7 +64,9 @@ export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) 
     const { error } = await supabase.auth.signInWithOtp({
       email,
       options: {
-        emailRedirectTo: `${location.origin}/auth/callback`,
+        emailRedirectTo: `${location.origin}/auth/callback?successRedirect=${
+          successRedirect || location.origin
+        }`,
         data: {
           full_name: name || user?.full_name,
         },
@@ -72,7 +91,7 @@ export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'github',
       options: {
-        redirectTo: `${location.origin}/auth/callback`,
+        redirectTo: `${location.origin}/auth/callback?successRedirect=${successRedirect || location.origin}`,
       },
     });
 
@@ -102,6 +121,7 @@ export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) 
                   onChange={(event) => {
                     setName(event.currentTarget.value);
                   }}
+                  className={buttonsClassname}
                 />
               </>
             )}
@@ -120,6 +140,7 @@ export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) 
               onChange={(event) => {
                 setEmail(event.currentTarget.value);
               }}
+              className={buttonsClassname}
             />
           </div>
           <Button disabled={isLoading}>
@@ -138,7 +159,12 @@ export function UserAuthForm({ authType }: { authType: 'sign-in' | 'sign-up' }) 
           <span className='bg-root text-muted-foreground px-2'>Or continue with</span>
         </div>
       </div>
-      <Button variant='outline' type='button' disabled={isLoading} onClick={handleGitHubSignIn}>
+      <Button
+        variant='outline'
+        type='button'
+        disabled={isLoading}
+        onClick={handleGitHubSignIn}
+        className={buttonsClassname}>
         {isLoading && provider === 'github' ? (
           <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' />
         ) : (

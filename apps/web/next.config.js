@@ -25,6 +25,12 @@ const nextConfig = {
         port: hostPath[2],
         pathname: '/storage/v1/object/public/changelog-images/**',
       },
+      {
+        protocol: hostPath[0],
+        hostname: hostPath[1].replace('//', ''),
+        port: hostPath[2],
+        pathname: '/storage/v1/object/public/projects/**',
+      },
     ],
   },
   experimental: {

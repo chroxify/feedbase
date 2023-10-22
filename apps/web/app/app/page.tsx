@@ -7,6 +7,11 @@ export default async function Projects() {
   const { data: projects, error } = await getUserProjects('server');
 
   if (error) {
+    // Redirect to login if the user is not authenticated
+    if (error.status === 401) {
+      return redirect('/login');
+    }
+
     return <div>{error.message}</div>;
   }
 
