@@ -1,12 +1,34 @@
+import { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { fontMono } from '@ui/styles/fonts';
 import { Separator } from 'ui/components/ui/separator';
-import { getProjectConfigBySlug } from '@/lib/api/projects';
+import { getProjectBySlug, getProjectConfigBySlug } from '@/lib/api/projects';
 import { getPublicProjectChangelogs } from '@/lib/api/public';
 
-export default async function Changelogs({ params }: { params: { project: string } }) {
+type Props = {
+  params: { project: string };
+};
+
+// Metadata
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // Get project
+  const { data: project, error } = await getProjectBySlug(params.project, 'server', true, false);
+
+  // If project is undefined redirects to 404
+  if (error?.status === 404 || !project) {
+    notFound();
+  }
+
+  return {
+    title: `Changelog - ${project.name}`,
+    description: `All the latest updates, improvements, and fixes to ${project.name}.`,
+    themeColor: '#05060A',
+  };
+}
+
+export default async function Changelogs({ params }: Props) {
   // Get changelogs
   const { data: changelogs, error } = await getPublicProjectChangelogs(params.project, 'server', true, false);
 

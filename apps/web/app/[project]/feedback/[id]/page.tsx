@@ -1,3 +1,4 @@
+import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@ui/components/ui/avatar';
@@ -9,6 +10,35 @@ import { getPublicProjectFeedback } from '@/lib/api/public';
 import { getCurrentUser } from '@/lib/api/user';
 import { PROSE_CN } from '@/lib/constants';
 import CommentsList from '@/components/hub/feedback/comments/comments-list';
+
+type Props = {
+  params: { project: string; id: string };
+};
+
+// Metadata
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // Get feedback
+  const { data: feedbackList, error } = await getPublicProjectFeedback(params.project, 'server', true, false);
+
+  // If project is undefined redirects to 404
+  if (error?.status === 404 || !feedbackList) {
+    notFound();
+  }
+
+  // Get current feedback
+  const feedback = feedbackList.find((feedback) => feedback.id === params.id);
+
+  // If feedback is undefined redirects to 404
+  if (!feedback) {
+    notFound();
+  }
+
+  return {
+    title: feedback.title,
+    description: feedback.description,
+    themeColor: '#05060A',
+  };
+}
 
 // Status options
 const statusOptions = [
@@ -34,7 +64,7 @@ const statusOptions = [
   },
 ];
 
-export default async function FeedbackDetails({ params }: { params: { project: string; id: string } }) {
+export default async function FeedbackDetails({ params }: Props) {
   const { data: feedbackList, error } = await getPublicProjectFeedback(params.project, 'server', true, false);
 
   if (error || !feedbackList) {

@@ -1,9 +1,32 @@
+import { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 import { Separator } from 'ui/components/ui/separator';
 import { getProjectBySlug } from '@/lib/api/projects';
 import { getCurrentUser } from '@/lib/api/user';
 import Header from '@/components/hub/nav-bar';
+
+type Props = {
+  children: React.ReactNode;
+  params: { project: string };
+};
+
+// Metadata
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // Get project
+  const { data: project, error } = await getProjectBySlug(params.project, 'server', true, false);
+
+  // If project is undefined redirects to 404
+  if (error?.status === 404 || !project) {
+    notFound();
+  }
+
+  return {
+    title: project.name,
+    description: `Discover the latest updates, roadmaps, submit feedback, and explore more about ${project.name}.`,
+    themeColor: '#05060A',
+  };
+}
 
 const tabs = [
   {
@@ -16,13 +39,7 @@ const tabs = [
   },
 ];
 
-export default async function HubLayout({
-  children,
-  params,
-}: {
-  children: React.ReactNode;
-  params: { project: string };
-}) {
+export default async function HubLayout({ children, params }: Props) {
   const headerList = headers();
   const pathname = headerList.get('x-pathname');
   const currentTab = tabs.find((tab) => tab.link === `/${pathname!.split('/')[1]}`);

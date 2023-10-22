@@ -1,10 +1,34 @@
+import { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 import { Separator } from '@ui/components/ui/separator';
+import { getProjectBySlug } from '@/lib/api/projects';
 import { getPublicProjectFeedback } from '@/lib/api/public';
 import { getCurrentUser } from '@/lib/api/user';
 import FeedbackHeader from '@/components/hub/feedback/button-header';
 import FeedbackList from '@/components/hub/feedback/feedback-list';
 
-export default async function Feedback({ params }: { params: { project: string } }) {
+type Props = {
+  params: { project: string };
+};
+
+// Metadata
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // Get project
+  const { data: project, error } = await getProjectBySlug(params.project, 'server', true, false);
+
+  // If project is undefined redirects to 404
+  if (error?.status === 404 || !project) {
+    notFound();
+  }
+
+  return {
+    title: `Feedback - ${project.name}`,
+    description: 'Have a suggestion or found a bug? Let us know!',
+    themeColor: '#05060A',
+  };
+}
+
+export default async function Feedback({ params }: Props) {
   // Get current user
   const { data: user } = await getCurrentUser('server');
 

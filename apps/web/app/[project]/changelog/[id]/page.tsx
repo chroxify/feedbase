@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
@@ -8,7 +9,45 @@ import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
 import { getPublicProjectChangelogs } from '@/lib/api/public';
 import { Icons } from '@/components/shared/icons/icons-static';
 
-export default async function ChangelogPage({ params }: { params: { project: string; id: string } }) {
+type Props = {
+  params: { project: string; id: string };
+};
+
+// Metadata
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  // Get changelogs
+  const { data: changelogs, error } = await getPublicProjectChangelogs(params.project, 'server', true, false);
+
+  if (error?.status === 404 || !changelogs) {
+    notFound();
+  }
+
+  // Get current changelog
+  const changelog = changelogs.find((changelog) => changelog.slug === 'new-codebase');
+
+  // If changelog is undefined redirects to 404
+  if (!changelog) {
+    notFound();
+  }
+
+  return {
+    title: changelog.title,
+    description: changelog.summary,
+    themeColor: '#05060A',
+    openGraph: {
+      images: [
+        {
+          url: changelog.image || '',
+          width: 1200,
+          height: 600,
+          alt: changelog.title,
+        },
+      ],
+    },
+  };
+}
+
+export default async function ChangelogPage({ params }: Props) {
   // Get changelogs
   const { data: changelogs, error } = await getPublicProjectChangelogs(params.project, 'server', true, false);
 
