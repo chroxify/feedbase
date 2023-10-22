@@ -25,6 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: project.name,
     description: `Discover the latest updates, roadmaps, submit feedback, and explore more about ${project.name}.`,
     themeColor: '#05060A',
+    icons: project.icon,
   };
 }
 
