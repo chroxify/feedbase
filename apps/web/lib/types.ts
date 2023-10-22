@@ -29,6 +29,12 @@ export type FeedbackWithUserInputProps = Database['public']['Tables']['feedback'
 
 export type FeedbackCommentProps = Database['public']['Tables']['feedback_comments'];
 
+export type FeedbackCommentWithUserProps = Database['public']['Tables']['feedback_comments']['Row'] & {
+  user: ProfileProps['Row'];
+  has_upvoted: boolean;
+  replies: FeedbackCommentWithUserProps[];
+};
+
 export type ProfileProps = Database['public']['Tables']['profiles'];
 
 // Helper Types

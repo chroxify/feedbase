@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { cn } from '@ui/lib/utils';
 import { Button } from 'ui/components/ui/button';
 import { NavbarTabProps, ProjectProps } from '@/lib/types';
-import { cn } from '@/lib/utils';
 import { Icons } from '../shared/icons/icons-static';
 
 const navTabs = [
@@ -57,11 +57,12 @@ export default function NavbarMobile({
   return (
     <div
       className={cn(
-        'bg-root fixed bottom-0 z-10 flex h-16 w-full flex-row items-center justify-evenly gap-5 overflow-hidden border-t px-5 md:hidden',
+        'bg-root fixed bottom-0 z-10 flex h-16 w-full flex-row items-center justify-evenly gap-5 overflow-hidden border-t px-5 md:hidden'
         // If PWA and ios, add margin bottom
-        window.matchMedia('(display-mode: standalone)').matches &&
-          window.navigator.userAgent.includes('iPhone') &&
-          'mb-6'
+        // window !== undefined &&
+        // window.matchMedia('(display-mode: standalone)').matches &&
+        //   window.navigator.userAgent.includes('iPhone') &&
+        //   'h-[88px] pb-6'
       )}>
       {navTabs.map((tab, index) => (
         // If roadmap, don't link to the page
