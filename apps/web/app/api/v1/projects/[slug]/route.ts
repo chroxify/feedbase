@@ -22,11 +22,17 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
     PUT /api/v1/projects/[slug]
 */
 export async function PATCH(req: Request, context: { params: { slug: string } }) {
-  const { name, slug, icon, icon_radius: iconRadius } = (await req.json()) as ProjectProps['Update'];
+  const {
+    name,
+    slug,
+    icon,
+    icon_radius: iconRadius,
+    og_image: OGImage,
+  } = (await req.json()) as ProjectProps['Update'];
 
   const { data: updatedProject, error } = await updateProjectBySlug(
     context.params.slug,
-    { name, slug, icon, icon_radius: iconRadius },
+    { name, slug, icon, icon_radius: iconRadius, og_image: OGImage },
     'route'
   );
 

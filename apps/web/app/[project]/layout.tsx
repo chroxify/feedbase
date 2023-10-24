@@ -26,6 +26,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: `Discover the latest updates, roadmaps, submit feedback, and explore more about ${project.name}.`,
     themeColor: '#05060A',
     icons: project.icon,
+    openGraph: {
+      images: [
+        {
+          url: project.og_image || '',
+          width: 1200,
+          height: 600,
+          alt: project.name,
+        },
+      ],
+    },
   };
 }
 

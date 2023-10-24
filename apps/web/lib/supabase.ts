@@ -324,6 +324,7 @@ export interface Database {
           icon_radius: string | null;
           id: string;
           name: string;
+          og_image: string | null;
           slug: string;
         };
         Insert: {
@@ -332,6 +333,7 @@ export interface Database {
           icon_radius?: string | null;
           id?: string;
           name: string;
+          og_image?: string | null;
           slug: string;
         };
         Update: {
@@ -340,6 +342,7 @@ export interface Database {
           icon_radius?: string | null;
           id?: string;
           name?: string;
+          og_image?: string | null;
           slug?: string;
         };
         Relationships: [];

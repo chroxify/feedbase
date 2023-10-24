@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Label } from '@radix-ui/react-label';
 import { cn } from '@ui/lib/utils';
@@ -10,6 +10,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from 'ui/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'ui/components/ui/select';
 import { ProjectConfigProps, ProjectProps } from '@/lib/types';
+import FileDrop from '@/components/shared/file-drop';
 
 export default function HubConfigCards({
   projectData,
@@ -20,6 +21,7 @@ export default function HubConfigCards({
 }) {
   const [project, setProject] = useState<ProjectProps['Row']>(projectData);
   const [projectConfig, setProjectConfig] = useState<ProjectConfigProps['Row']>(projectConfigData);
+  const [OGImage, setOGImage] = useState<string | null>(projectData.og_image || null);
   const router = useRouter();
 
   async function handleSaveProject() {
@@ -33,6 +35,7 @@ export default function HubConfigCards({
         body: JSON.stringify({
           icon: project.icon !== projectData.icon ? project.icon : undefined,
           icon_radius: project.icon_radius !== projectData.icon_radius ? project.icon_radius : undefined,
+          og_image: OGImage !== projectData.og_image ? OGImage : undefined,
         }),
       })
         .then((res) => res.json())
@@ -129,6 +132,12 @@ export default function HubConfigCards({
     [setProject]
   );
 
+  // Set the project data to the new one (Due to data://urls)
+  useEffect(() => {
+    setProject((prev) => ({ ...prev, icon: projectData.icon }));
+    setOGImage(projectData.og_image || null);
+  }, [projectData.icon, projectData.og_image]);
+
   return (
     <>
       {/* Theme Card */}
@@ -207,15 +216,28 @@ export default function HubConfigCards({
                 This is the radius of your logo.
               </Label>
             </div>
+
+            {/* OG Image */}
+            <div className='max-w-xs space-y-1'>
+              <FileDrop
+                labelComponent={<Label className='text-foreground/70 text-sm font-light'>OG Image</Label>}
+                image={OGImage}
+                setImage={setOGImage}
+              />
+
+              <Label className='text-foreground/50 text-xs font-extralight'>
+                The OG Image used when sharing your project.
+              </Label>
+            </div>
           </div>
         </CardContent>
         <CardFooter>
           <Button
             className='w-32'
             disabled={
-              (project.icon === projectData.icon && project.icon_radius === projectData.icon_radius) ||
-              !project.icon ||
-              !project.icon_radius
+              (project.icon === projectData.icon || (!project.icon && !projectData.icon)) &&
+              project.icon_radius === projectData.icon_radius &&
+              (OGImage === projectData.og_image || (!OGImage && !projectData.og_image))
             }
             onClick={handleSaveProject}>
             Save changes

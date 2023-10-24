@@ -84,14 +84,13 @@ export const updateProjectBySlug = (slug: string, data: ProjectProps['Update'], 
       return { data: null, error: { message: 'slug is invalid.', status: 400 } };
     }
 
-    // If image is provided, upload to storage
-    if (data.icon) {
+    const uploadImage = async (image: string, type: 'icon' | 'og_image') => {
       // Create unique image path
-      const imagePath = `${project!.slug}/logo/${Date.now()}.png`;
+      const imagePath = `${project!.slug}/${type}/${Date.now()}.png`;
 
       // Get current image path
-      if (project!.icon) {
-        const { data: currentImage } = supabase.storage.from('projects').getPublicUrl(project!.icon);
+      if (project![type]) {
+        const { data: currentImage } = supabase.storage.from('projects').getPublicUrl(project![type]!);
 
         // Get current image path (get last 3 segments of url)
         const currentImagePath = currentImage.publicUrl.split('/').slice(-3).join('/');
@@ -108,7 +107,7 @@ export const updateProjectBySlug = (slug: string, data: ProjectProps['Update'], 
       // Upload image to storage
       const { error: uploadError } = await supabase.storage
         .from('projects')
-        .upload(imagePath, decode(data.icon.replace(/^data:image\/\w+;base64,/, '')), {
+        .upload(imagePath, decode(image.replace(/^data:image\/\w+;base64,/, '')), {
           contentType: 'image/png',
         });
 
@@ -125,8 +124,36 @@ export const updateProjectBySlug = (slug: string, data: ProjectProps['Update'], 
         return { data: null, error: { message: 'issue uploading image', status: 500 } };
       }
 
+      // Return public url
+      return { data: publicUrlData.publicUrl, error: null };
+    };
+
+    // If icon is provided, upload to storage
+    if (data.icon) {
+      // Upload image
+      const { data: publicUrlData, error: uploadError } = await uploadImage(data.icon, 'icon');
+
+      // Check for errors
+      if (uploadError) {
+        return { data: null, error: { message: uploadError.message, status: 500 } };
+      }
+
       // Set icon to public URL
-      data.icon = publicUrlData.publicUrl;
+      data.icon = publicUrlData;
+    }
+
+    // If og image is provided, upload to storage
+    if (data.og_image) {
+      // Upload image
+      const { data: publicUrlData, error: uploadError } = await uploadImage(data.og_image, 'og_image');
+
+      // Check for errors
+      if (uploadError) {
+        return { data: null, error: { message: uploadError.message, status: 500 } };
+      }
+
+      // Set og image to public URL
+      data.og_image = publicUrlData;
     }
 
     // Update project
@@ -137,6 +164,7 @@ export const updateProjectBySlug = (slug: string, data: ProjectProps['Update'], 
         slug: data.slug || project!.slug,
         icon: data.icon || project!.icon,
         icon_radius: data.icon_radius || project!.icon_radius,
+        og_image: data.og_image || project!.og_image,
       })
       .eq('id', project!.id)
       .select();
