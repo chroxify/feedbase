@@ -100,7 +100,7 @@ export default function FeedbackHeader({
             </CreatePostModal>
           ) : (
             <AuthModal projectSlug={projectSlug}>
-              <Button variant='default' className='font-base text-sm'>
+              <Button variant='default' className='font-base shrink-0 text-sm'>
                 Create Post
               </Button>
             </AuthModal>

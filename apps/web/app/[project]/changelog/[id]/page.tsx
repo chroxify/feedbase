@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   // Get current changelog
-  const changelog = changelogs.find((changelog) => changelog.slug === 'new-codebase');
+  const changelog = changelogs.find((changelog) => changelog.slug === params.id);
 
   // If changelog is undefined redirects to 404
   if (!changelog) {

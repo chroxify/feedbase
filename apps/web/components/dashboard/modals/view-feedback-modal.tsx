@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import { cn } from '@ui/lib/utils';
 import { MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
@@ -21,6 +22,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from 'ui/components/ui/dropdown-menu';
+import { PROSE_CN } from '@/lib/constants';
 import { FeedbackTagProps, FeedbackWithUserProps } from '@/lib/types';
 import { formatRootUrl } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
@@ -292,7 +294,14 @@ export default function FeedbackModal({
 
         <DialogHeader className='text-left'>
           <DialogTitle className='mr-5'>{feedback.title}</DialogTitle>
-          {feedback.description ? <DialogDescription>{feedback.description}</DialogDescription> : null}
+          {feedback.description ? (
+            <DialogDescription>
+              <div
+                className={cn('text-foreground/60 text-sm font-light', PROSE_CN)}
+                dangerouslySetInnerHTML={{ __html: feedback.description }}
+              />
+            </DialogDescription>
+          ) : null}
         </DialogHeader>
 
         {/* Write Comment Text Area */}

@@ -71,7 +71,7 @@ export default function ChangelogList({
     <div className='flex flex-col gap-4'>
       {changelogs.map((changelog) => (
         <div
-          className='bg-card text-card-foreground flex h-36 gap-5 rounded-lg border p-3 shadow-sm md:h-40'
+          className='bg-card text-card-foreground flex h-40 gap-5 rounded-lg border p-3 shadow-sm sm:h-44 md:h-48'
           key={changelog.id}>
           {/* Image */}
           <div className='flex h-full w-full max-w-xs flex-col items-center justify-center'>
@@ -100,9 +100,9 @@ export default function ChangelogList({
           </div>
 
           {/* Content */}
-          <div className='flex h-full w-full flex-row py-1'>
+          <div className='flex h-full w-full flex-row gap-5 py-1'>
             {/* Tags */}
-            <div className='flex h-full w-[100%] flex-col gap-1 '>
+            <div className='flex h-full w-[100%] flex-col gap-1'>
               <div className='flex flex-row gap-2'>
                 {/* If published is true, show published badge, else show draft badge */}
                 <Badge size='default' variant='secondary' className='self-start'>
@@ -111,7 +111,7 @@ export default function ChangelogList({
 
                 {/* If date is not undefined, show date */}
                 {changelog.publish_date ? (
-                  <Badge size='default' variant='secondary' className='self-start'>
+                  <Badge size='default' variant='secondary' className='shrink-0 self-start'>
                     {new Date(changelog.publish_date).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
@@ -122,7 +122,7 @@ export default function ChangelogList({
 
               {/* Title and Summary */}
               <div className='text-1xl font-medium'>{changelog.title ? changelog.title : 'Untitled'}</div>
-              <div className='text-foreground/60 text-sm font-light'>
+              <div className='text-foreground/60 line-clamp-3 text-sm font-light'>
                 {changelog.summary ? changelog.summary : 'No changelog summary provided.'}
               </div>
             </div>
@@ -135,7 +135,7 @@ export default function ChangelogList({
                   <Button
                     variant='secondary'
                     size='icon'
-                    className='text-foreground/50 hover:text-foreground h-8 w-5'>
+                    className='text-foreground/50 hover:text-foreground -mt-1.5 h-8 w-5'>
                     <MoreVertical className='h-5 w-5' />
                   </Button>
                 </DropdownMenuTrigger>

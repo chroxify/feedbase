@@ -86,7 +86,8 @@ export default function Header({
               variant='secondary'
               size='sm'
               className={cn(
-                'text-foreground/90 inline-flex items-center rounded-lg px-3 py-1 text-base font-light'
+                'text-foreground/90 hover:bg-foreground/10 inline-flex items-center rounded-md px-3 py-1 text-base font-light transition-colors duration-150',
+                tab.link === currentTab.link && ''
               )}>
               {tab.name}
             </Button>

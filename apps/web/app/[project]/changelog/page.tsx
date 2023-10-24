@@ -55,14 +55,26 @@ export default async function Changelogs({ params }: Props) {
     notFound();
   }
 
+  // Get project
+  const { data: project, error: projectError } = await getProjectBySlug(
+    params.project,
+    'server',
+    true,
+    false
+  );
+
+  // If project is undefined redirects to 404
+  if (projectError?.status === 404 || !project) {
+    notFound();
+  }
+
   return (
     <div className='flex h-full w-full flex-col gap-10 selection:bg-[#8F9EFF]/20 selection:text-[#8F9EFF]'>
       <div className='flex items-center px-5 sm:px-10 md:px-10 lg:px-20'>
         <div className='flex w-full flex-col items-start gap-4'>
           <h1 className='text-3xl font-medium sm:text-4xl'>Changelog</h1>
           <p className='text-foreground/70 text-base font-extralight sm:text-lg'>
-            All the latest updates, improvements, and fixes to{' '}
-            {params.project.charAt(0).toUpperCase() + params.project.slice(1)}.
+            All the latest updates, improvements, and fixes to {project.name}.
           </p>
 
           {/* Buttons */}

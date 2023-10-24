@@ -160,7 +160,7 @@ export default function CommentsList({
           </Label>
         </>
       ) : (
-        <div className='flex h-10 w-full flex-row items-center justify-between rounded-md border border-[#8F9EFF]/40 bg-[#8F9EFF]/20 p-3'>
+        <div className='flex w-full flex-col justify-between gap-4 rounded-md border border-[#8F9EFF]/40 bg-[#8F9EFF]/20 p-3 sm:h-10 sm:flex-row sm:items-center'>
           <p className='text-foreground/90 text-sm font-light'>
             Please authenticate to take part in the discussion.
           </p>

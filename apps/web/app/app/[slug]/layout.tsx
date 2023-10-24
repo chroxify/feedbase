@@ -95,7 +95,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           />
 
           {/* Main content */}
-          <div className='flex w-full flex-col items-start justify-start overflow-hidden pb-16 md:pb-0 md:pl-[240px]'>
+          <div className='flex w-full flex-col items-start justify-start overflow-hidden pb-20 md:pb-0 md:pl-[240px]'>
             <TitleProvider
               tabs={tabs}
               initialTitle={activeTabIndex === -1 ? '' : tabs[activeTabIndex].name}
