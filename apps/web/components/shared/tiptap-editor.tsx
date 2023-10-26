@@ -5,7 +5,7 @@ import React from 'react';
 import { Highlight } from '@tiptap/extension-highlight';
 import { Placeholder } from '@tiptap/extension-placeholder';
 import { Typography } from '@tiptap/extension-typography';
-import { EditorContent, useEditor } from '@tiptap/react';
+import { AnyExtension, EditorContent, useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
 import { cn } from '@ui/lib/utils';
 
@@ -22,7 +22,7 @@ export default function RichTextEditor({
 }) {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit as AnyExtension,
       Highlight,
       Typography,
       Placeholder.configure({

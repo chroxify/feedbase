@@ -3,7 +3,7 @@
 import React from 'react';
 import { Highlight } from '@tiptap/extension-highlight';
 import { Typography } from '@tiptap/extension-typography';
-import { EditorContent, useEditor } from '@tiptap/react';
+import { AnyExtension, EditorContent, useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
 import { ChangelogProps } from '@/lib/types';
 import TooltipLabel from '@/components/shared/tooltip-label';
@@ -16,7 +16,7 @@ export default function RichTextEditor({
   setData: React.Dispatch<React.SetStateAction<ChangelogProps['Row']>>;
 }) {
   const editor = useEditor({
-    extensions: [StarterKit, Highlight, Typography],
+    extensions: [StarterKit as AnyExtension, Highlight, Typography],
     content: data.content,
     editorProps: {
       attributes: {

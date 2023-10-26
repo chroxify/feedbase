@@ -33,9 +33,6 @@ const nextConfig = {
       },
     ],
   },
-  experimental: {
-    serverActions: true,
-  },
 };
 
 module.exports = withPWA(nextConfig);
