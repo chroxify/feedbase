@@ -90,20 +90,31 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               }}
               className='col-span-3'
             />
+
+            <Label className='text-foreground/50 text-xs font-extralight'>The name of your project.</Label>
           </div>
+
           {/* Project Slug */}
           <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center gap-2'>
               <Label htmlFor='slug'>Project Slug</Label>
             </div>
 
-            <Input
-              id='slug'
-              placeholder='luminar'
-              value={slug}
-              onChange={handleSlugChange}
-              className='col-span-3'
-            />
+            <div className='bg-background focus-within:ring-ring ring-offset-root flex h-9 w-full rounded-md border text-sm font-extralight transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
+              <Input
+                className='h-full w-full border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0'
+                placeholder='luminar'
+                value={slug}
+                onChange={handleSlugChange}
+              />
+              <div className='text-foreground/50 bg-accent flex select-none items-center rounded-r-md border-l px-3 py-2'>
+                .luminar.so
+              </div>
+            </div>
+
+            <Label className='text-foreground/50 text-xs font-extralight'>
+              The subdomain of your project.
+            </Label>
           </div>
         </div>
         <DialogFooter>
