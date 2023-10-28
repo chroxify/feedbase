@@ -1,12 +1,10 @@
 import './globals.css';
 import { Metadata } from 'next';
-import { Inter } from 'next/font/google';
 import { headers } from 'next/headers';
 import { cn } from '@ui/lib/utils';
 import { Analytics } from '@vercel/analytics/react';
+import { GeistSans } from 'geist/font';
 import { ThemeProvider } from '@/components/theme-provider';
-
-const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Luminar',
@@ -38,7 +36,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           defaultTheme='dark'
           enableSystem={false}
           forcedTheme={host === process.env.NEXT_PUBLIC_ROOT_DOMAIN && pathname === '/' ? 'dark' : undefined}>
-          <main className={cn('bg-root flex min-h-screen w-full flex-col items-center', inter.className)}>
+          <main className={cn('bg-root flex min-h-screen w-full flex-col items-center', GeistSans.className)}>
             {children}
           </main>
         </ThemeProvider>
