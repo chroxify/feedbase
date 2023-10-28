@@ -1,6 +1,5 @@
 import './globals.css';
 import { Metadata } from 'next';
-import { headers } from 'next/headers';
 import { cn } from '@ui/lib/utils';
 import { Analytics } from '@vercel/analytics/react';
 import { GeistSans } from 'geist/font';
@@ -10,7 +9,13 @@ export const metadata: Metadata = {
   title: 'Luminar',
   description: 'Collect feedback & communicating updates with ease.',
   viewport: 'width=device-width, initial-scale=1, maximum-scale=1', // Prevents auto-zoom on mobile
-
+  openGraph: {
+    images: [
+      {
+        url: '/og-image.png',
+      },
+    ],
+  },
   // PWA
   themeColor: '#05060A',
   manifest: '/manifest.json',
@@ -23,19 +28,11 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
-  const headerList = headers();
-  const host = headerList.get('host');
-  const pathname = headerList.get('x-pathname');
-
   return (
     <html lang='en' suppressHydrationWarning>
       <body>
         <Analytics />
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='dark'
-          enableSystem={false}
-          forcedTheme={host === process.env.NEXT_PUBLIC_ROOT_DOMAIN && pathname === '/' ? 'dark' : undefined}>
+        <ThemeProvider attribute='class' defaultTheme='dark' enableSystem={false} forcedTheme='dark'>
           <main className={cn('bg-root flex min-h-screen w-full flex-col items-center', GeistSans.className)}>
             {children}
           </main>

@@ -59,16 +59,23 @@ export function CreateTagModal({
   open,
   setOpen,
   tagName,
+  demo,
 }: {
   open: boolean;
   setOpen: (open: boolean) => void;
   tagName: string;
+  demo?: boolean;
 }) {
   const pathname = usePathname();
   const router = useRouter();
   const projectSlug = pathname.split('/')[1];
 
   function onCreateTag(hex: string) {
+    if (demo) {
+      toast.error('Sign right up to start organizing your feedback!');
+      return;
+    }
+
     const promise = new Promise((resolve, reject) => {
       fetch(`/api/v1/projects/${projectSlug}/feedback/tags`, {
         method: 'POST',

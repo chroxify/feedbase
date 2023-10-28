@@ -108,7 +108,7 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
                 onChange={handleSlugChange}
               />
               <div className='text-foreground/50 bg-accent flex select-none items-center rounded-r-md border-l px-3 py-2'>
-                .luminar.so
+                .{process.env.NEXT_PUBLIC_ROOT_DOMAIN}
               </div>
             </div>
 

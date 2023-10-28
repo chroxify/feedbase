@@ -19,6 +19,7 @@ interface TagComboboxProps {
   triggerClassName?: string;
   showDropdownIcon?: boolean;
   align?: 'start' | 'end';
+  demo?: boolean;
 }
 
 export function TagCombobox({
@@ -28,6 +29,7 @@ export function TagCombobox({
   triggerClassName,
   showDropdownIcon = true,
   align = 'end',
+  demo,
 }: TagComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [tags, setTags] = React.useState(initialValue || []);
@@ -40,7 +42,7 @@ export function TagCombobox({
 
     return (
       <>
-        <CreateTagModal open={openColorDialog} setOpen={setOpenColorDialog} tagName={search} />
+        <CreateTagModal open={openColorDialog} setOpen={setOpenColorDialog} tagName={search} demo={demo} />
         <CommandItem
           className='flex flex-row items-center gap-2 font-extralight'
           key={search}
