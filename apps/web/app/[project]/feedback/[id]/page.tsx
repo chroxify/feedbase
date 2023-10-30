@@ -36,7 +36,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: feedback.title,
     description: feedback.description,
-    themeColor: '#05060A',
   };
 }
 

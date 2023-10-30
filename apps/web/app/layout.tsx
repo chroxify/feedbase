@@ -1,14 +1,15 @@
 import './globals.css';
-import { Metadata } from 'next';
+import { Metadata, Viewport } from 'next';
 import { cn } from '@ui/lib/utils';
 import { Analytics } from '@vercel/analytics/react';
 import { GeistSans } from 'geist/font';
+import { formatRootUrl } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   title: 'Luminar',
   description: 'Collect feedback & communicating updates with ease.',
-  viewport: 'width=device-width, initial-scale=1, maximum-scale=1', // Prevents auto-zoom on mobile
+  metadataBase: new URL(formatRootUrl()),
   openGraph: {
     images: [
       {
@@ -17,7 +18,6 @@ export const metadata: Metadata = {
     ],
   },
   // PWA
-  themeColor: '#05060A',
   manifest: '/manifest.json',
   icons: [
     {
@@ -25,6 +25,14 @@ export const metadata: Metadata = {
       url: '/favicon.ico',
     },
   ],
+};
+
+export const viewport: Viewport = {
+  // Prevents auto-zoom on mobile for input fields
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  themeColor: '#05060A',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
