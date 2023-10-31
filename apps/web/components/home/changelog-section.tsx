@@ -18,7 +18,7 @@ export default function ChangelogSection() {
   );
 
   return (
-    <div className='flex h-full w-full flex-col items-center justify-start gap-2'>
+    <div className='flex h-full w-full flex-col items-center justify-start gap-2 pb-60'>
       <span className='select-none bg-gradient-to-t from-[#c7d2fe] to-[#8678f9] bg-clip-text text-xl text-transparent'>
         Share what&apos;s new
       </span>

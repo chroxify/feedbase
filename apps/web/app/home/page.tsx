@@ -4,6 +4,7 @@ import { ArrowRight, ChevronRight } from 'lucide-react';
 import { Background } from 'ui/components/ui/background/background';
 import { formatRootUrl } from '@/lib/utils';
 import ChangelogSection from '@/components/home/changelog-section';
+import DashboardSection from '@/components/home/dashboard-section';
 import FeedbackSection from '@/components/home/feedback-section';
 import HomeFooter from '@/components/home/footer';
 
@@ -32,11 +33,13 @@ export default function Landing() {
             <Button className='border-background inline-flex rounded-full border'>Get Started</Button>
           </Link>
 
-          <button
-            className='hover:animate-background-shine text-foreground inline-flex h-9 items-center justify-center rounded-full border bg-[linear-gradient(110deg,#05060A,90%,#1e2631,95%,#05060A)] bg-[length:225%_100%] px-4 py-1 text-sm font-light transition-colors'
-            type='button'>
-            Star on GitHub
-          </button>
+          <Link href='/github'>
+            <button
+              className='hover:animate-background-shine text-foreground inline-flex h-9 items-center justify-center rounded-full border bg-[linear-gradient(110deg,#05060A,90%,#1e2631,95%,#05060A)] bg-[length:225%_100%] px-4 py-1 text-sm font-light transition-colors'
+              type='button'>
+              Star on GitHub
+            </button>
+          </Link>
         </div>
 
         <Link
@@ -55,7 +58,7 @@ export default function Landing() {
       <ChangelogSection />
 
       {/* Dashboard */}
-      {/* <DashboardSection /> */}
+      <DashboardSection />
 
       {/* Sign up 2 */}
       <div className='my-10 flex h-[60vh] w-full flex-col items-center justify-center'>
