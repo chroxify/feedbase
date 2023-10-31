@@ -24,7 +24,7 @@ export default async function Projects() {
   return (
     <div className='flex h-full w-full flex-col overflow-y-auto'>
       {/* Big Title */}
-      <div className='pb-11 text-3xl font-bold'>Projects</div>
+      {/* <div className='pb-11 text-3xl font-bold'>Projects</div> */}
 
       {/* Content */}
       <div className='flex h-full w-full flex-col gap-2'>

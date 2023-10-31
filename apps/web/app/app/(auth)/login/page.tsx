@@ -28,14 +28,14 @@ export default async function SignIn() {
 
   return (
     <div className='flex min-h-screen items-center justify-center'>
-      <Card className='w-full p-5 sm:max-w-md sm:p-8'>
+      <Card className='w-full p-5 sm:max-w-md sm:p-6'>
         <CardHeader className='flex flex-col items-center space-y-2'>
           <CardTitle>Sign In</CardTitle>
           <CardDescription className='text-center'>
             Sign in with your email address to continue.
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className='px-2'>
           <UserAuthForm authType='sign-in' />
         </CardContent>
         <CardFooter className='flex flex-col items-center'>
