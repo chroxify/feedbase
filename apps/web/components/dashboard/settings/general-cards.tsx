@@ -157,7 +157,7 @@ export default function GeneralConfigCards({ projectData }: { projectData: Proje
                   onChange={handleSlugChange}
                 />
                 <div className='text-foreground/50 bg-accent select-none rounded-r-md border-l px-3 py-2'>
-                  .luminar.so
+                  .{process.env.NEXT_PUBLIC_ROOT_DOMAIN}
                 </div>
               </div>
 

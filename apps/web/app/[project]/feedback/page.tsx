@@ -24,7 +24,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `Feedback - ${project.name}`,
     description: 'Have a suggestion or found a bug? Let us know!',
-    themeColor: '#05060A',
   };
 }
 

@@ -33,7 +33,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: changelog.title,
     description: changelog.summary,
-    themeColor: '#05060A',
     openGraph: {
       images: [
         {

@@ -2,6 +2,7 @@
 
 import './placeholder.css';
 import React from 'react';
+import { CharacterCount } from '@tiptap/extension-character-count';
 import { Highlight } from '@tiptap/extension-highlight';
 import { Placeholder } from '@tiptap/extension-placeholder';
 import { Typography } from '@tiptap/extension-typography';
@@ -14,11 +15,13 @@ export default function RichTextEditor({
   setContent,
   placeholder,
   className,
+  characterLimit,
 }: {
   content: string;
   setContent: React.Dispatch<React.SetStateAction<string>>;
   placeholder?: string;
   className?: string;
+  characterLimit?: number;
 }) {
   const editor = useEditor({
     extensions: [
@@ -27,6 +30,9 @@ export default function RichTextEditor({
       Typography,
       Placeholder.configure({
         placeholder: placeholder || 'Write something...',
+      }),
+      CharacterCount.configure({
+        limit: characterLimit || undefined,
       }),
     ],
     content,

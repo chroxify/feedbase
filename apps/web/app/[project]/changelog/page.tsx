@@ -24,7 +24,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: `Changelog - ${project.name}`,
     description: `All the latest updates, improvements, and fixes to ${project.name}.`,
-    themeColor: '#05060A',
   };
 }
 
