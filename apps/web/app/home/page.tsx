@@ -14,18 +14,22 @@ export default function Landing() {
       <Background />
 
       {/* Title */}
-      <div className='flex h-screen w-full flex-col items-center justify-center'>
-        <h1 className='text-foreground flex shrink-0 flex-col items-center justify-center gap-2 text-center text-2xl font-bold leading-tight sm:text-4xl md:text-5xl lg:text-6xl'>
-          <span>Gather Valuable Feedback</span>
+      <div className='flex h-screen w-full flex-col items-center justify-center xl:gap-2'>
+        <h1 className='text-foreground flex w-fit max-w-full shrink-0 flex-col items-center justify-center gap-2 text-center text-3xl font-bold sm:text-5xl md:text-5xl lg:text-6xl'>
+          {/* Collect Feedback and Share Product Updates in One Central Place */}
+          <span>
+            Collect Feedback <span className='hidden sm:inline-block'>and</span>
+          </span>
 
-          <span>and share Product Updates</span>
+          <span className='block sm:hidden'>and Share Updates</span>
+          <span className='hidden sm:block'>Share Product Updates</span>
 
           <span>in One Central Place</span>
         </h1>
 
-        <p className='text-foreground/60 mt-5 hidden text-center font-light sm:block'>
-          Luminar simplifies feedback collection, feature prioritization,
-          <br /> and product update sharing.
+        <p className='text-foreground/60 mt-5 max-w-xs text-center text-sm font-light sm:block sm:max-w-lg sm:text-lg md:max-w-xl'>
+          Luminar simplifies feedback collection, feature prioritization, and product update sharing, allowing
+          you to focus on building.
         </p>
 
         <div className='mt-5 flex w-full flex-row items-center justify-center gap-5'>
@@ -65,11 +69,11 @@ export default function Landing() {
         <div className='absolute -z-10 h-2/3 w-full'>
           <div className='absolute h-full w-full bg-[radial-gradient(#2e2e2f_0.5px,transparent_1px)] [background-size:16px_16px] [mask-image:radial-gradient(ellipse_40%_40%_at_50%_50%,#000_70%,transparent_100%)]' />
         </div>
-        <h1 className='text-foreground gap-2 text-center text-4xl font-medium leading-tight sm:text-5xl'>
+        <h1 className='text-foreground gap-2 text-center text-3xl font-medium leading-tight sm:text-5xl'>
           Create your feedback
           <br /> community today.
         </h1>
-        <p className='text-foreground/60 mt-5 w-full text-center font-light'>
+        <p className='text-foreground/60 mt-5 w-full text-center text-sm font-light sm:text-lg'>
           Capture feedback, post updates, and engage
           <br /> with your users in one central place.
         </p>

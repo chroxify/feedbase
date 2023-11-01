@@ -43,17 +43,17 @@ export default function FeedbackSection() {
 
   return (
     <div className='flex h-full w-full flex-col items-center justify-start gap-2 pb-60'>
-      <span className='select-none bg-gradient-to-t from-[#c7d2fe] to-[#8678f9] bg-clip-text text-xl text-transparent'>
+      <span className='select-none bg-gradient-to-t from-[#c7d2fe] to-[#8678f9] bg-clip-text text-lg text-transparent sm:text-xl'>
         Capture feedback
       </span>
 
-      <h1 className='w-full gap-2 text-center text-4xl font-medium leading-tight text-white'>
+      <h1 className='w-full gap-2 text-center text-3xl font-medium leading-tight text-white sm:text-4xl'>
         Build your feedback community
       </h1>
 
-      <p className='mt-2 w-[800px] max-w-full text-center font-light text-white/60'>
-        A special place for your valued users to give feedback, support creative ideas, and have meaningful
-        discussions about product features and improvements.
+      <p className='mt-2 w-[800px] max-w-full text-center text-sm font-light text-white/60 sm:text-base'>
+        A place for your users to give feedback, support creative ideas, and have meaningful discussions about
+        product features and improvements.
       </p>
 
       {/* Bento  */}

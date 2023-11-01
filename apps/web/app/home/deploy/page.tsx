@@ -48,11 +48,11 @@ export default function Deploy() {
 
             <div className='z-10 flex w-full flex-col items-center justify-center gap-3'>
               <h1 className='text-foreground/80 group-hover:text-foreground select-none text-center text-2xl font-medium leading-tight transition-colors'>
-                Migrate your Supabase database
+                Migrate the Supabase database
               </h1>
 
               <p className='text-foreground/60 group-hover:text-foreground/70 select-none text-center text-sm font-light transition-colors md:w-2/4'>
-                Once you have your Supabase project, you can migrate the database schema.
+                Once you have your Supabase project, you can migrate the necessary database schema.
               </p>
 
               <Link

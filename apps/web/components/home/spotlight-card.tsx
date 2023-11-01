@@ -28,7 +28,7 @@ export default function BentoCardWrapper({
   };
 
   const handleBlur = () => {
-    setOpacity(0);
+    // setOpacity(0);
   };
 
   const handleMouseEnter = () => {
@@ -52,7 +52,7 @@ export default function BentoCardWrapper({
         className
       )}>
       <div
-        className='pointer-events-none absolute -inset-px opacity-0 transition duration-300'
+        className='pointer-events-none absolute -inset-px hidden opacity-0 transition duration-300 sm:block'
         style={{
           opacity,
           background: `radial-gradient(400px circle at ${position.x}px ${position.y}px, rgba(255,255,255,.06), transparent 40%)`,

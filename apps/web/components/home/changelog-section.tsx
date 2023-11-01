@@ -19,17 +19,17 @@ export default function ChangelogSection() {
 
   return (
     <div className='flex h-full w-full flex-col items-center justify-start gap-2 pb-60'>
-      <span className='select-none bg-gradient-to-t from-[#c7d2fe] to-[#8678f9] bg-clip-text text-xl text-transparent'>
+      <span className='select-none bg-gradient-to-t from-[#c7d2fe] to-[#8678f9] bg-clip-text text-lg text-transparent sm:text-xl'>
         Share what&apos;s new
       </span>
 
-      <h1 className='text-foreground gap-2 text-center text-4xl font-medium leading-tight'>
+      <h1 className='text-foreground gap-2 text-center text-3xl font-medium leading-tight sm:text-4xl'>
         Keep your users in the loop
       </h1>
 
-      <p className='text-foreground/60 mt-2 w-[800px] max-w-full text-center font-light'>
-        Luminar adds a touch of enjoyment to help you keep your users informed through an attractive changelog
-        that&apos;s simple to generate and distribute.
+      <p className='text-foreground/60 mt-2 w-[800px] max-w-full text-center text-sm font-light sm:text-base'>
+        Luminar adds a touch of enjoyment to help you keep your users informed through an appealing changelog
+        that&apos;s simple to create and distribute.
       </p>
 
       {/* CTA */}

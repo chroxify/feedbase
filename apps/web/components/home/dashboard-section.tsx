@@ -22,6 +22,7 @@ export default function DashboardSection() {
   const [isLoading, setIsLoading] = useState(false);
   const [connected, setConnected] = useState(false);
   const [requested, setRequested] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [mail, setMail] = useState('');
   const [logo, setLogo] = useState({
     url: '',
@@ -53,16 +54,18 @@ export default function DashboardSection() {
 
   return (
     <div className='flex h-full w-full flex-col items-center justify-start gap-2'>
-      <span className='select-none bg-gradient-to-t from-[#c7d2fe] to-[#8678f9] bg-clip-text text-xl text-transparent'>
-        Make it yours
+      <span className='select-none bg-gradient-to-t from-[#c7d2fe] to-[#8678f9] bg-clip-text text-lg text-transparent sm:text-xl'>
+        Manage & Customize
       </span>
 
-      <h1 className='text-foreground gap-2 text-center text-4xl font-medium leading-tight'>
-        Powerful dashboard to manage everything
+      {/* TODO: Fidn fuckign better heading and desc and go over all texts */}
+      <h1 className='text-foreground gap-2 text-center text-3xl font-medium leading-tight sm:text-4xl'>
+        Have full control from a single dashboard
       </h1>
 
-      <p className='text-foreground/60 mt-2 w-[800px] max-w-full text-center font-light'>
-        Manage everything from a single dashboard — feedback, changelog, roadmap, customizations, and more.
+      <p className='text-foreground/60 mt-2 w-[800px] max-w-full text-center text-sm font-light sm:text-base'>
+        Enhance your workflow from a centralized dashboard - analyze feedback, prepare updates, respond to
+        user inquiries, and more!
       </p>
 
       {/* Bento  */}
@@ -309,7 +312,7 @@ export default function DashboardSection() {
           <div className='p-7'>
             <h1 className='text-lg font-medium text-white'>Integrations</h1>
             <p className='mt-2 text-sm font-light text-white/60'>
-              Connect your hub with your favorite tools.
+              Connect your favorite tools for maximum productivity.
             </p>
 
             <div className='col-span-2 mt-5 flex h-full w-full flex-row items-center justify-between rounded-md border p-4 sm:col-span-1'>
@@ -347,7 +350,7 @@ export default function DashboardSection() {
                 Connect
               </Button>
 
-              <DropdownMenu>
+              <DropdownMenu open={menuOpen} onOpenChange={setMenuOpen}>
                 <DropdownMenuTrigger asChild className={cn(!connected && 'hidden')}>
                   <Button
                     variant='secondary'
@@ -356,7 +359,7 @@ export default function DashboardSection() {
                     <MoreVertical className='h-5 w-5' />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className=' justify-between' align='end'>
+                <DropdownMenuContent className={cn('justify-between', !connected && 'hidden')} align='end'>
                   <DropdownMenuItem
                     className='text-destructive focus:text-destructive/90'
                     onSelect={(e) => {
@@ -366,6 +369,7 @@ export default function DashboardSection() {
                       setTimeout(() => {
                         setIsLoading(false);
                         setConnected(false);
+                        setMenuOpen(false);
                       }, 1000);
                     }}
                     disabled={isLoading || !connected}>
