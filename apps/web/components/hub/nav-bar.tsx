@@ -3,11 +3,10 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { UserMetadata } from '@supabase/supabase-js';
 import { Button } from '@ui/components/ui/button';
 import { cn } from '@ui/lib/utils';
 import { satoshi } from '@ui/styles/fonts';
-import { ProjectProps } from '@/lib/types';
+import { ProfileProps, ProjectProps } from '@/lib/types';
 import UserDropdown from '../shared/user-dropdown';
 import AuthModal from './modals/login-signup-modal';
 
@@ -25,7 +24,7 @@ export default function Header({
   tabs: TabProps[];
   intialTab: TabProps;
   project: ProjectProps['Row'];
-  user: UserMetadata | null;
+  user: ProfileProps['Row'] | null;
 }) {
   const [currentTab, setCurrentTab] = useState(intialTab);
   const pathname = usePathname();

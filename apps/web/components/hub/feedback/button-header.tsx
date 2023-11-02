@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@ui/components/ui/button';
 import { Input } from '@ui/components/ui/input';
@@ -24,6 +25,8 @@ export default function FeedbackHeader({
   // Query params
   const sort = searchParams.get('sort') || '';
 
+  const [currentSort, setCurrentSort] = useState<string>(sort);
+
   return (
     <>
       {/* Header */}
@@ -35,9 +38,10 @@ export default function FeedbackHeader({
             variant='secondary'
             className={cn(
               'text-foreground/70 hover:text-foreground/80 border text-sm font-light transition-all duration-200',
-              sort === '' && 'bg-secondary ring-ring/80 text-foreground/80 ring-1'
+              currentSort === '' && 'bg-secondary ring-ring/80 text-foreground/80 ring-1'
             )}
             onClick={() => {
+              setCurrentSort('');
               router.push(`${pathname}?${createQueryString('sort', '')}`);
             }}
             size='sm'>
@@ -50,9 +54,10 @@ export default function FeedbackHeader({
             variant='secondary'
             className={cn(
               'text-foreground/70 hover:text-foreground/80 border text-sm font-light transition-all duration-200',
-              sort === 'trending' && 'bg-secondary ring-ring/80 text-foreground/80 ring-1'
+              currentSort === 'trending' && 'bg-secondary ring-ring/80 text-foreground/80 ring-1'
             )}
             onClick={() => {
+              setCurrentSort('trending');
               router.push(`${pathname}?${createQueryString('sort', 'trending')}`);
             }}
             size='sm'>
@@ -65,9 +70,10 @@ export default function FeedbackHeader({
             variant='secondary'
             className={cn(
               'text-foreground/70 hover:text-foreground/80 border text-sm font-light transition-all duration-200',
-              sort === 'upvotes' && 'bg-secondary ring-ring/80 text-foreground/80 ring-1'
+              currentSort === 'upvotes' && 'bg-secondary ring-ring/80 text-foreground/80 ring-1'
             )}
             onClick={() => {
+              setCurrentSort('upvotes');
               router.push(`${pathname}?${createQueryString('sort', 'upvotes')}`);
             }}
             size='sm'>

@@ -14,6 +14,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from 'ui/components/ui/dialog';
+import { Icons } from '@/components/shared/icons/icons-static';
 import PostEditor from '@/components/shared/tiptap-editor';
 
 export default function CreatePostModal({
@@ -26,10 +27,15 @@ export default function CreatePostModal({
   const [open, setOpen] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   // Submit post
   function onSubmit() {
+    // Set loading
+    setIsLoading(true);
+
+    // Create promise
     const promise = new Promise((resolve, reject) => {
       fetch(`/api/v1/projects/${projectSlug}/feedback`, {
         method: 'POST',
@@ -58,6 +64,9 @@ export default function CreatePostModal({
       .then(() => {
         // Close modal
         setOpen(false);
+
+        // Set loading
+        setIsLoading(false);
 
         // Reload comments
         router.refresh();
@@ -112,7 +121,8 @@ export default function CreatePostModal({
           <Button
             type='submit'
             onClick={onSubmit}
-            disabled={!title || content.replace(/<[^>]*>?/gm, '').length === 0}>
+            disabled={!title || content.replace(/<[^>]*>?/gm, '').length === 0 || isLoading}>
+            {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
             Submit Post
           </Button>
         </DialogFooter>

@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { UserMetadata } from '@supabase/supabase-js';
 import { Avatar, AvatarFallback, AvatarImage } from '@ui/components/ui/avatar';
 import { Button } from '@ui/components/ui/button';
 import { Separator } from '@ui/components/ui/separator';
@@ -16,7 +15,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from 'ui/components/ui/dropdown-menu';
-import { FeedbackCommentWithUserProps } from '@/lib/types';
+import { FeedbackCommentWithUserProps, ProfileProps } from '@/lib/types';
 import { formatRootUrl } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
 import RichTextEditor from '@/components/shared/tiptap-editor';
@@ -26,7 +25,7 @@ import AuthModal from '../../modals/login-signup-modal';
 interface CommentProps extends React.HTMLAttributes<HTMLDivElement> {
   commentData: FeedbackCommentWithUserProps;
   projectSlug: string;
-  user: UserMetadata | null;
+  user: ProfileProps['Row'] | null;
   children?: React.ReactNode;
 }
 
@@ -35,6 +34,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
   const [replyContent, setReplyContent] = useState<string>('');
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [timeAgo, setTimeAgo] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   // Time ago
@@ -133,6 +133,10 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
 
   // Post comment
   async function onPostReply() {
+    // Set loading
+    setIsLoading(true);
+
+    // Create promise
     const promise = new Promise((resolve, reject) => {
       fetch(`/api/v1/projects/${projectSlug}/feedback/${comment.feedback_id}/comments`, {
         method: 'POST',
@@ -159,6 +163,9 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
 
     promise
       .then(() => {
+        // Set loading
+        setIsLoading(false);
+
         // Reset reply state
         setIsReplying(false);
         setReplyContent('');
@@ -310,9 +317,14 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
                 {/* Submit Button */}
                 <Button
                   variant='outline'
-                  className='text-foreground/60 flex h-8 items-center justify-between gap-2 border font-extralight sm:w-fit'
+                  className='text-foreground/60 flex h-8 items-center justify-between border font-extralight sm:w-fit'
                   size='sm'
-                  onClick={onPostReply}>
+                  onClick={onPostReply}
+                  disabled={
+                    // disabled if content is 0 or its only html tags
+                    replyContent.replace(/<[^>]*>?/gm, '').length === 0 || isLoading
+                  }>
+                  {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
                   Post Reply
                 </Button>
               </div>

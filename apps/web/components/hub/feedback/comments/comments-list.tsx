@@ -2,13 +2,13 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { UserMetadata } from '@supabase/supabase-js';
 import { Button } from '@ui/components/ui/button';
 import { Label } from '@ui/components/ui/label';
 import { Skeleton } from '@ui/components/ui/skeleton';
 import { toast } from 'sonner';
 import useCreateQueryString from '@/lib/hooks/use-create-query';
-import { FeedbackCommentWithUserProps } from '@/lib/types';
+import { FeedbackCommentWithUserProps, ProfileProps } from '@/lib/types';
+import { Icons } from '@/components/shared/icons/icons-static';
 import RichTextEditor from '@/components/shared/tiptap-editor';
 import AuthModal from '../../modals/login-signup-modal';
 import Comment from './comment';
@@ -23,12 +23,13 @@ export default function CommentsList({
   feedbackComments: FeedbackCommentWithUserProps[] | null;
   projectSlug: string;
   feedbackId: string;
-  user: UserMetadata | null;
+  user: ProfileProps['Row'] | null;
 }) {
   const [commentContent, setCommentContent] = useState<string>('');
   const [totalCommentsAndReplies, setTotalCommentsAndReplies] = useState<number | null>(null);
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const createQueryString = useCreateQueryString(searchParams);
   const router = useRouter();
 
@@ -53,6 +54,10 @@ export default function CommentsList({
 
   // Post comment
   async function onPostComment() {
+    // Set loading
+    setIsLoading(true);
+
+    // Create promise
     const promise = new Promise((resolve, reject) => {
       fetch(`/api/v1/projects/${projectSlug}/feedback/${feedbackId}/comments`, {
         method: 'POST',
@@ -78,6 +83,9 @@ export default function CommentsList({
 
     promise
       .then(() => {
+        // Set loading
+        setIsLoading(false);
+
         // Reload comments
         router.refresh();
       })
@@ -143,13 +151,14 @@ export default function CommentsList({
               {/* Submit Button */}
               <Button
                 variant='outline'
-                className='text-foreground/60 flex h-8 items-center justify-between gap-2 border font-extralight sm:w-fit'
+                className='text-foreground/60 flex h-8 items-center justify-between border font-extralight sm:w-fit'
                 size='sm'
                 onClick={onPostComment}
                 disabled={
                   // disabled if content is 0 or its only html tags
-                  commentContent.replace(/<[^>]*>?/gm, '').length === 0
+                  commentContent.replace(/<[^>]*>?/gm, '').length === 0 || isLoading
                 }>
+                {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
                 Post Comment
               </Button>
             </div>
