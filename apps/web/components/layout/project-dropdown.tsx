@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@ui/lib/utils';
 import { ChevronsUpDownIcon, GlobeIcon, Plus } from 'lucide-react';
@@ -31,9 +32,21 @@ export default function ProjectDropdown({
       <DropdownMenuTrigger asChild>
         <Button variant='outline' className={cn('h-9 w-full justify-between p-1', className)}>
           <div className='flex flex-row items-center justify-start gap-2'>
-            <div className='bg-accent flex flex-row items-center justify-center rounded-sm p-[6px]'>
-              <GlobeIcon className='text-foreground/70 h-4 w-4' />
-            </div>
+            {activeProject?.icon ? (
+              <div className='ml-[2px] flex items-center justify-center'>
+                <Image
+                  src={activeProject.icon}
+                  width={22}
+                  height={22}
+                  className='rounded-sm'
+                  alt='Project Icon'
+                />
+              </div>
+            ) : (
+              <div className='bg-accent flex flex-row items-center justify-center rounded-sm p-[6px]'>
+                <GlobeIcon className='text-foreground/70 h-4 w-4' />
+              </div>
+            )}
             {/* While selected project is null (incase of unexpected error), show skeleton */}
             <span className='text-sm font-normal'>
               {selectedProject ? selectedProject.name : <Skeleton className='h-4 w-20' />}
@@ -50,7 +63,13 @@ export default function ProjectDropdown({
                 setSelectedProject(project);
               }}
               className='flex flex-row items-center gap-2'>
-              <GlobeIcon className='text-foreground/70 h-4 w-4' />
+              {project.icon ? (
+                <Image src={project.icon} width={22} height={22} className='rounded-sm' alt='Project Icon' />
+              ) : (
+                <div className='flex items-center justify-center rounded-sm px-[3.5px]'>
+                  <GlobeIcon className='text-foreground/70 h-4 w-4' />
+                </div>
+              )}
               {project.name}
             </DropdownMenuItem>
           </Link>
@@ -61,7 +80,7 @@ export default function ProjectDropdown({
               onSelect={(event) => {
                 event.preventDefault();
               }}>
-              <div className='flex flex-row items-center gap-2'>
+              <div className='flex flex-row items-center gap-3 pl-[3.5px]'>
                 <Plus className='text-foreground/70 h-4 w-4' />
                 New Project
               </div>
