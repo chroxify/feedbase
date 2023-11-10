@@ -56,7 +56,7 @@ export default function ProjectDropdown({
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className={cn('w-[200px] justify-between', className)}>
-        {projects.map((project, index) => (
+        {projects.map((project) => (
           <Link href={`/${project.slug}`} key={project.id}>
             <DropdownMenuItem
               onSelect={() => {

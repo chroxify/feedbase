@@ -30,7 +30,7 @@ export default function CategoryTabs({
   }, [pathname, tabs]);
 
   return (
-    <div className='bg-blue flex h-10 w-full flex-row items-center gap-4'>
+    <div className='flex h-10 w-full flex-row items-center gap-4'>
       {tabs.map((tab, index) => (
         <Link href={`/${projectSlug}/settings/${tab.slug}`} key={tab.slug}>
           <Button

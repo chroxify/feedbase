@@ -51,17 +51,17 @@
     --muted: 230 11% 8%; /* #20242c */
     --muted-foreground: 215 6% 62%;
  
-    --popover: 228 38% 3%; /* #0A0C10 */
+    --popover: 230 35% 3%; /* #0A0C10 */
     --popover-foreground: 210 40% 98%;
 
-    --card: 228 38% 3%; /* #0A0C10 */
+    --card: 230 35% 3%; /* #0A0C10 */
     --card-foreground: 210 40% 98%;
  
     --border: 222 9% 22%; /* #20242c */
     --input: 222 9% 22%; /* #20242c */
  
     --primary: 210 40% 98%;
-    --primary-foreground: 228 38% 3%;
+    --primary-foreground: 230 35% 3%;
     
     /* Hover & active backgrounds (Nav buttons, etc) */
     --secondary: 227 11% 12%; /* #20242c */
