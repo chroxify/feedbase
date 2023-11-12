@@ -14,7 +14,7 @@ export const createFeedback = (
   data: FeedbackWithUserInputProps,
   cType: 'server' | 'route'
 ) =>
-  withProjectAuth<FeedbackWithUserProps>(async (user, supabase, project, error) => {
+  withProjectAuth<FeedbackProps['Row']>(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };

@@ -88,8 +88,16 @@ export const updateDiscordIntegration = (
       .from('project_configs')
       .update({
         integration_discord_status: integrationData.status,
-        integration_discord_webhook: integrationData.webhook ? integrationData.webhook : undefined,
-        integration_discord_role_id: integrationData.roleId ? integrationData.roleId : undefined,
+        integration_discord_webhook: integrationData.status
+          ? integrationData.webhook
+            ? integrationData.webhook
+            : undefined
+          : null,
+        integration_discord_role_id: integrationData.status
+          ? integrationData.roleId
+            ? integrationData.roleId
+            : undefined
+          : null,
       })
       .eq('project_id', project!.id)
       .select()
