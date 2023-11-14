@@ -13,7 +13,7 @@ export async function PATCH(req: Request) {
   const { full_name: fullName, avatar_url: avatarUrl } = await req.json();
 
   // Validate Request Body
-  if (!fullName && !fullName) {
+  if (!fullName && !avatarUrl) {
     return NextResponse.json({ error: 'full_name or avatar_url is required.' }, { status: 400 });
   }
 

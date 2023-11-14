@@ -6,6 +6,7 @@ import {
   FeedbackWithUserProps,
   ProfileProps,
 } from '../types';
+import { sendDiscordNotification } from './integrations';
 
 // Create a feedback post
 export const createFeedback = (
@@ -86,12 +87,33 @@ export const createFeedback = (
         project_id: project!.id,
         user_id: user!.id,
       })
-      .select()
+      .select('*, user:user_id (*)')
       .single();
 
     // Check for errors
     if (feedbackError) {
       return { data: null, error: { message: feedbackError.message, status: 500 } };
+    }
+
+    // Convert feedback to unknown type and then to test type
+    const feedbackData = feedback as unknown as FeedbackWithUserProps;
+
+    // Fetch Project Config for integrations
+    const { data: projectConfig, error: projectConfigError } = await supabase
+      .from('project_configs')
+      .select()
+      .eq('project_id', project!.id)
+      .single();
+
+    // Check for errors
+    if (projectConfigError) {
+      return { data: null, error: { message: projectConfigError.message, status: 500 } };
+    }
+
+    // Check if Discord integration is enabled
+    if (projectConfig.integration_discord_status) {
+      // Send Discord notification asynchronously without waiting for it to complete
+      sendDiscordNotification(feedbackData, project!, projectConfig);
     }
 
     // Return feedback

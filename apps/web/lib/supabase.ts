@@ -44,12 +44,14 @@ export interface Database {
           {
             foreignKeyName: 'changelogs_author_id_fkey';
             columns: ['author_id'];
+            isOneToOne: false;
             referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'changelogs_project_id_fkey';
             columns: ['project_id'];
+            isOneToOne: false;
             referencedRelation: 'projects';
             referencedColumns: ['id'];
           },
@@ -96,12 +98,14 @@ export interface Database {
           {
             foreignKeyName: 'feedback_project_id_fkey';
             columns: ['project_id'];
+            isOneToOne: false;
             referencedRelation: 'projects';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'feedback_user_id_fkey';
             columns: ['user_id'];
+            isOneToOne: false;
             referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
@@ -142,18 +146,21 @@ export interface Database {
           {
             foreignKeyName: 'feedback_comments_feedback_id_fkey';
             columns: ['feedback_id'];
+            isOneToOne: false;
             referencedRelation: 'feedback';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'feedback_comments_reply_to_id_fkey';
             columns: ['reply_to_id'];
+            isOneToOne: false;
             referencedRelation: 'feedback_comments';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'feedback_comments_user_id_fkey';
             columns: ['user_id'];
+            isOneToOne: false;
             referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
@@ -185,6 +192,7 @@ export interface Database {
           {
             foreignKeyName: 'feedback_tags_project_id_fkey';
             columns: ['project_id'];
+            isOneToOne: false;
             referencedRelation: 'projects';
             referencedColumns: ['id'];
           },
@@ -213,12 +221,14 @@ export interface Database {
           {
             foreignKeyName: 'feedback_upvoters_feedback_id_fkey';
             columns: ['feedback_id'];
+            isOneToOne: false;
             referencedRelation: 'feedback';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'feedback_upvoters_profile_id_fkey';
             columns: ['profile_id'];
+            isOneToOne: false;
             referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
@@ -247,6 +257,7 @@ export interface Database {
           {
             foreignKeyName: 'profiles_id_fkey';
             columns: ['id'];
+            isOneToOne: true;
             referencedRelation: 'users';
             referencedColumns: ['id'];
           },
@@ -258,6 +269,9 @@ export interface Database {
           changelog_twitter_handle: string | null;
           created_at: string;
           id: string;
+          integration_discord_role_id: string | null;
+          integration_discord_status: boolean;
+          integration_discord_webhook: string | null;
           project_id: string;
         };
         Insert: {
@@ -265,6 +279,9 @@ export interface Database {
           changelog_twitter_handle?: string | null;
           created_at?: string;
           id?: string;
+          integration_discord_role_id?: string | null;
+          integration_discord_status?: boolean;
+          integration_discord_webhook?: string | null;
           project_id: string;
         };
         Update: {
@@ -272,12 +289,16 @@ export interface Database {
           changelog_twitter_handle?: string | null;
           created_at?: string;
           id?: string;
+          integration_discord_role_id?: string | null;
+          integration_discord_status?: boolean;
+          integration_discord_webhook?: string | null;
           project_id?: string;
         };
         Relationships: [
           {
             foreignKeyName: 'project_configs_project_id_fkey';
             columns: ['project_id'];
+            isOneToOne: false;
             referencedRelation: 'projects';
             referencedColumns: ['id'];
           },
@@ -306,12 +327,14 @@ export interface Database {
           {
             foreignKeyName: 'project_members_member_id_fkey';
             columns: ['member_id'];
+            isOneToOne: false;
             referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'project_members_project_id_fkey';
             columns: ['project_id'];
+            isOneToOne: false;
             referencedRelation: 'projects';
             referencedColumns: ['id'];
           },
