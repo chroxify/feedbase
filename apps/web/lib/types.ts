@@ -9,6 +9,13 @@ export type TeamMemberProps = Database['public']['Tables']['profiles']['Row'] & 
   joined_at: string;
 };
 
+export type ProjectInviteProps = Database['public']['Tables']['project_invites'];
+
+export type ExtendedInviteProps = ProjectInviteProps['Row'] & {
+  project: { name: string; slug: string; icon: string };
+  creator: { full_name: string };
+};
+
 export type ChangelogProps = Database['public']['Tables']['changelogs'];
 
 export type ChangelogWithAuthorProps = Database['public']['Tables']['changelogs']['Row'] & {

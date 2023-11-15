@@ -304,6 +304,48 @@ export interface Database {
           },
         ];
       };
+      project_invites: {
+        Row: {
+          accepted: boolean;
+          created_at: string;
+          creator_id: string;
+          email: string;
+          id: string;
+          project_id: string;
+        };
+        Insert: {
+          accepted?: boolean;
+          created_at?: string;
+          creator_id: string;
+          email: string;
+          id?: string;
+          project_id: string;
+        };
+        Update: {
+          accepted?: boolean;
+          created_at?: string;
+          creator_id?: string;
+          email?: string;
+          id?: string;
+          project_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'project_invites_creator_id_fkey';
+            columns: ['creator_id'];
+            isOneToOne: false;
+            referencedRelation: 'projects';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'project_invites_project_id_fkey';
+            columns: ['project_id'];
+            isOneToOne: false;
+            referencedRelation: 'projects';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       project_members: {
         Row: {
           created_at: string | null;
