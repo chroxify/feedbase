@@ -5,7 +5,7 @@ import { ExtendedInviteProps, ProfileProps, ProjectInviteProps } from '../types'
 import { formatRootUrl } from '../utils';
 
 // Get all project invites
-export const getProjectInvites = withProjectAuth<ProjectInviteProps['Row'][]>(
+export const getProjectInvites = withProjectAuth<ExtendedInviteProps[]>(
   async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
@@ -15,7 +15,7 @@ export const getProjectInvites = withProjectAuth<ProjectInviteProps['Row'][]>(
     // Get all invites for project
     const { data: invites, error: invitesError } = await supabase
       .from('project_invites')
-      .select()
+      .select('*, project:project_id (name, slug, icon), creator:creator_id (full_name)')
       .eq('project_id', project!.id);
 
     // If any errors, return error
@@ -23,8 +23,11 @@ export const getProjectInvites = withProjectAuth<ProjectInviteProps['Row'][]>(
       return { data: null, error: { message: invitesError.message, status: 500 } };
     }
 
+    // Convert invites type
+    const invitesData = invites as unknown as ExtendedInviteProps[];
+
     // Return invites
-    return { data: invites, error: null };
+    return { data: invitesData, error: null };
   }
 );
 
@@ -136,7 +139,7 @@ export const createProjectInvite = (slug: string, cType: 'server' | 'route', ema
         invitedByFullName: inviteData.creator.full_name,
         invitedByEmail: inviteData.creator.email,
         projectName: project!.name,
-        inviteLink: formatRootUrl('app', `/projects/${slug}/invites/${inviteData.id}`),
+        inviteLink: formatRootUrl('app', `/invite/${inviteData.id}`),
       }),
     });
 

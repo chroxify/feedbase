@@ -8,9 +8,11 @@ export default function DefaultTooltip({
   content: React.ReactNode;
 }) {
   return (
-    <TooltipProvider delayDuration={300}>
+    <TooltipProvider delayDuration={250}>
       <Tooltip>
-        <TooltipTrigger asChild>{children}</TooltipTrigger>
+        <TooltipTrigger asChild className='select-none'>
+          {children}
+        </TooltipTrigger>
         <TooltipContent>
           <span className='text-foreground/50 text-xs font-normal'>{content}</span>
         </TooltipContent>
