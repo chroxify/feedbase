@@ -66,69 +66,69 @@ export const createProjectInvite = (slug: string, cType: 'server' | 'route', ema
       return { data: null, error };
     }
 
-    // Check if user has an account already
-    const { data: profile, error: profileError } = await supabase
-      .from('profiles')
-      .select()
-      .eq('email', email)
-      .single();
+    // // Check if user has an account already
+    // const { data: profile, error: profileError } = await supabase
+    //   .from('profiles')
+    //   .select()
+    //   .eq('email', email)
+    //   .single();
 
-    // If any errors, return error and make sure it's not a PGRST116 error (no rows found)
-    if (profileError && profileError.code !== 'PGRST116') {
-      return { data: null, error: { message: profileError.message, status: 500 } };
-    }
+    // // If any errors, return error and make sure it's not a PGRST116 error (no rows found)
+    // if (profileError && profileError.code !== 'PGRST116') {
+    //   return { data: null, error: { message: profileError.message, status: 500 } };
+    // }
 
-    if (profile) {
-      // Check if user is already a member of the project
-      const { data: isMember, error: isMemberError } = await supabase
-        .from('project_members')
-        .select()
-        .eq('project_id', project!.id)
-        .eq('member_id', profile.id)
-        .single();
+    // if (profile) {
+    //   // Check if user is already a member of the project
+    //   const { data: isMember, error: isMemberError } = await supabase
+    //     .from('project_members')
+    //     .select()
+    //     .eq('project_id', project!.id)
+    //     .eq('member_id', profile.id)
+    //     .single();
 
-      // If any errors, return error
-      if (isMemberError) {
-        return { data: null, error: { message: isMemberError.message, status: 500 } };
-      }
+    //   // If any errors, return error
+    //   if (isMemberError) {
+    //     return { data: null, error: { message: isMemberError.message, status: 500 } };
+    //   }
 
-      // If user is already a member of the project, return error
-      if (isMember) {
-        return { data: null, error: { message: 'User is already a member of this project', status: 400 } };
-      }
-    }
+    //   // If user is already a member of the project, return error
+    //   if (isMember) {
+    //     return { data: null, error: { message: 'User is already a member of this project', status: 400 } };
+    //   }
+    // }
 
-    // Make sure user is not already invited to the project
-    const { data: alreadyInvited, error: alreadyInvitedError } = await supabase
-      .from('project_invites')
-      .select()
-      .eq('project_id', project!.id)
-      .eq('email', email);
+    // // Make sure user is not already invited to the project
+    // const { data: alreadyInvited, error: alreadyInvitedError } = await supabase
+    //   .from('project_invites')
+    //   .select()
+    //   .eq('project_id', project!.id)
+    //   .eq('email', email);
 
-    // If any errors, return error
-    if (alreadyInvitedError) {
-      return { data: null, error: { message: alreadyInvitedError.message, status: 500 } };
-    }
+    // // If any errors, return error
+    // if (alreadyInvitedError) {
+    //   return { data: null, error: { message: alreadyInvitedError.message, status: 500 } };
+    // }
 
-    // If user is already invited to the project, return error
-    if (alreadyInvited && alreadyInvited.length > 0) {
-      return { data: null, error: { message: 'User is already invited to this project', status: 400 } };
-    }
+    // // If user is already invited to the project, return error
+    // if (alreadyInvited && alreadyInvited.length > 0) {
+    //   return { data: null, error: { message: 'User is already invited to this project', status: 400 } };
+    // }
 
-    // Create invite
-    const { data: invite, error: inviteError } = await supabase
-      .from('project_invites')
-      .insert({ project_id: project!.id, email, creator_id: user!.id })
-      .select('*, creator:creator_id (full_name, email)')
-      .single();
+    // // Create invite
+    // const { data: invite, error: inviteError } = await supabase
+    //   .from('project_invites')
+    //   .insert({ project_id: project!.id, email, creator_id: user!.id })
+    //   .select('*, creator:creator_id (full_name, email)')
+    //   .single();
 
-    // If any errors, return error
-    if (inviteError) {
-      return { data: null, error: { message: inviteError.message, status: 500 } };
-    }
+    // // If any errors, return error
+    // if (inviteError) {
+    //   return { data: null, error: { message: inviteError.message, status: 500 } };
+    // }
 
-    // Convert invite to invite with creator object
-    const inviteData = invite as unknown as ProjectInviteProps['Row'] & { creator: ProfileProps['Row'] };
+    // // Convert invite to invite with creator object
+    // const inviteData = invite as unknown as ProjectInviteProps['Row'] & { creator: ProfileProps['Row'] };
 
     // Send email to user
     const { error: emailError } = await sendEmail({
@@ -136,10 +136,10 @@ export const createProjectInvite = (slug: string, cType: 'server' | 'route', ema
       email,
       react: ProjectInviteEmail({
         email,
-        invitedByFullName: inviteData.creator.full_name,
-        invitedByEmail: inviteData.creator.email,
+        invitedByFullName: 'test',
+        invitedByEmail: 'abc',
         projectName: project!.name,
-        inviteLink: formatRootUrl('app', `/invite/${inviteData.id}`),
+        inviteLink: formatRootUrl('app', `/invite/test`),
       }),
     })
       .then((data) => {
@@ -153,13 +153,20 @@ export const createProjectInvite = (slug: string, cType: 'server' | 'route', ema
     // If any errors, return error
     if (emailError) {
       // Delete invite
-      await supabase.from('project_invites').delete().eq('id', inviteData.id).single();
+      await supabase.from('project_invites').delete().eq('id', '').single();
 
       return { data: null, error: emailError };
     }
 
     // Return invite
-    return { data: invite, error: null };
+    return { data: {
+      accepted: false,
+      id: 'test',
+      created_at: 'test',
+      creator_id: 'test',
+      email: 'test',
+      project_id: 'test',
+    }, error: null };
   })(slug, cType);
 
 // Accept project invite
