@@ -131,7 +131,7 @@ export const createProjectInvite = (slug: string, cType: 'server' | 'route', ema
     const inviteData = invite as unknown as ProjectInviteProps['Row'] & { creator: ProfileProps['Row'] };
 
     // Send email to user
-    await sendEmail({
+    const { error: emailError } = await sendEmail({
       subject: `You've been invited to join ${project!.name} on Luminar`,
       email,
       react: ProjectInviteEmail({
@@ -141,7 +141,22 @@ export const createProjectInvite = (slug: string, cType: 'server' | 'route', ema
         projectName: project!.name,
         inviteLink: formatRootUrl('app', `/invite/${inviteData.id}`),
       }),
-    });
+    })
+      .then((data) => {
+        return { data, error: null };
+      })
+      .catch((err) => {
+        // If any errors, return error
+        return { data: null, error: { message: err.message, status: 500 } };
+      });
+
+    // If any errors, return error
+    if (emailError) {
+      // Delete invite
+      await supabase.from('project_invites').delete().eq('id', inviteData.id).single();
+
+      return { data: null, error: emailError };
+    }
 
     // Return invite
     return { data: invite, error: null };

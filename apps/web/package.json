@@ -36,6 +36,7 @@
     "@tiptap/react": "^2.1.11",
     "@tiptap/starter-kit": "^2.1.11",
     "@vercel/analytics": "^1.0.2",
+    "@vercel/speed-insights": "^0.0.4",
     "autoprefixer": "10.4.14",
     "base64-arraybuffer": "^1.0.2",
     "class-variance-authority": "^0.7.0",

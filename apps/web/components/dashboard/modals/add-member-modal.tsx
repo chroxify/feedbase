@@ -69,6 +69,7 @@ export default function InviteMemberDialog({
         return `Invitation sent!`;
       },
       error: (err) => {
+        setIsLoading(false);
         return err;
       },
     });

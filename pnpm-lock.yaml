@@ -119,6 +119,9 @@ importers:
       '@vercel/analytics':
         specifier: ^1.0.2
         version: 1.0.2
+      '@vercel/speed-insights':
+        specifier: ^0.0.4
+        version: 0.0.4
       autoprefixer:
         specifier: 10.4.14
         version: 10.4.14(postcss@8.4.24)
@@ -4309,6 +4312,11 @@ packages:
 
   /@vercel/analytics@1.0.2:
     resolution: {integrity: sha512-BZFxVrv24VbNNl5xMxqUojQIegEeXMI6rX3rg1uVLYUEXsuKNBSAEQf4BWEcjQDp/8aYJOj6m8V4PUA3x/cxgg==}
+    dev: false
+
+  /@vercel/speed-insights@0.0.4:
+    resolution: {integrity: sha512-ZKjaAKvMmiKqz2PmwnLO/Ma6ckM6f6R3yAlfBw8JWeoCf0zj8UdiV2eTrDQtKnXrBeNTasH/D0CN/mO6qD1XNg==}
+    requiresBuild: true
     dev: false
 
   /@vercel/style-guide@5.0.0(@next/eslint-plugin-next@12.3.0)(eslint@8.50.0)(prettier@3.0.3)(typescript@5.1.3):

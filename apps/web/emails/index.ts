@@ -19,10 +19,9 @@ export const sendEmail = async ({
 }) => {
   if (!resend) {
     // eslint-disable-next-line no-console
-    console.log(
+    throw new Error(
       'Resend is not configured. You need to add a RESEND_API_KEY in your .env file for emails to work.'
     );
-    return Promise.resolve();
   }
   return resend.emails.send({
     from: marketing ? 'Christo from Luminar <christo@luminar.so>' : 'Luminar <system@luminar.so>',
