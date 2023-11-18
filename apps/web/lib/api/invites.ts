@@ -1,7 +1,7 @@
 import { sendEmail } from '@/emails';
 import ProjectInviteEmail from '@/emails/project-invite';
 import { withProjectAuth, withUserAuth } from '../auth';
-import { ExtendedInviteProps, ProfileProps, ProjectInviteProps } from '../types';
+import { ExtendedInviteProps, ProjectInviteProps } from '../types';
 import { formatRootUrl } from '../utils';
 
 // Get all project invites
