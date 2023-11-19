@@ -1,0 +1,98 @@
+{
+  "$schema": "https://mintlify.com/schema.json",
+  "name": "Luminar Docs",
+  "logo": {
+    "dark": "/logo/dark.svg",
+    "light": "/logo/light.svg"
+  },
+  "favicon": "/logo//favicon.svg",
+  "colors": {
+    "primary": "#8F9EFF",
+    "light": "#e1e1e1",
+    "dark": "#06060A",
+    "background": {
+      "light": "#fff",
+      "dark": "#06060A"
+    },
+    "anchors": {
+      "from": "#030303",
+      "to": "#030303"
+    }
+  },
+  "modeToggle": {
+    "default": "dark",
+    "isHidden": true
+  },
+  "topbarLinks": [
+    {
+      "name": "Sign In",
+      "url": "https://app.luminar.so/login"
+    }
+  ],
+  "topbarCtaButton": {
+    "name": "Get Started",
+    "url": "https://app.luminar.so/signup"
+  },
+  "tabs": [
+    {
+      "name": "API Reference",
+      "url": "api-reference"
+    },
+    { 
+      "name": "SDK Reference",
+      "url": "sdk-reference"
+    }
+  ],
+  "anchors": [
+    {
+      "name": "Github",
+      "icon": "github",
+      "url": "https://luminar.so/github"
+    },
+    {
+      "name": "Public Hub",
+      "icon": "people-group",
+      "url": "https://hub.luminar.so"
+    },
+    {
+      "name": "Community",
+      "icon": "discord",
+      "url": "https://luminar.so/discord"
+    }
+  ],
+  "navigation": [
+    {
+      "group": "Introduction",
+      "pages": ["introduction"]
+    },
+    {
+      "group": "Development Guide",
+      "pages": ["development/requirements", "development/installation", "development/configuration", "development/contributing"]
+    },
+    {
+      "group": "Self Hosting",
+      "pages": ["self-hosting/vercel", "self-hosting/docker"]
+    },
+    {
+      "group": "API Documentation",
+      "pages": ["api-reference/introduction"]
+    },
+    {
+      "group": "Endpoint Examples",
+      "pages": [
+        "api-reference/endpoint/get",
+        "api-reference/endpoint/create",
+        "api-reference/endpoint/delete"
+      ]
+    }
+  ],
+  "feedback": {
+    "thumbsRating": true,
+    "suggestEdit": true,
+    "raiseIssue": true
+  },
+  "footerSocials": {
+    "twitter": "https://twitter.com/0xChroxify",
+    "github": "https://github.com/chroxify/luminar"
+  }
+}
