@@ -268,6 +268,7 @@ export interface Database {
           changelog_preview_style: string;
           changelog_twitter_handle: string | null;
           created_at: string;
+          custom_domain: string | null;
           id: string;
           integration_discord_role_id: string | null;
           integration_discord_status: boolean;
@@ -278,6 +279,7 @@ export interface Database {
           changelog_preview_style?: string;
           changelog_twitter_handle?: string | null;
           created_at?: string;
+          custom_domain?: string | null;
           id?: string;
           integration_discord_role_id?: string | null;
           integration_discord_status?: boolean;
@@ -288,6 +290,7 @@ export interface Database {
           changelog_preview_style?: string;
           changelog_twitter_handle?: string | null;
           created_at?: string;
+          custom_domain?: string | null;
           id?: string;
           integration_discord_role_id?: string | null;
           integration_discord_status?: boolean;
@@ -334,7 +337,7 @@ export interface Database {
             foreignKeyName: 'project_invites_creator_id_fkey';
             columns: ['creator_id'];
             isOneToOne: false;
-            referencedRelation: 'projects';
+            referencedRelation: 'profiles';
             referencedColumns: ['id'];
           },
           {

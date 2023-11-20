@@ -18,7 +18,6 @@ export const sendEmail = async ({
   test?: boolean;
 }) => {
   if (!resend) {
-    // eslint-disable-next-line no-console
     throw new Error(
       'Resend is not configured. You need to add a RESEND_API_KEY in your .env file for emails to work.'
     );
