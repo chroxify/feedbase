@@ -294,6 +294,10 @@ export const updateProjectConfigBySlug = (
             ? data.changelog_twitter_handle
             : config.changelog_twitter_handle,
         custom_domain: data.custom_domain !== undefined ? data.custom_domain : config.custom_domain,
+        custom_domain_verified:
+          data.custom_domain_verified !== undefined
+            ? data.custom_domain_verified
+            : config.custom_domain_verified,
       })
       .eq('id', config.id)
       .select();

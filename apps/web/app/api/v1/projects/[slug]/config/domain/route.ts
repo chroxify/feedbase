@@ -55,7 +55,6 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
   }
 
   // If domain is not verified, try to verify it
-  let verifyData;
   if (!domainData.verified && !configData.misconfigured) {
     const verifyResponse = await fetch(
       `https://api.vercel.com/v9/projects/${process.env.VERCEL_PROJECT_ID}/domains/${
@@ -71,24 +70,57 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
     );
 
     // Parse response
-    verifyData = await verifyResponse.json();
+    const verifyData = await verifyResponse.json();
+
+    // If error, return error
+    if (verifyResponse.status !== 200) {
+      return NextResponse.json(
+        { error: verifyData.error.message },
+        {
+          status:
+            verifyData.error.code === 'forbidden'
+              ? 403
+              : verifyData.error.code === 'domain_taken'
+              ? 409
+              : verifyData.error.code === 'verification_failed'
+              ? 400
+              : 400,
+        }
+      );
+    }
   }
 
   // If verification failed, return configData
-  if (verifyData && !verifyData.verified) {
+  if (domainData && !domainData.verified) {
     return NextResponse.json(
       {
         verified: false,
+        domain: domainData,
         config: configData,
       },
       { status: 200 }
     );
   }
 
+  // If verification succeeded, update project config
+  if (domainData?.verified && !configData.misconfigured) {
+    const { error: updateError } = await updateProjectConfigBySlug(
+      context.params.slug,
+      { custom_domain_verified: true },
+      'route'
+    );
+
+    // If any errors thrown, return error
+    if (updateError) {
+      return NextResponse.json({ error: updateError.message }, { status: updateError.status });
+    }
+  }
+
   // Return response
   return NextResponse.json(
     {
       verified: true,
+      domain: domainData,
       config: configData,
     },
     { status: 200 }
@@ -101,11 +133,27 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
     "name": "example.com"
   }
 */
-export async function POST(req: Request) {
+export async function POST(req: Request, context: { params: { slug: string } }) {
   const { name } = await req.json();
 
   if (!name) {
     return NextResponse.json({ error: 'Name is required' }, { status: 400 });
+  }
+
+  // Get project config
+  const { data: projectConfig, error: projectConfigError } = await getProjectConfigBySlug(
+    context.params.slug,
+    'route'
+  );
+
+  // If any errors thrown, return error
+  if (projectConfigError) {
+    return NextResponse.json({ error: projectConfigError.message }, { status: projectConfigError.status });
+  }
+
+  // If project already has a domain, return error
+  if (projectConfig.custom_domain) {
+    return NextResponse.json({ error: 'Project already has a custom domain' }, { status: 409 });
   }
 
   const response = await fetch(
@@ -140,8 +188,20 @@ export async function POST(req: Request) {
     );
   }
 
+  // Update project config
+  const { error } = await updateProjectConfigBySlug(
+    context.params.slug,
+    { custom_domain: responseData.name, custom_domain_verified: false },
+    'route'
+  );
+
+  // If any errors thrown, return error
+  if (error) {
+    return NextResponse.json({ error: error.message }, { status: error.status });
+  }
+
   // Return response
-  return new Response(null, { status: 200 });
+  return NextResponse.json(responseData, { status: 200 });
 }
 
 /*
@@ -185,7 +245,7 @@ export async function DELETE(req: Request, context: { params: { slug: string } }
   // Update project config
   const { data: updatedProjectConfig, error: updatedProjectConfigError } = await updateProjectConfigBySlug(
     context.params.slug,
-    { custom_domain: null },
+    { custom_domain: null, custom_domain_verified: null },
     'route'
   );
 

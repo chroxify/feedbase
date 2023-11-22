@@ -269,6 +269,7 @@ export interface Database {
           changelog_twitter_handle: string | null;
           created_at: string;
           custom_domain: string | null;
+          custom_domain_verified: boolean | null;
           id: string;
           integration_discord_role_id: string | null;
           integration_discord_status: boolean;
@@ -280,6 +281,7 @@ export interface Database {
           changelog_twitter_handle?: string | null;
           created_at?: string;
           custom_domain?: string | null;
+          custom_domain_verified?: boolean | null;
           id?: string;
           integration_discord_role_id?: string | null;
           integration_discord_status?: boolean;
@@ -291,6 +293,7 @@ export interface Database {
           changelog_twitter_handle?: string | null;
           created_at?: string;
           custom_domain?: string | null;
+          custom_domain_verified?: boolean | null;
           id?: string;
           integration_discord_role_id?: string | null;
           integration_discord_status?: boolean;
