@@ -36,8 +36,16 @@ export default async function middleware(req: NextRequest) {
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
   const path = url.pathname;
 
+  // Get root domain
+  const rootDomain =
+    process.env.NODE_ENV === 'development'
+      ? hostname.split('.').slice(-1)[0]
+      : hostname.split('.').length >= 2
+      ? `${hostname.split('.').slice(-2).join('.')}`
+      : null;
+
   // custom domain / only for everything else routes
-  if (hostname.split('.').slice(-1)[0] !== process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
+  if (rootDomain !== process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
     // Retrieve the project from the database
     const { data, error } = (await supabase
       .from('project_configs')
