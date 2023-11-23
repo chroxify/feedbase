@@ -16,6 +16,7 @@ import {
 } from 'ui/components/ui/dialog';
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
+import { sendDiscordConfirmation } from '@/lib/api/integrations';
 import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function DiscordIntegrationModal({
@@ -44,6 +45,7 @@ export default function DiscordIntegrationModal({
     }).then((res) => res.status === 200);
 
     if (!webhookValid) {
+      setIsLoading(false);
       toast.error('Invalid webhook url.');
       return;
     }
@@ -89,6 +91,7 @@ export default function DiscordIntegrationModal({
       success: () => {
         setIsLoading(false);
         setEnabledIntegrations([...enabledIntegrations, 'discord']);
+        sendDiscordConfirmation(projectSlug, webhook, role === '' ? undefined : role);
         return 'Discord integration connected successfully!';
       },
       error: (err) => {

@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from 'ui/components/ui/dropdown-menu';
 import { ProjectConfigProps } from '@/lib/types';
-import DiscordIntegrationModal from '@/components/dashboard/modals/add-edit-discord-modal';
+import DiscordIntegrationModal from '@/components/dashboard/modals/connect-discord-modal';
 import DefaultTooltip from '@/components/shared/tooltip';
 
 export default function IntegrationCards({
@@ -116,7 +116,7 @@ export default function IntegrationCards({
                                 Configure
                             </DropdownMenuItem> */}
                       <DropdownMenuItem
-                        className='text-destructive focus:text-destructive/90'
+                        className='text-destructive focus:text-destructive/90 focus:bg-destructive/20'
                         onSelect={() => {
                           disconnectIntegration('discord');
                         }}>

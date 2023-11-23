@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { updateDiscordIntegration } from '@/lib/api/integrations';
+import { updateProjectConfigBySlug } from '@/lib/api/projects';
 
 /*
     Update Discord integration
@@ -17,14 +17,22 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
     roleId: string;
   };
 
+  // If status is true, make sure webhook and roleId are not empty
+  if (status && !webhook) {
+    return NextResponse.json(
+      { error: 'webhook is required when enabling Discord integration.' },
+      { status: 400 }
+    );
+  }
+
   // Update project config
-  const { data: updatedProjectConfig, error } = await updateDiscordIntegration(
-    {
-      status,
-      webhook,
-      roleId,
-    },
+  const { data: updatedProjectConfig, error } = await updateProjectConfigBySlug(
     context.params.slug,
+    {
+      integration_discord_status: status,
+      integration_discord_webhook: status ? webhook : null,
+      integration_discord_role_id: status ? roleId : null,
+    },
     'route'
   );
 

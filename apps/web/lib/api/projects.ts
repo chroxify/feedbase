@@ -293,6 +293,18 @@ export const updateProjectConfigBySlug = (
           data.changelog_twitter_handle !== undefined
             ? data.changelog_twitter_handle
             : config.changelog_twitter_handle,
+        integration_discord_status:
+          data.integration_discord_status !== undefined
+            ? data.integration_discord_status
+            : config.integration_discord_status,
+        integration_discord_webhook:
+          data.integration_discord_webhook !== undefined
+            ? data.integration_discord_webhook
+            : config.integration_discord_webhook,
+        integration_discord_role_id:
+          data.integration_discord_role_id !== undefined
+            ? data.integration_discord_role_id
+            : config.integration_discord_role_id,
         custom_domain: data.custom_domain !== undefined ? data.custom_domain : config.custom_domain,
         custom_domain_verified:
           data.custom_domain_verified !== undefined
