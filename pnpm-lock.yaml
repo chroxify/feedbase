@@ -87,8 +87,8 @@ importers:
         specifier: ^1.0.4
         version: 1.0.4(@types/react-dom@18.2.8)(@types/react@18.2.25)(react-dom@18.2.0)(react@18.2.0)
       '@react-email/components':
-        specifier: ^0.0.11
-        version: 0.0.11(@types/react@18.2.25)(react@18.2.0)
+        specifier: 0.0.12-canary.0
+        version: 0.0.12-canary.0(@types/react@18.2.25)(react@18.2.0)
       '@react-email/tailwind':
         specifier: 0.0.13-canary.1
         version: 0.0.13-canary.1(react@18.2.0)
@@ -3436,8 +3436,8 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@react-email/components@0.0.11(@types/react@18.2.25)(react@18.2.0):
-    resolution: {integrity: sha512-wj9Sra/AGQvadb3ZABz44ll9Fb9FvXPEmODXRWbNRSc8pJTFGWorrsm4M/yj8dnewd4HtnbLkV1eDOvuiLAVLA==}
+  /@react-email/components@0.0.12-canary.0(@types/react@18.2.25)(react@18.2.0):
+    resolution: {integrity: sha512-QehhQElpqodnXNgDQN/NaMPS/roZesovPo/4ckhZK3ylUcs8emLnxWF9YgjzA5Vid9IYOz9oWSEGZFGyto7qvg==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: 18.2.0
@@ -3457,7 +3457,7 @@ packages:
       '@react-email/render': 0.0.9
       '@react-email/row': 0.0.6(react@18.2.0)
       '@react-email/section': 0.0.10(react@18.2.0)
-      '@react-email/tailwind': 0.0.12(react@18.2.0)
+      '@react-email/tailwind': 0.0.13-canary.1(react@18.2.0)
       '@react-email/text': 0.0.6(react@18.2.0)
       react: 18.2.0
     transitivePeerDependencies:
@@ -3572,19 +3572,6 @@ packages:
       react: 18.2.0
     dependencies:
       react: 18.2.0
-    dev: false
-
-  /@react-email/tailwind@0.0.12(react@18.2.0):
-    resolution: {integrity: sha512-s8Ch7GL30qRKScn9NWwItMqxjtzbyUtCnXfC6sL2YTVtulbfvZZ06W+aA0S6f7fdrVlOOlQzZuK/sVaQCHhcSw==}
-    engines: {node: '>=18.0.0'}
-    peerDependencies:
-      react: 18.2.0
-    dependencies:
-      react: 18.2.0
-      react-dom: 18.2.0(react@18.2.0)
-      tw-to-css: 0.0.12
-    transitivePeerDependencies:
-      - ts-node
     dev: false
 
   /@react-email/tailwind@0.0.13-canary.1(react@18.2.0):
@@ -7673,17 +7660,6 @@ packages:
     engines: {node: '>=4'}
     dev: false
 
-  /postcss-css-variables@0.18.0(postcss@8.4.31):
-    resolution: {integrity: sha512-lYS802gHbzn1GI+lXvy9MYIYDuGnl1WB4FTKoqMQqJ3Mab09A7a/1wZvGTkCEZJTM8mSbIyb1mJYn8f0aPye0Q==}
-    peerDependencies:
-      postcss: ^8.2.6
-    dependencies:
-      balanced-match: 1.0.2
-      escape-string-regexp: 1.0.5
-      extend: 3.0.2
-      postcss: 8.4.31
-    dev: false
-
   /postcss-css-variables@0.19.0(postcss@8.4.31):
     resolution: {integrity: sha512-Hr0WEYKLK9VCrY15anHXOd4RCvJy/xRvCnWdplGBeLInwEj6Z14hgzTb2W/39dYTCnS8hnHUfU4/F1zxX0IZuQ==}
     peerDependencies:
@@ -9043,17 +9019,6 @@ packages:
       turbo-windows-64: 1.10.14
       turbo-windows-arm64: 1.10.14
     dev: true
-
-  /tw-to-css@0.0.12:
-    resolution: {integrity: sha512-rQAsQvOtV1lBkyCw+iypMygNHrShYAItES5r8fMsrhhaj5qrV2LkZyXc8ccEH+u5bFjHjQ9iuxe90I7Kykf6pw==}
-    engines: {node: '>=16.0.0'}
-    dependencies:
-      postcss: 8.4.31
-      postcss-css-variables: 0.18.0(postcss@8.4.31)
-      tailwindcss: 3.3.2
-    transitivePeerDependencies:
-      - ts-node
-    dev: false
 
   /type-check@0.4.0:
     resolution: {integrity: sha512-XleUoc9uwGXqjWwXaUTZAmzMcFZ5858QA2vvx1Ur5xIcixXIP+8LnFDgRplU30us6teqdlskFfu+ae4K79Ooew==}
