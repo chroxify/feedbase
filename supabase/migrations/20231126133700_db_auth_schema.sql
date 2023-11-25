@@ -119,7 +119,9 @@ CREATE TABLE IF NOT EXISTS "public"."project_configs" (
     "project_id" "uuid" NOT NULL,
     "integration_discord_status" boolean DEFAULT false NOT NULL,
     "integration_discord_webhook" "text",
-    "integration_discord_role_id" "text"
+    "integration_discord_role_id" "text",
+    "custom_domain" "text",
+    "custom_domain_verified" boolean
 );
 
 ALTER TABLE "public"."project_configs" OWNER TO "postgres";
@@ -185,6 +187,9 @@ ALTER TABLE ONLY "public"."profiles"
 
 ALTER TABLE ONLY "public"."project_configs"
     ADD CONSTRAINT "project_config_pkey" PRIMARY KEY ("id");
+
+ALTER TABLE ONLY "public"."project_configs"
+    ADD CONSTRAINT "project_configs_custom_domain_key" UNIQUE ("custom_domain");
 
 ALTER TABLE ONLY "public"."project_invites"
     ADD CONSTRAINT "project_invites_pkey" PRIMARY KEY ("id");
@@ -260,6 +265,8 @@ CREATE POLICY "Enable delete for authenticated users only" ON "public"."feedback
 
 CREATE POLICY "Enable delete for authenticated users only" ON "public"."feedback_upvoters" FOR DELETE TO "authenticated" USING (true);
 
+CREATE POLICY "Enable delete for authenticated users only" ON "public"."project_invites" FOR DELETE TO "authenticated" USING (true);
+
 CREATE POLICY "Enable delete for authenticated users only" ON "public"."projects" FOR DELETE TO "authenticated" USING (true);
 
 CREATE POLICY "Enable insert access for all users" ON "public"."waitlist" FOR INSERT WITH CHECK (true);
@@ -275,6 +282,8 @@ CREATE POLICY "Enable insert for authenticated users only" ON "public"."feedback
 CREATE POLICY "Enable insert for authenticated users only" ON "public"."feedback_upvoters" FOR INSERT TO "authenticated" WITH CHECK (true);
 
 CREATE POLICY "Enable insert for authenticated users only" ON "public"."project_configs" FOR INSERT TO "authenticated" WITH CHECK (true);
+
+CREATE POLICY "Enable insert for authenticated users only" ON "public"."project_invites" FOR INSERT TO "authenticated" WITH CHECK (true);
 
 CREATE POLICY "Enable insert for authenticated users only" ON "public"."project_members" FOR INSERT TO "authenticated" WITH CHECK (true);
 
@@ -292,6 +301,8 @@ CREATE POLICY "Enable read access for all users" ON "public"."feedback_upvoters"
 
 CREATE POLICY "Enable read access for all users" ON "public"."project_configs" FOR SELECT USING (true);
 
+CREATE POLICY "Enable read access for all users" ON "public"."project_invites" FOR SELECT USING (true);
+
 CREATE POLICY "Enable read access for all users" ON "public"."project_members" FOR SELECT USING (true);
 
 CREATE POLICY "Enable read access for all users" ON "public"."projects" FOR SELECT USING (true);
@@ -305,6 +316,8 @@ CREATE POLICY "Enable update for authenticated users only" ON "public"."feedback
 CREATE POLICY "Enable update for authenticated users only" ON "public"."feedback_tags" FOR UPDATE TO "authenticated" USING (true) WITH CHECK (true);
 
 CREATE POLICY "Enable update for authenticated users only" ON "public"."project_configs" FOR UPDATE TO "authenticated" USING (true) WITH CHECK (true);
+
+CREATE POLICY "Enable update for authenticated users only" ON "public"."project_invites" FOR UPDATE TO "authenticated" USING (true) WITH CHECK (true);
 
 CREATE POLICY "Enable update for authenticated users only" ON "public"."projects" FOR UPDATE TO "authenticated" USING (true) WITH CHECK (true);
 
@@ -405,3 +418,5 @@ ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TAB
 ALTER DEFAULT PRIVILEGES FOR ROLE "postgres" IN SCHEMA "public" GRANT ALL ON TABLES  TO "service_role";
 
 RESET ALL;
+
+CREATE TRIGGER on_auth_user_created AFTER INSERT ON auth.users FOR EACH ROW EXECUTE FUNCTION handle_new_user();
