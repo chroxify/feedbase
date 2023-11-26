@@ -1,0 +1,40 @@
+---
+title: Installation
+description: 'Learn how to install Luminar on your local machine'
+---
+
+## System Requirements
+
+- [Node.js 18.0.0](https://nodejs.org/en/download/) or higher
+- [pnpm 8.8.0](https://pnpm.io/installation) or higher
+
+## Clone the repository
+<Steps>
+  <Step title="Clone the repository and open the project directory">
+    ```bash
+    git clone https://github.com/chroxify/luminar.git && cd luminar
+    ```
+  </Step>
+  <Step title="Install dependencies">
+    ```bash
+    pnpm install
+    ```
+  </Step>
+</Steps>
+
+## Database Setup
+Luminar is using [Supabase](https://supabase.io/) as its database. For local development, you can use the Supabase CLI to start a local Postgres database.
+
+<Steps>
+  <Step title="Install the Supabase CLI">
+    Follow the instructions [here](https://github.com/supabase/cli?tab=readme-ov-file#install-the-cli) to install the Supabase CLI for your operating system.
+  </Step>
+  <Step title="Start the database">
+    ```bash
+    supabase start
+    ```
+  </Step>
+  <Step title="Visit the dashboard">
+    Now you can visit the local Supabase dashboard at [http://localhost:54323](http://localhost:54323) to make sure all migrations have been applied correctly.
+  </Step>
+</Steps>

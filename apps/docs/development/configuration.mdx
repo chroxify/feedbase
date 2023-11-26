@@ -1,0 +1,66 @@
+---
+title: 'Configuration'
+description: 'Setting up all necessary environment variables to run the project.'
+---
+
+## Environment Variables
+
+That that we have our project cloned, and database set up, we need to set up our environment variables. To do this, we will need to create a `.env` file in the root of our project.
+
+### Supabase
+
+To retrieve the Supabase variables, we can run the following command in our terminal:
+
+```bash
+supabase status
+```
+
+<Note>Supabase must be running in order for this command to work.</Note>
+
+This will return a list of urls and keys about our project. We will need to add the following variables to our `.env` file:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL= # API URL
+NEXT_PUBLIC_SUPABASE_ANON_KEY= # anon key
+```
+
+### Github OAuth
+
+For local authentication we will be using GitHub. To set this up, we will need to create a GitHub OAuth app. Go to your GitHub settings and click on "Developer Settings" in the sidebar. Then click on "OAuth Apps" and "New OAuth App". Fill out the form with the following information:
+
+- Application Name: `Development`
+- Homepage URL: `http://localhost:3000`
+- Authorization callback URL: `http://127.0.0.1:54321/auth/v1/callback`
+
+Once you have created the app, you will be given a Client ID and Client Secret. Add these to your `.env` file:
+
+```bash
+GITHUB_CLIENT_ID= # client id
+GITHUB_CLIENT_SECRET= # client secret
+```
+
+### Resend
+
+<Info>This is optional. If you do not need to send emails, you can skip this step.</Info>
+
+To send emails, we will be using [Resend](https://resend.com/). Create an account and add your API key to your `.env` file:
+
+```bash
+RESEND_API_KEY= # api key
+```
+
+### Other
+
+We will also need to add one other variables to our `.env` file:
+
+```bash
+NEXT_PUBLIC_ROOT_DOMAIN= # root domain (e.g. localhost:3000)
+```
+
+## Next Steps
+
+Now that we have everything set up, we are ready to start the development server and begin building.
+
+```bash
+pnpm dev
+```
