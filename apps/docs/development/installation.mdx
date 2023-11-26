@@ -8,32 +8,33 @@ description: 'Learn how to install Luminar on your local machine'
 - [Node.js 18.0.0](https://nodejs.org/en/download/) or higher
 - [pnpm 8.8.0](https://pnpm.io/installation) or higher
 
-## Database Setup
-Luminar uses [Supabase](https://supabase.io/) as its database. You can create a free account and use the free tier for development. Once you have created an account, you can create a new project and use the following commands to set up the database for local development.
-
-```bash
-# Install the supabase CLI
-pnpm install -g supabase-cli
-
-# Create a new database
-supabase init
-
-# Start the database
-supabase start
-```
-
-Once the database is running, you can visit [http://localhost:54321](http://localhost:54321) to view the Supabase dashboard and run the [migration script](https://supabase.io/docs/guides/database/migrations) to populate the database with the necessary tables.
-
 ## Clone the repository
+<Steps>
+  <Step title="Clone the repository and open the project directory">
+    ```bash
+    git clone https://github.com/chroxify/luminar.git && cd luminar
+    ```
+  </Step>
+  <Step title="Install dependencies">
+    ```bash
+    pnpm install
+    ```
+  </Step>
+</Steps>
 
-1. Clone the repository and open the project directory
+## Database Setup
+Luminar is using [Supabase](https://supabase.io/) as its database. For local development, you can use the Supabase CLI to start a local Postgres database.
 
-```bash
-git clone https://github.com/chroxify/luminar.git && cd luminar
-```
-
-2. Install dependencies
-
-```bash
-pnpm install
-```
+<Steps>
+  <Step title="Install the Supabase CLI">
+    Follow the instructions [here](https://github.com/supabase/cli?tab=readme-ov-file#install-the-cli) to install the Supabase CLI for your operating system.
+  </Step>
+  <Step title="Start the database">
+    ```bash
+    supabase start
+    ```
+  </Step>
+  <Step title="Visit the dashboard">
+    Now you can visit the local Supabase dashboard at [http://localhost:54323](http://localhost:54323) to make sure all migrations have been applied correctly.
+  </Step>
+</Steps>

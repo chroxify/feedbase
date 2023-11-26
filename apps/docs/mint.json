@@ -67,7 +67,7 @@
     },
     {
       "group": "Development Guide",
-      "pages": ["development/requirements", "development/installation", "development/configuration", "development/contributing"]
+      "pages": ["development/installation", "development/configuration"]
     },
     {
       "group": "Self Hosting",
