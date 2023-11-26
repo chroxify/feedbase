@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
+import { PostgrestError } from '@supabase/supabase-js';
 
 export const config = {
   matcher: [
@@ -34,6 +35,39 @@ export default async function middleware(req: NextRequest) {
 
   // Get the pathname of the request (e.g. /, /about, /blog/first-post)
   const path = url.pathname;
+
+  // Get root domain
+  const rootDomain =
+    process.env.NODE_ENV === 'development'
+      ? hostname.split('.').slice(-1)[0]
+      : hostname.split('.').length >= 2
+      ? `${hostname.split('.').slice(-2).join('.')}`
+      : null;
+
+  // custom domain / only for everything else routes
+  if (rootDomain !== process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
+    // Retrieve the project from the database
+    const { data, error } = (await supabase
+      .from('project_configs')
+      .select('project:project_id (slug)')
+      .eq('custom_domain', hostname)
+      .eq('custom_domain_verified', true)
+      .single()) as { data: { project: { slug: string } } | null; error: PostgrestError | null };
+
+    // If the project doesn't exist, return 404
+    if (error || !data) {
+      return NextResponse.next();
+    }
+
+    // If the project exists, rewrite the request to the project's folder
+    return NextResponse.rewrite(new URL(`/${data?.project?.slug}${path}`, req.url), {
+      headers: {
+        'x-pathname': path,
+        'x-project': data?.project?.slug,
+        'x-powered-by': 'Luminar',
+      },
+    });
+  }
 
   // rewrites for app pages
   if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {

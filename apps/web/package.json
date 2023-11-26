@@ -12,6 +12,7 @@
   "dependencies": {
     "@dotlottie/react-player": "^1.5.0",
     "@heroicons/react": "^2.0.18",
+    "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-aspect-ratio": "^1.0.3",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -24,7 +25,8 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tabs": "^1.0.4",
-    "@react-email/components": "^0.0.11",
+    "@react-email/components": "0.0.12-canary.0",
+    "@react-email/tailwind": "0.0.13-canary.1",
     "@supabase/auth-helpers-nextjs": "latest",
     "@supabase/supabase-js": "latest",
     "@tailwindcss/typography": "^0.5.10",

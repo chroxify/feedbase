@@ -45,7 +45,7 @@ export default function ProjectInviteEmail({
                 src={`${formatRootUrl()}/icon-512x512.png`}
                 width='40'
                 height='40'
-                alt='Vercel'
+                alt='Luminar'
                 className='mx-auto my-0 rounded-md'
               />
             </Section>
@@ -61,7 +61,7 @@ export default function ProjectInviteEmail({
             </Text>
             <Section className='mb-[32px] mt-[32px] text-center'>
               <Button
-                className='rounded-md bg-[#000000] px-4 py-3 text-center text-[12px] font-semibold text-white no-underline'
+                className='rounded-md bg-[#000000] px-5 py-3 text-center text-[12px] font-semibold text-white no-underline'
                 href={inviteLink}>
                 Join the team
               </Button>

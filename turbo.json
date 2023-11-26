@@ -1,17 +1,26 @@
 {
   "$schema": "https://turbo.build/schema.json",
-  "globalDependencies": [".env"],
+  "globalDependencies": ["**/.env"],
   "globalDotEnv": [".env"],
   "globalEnv": [
     "NEXT_PUBLIC_SUPABASE_URL",
     "NEXT_PUBLIC_ROOT_DOMAIN",
     "NEXT_PUBLIC_VERCEL_ENV",
+    "RESEND_API_KEY",
+    "VERCEL_TEAM_ID",
+    "VERCEL_PROJECT_ID",
+    "VERCEL_AUTH_TOKEN",
     "NODE_ENV"
   ],
   "pipeline": {
     "build": {
       "dependsOn": ["^build"],
       "outputs": [".next/**", "!.next/cache/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": ["GITHUB_CLIENT_ID", "GITHUB_SECRET"]
     },
     "topo": {
       "dependsOn": ["^topo"]
@@ -21,17 +30,6 @@
     },
     "ts": {
       "dependsOn": ["topo"]
-    },
-    "dev": {
-      "cache": false,
-      "persistent": true,
-      "env": ["GITHUB_CLIENT_ID", "GITHUB_SECRET"]
-    },
-    "db:generate": {
-      "cache": false
-    },
-    "db:push": {
-      "cache": false
     }
   }
 }
