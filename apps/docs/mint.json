@@ -5,7 +5,7 @@
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
   },
-  "favicon": "/logo//favicon.svg",
+  "favicon": "/logo/favicon.svg",
   "colors": {
     "primary": "#8F9EFF",
     "light": "#e1e1e1",
@@ -72,18 +72,6 @@
     {
       "group": "Self Hosting",
       "pages": ["self-hosting/vercel", "self-hosting/docker"]
-    },
-    {
-      "group": "API Documentation",
-      "pages": ["api-reference/introduction"]
-    },
-    {
-      "group": "Endpoint Examples",
-      "pages": [
-        "api-reference/endpoint/get",
-        "api-reference/endpoint/create",
-        "api-reference/endpoint/delete"
-      ]
     }
   ],
   "feedback": {
