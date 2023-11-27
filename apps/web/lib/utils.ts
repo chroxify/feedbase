@@ -54,3 +54,16 @@ export const formatHtmlToMd = (htmlString: string): string => {
   return htmlString;
 };
 /* eslint-enable */
+
+// Create api key token
+export function generateApiToken(prefix: string, length: number): string {
+  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let token = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    token += charset.charAt(randomIndex);
+  }
+
+  return `${prefix}_${token}`;
+}

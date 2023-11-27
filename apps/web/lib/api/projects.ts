@@ -1,7 +1,13 @@
 import { decode } from 'base64-arraybuffer';
 import { withProjectAuth, withUserAuth } from '@/lib/auth';
-import { ProjectConfigProps, ProjectProps, TeamMemberProps } from '@/lib/types';
-import { isSlugValid } from '@/lib/utils';
+import {
+  ProjectApiKeyProps,
+  ProjectApiKeyWithoutTokenProps,
+  ProjectConfigProps,
+  ProjectProps,
+  TeamMemberProps,
+} from '@/lib/types';
+import { generateApiToken, isSlugValid } from '@/lib/utils';
 
 // Get Project
 export const getProjectBySlug = withProjectAuth<ProjectProps['Row']>(
@@ -321,4 +327,112 @@ export const updateProjectConfigBySlug = (
 
     // Return updated config
     return { data: updatedConfig[0], error: null };
+  })(slug, cType);
+
+// Create new API key
+export const createProjectApiKey = (
+  slug: string,
+  data: { name: string; permission: string },
+  cType: 'server' | 'route'
+) =>
+  withProjectAuth<ProjectApiKeyProps['Row']>(async (user, supabase, project, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error };
+    }
+
+    // Validate permission
+    if (!['full_access', 'public_access'].includes(data.permission)) {
+      return {
+        data: null,
+        error: { message: 'permission must be one of: full_access, public_access', status: 400 },
+      };
+    }
+
+    // Generate API key token
+    const apiKeyToken = generateApiToken('lum', 20);
+    const shortToken = apiKeyToken.slice(0, 12);
+
+    // Create API key
+    const { data: apiKey, error: apiKeyError } = await supabase
+      .from('project_api_keys')
+      .insert({
+        project_id: project!.id,
+        name: data.name,
+        token: apiKeyToken,
+        permission: data.permission,
+        short_token: shortToken,
+      })
+      .select()
+      .single();
+
+    // Check for errors
+    if (apiKeyError) {
+      return { data: null, error: { message: apiKeyError.message, status: 500 } };
+    }
+
+    // Return API key
+    return { data: apiKey, error: null };
+  })(slug, cType);
+
+// Get all API keys for project
+export const getProjectApiKeys = withProjectAuth<ProjectApiKeyWithoutTokenProps[]>(
+  async (user, supabase, project, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error };
+    }
+
+    // Get all API keys for project
+    const { data: apiKeys, error: apiKeysError } = await supabase
+      .from('project_api_keys')
+      .select('id, name, permission, short_token, project_id, created_at')
+      .eq('project_id', project!.id);
+
+    // Check for errors
+    if (apiKeysError) {
+      return { data: null, error: { message: apiKeysError.message, status: 500 } };
+    }
+
+    // Return API keys
+    return { data: apiKeys, error: null };
+  }
+);
+
+// Delete API key for project
+export const deleteProjectApiKey = (slug: string, keyId: string, cType: 'server' | 'route') =>
+  withProjectAuth<ProjectApiKeyProps['Row']>(async (user, supabase, project, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error };
+    }
+
+    // Get API key
+    const { data: apiKey, error: apiKeyError } = await supabase
+      .from('project_api_keys')
+      .select()
+      .eq('project_id', project!.id)
+      .eq('id', keyId)
+      .single();
+
+    // Check for errors
+    if (apiKeyError || !apiKey) {
+      return { data: null, error: { message: 'invalid api key', status: 400 } };
+    }
+
+    // Delete API key
+    const { data: deletedApiKey, error: deleteError } = await supabase
+      .from('project_api_keys')
+      .delete()
+      .eq('id', apiKey.id)
+      .select()
+      .single();
+
+    // Check for errors
+    if (deleteError) {
+      return { data: null, error: { message: deleteError.message, status: 500 } };
+    }
+
+    // Return deleted API key
+    return { data: deletedApiKey, error: null };
   })(slug, cType);

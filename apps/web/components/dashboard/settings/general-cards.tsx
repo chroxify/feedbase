@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { fontMono } from '@ui/styles/fonts';
-import { CheckIcon, ClipboardList } from 'lucide-react';
+import { CheckIcon, ClipboardList, MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from 'ui/components/ui/accordion';
 import {
@@ -19,12 +19,18 @@ import {
 } from 'ui/components/ui/alert-dialog';
 import { Button } from 'ui/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/ui/card';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from 'ui/components/ui/dropdown-menu';
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/ui/tabs';
 import { ProjectConfigProps, ProjectProps } from '@/lib/types';
 import { Icons } from '@/components/shared/icons/icons-static';
-import DefaultTooltip from '@/components/shared/tooltip';
+import AddApiKeyDialog from '../modals/add-api-key-modal';
 
 interface domainData {
   name: string;
@@ -722,23 +728,53 @@ export default function GeneralConfigCards({
           <CardDescription>Configure your project&apos;s API access.</CardDescription>
         </CardHeader>
         <CardContent>
+          {/* Top Row */}
+          <div className='bg-background flex w-full max-w-xs flex-row items-center justify-between rounded-md border border-b px-3 py-1.5'>
+            <span className='text-foreground/70 text-xs'>Name</span>
+
+            <span className='text-foreground/70 pr-4 text-xs'>Token</span>
+
+            <span className='text-foreground/70 pr-3 text-xs'>Permissions</span>
+          </div>
+
           {/* API Key */}
-          <div className='flex h-full w-full flex-col space-y-4'>
-            <div className='space-y-1'>
-              <Label className='text-foreground/70 text-sm font-light'>API Key</Label>
-              <div className='flex h-10 w-full flex-row space-x-2'>
-                <DefaultTooltip content='API Keys are currently in early testing and will be available soon.'>
-                  <Input className='w-full max-w-xs' placeholder='Coming Soon' disabled />
-                </DefaultTooltip>
-              </div>
+          <div className='flex max-w-xs flex-row items-center justify-between rounded-md px-3.5 py-1.5'>
+            <span className='text-foreground/90 text-sm font-light'>Production</span>
+
+            <span className='text-foreground/70 bg-background line-clamp-1 w-[90px] rounded px-1.5 py-0.5 text-xs font-light'>
+              lum_kljasdfl-dafioasdoifjklo
+            </span>
+            {/* Permissions */}
+            <span className='text-foreground/90 text-sm font-light'>Read</span>
+
+            <div className='flex flex-row items-center space-x-2'>
+              {/* Actions */}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    variant='secondary'
+                    size='icon'
+                    className='text-foreground/50 hover:text-foreground h-7 w-4'>
+                    <MoreVertical className='h-4 w-4' />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className=' justify-between' align='end'>
+                  {/* TODO: Add logic for removing */}
+                  <DropdownMenuItem className='text-destructive focus:text-destructive/90' disabled>
+                    Remove
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </CardContent>
 
         <CardFooter>
-          <Button variant='default' className='w-32' disabled>
-            Generate key
-          </Button>
+          <AddApiKeyDialog>
+            <Button variant='default' className='w-32'>
+              Generate key
+            </Button>
+          </AddApiKeyDialog>
         </CardFooter>
       </Card>
 
