@@ -15,7 +15,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
   }
 
   // Return project config
-  return NextResponse.json({ projectConfig }, { status: 200 });
+  return NextResponse.json(projectConfig, { status: 200 });
 }
 
 /*

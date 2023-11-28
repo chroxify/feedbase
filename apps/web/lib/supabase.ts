@@ -255,6 +255,7 @@ export interface Database {
       project_api_keys: {
         Row: {
           created_at: string;
+          creator_id: string;
           id: string;
           name: string;
           permission: string;
@@ -264,6 +265,7 @@ export interface Database {
         };
         Insert: {
           created_at?: string;
+          creator_id: string;
           id?: string;
           name: string;
           permission: string;
@@ -273,6 +275,7 @@ export interface Database {
         };
         Update: {
           created_at?: string;
+          creator_id?: string;
           id?: string;
           name?: string;
           permission?: string;
@@ -281,6 +284,12 @@ export interface Database {
           token?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: 'project_api_keys_creator_id_fkey';
+            columns: ['creator_id'];
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
           {
             foreignKeyName: 'project_api_keys_project_id_fkey';
             columns: ['project_id'];

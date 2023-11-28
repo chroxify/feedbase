@@ -9,7 +9,7 @@ export async function DELETE(req: Request, context: { params: { slug: string; id
   const { error } = await deleteProjectApiKey(context.params.slug, context.params.id, 'route');
 
   if (error) {
-    return NextResponse.json({ error }, { status: 400 });
+    return NextResponse.json({ error }, { status: error.status });
   }
 
   return NextResponse.json({ success: true }, { status: 200 });

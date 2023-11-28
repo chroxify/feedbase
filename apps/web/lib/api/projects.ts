@@ -290,6 +290,14 @@ export const updateProjectConfigBySlug = (
       return { data: null, error: { message: configError.message, status: 500 } };
     }
 
+    // Validate changelog_preview_style
+    if (data.changelog_preview_style && !['summary', 'content'].includes(data.changelog_preview_style)) {
+      return {
+        data: null,
+        error: { message: 'changelog_preview_style must be one of: summary, content', status: 400 },
+      };
+    }
+
     // Update project config
     const { data: updatedConfig, error: updateError } = await supabase
       .from('project_configs')
@@ -349,6 +357,27 @@ export const createProjectApiKey = (
       };
     }
 
+    // Get all API keys for project
+    const { data: apiKeys, error: apiKeysError } = await supabase
+      .from('project_api_keys')
+      .select()
+      .eq('project_id', project!.id);
+
+    // Check for errors
+    if (apiKeysError) {
+      return { data: null, error: { message: apiKeysError.message, status: 500 } };
+    }
+
+    // Check if API key name already exists
+    if (apiKeys.some((item) => item.name === data.name)) {
+      return { data: null, error: { message: 'api key name already exists', status: 400 } };
+    }
+
+    // Check if it's more than 3 API keys
+    if (apiKeys.length >= 3) {
+      return { data: null, error: { message: 'maximum of 3 api keys reached', status: 400 } };
+    }
+
     // Generate API key token
     const apiKeyToken = generateApiToken('lum', 20);
     const shortToken = apiKeyToken.slice(0, 12);
@@ -362,6 +391,7 @@ export const createProjectApiKey = (
         token: apiKeyToken,
         permission: data.permission,
         short_token: shortToken,
+        creator_id: user!.id,
       })
       .select()
       .single();
@@ -386,7 +416,7 @@ export const getProjectApiKeys = withProjectAuth<ProjectApiKeyWithoutTokenProps[
     // Get all API keys for project
     const { data: apiKeys, error: apiKeysError } = await supabase
       .from('project_api_keys')
-      .select('id, name, permission, short_token, project_id, created_at')
+      .select('id, name, permission, short_token, project_id, creator_id, created_at')
       .eq('project_id', project!.id);
 
     // Check for errors

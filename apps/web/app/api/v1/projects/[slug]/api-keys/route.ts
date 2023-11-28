@@ -10,7 +10,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
   const { data: apiKeys, error } = await getProjectApiKeys(context.params.slug, 'route');
 
   if (error) {
-    return NextResponse.json({ error }, { status: 400 });
+    return NextResponse.json({ error }, { status: error.status });
   }
 
   return NextResponse.json(apiKeys, { status: 200 });
@@ -40,8 +40,8 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
   );
 
   if (error) {
-    return NextResponse.json({ error }, { status: 400 });
+    return NextResponse.json({ error }, { status: error.status });
   }
 
-  return NextResponse.json({ apiKey });
+  return NextResponse.json(apiKey, { status: 200 });
 }

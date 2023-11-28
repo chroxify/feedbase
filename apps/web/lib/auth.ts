@@ -1,19 +1,61 @@
-import { cookies } from 'next/headers';
+import { cookies, headers } from 'next/headers';
 import { createRouteHandlerClient, createServerComponentClient } from '@supabase/auth-helpers-nextjs';
 import { SupabaseClient, UserMetadata } from '@supabase/supabase-js';
 import { Database } from '@/lib/supabase';
-import { ApiResponse, ErrorProps, FeedbackProps, ProjectProps } from '@/lib/types';
+import { ApiResponse, ErrorProps, FeedbackProps, ProfileProps, ProjectProps } from '@/lib/types';
 
 // Create Supabase Client for needed client type
 // Also returns the current user
 // cType: 'server' | 'route'
-async function createClient(cType: 'server' | 'route') {
+async function createClient(cType: 'server' | 'route', isPublic = false) {
+  const headerStore = headers();
   const cookieStore = cookies();
+
+  // Create client
   const supabase =
     cType === 'server'
       ? await createServerComponentClient<Database>({ cookies: () => cookieStore })
       : await createRouteHandlerClient<Database>({ cookies: () => cookieStore });
+
+  // Check if request includes authorization header
+  const authHeader = headerStore.get('authorization');
+
+  // If auth header exists, validate api key
+  if (authHeader) {
+    // Get api key from auth header
+    const apiKey = authHeader.split(' ')[1];
+
+    // Fetch api key
+    const { data, error } = (await supabase
+      .from('project_api_keys')
+      .select('permission, creator:creator_id (*)')
+      .eq('token', apiKey)
+      .single()) as unknown as {
+      data: { permission: 'full_access' | 'public_access'; creator: ProfileProps['Row'] };
+      error: ErrorProps;
+    };
+
+    // If error is not null, then the api key is invalid
+    if (error) {
+      return {
+        supabase,
+        user: { data: null, error: { message: 'unauthorized, invalid api key.', status: 401 } },
+      };
+    }
+
+    // Validate api key permissions
+    if (!isPublic && data.permission !== 'full_access') {
+      return {
+        supabase,
+        user: { data: null, error: { message: 'unauthorized, invalid api key.', status: 401 } },
+      };
+    }
+
+    return { supabase, user: { data: { user: data.creator }, error: null } };
+  }
+
   const user = await supabase.auth.getUser();
+
   return { supabase, user };
 }
 type WithProjectAuthHandler<T> = (
@@ -34,9 +76,12 @@ export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
     const { supabase, user } = await createClient(cType);
 
     // If user.error is not null, then the user is likely not logged in
-    if (user.error !== null && requireLogin) {
-      return handler(user.data.user, supabase, null, {
-        message: 'unauthorized, login required.',
+    if ((user.error !== null && requireLogin) || user.data === null) {
+      return handler(null, supabase, null, {
+        message:
+          user.error?.message === 'invalid claim: missing sub claim'
+            ? 'unauthorized, login required.'
+            : user.error?.message,
         status: 401,
       });
     }
@@ -84,9 +129,12 @@ export const withFeedbackAuth = <T>(handler: WithFeedbackAuthHandler<T>) => {
     const { supabase, user } = await createClient(cType);
 
     // If user.error is not null, then the user is likely not logged in
-    if (user.error !== null && requireLogin) {
-      return handler(user.data.user, supabase, null, null, {
-        message: 'unauthorized, login required.',
+    if ((user.error !== null && requireLogin) || user.data === null) {
+      return handler(null, supabase, null, null, {
+        message:
+          user.error?.message === 'invalid claim: missing sub claim'
+            ? 'unauthorized, login required.'
+            : user.error?.message,
         status: 401,
       });
     }
@@ -135,7 +183,13 @@ export const withUserAuth = <T>(handler: WithUserAuthHandler<T>) => {
 
     // If user.error is not null, then the user is likely not logged in
     if (user.error !== null) {
-      return handler(user.data.user, supabase, { message: 'unauthorized, login required.', status: 401 });
+      return handler(null, supabase, {
+        message:
+          user.error?.message === 'invalid claim: missing sub claim'
+            ? 'unauthorized, login required.'
+            : user.error?.message,
+        status: 401,
+      });
     }
 
     return handler(user.data.user, supabase, null);

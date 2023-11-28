@@ -5,6 +5,7 @@ import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { fontMono } from '@ui/styles/fonts';
 import { CheckIcon, ClipboardList, MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
+import useSWR from 'swr';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from 'ui/components/ui/accordion';
 import {
   AlertDialog,
@@ -28,8 +29,10 @@ import {
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/ui/tabs';
-import { ProjectConfigProps, ProjectProps } from '@/lib/types';
+import { ProjectApiKeyWithoutTokenProps, ProjectConfigProps, ProjectProps } from '@/lib/types';
+import { fetcher } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
+import DefaultTooltip from '@/components/shared/tooltip';
 import AddApiKeyDialog from '../modals/add-api-key-modal';
 
 interface domainData {
@@ -64,6 +67,11 @@ export default function GeneralConfigCards({
   );
   const [domainData, setDomainData] = useState<domainData>();
   const [hasCopied, setHasCopied] = useState<string[]>([]);
+  const {
+    data: apiKeys,
+    isLoading,
+    mutate,
+  } = useSWR<ProjectApiKeyWithoutTokenProps[]>(`/api/v1/projects/${projectData.slug}/api-keys`, fetcher);
 
   function handleSlugChange(event: React.ChangeEvent<HTMLInputElement>) {
     // Replace spaces with dashes
@@ -247,6 +255,40 @@ export default function GeneralConfigCards({
       setDomainData(undefined);
       setDomain('');
       setDomainStatus(null);
+    });
+  }
+
+  // On revoke api key
+  function handleRevokeApiKey(apiKey: ProjectApiKeyWithoutTokenProps) {
+    const promise = new Promise((resolve, reject) => {
+      fetch(`/api/v1/projects/${projectData.slug}/api-keys/${apiKey.id}`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            reject(data.error);
+          } else {
+            resolve(data);
+          }
+        })
+        .catch((err) => {
+          reject(err.message);
+        });
+    });
+
+    toast.promise(promise, {
+      loading: 'Revoking API key...',
+      success: () => {
+        mutate();
+        return `API key revoked!`;
+      },
+      error: (err) => {
+        return err;
+      },
     });
   }
 
@@ -727,53 +769,106 @@ export default function GeneralConfigCards({
           <CardTitle>API Access</CardTitle>
           <CardDescription>Configure your project&apos;s API access.</CardDescription>
         </CardHeader>
-        <CardContent>
-          {/* Top Row */}
-          <div className='bg-background flex w-full max-w-xs flex-row items-center justify-between rounded-md border border-b px-3 py-1.5'>
-            <span className='text-foreground/70 text-xs'>Name</span>
+        {apiKeys?.length !== 0 && !isLoading && (
+          <CardContent>
+            {/* Top Row */}
+            <div className='bg-background flex w-full max-w-xs flex-row items-center justify-between rounded-md border border-b px-3 py-1.5'>
+              <span className='text-foreground/70 w-full max-w-[100px] text-xs'>Name</span>
 
-            <span className='text-foreground/70 pr-4 text-xs'>Token</span>
+              <span className='text-foreground/70 w-full max-w-[120px] text-xs'>Token</span>
 
-            <span className='text-foreground/70 pr-3 text-xs'>Permissions</span>
-          </div>
+              <span className='text-foreground/70 w-full max-w-[80px] text-xs'>Permissions</span>
 
-          {/* API Key */}
-          <div className='flex max-w-xs flex-row items-center justify-between rounded-md px-3.5 py-1.5'>
-            <span className='text-foreground/90 text-sm font-light'>Production</span>
-
-            <span className='text-foreground/70 bg-background line-clamp-1 w-[90px] rounded px-1.5 py-0.5 text-xs font-light'>
-              lum_kljasdfl-dafioasdoifjklo
-            </span>
-            {/* Permissions */}
-            <span className='text-foreground/90 text-sm font-light'>Read</span>
-
-            <div className='flex flex-row items-center space-x-2'>
-              {/* Actions */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant='secondary'
-                    size='icon'
-                    className='text-foreground/50 hover:text-foreground h-7 w-4'>
-                    <MoreVertical className='h-4 w-4' />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className=' justify-between' align='end'>
-                  {/* TODO: Add logic for removing */}
-                  <DropdownMenuItem className='text-destructive focus:text-destructive/90' disabled>
-                    Remove
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
+              <span className='text-foreground/70 w-full max-w-[10px] text-xs' />
             </div>
-          </div>
-        </CardContent>
 
+            {apiKeys?.map((apiKey) => (
+              <div
+                className='flex max-w-xs flex-row items-center justify-between rounded-md px-3.5 py-1.5'
+                key={apiKey.id}>
+                <span className='text-foreground/90 w-full max-w-[100px] text-sm font-light'>
+                  {apiKey.name}
+                </span>
+
+                <div className='flex w-full max-w-[120px]'>
+                  <span className='text-foreground/70 bg-background line-clamp-1 w-[80px] rounded py-0.5 pl-1.5 pr-1 text-xs font-light'>
+                    {/* Replace last 2 characters with new line so it line clamps  */}
+                    {`${apiKey.short_token.slice(0, -1)}\n${apiKey.short_token.slice(-1)}`}
+                  </span>
+                </div>
+                {/* Permissions */}
+                <span className='text-foreground/90 w-full max-w-[80px] text-sm font-light'>
+                  {apiKey.permission === 'full_access' ? 'Full Access' : 'Public Only'}
+                </span>
+
+                <div className='-mr-2 flex flex-row items-center space-x-2'>
+                  {/* Actions */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant='secondary'
+                        size='icon'
+                        className='text-foreground/50 hover:text-foreground h-7 w-4'>
+                        <MoreVertical className='h-4 w-4' />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align='end'>
+                      <AlertDialog>
+                        <AlertDialogTrigger asChild>
+                          <DropdownMenuItem
+                            className='text-destructive focus:text-destructive/90 focus:bg-destructive/20'
+                            onSelect={(event) => {
+                              event.preventDefault();
+                            }}>
+                            Revoke
+                          </DropdownMenuItem>
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              This action cannot be undone. This will permanently make your API key invalid
+                              and you will not be able to use it anymore.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction
+                              className='bg-destructive hover:bg-destructive/90 dark:text-foreground'
+                              onClick={() => {
+                                handleRevokeApiKey(apiKey);
+                              }}>
+                              Yes, revoke
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+              </div>
+            ))}
+          </CardContent>
+        )}
         <CardFooter>
-          <AddApiKeyDialog>
-            <Button variant='default' className='w-32'>
-              Generate key
-            </Button>
+          <AddApiKeyDialog
+            projectSlug={project.slug}
+            disabled={isLoading || (apiKeys && apiKeys.length >= 3)}
+            mutateKeys={mutate}>
+            <DefaultTooltip
+              content='Due to security reasons, you can only have up to 3 API keys per project.'
+              disabled={!(apiKeys && apiKeys.length >= 3)}>
+              <div className='flex flex-row items-center space-x-2'>
+                <Button
+                  variant='default'
+                  className='w-32'
+                  disabled={isLoading || (apiKeys && apiKeys.length >= 3)}>
+                  Generate key
+                </Button>
+
+                {isLoading ? <Icons.Spinner className='text-foreground/70 h-5 w-5 animate-spin' /> : null}
+              </div>
+            </DefaultTooltip>
           </AddApiKeyDialog>
         </CardFooter>
       </Card>
