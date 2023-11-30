@@ -23,11 +23,6 @@ async function createClient(cType: 'server' | 'route', isPublic = false) {
                 return cookieStore.get(name)?.value;
               },
             },
-            global: {
-              headers: {
-                apikey: headerStore.get('authorization')?.split(' ')[1] || '',
-              },
-            },
           }
         )
       : createServerClient<Database>(
@@ -39,10 +34,10 @@ async function createClient(cType: 'server' | 'route', isPublic = false) {
                 return cookieStore.get(name)?.value;
               },
               set(name: string, value: string, options: CookieOptions) {
-                cookieStore.set(name, value, options);
+                cookieStore.set({ name, value, ...options });
               },
-              remove(name: string) {
-                cookieStore.delete(name);
+              remove(name: string, options: CookieOptions) {
+                cookieStore.set({ name, value: '', ...options });
               },
             },
             global: {

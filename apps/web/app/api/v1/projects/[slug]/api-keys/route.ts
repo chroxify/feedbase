@@ -40,7 +40,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
   );
 
   if (error) {
-    return NextResponse.json({ error }, { status: error.status });
+    return NextResponse.json({ error: error.message }, { status: error.status });
   }
 
   return NextResponse.json(apiKey, { status: 200 });
