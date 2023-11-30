@@ -24,7 +24,7 @@ export async function POST(req: Request) {
 
   // Check for errors
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: error.status });
   }
 
   return NextResponse.json(project, { status: 201 });
@@ -40,7 +40,7 @@ export async function GET(req: Request) {
 
   // Check for errors
   if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message }, { status: error.status });
   }
 
   // Return projects

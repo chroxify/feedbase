@@ -1,21 +1,100 @@
-import { cookies } from 'next/headers';
-import { createRouteHandlerClient, createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies, headers } from 'next/headers';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { SupabaseClient, UserMetadata } from '@supabase/supabase-js';
 import { Database } from '@/lib/supabase';
-import { ApiResponse, ErrorProps, FeedbackProps, ProjectProps } from '@/lib/types';
+import { ApiResponse, ErrorProps, FeedbackProps, ProfileProps, ProjectProps } from '@/lib/types';
 
 // Create Supabase Client for needed client type
 // Also returns the current user
 // cType: 'server' | 'route'
-async function createClient(cType: 'server' | 'route') {
+async function createClient(cType: 'server' | 'route', isPublic = false) {
+  const headerStore = headers();
   const cookieStore = cookies();
+
+  // Create client switch
   const supabase =
     cType === 'server'
-      ? await createServerComponentClient<Database>({ cookies: () => cookieStore })
-      : await createRouteHandlerClient<Database>({ cookies: () => cookieStore });
+      ? createServerClient<Database>(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          {
+            cookies: {
+              get(name: string) {
+                return cookieStore.get(name)?.value;
+              },
+            },
+            global: {
+              headers: {
+                apikey: headerStore.get('authorization')?.split(' ')[1] || '',
+              },
+            },
+          }
+        )
+      : createServerClient<Database>(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          {
+            cookies: {
+              get(name: string) {
+                return cookieStore.get(name)?.value;
+              },
+              set(name: string, value: string, options: CookieOptions) {
+                cookieStore.set(name, value, options);
+              },
+              remove(name: string) {
+                cookieStore.delete(name);
+              },
+            },
+            global: {
+              headers: {
+                apikey: headerStore.get('authorization')?.split(' ')[1] || '',
+              },
+            },
+          }
+        );
+
+  // Check if request includes authorization header
+  const authHeader = headerStore.get('authorization');
+
+  // If auth header exists, validate api key
+  if (authHeader) {
+    // Get api key from auth header
+    const apiKey = authHeader.split(' ')[1];
+
+    // Fetch api key
+    const { data, error } = (await supabase
+      .from('project_api_keys')
+      .select('project_id, permission, creator:creator_id (*)')
+      .eq('token', apiKey)
+      .single()) as unknown as {
+      data: { permission: 'full_access' | 'public_access'; creator: ProfileProps['Row']; project_id: string };
+      error: ErrorProps;
+    };
+
+    // If error is not null, then the api key is invalid
+    if (error) {
+      return {
+        supabase,
+        user: { data: null, error: { message: 'unauthorized, invalid api key.', status: 401 } },
+      };
+    }
+
+    // TODO: Expand this further, also supporting public access for feedback etc.
+    if (data.permission === 'public_access' && !isPublic) {
+      return {
+        supabase,
+        user: { data: null, error: { message: 'unauthorized, missing permissions.', status: 403 } },
+      };
+    }
+
+    return { supabase, user: { data: { user: data.creator }, error: null }, apiKey: data };
+  }
+
   const user = await supabase.auth.getUser();
-  return { supabase, user };
+
+  return { supabase, user, apiKey: null };
 }
+
 type WithProjectAuthHandler<T> = (
   user: UserMetadata | null,
   supabase: SupabaseClient<Database>,
@@ -31,13 +110,16 @@ type WithProjectAuthHandler<T> = (
 export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
   return async (slug: string, cType: 'server' | 'route', allowAnonAccess = false, requireLogin = true) => {
     // Get the user from the session
-    const { supabase, user } = await createClient(cType);
+    const { supabase, user, apiKey } = await createClient(cType, (allowAnonAccess && !requireLogin) || false);
 
     // If user.error is not null, then the user is likely not logged in
-    if (user.error !== null && requireLogin) {
-      return handler(user.data.user, supabase, null, {
-        message: 'unauthorized, login required.',
-        status: 401,
+    if ((user.error !== null && requireLogin) || user.data === null) {
+      return handler(null, supabase, null, {
+        message:
+          user.error?.message === 'invalid claim: missing sub claim'
+            ? 'unauthorized, login required.'
+            : user.error?.message,
+        status: user.error?.status || 401,
       });
     }
 
@@ -47,6 +129,14 @@ export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
     // If error is not null, then the project does not exist
     if (error) {
       return handler(user.data.user, supabase, project, { message: 'project not found.', status: 404 });
+    }
+
+    // If api key exists, check if the api key has access to the project
+    if (apiKey && apiKey.project_id !== project.id) {
+      return handler(user.data.user, supabase, project, {
+        message: 'unauthorized, invalid api key.',
+        status: 401,
+      });
     }
 
     // Check if user is a member of the project
@@ -84,10 +174,13 @@ export const withFeedbackAuth = <T>(handler: WithFeedbackAuthHandler<T>) => {
     const { supabase, user } = await createClient(cType);
 
     // If user.error is not null, then the user is likely not logged in
-    if (user.error !== null && requireLogin) {
-      return handler(user.data.user, supabase, null, null, {
-        message: 'unauthorized, login required.',
-        status: 401,
+    if ((user.error !== null && requireLogin) || user.data === null) {
+      return handler(null, supabase, null, null, {
+        message:
+          user.error?.message === 'invalid claim: missing sub claim'
+            ? 'unauthorized, login required.'
+            : user.error?.message,
+        status: user.error?.status || 401,
       });
     }
 
@@ -135,7 +228,13 @@ export const withUserAuth = <T>(handler: WithUserAuthHandler<T>) => {
 
     // If user.error is not null, then the user is likely not logged in
     if (user.error !== null) {
-      return handler(user.data.user, supabase, { message: 'unauthorized, login required.', status: 401 });
+      return handler(null, supabase, {
+        message:
+          user.error?.message === 'invalid claim: missing sub claim'
+            ? 'unauthorized, login required.'
+            : user.error?.message,
+        status: user.error?.status || 401,
+      });
     }
 
     return handler(user.data.user, supabase, null);
