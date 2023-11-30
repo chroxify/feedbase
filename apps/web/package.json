@@ -27,7 +27,7 @@
     "@radix-ui/react-tabs": "^1.0.4",
     "@react-email/components": "0.0.12-canary.0",
     "@react-email/tailwind": "0.0.13-canary.1",
-    "@supabase/auth-helpers-nextjs": "latest",
+    "@supabase/ssr": "^0.0.10",
     "@supabase/supabase-js": "latest",
     "@tailwindcss/typography": "^0.5.10",
     "@tiptap/extension-character-count": "^2.1.12",

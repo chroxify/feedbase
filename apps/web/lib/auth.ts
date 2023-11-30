@@ -1,5 +1,5 @@
 import { cookies, headers } from 'next/headers';
-import { createRouteHandlerClient, createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { SupabaseClient, UserMetadata } from '@supabase/supabase-js';
 import { Database } from '@/lib/supabase';
 import { ApiResponse, ErrorProps, FeedbackProps, ProfileProps, ProjectProps } from '@/lib/types';
@@ -11,11 +11,47 @@ async function createClient(cType: 'server' | 'route', isPublic = false) {
   const headerStore = headers();
   const cookieStore = cookies();
 
-  // Create client
+  // Create client switch
   const supabase =
     cType === 'server'
-      ? await createServerComponentClient<Database>({ cookies: () => cookieStore })
-      : await createRouteHandlerClient<Database>({ cookies: () => cookieStore });
+      ? createServerClient<Database>(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          {
+            cookies: {
+              get(name: string) {
+                return cookieStore.get(name)?.value;
+              },
+            },
+            global: {
+              headers: {
+                apikey: headerStore.get('authorization')?.split(' ')[1] || '',
+              },
+            },
+          }
+        )
+      : createServerClient<Database>(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          {
+            cookies: {
+              get(name: string) {
+                return cookieStore.get(name)?.value;
+              },
+              set(name: string, value: string, options: CookieOptions) {
+                cookieStore.set(name, value, options);
+              },
+              remove(name: string) {
+                cookieStore.delete(name);
+              },
+            },
+            global: {
+              headers: {
+                apikey: headerStore.get('authorization')?.split(' ')[1] || '',
+              },
+            },
+          }
+        );
 
   // Check if request includes authorization header
   const authHeader = headerStore.get('authorization');
@@ -43,11 +79,11 @@ async function createClient(cType: 'server' | 'route', isPublic = false) {
       };
     }
 
-    // Validate api key permissions
-    if (!isPublic && data.permission !== 'full_access') {
+    // TODO: Expand this further, also supporting public access for feedback etc.
+    if (data.permission === 'public_access' && !isPublic) {
       return {
         supabase,
-        user: { data: null, error: { message: 'unauthorized, invalid api key.', status: 401 } },
+        user: { data: null, error: { message: 'unauthorized, missing permissions.', status: 403 } },
       };
     }
 
@@ -58,6 +94,7 @@ async function createClient(cType: 'server' | 'route', isPublic = false) {
 
   return { supabase, user };
 }
+
 type WithProjectAuthHandler<T> = (
   user: UserMetadata | null,
   supabase: SupabaseClient<Database>,
@@ -73,7 +110,7 @@ type WithProjectAuthHandler<T> = (
 export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
   return async (slug: string, cType: 'server' | 'route', allowAnonAccess = false, requireLogin = true) => {
     // Get the user from the session
-    const { supabase, user } = await createClient(cType);
+    const { supabase, user } = await createClient(cType, (allowAnonAccess && !requireLogin) || false);
 
     // If user.error is not null, then the user is likely not logged in
     if ((user.error !== null && requireLogin) || user.data === null) {
@@ -82,7 +119,7 @@ export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
           user.error?.message === 'invalid claim: missing sub claim'
             ? 'unauthorized, login required.'
             : user.error?.message,
-        status: 401,
+        status: user.error?.status || 401,
       });
     }
 
@@ -135,7 +172,7 @@ export const withFeedbackAuth = <T>(handler: WithFeedbackAuthHandler<T>) => {
           user.error?.message === 'invalid claim: missing sub claim'
             ? 'unauthorized, login required.'
             : user.error?.message,
-        status: 401,
+        status: user.error?.status || 401,
       });
     }
 
@@ -188,7 +225,7 @@ export const withUserAuth = <T>(handler: WithUserAuthHandler<T>) => {
           user.error?.message === 'invalid claim: missing sub claim'
             ? 'unauthorized, login required.'
             : user.error?.message,
-        status: 401,
+        status: user.error?.status || 401,
       });
     }
 
