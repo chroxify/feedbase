@@ -64,10 +64,10 @@ async function createClient(cType: 'server' | 'route', isPublic = false) {
     // Fetch api key
     const { data, error } = (await supabase
       .from('project_api_keys')
-      .select('permission, creator:creator_id (*)')
+      .select('project_id, permission, creator:creator_id (*)')
       .eq('token', apiKey)
       .single()) as unknown as {
-      data: { permission: 'full_access' | 'public_access'; creator: ProfileProps['Row'] };
+      data: { permission: 'full_access' | 'public_access'; creator: ProfileProps['Row']; project_id: string };
       error: ErrorProps;
     };
 
@@ -87,12 +87,12 @@ async function createClient(cType: 'server' | 'route', isPublic = false) {
       };
     }
 
-    return { supabase, user: { data: { user: data.creator }, error: null } };
+    return { supabase, user: { data: { user: data.creator }, error: null }, apiKey: data };
   }
 
   const user = await supabase.auth.getUser();
 
-  return { supabase, user };
+  return { supabase, user, apiKey: null };
 }
 
 type WithProjectAuthHandler<T> = (
@@ -110,7 +110,7 @@ type WithProjectAuthHandler<T> = (
 export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
   return async (slug: string, cType: 'server' | 'route', allowAnonAccess = false, requireLogin = true) => {
     // Get the user from the session
-    const { supabase, user } = await createClient(cType, (allowAnonAccess && !requireLogin) || false);
+    const { supabase, user, apiKey } = await createClient(cType, (allowAnonAccess && !requireLogin) || false);
 
     // If user.error is not null, then the user is likely not logged in
     if ((user.error !== null && requireLogin) || user.data === null) {
@@ -129,6 +129,14 @@ export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
     // If error is not null, then the project does not exist
     if (error) {
       return handler(user.data.user, supabase, project, { message: 'project not found.', status: 404 });
+    }
+
+    // If api key exists, check if the api key has access to the project
+    if (apiKey && apiKey.project_id !== project.id) {
+      return handler(user.data.user, supabase, project, {
+        message: 'unauthorized, invalid api key.',
+        status: 401,
+      });
     }
 
     // Check if user is a member of the project
