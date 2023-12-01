@@ -97,12 +97,12 @@ async function createClient(cType: 'server' | 'route', isPublic = false) {
       data: { permission: 'full_access' | 'public_access'; creator: ProfileProps['Row']; project_id: string };
       error: ErrorProps;
     };
-
+    console.log(data, error);
     // If error is not null, then the api key is invalid
     if (error) {
       return {
         supabase,
-        user: { data: null, error: { message: 'unauthorized, invalid api key.', status: 401 } },
+        user: { data: null, error: { message: 'unauthorized, invalid api key: ' + error.message, status: 401 } },
       };
     }
 
