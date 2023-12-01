@@ -74,7 +74,7 @@ async function createClient(cType: 'server' | 'route', isPublic = false) {
         ...createCookiesConfig(cookieStore, ['get', 'set', 'remove']),
         global: {
           headers: {
-            apikey: authHeader.split(' ')[1],
+            lum_key: authHeader.split(' ')[1],
           },
         },
       }
