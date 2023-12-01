@@ -52,36 +52,25 @@ async function createClient(cType: 'server' | 'route', isPublic = false) {
   const authHeader = headerStore.get('authorization');
 
   // Create client
-  let supabase;
-
-  if (cType === 'server') {
-    supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      createCookiesConfig(cookieStore, ['get'])
-    );
-  } else if (cType === 'route' && authHeader === null) {
-    supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      createCookiesConfig(cookieStore, ['get', 'set', 'remove'])
-    );
-  } else if (cType === 'route' && authHeader !== null) {
-    supabase = createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        ...createCookiesConfig(cookieStore, ['get', 'set', 'remove']),
-        global: {
-          headers: {
-            apikey: authHeader.split(' ')[1],
-          },
-        },
-      }
-    );
-  } else {
-    throw new Error(`Invalid client type: ${cType}`);
-  }
+  const supabase =
+    cType === 'server'
+      ? createServerClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          createCookiesConfig(cookieStore, ['get'])
+        )
+      : createServerClient(
+          process.env.NEXT_PUBLIC_SUPABASE_URL!,
+          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+          {
+            ...createCookiesConfig(cookieStore, ['get', 'set', 'remove']),
+            global: {
+              headers: {
+                lumkey: authHeader ? authHeader.split(' ')[1] : '',
+              },
+            },
+          }
+        );
 
   // If auth header exists, validate api key
   if (authHeader) {

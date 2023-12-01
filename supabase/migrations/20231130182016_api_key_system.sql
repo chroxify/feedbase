@@ -50,8 +50,8 @@ on "public"."changelogs"
 as permissive
 for all
 to public
-using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'apikey'::text), '{full_access}'::token_type[]))
-with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'apikey'::text), '{full_access}'::token_type[]));
+using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]))
+with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]));
 
 
 create policy "Allow API Access"
@@ -59,8 +59,8 @@ on "public"."project_api_keys"
 as permissive
 for all
 to public
-using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'apikey'::text), '{full_access}'::token_type[]))
-with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'apikey'::text), '{full_access}'::token_type[]));
+using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]))
+with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]));
 
 
 create policy "Enable delete for authenticated users only"
@@ -100,8 +100,8 @@ on "public"."project_configs"
 as permissive
 for all
 to public
-using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'apikey'::text), '{full_access}'::token_type[]))
-with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'apikey'::text), '{full_access}'::token_type[]));
+using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]))
+with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]));
 
 
 create policy "Allow API Access"
@@ -109,8 +109,8 @@ on "public"."project_invites"
 as permissive
 for all
 to public
-using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'apikey'::text), '{full_access}'::token_type[]))
-with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'apikey'::text), '{full_access}'::token_type[]));
+using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]))
+with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]));
 
 
 create policy "Allow API Access"
@@ -118,8 +118,8 @@ on "public"."project_members"
 as permissive
 for all
 to public
-using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'apikey'::text), '{full_access}'::token_type[]))
-with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'apikey'::text), '{full_access}'::token_type[]));
+using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]))
+with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]));
 
 
 create policy "Allow API Access"
@@ -127,8 +127,8 @@ on "public"."projects"
 as permissive
 for all
 to public
-using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'apikey'::text), '{full_access}'::token_type[]))
-with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'apikey'::text), '{full_access}'::token_type[]));
+using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]))
+with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]));
 
 
 
