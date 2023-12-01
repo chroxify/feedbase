@@ -1,8 +1,47 @@
+import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { cookies, headers } from 'next/headers';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { SupabaseClient, UserMetadata } from '@supabase/supabase-js';
 import { Database } from '@/lib/supabase';
 import { ApiResponse, ErrorProps, FeedbackProps, ProfileProps, ProjectProps } from '@/lib/types';
+
+export interface ClientCookiesConfig {
+  cookies: {
+    get?: (name: string) => string | undefined;
+    set?: (name: string, value: string, options: CookieOptions) => void;
+    remove?: (name: string, options: CookieOptions) => void;
+  };
+}
+
+// Helper function to create a config object for the Supabase client
+function createCookiesConfig(
+  cookieStore: ReadonlyRequestCookies,
+  operations: ('get' | 'set' | 'remove')[]
+): ClientCookiesConfig {
+  const config: ClientCookiesConfig = {
+    cookies: {},
+  };
+
+  operations.forEach((operation) => {
+    switch (operation) {
+      case 'get':
+        config.cookies.get = (name: string) => cookieStore.get(name)?.value;
+        break;
+      case 'set':
+        config.cookies.set = (name: string, value: string, options: CookieOptions) =>
+          cookieStore.set({ name, value, ...options });
+        break;
+      case 'remove':
+        config.cookies.remove = (name: string, options: CookieOptions) =>
+          cookieStore.set({ name, value: '', ...options });
+        break;
+      default:
+        throw new Error(`Invalid operation: ${operation as string}`);
+    }
+  });
+
+  return config;
+}
 
 // Create Supabase Client for needed client type
 // Also returns the current user
@@ -10,46 +49,39 @@ import { ApiResponse, ErrorProps, FeedbackProps, ProfileProps, ProjectProps } fr
 async function createClient(cType: 'server' | 'route', isPublic = false) {
   const headerStore = headers();
   const cookieStore = cookies();
-
-  // Create client switch
-  const supabase =
-    cType === 'server'
-      ? createServerClient<Database>(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          {
-            cookies: {
-              get(name: string) {
-                return cookieStore.get(name)?.value;
-              },
-            },
-          }
-        )
-      : createServerClient<Database>(
-          process.env.NEXT_PUBLIC_SUPABASE_URL!,
-          process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-          {
-            cookies: {
-              get(name: string) {
-                return cookieStore.get(name)?.value;
-              },
-              set(name: string, value: string, options: CookieOptions) {
-                cookieStore.set({ name, value, ...options });
-              },
-              remove(name: string, options: CookieOptions) {
-                cookieStore.set({ name, value: '', ...options });
-              },
-            },
-            global: {
-              headers: {
-                apikey: headerStore.get('authorization')?.split(' ')[1] || '',
-              },
-            },
-          }
-        );
-
-  // Check if request includes authorization header
   const authHeader = headerStore.get('authorization');
+
+  // Create client
+  let supabase;
+
+  if (cType === 'server') {
+    supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      createCookiesConfig(cookieStore, ['get'])
+    );
+  } else if (cType === 'route' && authHeader === null) {
+    supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      createCookiesConfig(cookieStore, ['get', 'set', 'remove'])
+    );
+  } else if (cType === 'route' && authHeader !== null) {
+    supabase = createServerClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+      {
+        ...createCookiesConfig(cookieStore, ['get', 'set', 'remove']),
+        global: {
+          headers: {
+            apikey: authHeader.split(' ')[1],
+          },
+        },
+      }
+    );
+  } else {
+    throw new Error(`Invalid client type: ${cType}`);
+  }
 
   // If auth header exists, validate api key
   if (authHeader) {
