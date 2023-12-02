@@ -40,7 +40,7 @@ Luminar is an open-source product management tool that helps products to enhance
 
 ## Deploy Your Own
 
-If you're interested in self-hosting your own Luminar instance, check out the [documentation].(https://docs.luminar.so/self-hosting)
+If you're interested in self-hosting your own Luminar instance, check out the [documentation](https://docs.luminar.so/self-hosting).
 
 ## Roadmap
 
