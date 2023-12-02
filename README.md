@@ -34,18 +34,13 @@ Luminar is an open-source product management tool that helps products to enhance
 - [Next.js](https://nextjs.org/) – Framework
 - [Typescript](https://www.typescriptlang.org/) – Language
 - [Tailwind](https://tailwindcss.com/) – CSS
-- [Shadcn/ui](https://ui.shadcn.com/) - Component Library
+- [Shadcn/ui](https://ui.shadcn.com/) – Component Library
 - [Supabase](https://supabase.com/) – Database & Auth
 - [Vercel](https://vercel.com/) – Hosting
 
 ## Deploy Your Own
 
-<!-- > Note: One-Click deployment isn't fully supported yet and there might be some issues with hard-coded values in the codebase.
-
-To deploy your own instance of Luminar, just click the button below and follow the instructions. You will need to create a Supabase project and a Vercel account.
-
-[![Deploy with Vercel](https://vercel.com/button)](https://luminar.so/deploy) -->
-This is currently not supported yet until we release the necessary migration scripts to make the backend work.
+If you're interested in self-hosting your own Luminar instance, check out the [documentation].(https://docs.luminar.so/self-hosting)
 
 ## Roadmap
 
