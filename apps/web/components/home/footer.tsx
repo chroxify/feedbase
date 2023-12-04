@@ -43,7 +43,7 @@ export default function HomeFooter({ fixed }: { fixed?: boolean }) {
 
         {/* Name */}
         <div className='text-foreground/60 hidden flex-row items-center justify-center gap-5 text-sm font-light md:flex'>
-          © {new Date().getFullYear()} Luminar
+          © {new Date().getFullYear()} Feedbase
         </div>
       </div>
     </div>

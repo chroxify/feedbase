@@ -132,7 +132,7 @@ export const createProjectInvite = (slug: string, cType: 'server' | 'route', ema
 
     // Send email to user
     const { error: emailError } = await sendEmail({
-      subject: `You've been invited to join ${project!.name} on Luminar`,
+      subject: `You've been invited to join ${project!.name} on Feedbase`,
       email,
       react: ProjectInviteEmail({
         email,

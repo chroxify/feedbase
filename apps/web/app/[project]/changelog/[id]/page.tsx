@@ -142,7 +142,7 @@ export default async function ChangelogPage({ params }: Props) {
               {/* Twitter */}
               <Link
                 className='text-foreground/70 hover:text-foreground/95 transition-all duration-200 hover:scale-110'
-                href={`https://twitter.com/intent/tweet?text=Make sure to check out ${changelog.title} by ${changelog.author.full_name}!&url=https://luminar.app/changelog/${changelog.slug}`}
+                href={`https://twitter.com/intent/tweet?text=Make sure to check out ${changelog.title} by ${changelog.author.full_name}!&url=https://feedbase.app/changelog/${changelog.slug}`}
                 target='_blank'
                 rel='noopener noreferrer'>
                 <Icons.Twitter className='h-6 w-6' />

@@ -96,7 +96,7 @@ export default async function middleware(req: NextRequest) {
       headers: {
         'x-pathname': path,
         'x-project': data?.project?.slug,
-        'x-powered-by': 'Luminar',
+        'x-powered-by': 'Feedbase',
       },
     });
   }
@@ -132,7 +132,7 @@ export default async function middleware(req: NextRequest) {
     headers: {
       'x-pathname': path,
       'x-project': hostname.split('.')[0],
-      'x-powered-by': 'Luminar',
+      'x-powered-by': 'Feedbase',
     },
   });
 }

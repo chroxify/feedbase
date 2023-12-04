@@ -1,6 +1,6 @@
 ---
 title: 'Deploy to Vercel'
-description: 'How to self-host Luminar on Vercel'
+description: 'How to self-host Feedbase on Vercel'
 ---
 
 ## Create a new Supabase project
@@ -19,9 +19,9 @@ Once you've created a new project, you'll need to migrate your database. You can
     For this method, you'll need to install the Supabase CLI. View the installation instructions [here](https://github.com/supabase/cli?tab=readme-ov-file#install-the-cli).
 
     <Steps>
-        <Step title="Clone the Luminar repository">
+        <Step title="Clone the Feedbase repository">
             ```bash
-            git clone https://github.com/chroxify/luminar.git && cd luminar
+            git clone https://github.com/chroxify/feedbase.git && cd feedbase
             ```
         </Step>
         <Step title="Login to Supabase">
@@ -55,7 +55,7 @@ Once you've created a new project, you'll need to migrate your database. You can
             Click on the SQL tab in your project dashboard or follow [this link](https://supabase.com/dashboard/project/_/sql/new).
         </Step>
         <Step title="Run the migrations">
-            Copy and paste all the contents of each file in the [`supabase/migrations`](https://github.com/chroxify/luminar/tree/main/supabase/migrations) folder of the Luminar repository into the SQL editor and run them.
+            Copy and paste all the contents of each file in the [`supabase/migrations`](https://github.com/chroxify/feedbase/tree/main/supabase/migrations) folder of the Feedbase repository into the SQL editor and run them.
         </Step>
         <Step title="Verify the migrations">
             If everything went successful, you should be able to see a populated database in your Supabase dashboard.
@@ -67,9 +67,9 @@ Once you've created a new project, you'll need to migrate your database. You can
 
 Once you've migrated your database, you'll need to prepare all necessary environment variables for the next step. 
 
-You can find a list of all environment variables and where to find them [here](https://github.com/chroxify/luminar/blob/main/.env.example).
+You can find a list of all environment variables and where to find them [here](https://github.com/chroxify/feedbase/blob/main/.env.example).
 
 ## Deploy to Vercel
 
-Finally, you can deploy your Luminar instance to Vercel by following the instructions [here](https://luminar.so/deploy-vercel).
+Finally, you can deploy your Feedbase instance to Vercel by following the instructions [here](https://feedbase.app/deploy-vercel).
 

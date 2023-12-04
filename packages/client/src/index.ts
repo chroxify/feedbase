@@ -2,25 +2,25 @@ import { _request, AuthError } from '../lib/fetch';
 import { ChangelogsResponse } from '../lib/types';
 
 /**
- * Represents the Luminar class for interacting with the Luminar API.
+ * Represents the Feedbase class for interacting with the Feedbase API.
  */
-export class Luminar {
+export class Feedbase {
   public readonly baseUrl: string;
   public readonly slug: string;
   private readonly token: string;
 
   /**
    * @param slug - The slug of the project to access.
-   * @param token - The authentication token for accessing the Luminar API.
-   * @param baseUrl - (Optional) The base URL of the Luminar API. Defaults to 'https://app.luminar.so'.
+   * @param token - The authentication token for accessing the Feedbase API.
+   * @param baseUrl - (Optional) The base URL of the Feedbase API. Defaults to 'https://app.feedbase.app'.
    */
   constructor(slug: string, token: string, baseUrl?: string) {
     this.slug = slug;
-    this.baseUrl = baseUrl ?? 'https://app.luminar.so';
+    this.baseUrl = baseUrl ?? 'https://app.feedbase.app';
 
     // Make sure the token is not empty
     if (!token) {
-      throw new Error('Luminar token must not be empty');
+      throw new Error('Feedbase token must not be empty');
     }
     this.token = token;
   }

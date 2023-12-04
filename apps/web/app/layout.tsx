@@ -8,7 +8,7 @@ import { formatRootUrl } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'Luminar',
+  title: 'Feedbase',
   description: 'Collect feedback & communicating updates with ease.',
   metadataBase: new URL(formatRootUrl()),
   openGraph: {

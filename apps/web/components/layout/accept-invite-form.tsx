@@ -77,7 +77,7 @@ export default function ProjectInviteForm({
         </CardTitle>
         <CardDescription className='text-center'>
           {invite.creator.full_name} has invited you to join and collaborate on the project{' '}
-          <strong className='text-foreground/70'>{invite.project.name}</strong> on Luminar.
+          <strong className='text-foreground/70'>{invite.project.name}</strong> on Feedbase.
         </CardDescription>
       </CardHeader>
       <CardContent className='flex flex-col gap-5'>

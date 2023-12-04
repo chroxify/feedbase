@@ -1,6 +1,6 @@
 {
   "$schema": "https://mintlify.com/schema.json",
-  "name": "Luminar Docs",
+  "name": "Feedbase Docs",
   "logo": {
     "dark": "/logo/dark.svg",
     "light": "/logo/light.svg"
@@ -26,12 +26,12 @@
   "topbarLinks": [
     {
       "name": "Sign In",
-      "url": "https://app.luminar.so/login"
+      "url": "https://app.feedbase.app/login"
     }
   ],
   "topbarCtaButton": {
     "name": "Get Started",
-    "url": "https://app.luminar.so/signup"
+    "url": "https://app.feedbase.app/signup"
   },
   "tabs": [
     {
@@ -47,17 +47,17 @@
     {
       "name": "Github",
       "icon": "github",
-      "url": "https://luminar.so/github"
+      "url": "https://feedbase.app/github"
     },
     {
       "name": "Public Hub",
       "icon": "people-group",
-      "url": "https://hub.luminar.so"
+      "url": "https://hub.feedbase.app"
     },
     {
       "name": "Community",
       "icon": "discord",
-      "url": "https://luminar.so/discord"
+      "url": "https://feedbase.app/discord"
     }
   ],
   "navigation": [
@@ -81,6 +81,6 @@
   },
   "footerSocials": {
     "twitter": "https://twitter.com/0xChroxify",
-    "github": "https://github.com/chroxify/luminar"
+    "github": "https://github.com/chroxify/feedbase"
   }
 }

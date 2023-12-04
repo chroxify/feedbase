@@ -28,8 +28,8 @@ export default function Landing() {
         </h1>
 
         <p className='text-foreground/60 mt-5 max-w-xs text-center text-sm font-light sm:block sm:max-w-lg sm:text-lg md:max-w-xl'>
-          Luminar simplifies feedback collection, feature prioritization, and product update sharing, allowing
-          you to focus on building.
+          Feedbase simplifies feedback collection, feature prioritization, and product update sharing,
+          allowing you to focus on building.
         </p>
 
         <div className='mt-5 flex w-full flex-row items-center justify-center gap-5'>

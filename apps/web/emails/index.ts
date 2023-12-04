@@ -23,7 +23,7 @@ export const sendEmail = async ({
     );
   }
   return resend.emails.send({
-    from: marketing ? 'Christo from Luminar <christo@luminar.so>' : 'Luminar <system@luminar.so>',
+    from: marketing ? 'Christo from Feedbase <christo@feedbase.app>' : 'Feedbase <system@feedbase.app>',
     to: test ? 'delivered@resend.dev' : email,
     subject,
     react,

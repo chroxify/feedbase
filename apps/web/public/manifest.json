@@ -4,8 +4,8 @@
     "display": "standalone",
     "scope": "/",
     "start_url": "/",
-    "name": "Luminar",
-    "short_name": "Luminar",
+    "name": "Feedbase",
+    "short_name": "Feedbase",
     "description": "The open-source solution for collecting feedback & communicating updates.",
     "icons": [
       {

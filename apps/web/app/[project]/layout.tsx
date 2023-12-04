@@ -92,7 +92,7 @@ export default async function HubLayout({ children, params }: Props) {
             className={cn(
               'text-foreground/80 font-light inline-flex items-center rounded-lg px-3 py-1 w-fit text-md hover:text-foreground',
             )}>
-            Powered by Luminar
+            Powered by Feedbase
         </Button>
       </div> */}
     </main>

@@ -112,7 +112,7 @@ export function WaitlistModal({
         <DialogHeader className='flex flex-col items-center pb-2 pt-5'>
           <DialogTitle className='pb-2 font-normal'>Request Access</DialogTitle>
           <DialogDescription className='text-center font-extralight text-white/50'>
-            Request access to the Luminar beta today and we&apos;ll get back to you as soon as possible.
+            Request access to the Feedbase beta today and we&apos;ll get back to you as soon as possible.
           </DialogDescription>
         </DialogHeader>
         <div className='flex flex-col gap-5'>
