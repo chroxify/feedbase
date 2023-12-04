@@ -38,6 +38,7 @@ export type FeedbackWithUserProps = Database['public']['Tables']['feedback']['Ro
 
 export type FeedbackWithUserInputProps = Database['public']['Tables']['feedback']['Insert'] & {
   tags?: string[];
+  user?: ProfileProps['Update'];
 };
 
 export type FeedbackCommentProps = Database['public']['Tables']['feedback_comments'];

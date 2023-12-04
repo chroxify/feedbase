@@ -126,7 +126,7 @@ type WithProjectAuthHandler<T> = (
 export const withProjectAuth = <T>(handler: WithProjectAuthHandler<T>) => {
   return async (slug: string, cType: 'server' | 'route', allowAnonAccess = false, requireLogin = true) => {
     // Get the user from the session
-    const { supabase, user, apiKey } = await createClient(cType, (allowAnonAccess && !requireLogin) || false);
+    const { supabase, user, apiKey } = await createClient(cType, allowAnonAccess);
 
     // If user.error is not null, then the user is likely not logged in
     if ((user.error !== null && requireLogin) || user.data === null) {

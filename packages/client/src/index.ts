@@ -77,7 +77,7 @@ export class Luminar {
           description,
           user: {
             email,
-            fullName,
+            full_name: fullName,
             avatar_url: avatarUrl,
           },
         }

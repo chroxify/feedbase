@@ -130,5 +130,24 @@ to public
 using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]))
 with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{full_access}'::token_type[]));
 
+create policy "API Access for Insert"
+on "public"."feedback"
+as permissive
+for insert
+to public
+with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{public_access,full_access}'::token_type[]));
 
+create policy "API Access for Update"
+on "public"."profiles"
+as permissive
+for update
+to public
+using (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{public_access}'::token_type[]))
+with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{public_access}'::token_type[]));
 
+create policy "API Access for Insert"
+on "public"."profiles"
+as permissive
+for insert
+to public
+with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{public_access}'::token_type[]));

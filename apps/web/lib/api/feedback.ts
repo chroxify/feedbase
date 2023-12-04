@@ -6,6 +6,7 @@ import {
   FeedbackWithUserProps,
   ProfileProps,
 } from '../types';
+import { isValidEmail } from '../utils';
 import { sendDiscordNotification } from './integrations';
 
 // Create a feedback post
@@ -71,6 +72,135 @@ export const createFeedback = (
         });
     }
 
+    // Check if user is not undefined
+    if (data.user !== undefined) {
+      // Make sure user has email and its an email
+      if (!data.user.email || !isValidEmail(data.user.email)) {
+        return {
+          data: null,
+          error: { message: 'user.email is required and must be a valid email.', status: 400 },
+        };
+      }
+
+      // Check if user exists
+      const { data: userProfile, error: profileError } = await supabase
+        .from('profiles')
+        .select()
+        .eq('email', data.user.email);
+
+      // Check for errors
+      if (profileError) {
+        return { data: null, error: { message: profileError.message, status: 500 } };
+      }
+
+      // Check if widget user email exists
+      const { data: widgetUser, error: widgetUserError } = await supabase
+        .from('profiles')
+        .select()
+        .eq('email', data.user.email.replace('@', '+widget@'));
+
+      // Check for errors
+      if (widgetUserError) {
+        return { data: null, error: { message: widgetUserError.message, status: 500 } };
+      }
+
+      /**
+       * Theres 3 cases:
+       * 1. No real user profile
+       *  1.1. No widget user profile → create new widget user profile
+       *  1.2. Already widget user profile → use widget user profile
+       * 2. Real user profile & widget user profile → use widget user profile but update if name has changed
+       * 3. Real user profile & no widget user profile → create new widget user profile
+       */
+      if (!userProfile || userProfile.length === 0) {
+        /**
+         * If there is no real user profile check if there is a widget user profile
+         * Already widget user profile → use widget user profile
+         * No widget user profile → create new widget user profile
+         */
+        if (widgetUser && widgetUser.length > 0) {
+          // Update name if it has changed
+          if (data.user.full_name !== undefined && widgetUser[0].full_name !== data.user.full_name) {
+            const { error: updateError } = await supabase
+              .from('profiles')
+              .update({ full_name: data.user.full_name })
+              .eq('id', widgetUser[0].id)
+              .select()
+              .single();
+
+            // Check for errors
+            if (updateError) {
+              return { data: null, error: { message: updateError.message, status: 500 } };
+            }
+          }
+
+          data.user_id = widgetUser[0].id;
+        } else {
+          // Create user
+          const { data: createdProfile, error: createError } = await supabase
+            .from('profiles')
+            .insert({
+              email: data.user.email.replace('@', '+widget@'),
+              full_name:
+                data.user.full_name !== undefined ? data.user.full_name : data.user.email.split('@')[0],
+            })
+            .select()
+            .single();
+
+          // Check for errors
+          if (createError) {
+            return { data: null, error: { message: createError.message, status: 500 } };
+          }
+
+          // Set user id
+          data.user_id = createdProfile.id;
+        }
+      } else if (widgetUser && widgetUser.length > 0) {
+        /**
+         * As there is a real user profile check if there is a widget user profile
+         * Already widget user profile → possibly update name and use widget user profile
+         */
+
+        // Update name if it has changed
+        if (data.user.full_name !== undefined && userProfile[0].full_name !== data.user.full_name) {
+          const { error: updateError } = await supabase
+            .from('profiles')
+            .update({ full_name: data.user.full_name })
+            .eq('id', widgetUser[0].id)
+            .select()
+            .single();
+
+          // Check for errors
+          if (updateError) {
+            return { data: null, error: { message: updateError.message, status: 500 } };
+          }
+        }
+
+        data.user_id = widgetUser[0].id;
+      } else {
+        /**
+         * As there is a real user profile but no widget user profile
+         * Create new widget user profile
+         */
+        const { data: createdProfile, error: createError } = await supabase
+          .from('profiles')
+          .insert({
+            email: userProfile[0].email.replace('@', '+widget@'),
+            full_name: userProfile[0].full_name,
+          })
+          .select()
+          .single();
+
+        // Check for errors
+        if (createError) {
+          return { data: null, error: { message: createError.message, status: 500 } };
+        }
+
+        // Set user id
+        data.user_id = createdProfile.id;
+      }
+    }
+
     // Make sure content is not empty or just html tags
     if (data.description.replace(/<[^>]*>?/gm, '').length === 0) {
       return { data: null, error: { message: 'feedback description cannot be empty.', status: 400 } };
@@ -85,7 +215,7 @@ export const createFeedback = (
         status: data.status,
         raw_tags: data.raw_tags,
         project_id: project!.id,
-        user_id: user!.id,
+        user_id: data.user !== undefined ? data.user_id : user!.id,
       })
       .select('*, user:user_id (*)')
       .single();

@@ -103,7 +103,7 @@ CREATE TABLE IF NOT EXISTS "public"."feedback_upvoters" (
 ALTER TABLE "public"."feedback_upvoters" OWNER TO "postgres";
 
 CREATE TABLE IF NOT EXISTS "public"."profiles" (
-    "id" "uuid" NOT NULL,
+    "id" "uuid" DEFAULT "gen_random_uuid"() NOT NULL,
     "full_name" "text" NOT NULL,
     "avatar_url" "text",
     "email" "text" NOT NULL
@@ -238,9 +238,6 @@ ALTER TABLE ONLY "public"."feedback_upvoters"
 
 ALTER TABLE ONLY "public"."feedback"
     ADD CONSTRAINT "feedback_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id");
-
-ALTER TABLE ONLY "public"."profiles"
-    ADD CONSTRAINT "profiles_id_fkey" FOREIGN KEY ("id") REFERENCES "auth"."users"("id") ON DELETE CASCADE;
 
 ALTER TABLE ONLY "public"."project_configs"
     ADD CONSTRAINT "project_configs_project_id_fkey" FOREIGN KEY ("project_id") REFERENCES "public"."projects"("id") ON UPDATE CASCADE ON DELETE CASCADE;

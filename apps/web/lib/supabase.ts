@@ -235,7 +235,7 @@ export interface Database {
           avatar_url?: string | null;
           email: string;
           full_name: string;
-          id: string;
+          id?: string;
         };
         Update: {
           avatar_url?: string | null;
@@ -258,7 +258,7 @@ export interface Database {
           creator_id: string;
           id: string;
           name: string;
-          permission: string;
+          permission: Database['public']['Enums']['token_type'];
           project_id: string;
           short_token: string;
           token: string;
@@ -268,7 +268,7 @@ export interface Database {
           creator_id: string;
           id?: string;
           name: string;
-          permission: string;
+          permission: Database['public']['Enums']['token_type'];
           project_id: string;
           short_token: string;
           token: string;
@@ -278,7 +278,7 @@ export interface Database {
           creator_id?: string;
           id?: string;
           name?: string;
-          permission?: string;
+          permission?: Database['public']['Enums']['token_type'];
           project_id?: string;
           short_token?: string;
           token?: string;
@@ -474,10 +474,16 @@ export interface Database {
       [_ in never]: never;
     };
     Functions: {
-      [_ in never]: never;
+      is_allowed_api_token: {
+        Args: {
+          apitoken: string;
+          tokentype: Database['public']['Enums']['token_type'][];
+        };
+        Returns: boolean;
+      };
     };
     Enums: {
-      [_ in never]: never;
+      token_type: 'full_access' | 'public_access';
     };
     CompositeTypes: {
       [_ in never]: never;

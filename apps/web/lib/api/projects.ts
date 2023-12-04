@@ -389,7 +389,7 @@ export const createProjectApiKey = (
         project_id: project!.id,
         name: data.name,
         token: apiKeyToken,
-        permission: data.permission,
+        permission: data.permission as 'full_access' | 'public_access',
         short_token: shortToken,
         creator_id: user!.id,
       })
