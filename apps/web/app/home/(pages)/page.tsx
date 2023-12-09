@@ -39,7 +39,7 @@ export default function Landing() {
 
           <Link href='/github'>
             <button
-              className='hover:animate-background-shine text-foreground inline-flex h-9 items-center justify-center rounded-full border bg-[linear-gradient(110deg,#05060A,90%,#1e2631,95%,#05060A)] bg-[length:225%_100%] px-4 py-1 text-sm font-light transition-colors'
+              className='hover:animate-background-shine text-foreground inline-flex h-9 items-center justify-center rounded-full border bg-[linear-gradient(110deg,#06060A,90%,#1e2631,95%,#06060A)] bg-[length:225%_100%] px-4 py-1 text-sm font-light transition-colors'
               type='button'>
               Star on GitHub
             </button>
