@@ -6,7 +6,7 @@
     "start_url": "/",
     "name": "Feedbase",
     "short_name": "Feedbase",
-    "description": "The open-source solution for collecting feedback & communicating updates.",
+    "description": "The open-source solution for collecting feedback & communicating product updates.",
     "icons": [
       {
         "src": "/icon-192x192.png",
