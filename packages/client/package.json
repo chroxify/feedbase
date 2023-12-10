@@ -1,6 +1,6 @@
 {
-  "name": "@feedbase/client",
-  "version": "1.0.0",
+  "name": "@feedbase-ts/client",
+  "version": "1.0.1",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "license": "MIT",

@@ -1,11 +1,13 @@
 
 {
   "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ESNext", "dom"],
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "isolatedModules": true,
     "module": "ESNext",
-    "moduleResolution": "Bundler",
+    "moduleResolution": "node",
     "preserveWatchOutput": true,
     "skipLibCheck": true,
     "noEmit": true,
