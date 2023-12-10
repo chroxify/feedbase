@@ -139,7 +139,7 @@ export const createProjectInvite = (slug: string, cType: 'server' | 'route', ema
         invitedByFullName: inviteData.creator.full_name,
         invitedByEmail: inviteData.creator.email,
         projectName: project!.name,
-        inviteLink: formatRootUrl('app', `/invite/${inviteData.id}`),
+        inviteLink: formatRootUrl('dash', `/invite/${inviteData.id}`),
       }),
     })
       .then((data) => {

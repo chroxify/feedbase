@@ -78,7 +78,7 @@ export const sendDiscordConfirmation = async (
         {
           title: 'Discord Integration Enabled',
           description: "If you're seeing this, it means that your Discord integration is working correctly.",
-          url: `https://app.feedbase.app/${projectSlug}`,
+          url: `https://dash.feedbase.app/${projectSlug}`,
           color: 0x05060a,
         },
       ],

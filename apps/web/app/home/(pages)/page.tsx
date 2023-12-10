@@ -33,7 +33,7 @@ export default function Landing() {
         </p>
 
         <div className='mt-5 flex w-full flex-row items-center justify-center gap-5'>
-          <Link href={formatRootUrl('app', '/signup')}>
+          <Link href={formatRootUrl('dash', '/signup')}>
             <Button className='border-background inline-flex rounded-full border'>Get Started</Button>
           </Link>
 
@@ -79,7 +79,7 @@ export default function Landing() {
         </p>
 
         <div className='mt-10 flex w-full flex-row items-center justify-center gap-5'>
-          <Link href={formatRootUrl('app', '/signup')}>
+          <Link href={formatRootUrl('dash', '/signup')}>
             <Button className='border-background inline-flex border'>Get Started</Button>
           </Link>
 

@@ -1,7 +1,7 @@
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getCurrentUser, getUserProjects } from '@/lib/api/user';
-import { APP_DOMAIN } from '@/lib/constants';
+import { DASH_DOMAIN } from '@/lib/constants';
 import NavbarMobile from '@/components/layout/nav-bar-mobile';
 import Sidebar from '@/components/layout/sidebar';
 import TitleProvider from '@/components/layout/title-provider';
@@ -47,7 +47,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const { data: user } = await getCurrentUser('server');
 
   if (!user) {
-    return redirect(`${APP_DOMAIN}/login`);
+    return redirect(`${DASH_DOMAIN}/login`);
   }
 
   // Fetch the user's projects
@@ -55,7 +55,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
   // Check if the user has any projects
   if (!projects || projects.length === 0) {
-    return redirect(`${APP_DOMAIN}`);
+    return redirect(`${DASH_DOMAIN}`);
   }
 
   // Get the project with the current slug

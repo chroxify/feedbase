@@ -12,11 +12,11 @@ export class Feedbase {
   /**
    * @param slug - The slug of the project to access.
    * @param token - The authentication token for accessing the Feedbase API.
-   * @param baseUrl - (Optional) The base URL of the Feedbase API. Defaults to 'https://app.feedbase.app'.
+   * @param baseUrl - (Optional) The base URL of the Feedbase API. Defaults to 'https://dash.feedbase.app'.
    */
   constructor(slug: string, token: string, baseUrl?: string) {
     this.slug = slug;
-    this.baseUrl = baseUrl ?? 'https://app.feedbase.app';
+    this.baseUrl = baseUrl ?? 'https://dash.feedbase.app';
 
     // Make sure the token is not empty
     if (!token) {

@@ -101,15 +101,15 @@ export default async function middleware(req: NextRequest) {
     });
   }
 
-  // rewrites for app pages
-  if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+  // rewrites for dash pages
+  if (hostname === `dash.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     // protect all app pages with authentication except for /login, /signup and /invite/*
     if (!session.data.session && path !== '/login' && path !== '/signup' && !path.startsWith('/invite/')) {
       return NextResponse.redirect(new URL('/login', req.url));
     }
 
-    // rewrite / to /app
-    return NextResponse.rewrite(new URL(`/app${path === '/' ? '' : path}`, req.url), {
+    // rewrite / to /dash
+    return NextResponse.rewrite(new URL(`/dash${path === '/' ? '' : path}`, req.url), {
       headers: {
         'x-pathname': path,
         'x-project': path.split('/')[1],

@@ -78,7 +78,7 @@ export default function HomeNav() {
           ))}
 
           {scrolled ? (
-            <Link href={formatRootUrl('app', '/signup')}>
+            <Link href={formatRootUrl('dash', '/signup')}>
               <Button
                 className='border-background h-8 min-w-fit shrink-0 rounded-full border px-2.5 text-sm font-normal sm:inline-flex'
                 size='sm'>
@@ -90,7 +90,7 @@ export default function HomeNav() {
 
         {/* Buttons */}
         <div className={cn('flex flex-row items-center justify-center gap-3')}>
-          <Link href={formatRootUrl('app', '/signup')} className='inline-flex'>
+          <Link href={formatRootUrl('dash', '/signup')} className='inline-flex'>
             <Button className='h-8 sm:inline-flex' size='sm'>
               Get Started
             </Button>

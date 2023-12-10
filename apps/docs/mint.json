@@ -26,12 +26,12 @@
   "topbarLinks": [
     {
       "name": "Sign In",
-      "url": "https://app.feedbase.app/login"
+      "url": "https://dash.feedbase.app/login"
     }
   ],
   "topbarCtaButton": {
     "name": "Get Started",
-    "url": "https://app.feedbase.app/signup"
+    "url": "https://dash.feedbase.app/signup"
   },
   "tabs": [
     {
