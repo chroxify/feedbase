@@ -81,7 +81,7 @@ export default function Onboarding() {
 
               <Input
                 id='name'
-                placeholder='Luminar'
+                placeholder='Feedbase'
                 value={name}
                 onChange={(event) => {
                   setName(event.target.value);
@@ -101,7 +101,7 @@ export default function Onboarding() {
               <div className='bg-background focus-within:ring-ring ring-offset-root flex h-9 w-full rounded-md border text-sm font-extralight transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
                 <Input
                   className='h-full w-full border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0'
-                  placeholder='luminar'
+                  placeholder='feedbase'
                   value={slug}
                   onChange={handleSlugChange}
                 />

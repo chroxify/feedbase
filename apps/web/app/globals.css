@@ -5,7 +5,7 @@
 @layer base {
   :root {
     /* App root background */
-    --root-background: 210 38% 95%; /* #000000 */
+    --root-background: 240 25% 3%; /* #000000 */
 
     --background: 0 0% 100%; 
     --foreground: 220 26% 14%;

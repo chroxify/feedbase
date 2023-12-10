@@ -13,7 +13,7 @@ import { FeedbackWithUserInputProps } from '@/lib/types';
     }
 */
 export async function POST(req: Request, context: { params: { slug: string } }) {
-  const { title, description, status, tags } = (await req.json()) as FeedbackWithUserInputProps;
+  const { title, description, status, tags, user } = (await req.json()) as FeedbackWithUserInputProps;
 
   // Validate Request Body
   if (!title) {
@@ -29,6 +29,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
       project_id: 'dummy-id',
       user_id: 'dummy-id',
       tags: tags || [],
+      user: user !== null ? user : undefined,
     },
     'route'
   );

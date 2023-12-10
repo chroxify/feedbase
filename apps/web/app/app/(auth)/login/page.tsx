@@ -7,8 +7,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { UserAuthForm } from '@/components/user-auth-form';
 
 export const metadata: Metadata = {
-  title: 'Sign in to Luminar',
-  description: 'Sign in to your Luminar account.',
+  title: 'Sign in to Feedbase',
+  description: 'Sign in to your Feedbase account.',
 };
 
 export default async function SignIn() {

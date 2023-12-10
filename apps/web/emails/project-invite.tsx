@@ -31,7 +31,7 @@ export default function ProjectInviteEmail({
   projectName,
   inviteLink,
 }: ProjectInviteEmailProps) {
-  const previewText = `Join ${projectName} on Luminar`;
+  const previewText = `Join ${projectName} on Feedbase`;
 
   return (
     <Html>
@@ -45,19 +45,19 @@ export default function ProjectInviteEmail({
                 src={`${formatRootUrl()}/icon-512x512.png`}
                 width='40'
                 height='40'
-                alt='Luminar'
+                alt='Feedbase'
                 className='mx-auto my-0 rounded-md'
               />
             </Section>
             <Heading className='mx-0 my-[30px] p-0 text-center text-[24px] font-normal text-black'>
-              Join <strong>{projectName}</strong> on <strong>Luminar</strong>
+              Join <strong>{projectName}</strong> on <strong>Feedbase</strong>
             </Heading>
             <Text className='text-[14px] leading-[24px] text-black'>
               <strong>{invitedByFullName}</strong> (
               <Link href={`mailto:${invitedByEmail}`} className='text-blue-600 no-underline'>
                 {invitedByEmail}
               </Link>
-              ) has invited you to the <strong>{projectName}</strong> team on <strong>Luminar</strong>.
+              ) has invited you to the <strong>{projectName}</strong> team on <strong>Feedbase</strong>.
             </Text>
             <Section className='mb-[32px] mt-[32px] text-center'>
               <Button

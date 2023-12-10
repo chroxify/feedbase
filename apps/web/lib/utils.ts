@@ -86,3 +86,8 @@ export async function fetcher<JSON = any>(input: RequestInfo, init?: RequestInit
 
   return res.json();
 }
+
+// Is valid email
+export function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}

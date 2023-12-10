@@ -1,0 +1,29 @@
+{
+  "name": "@feedbase-ts/client",
+  "version": "1.0.1",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "license": "MIT",
+  "private": false,
+  "keywords": [
+    "feedbase",
+    "client",
+    "api"
+  ],
+  "bugs": {
+    "url": "https://github.com/chroxify/feedbase/issues"
+  },
+  "homepage": "https://docs.feedbase.app",
+  "files": [
+    "./dist/**"
+  ],
+  "scripts": {
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "@types/node": "^20.2.1",
+    "tsup": "^6.7.0",
+    "tsx": "^3.12.7",
+    "typescript": "^5.0.4"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "name": "@luminar/tailwind-config",
+  "name": "@feedbase/tailwind-config",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,

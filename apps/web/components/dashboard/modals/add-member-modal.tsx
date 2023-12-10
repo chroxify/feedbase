@@ -102,7 +102,7 @@ export default function InviteMemberDialog({
 
               <Input
                 id='email'
-                placeholder='member@luminar.so'
+                placeholder='member@feedbase.app'
                 value={email}
                 onChange={(event) => {
                   setEmail(event.target.value);
