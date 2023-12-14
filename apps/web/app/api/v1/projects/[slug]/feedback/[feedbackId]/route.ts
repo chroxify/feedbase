@@ -24,7 +24,7 @@ export async function GET(req: Request, context: { params: { slug: string; feedb
 
 /*
     Update Feedback by ID
-    PUT /api/v1/projects/[slug]/feedback/[id]
+    PATCH /api/v1/projects/[slug]/feedback/[id]
     {
         title: string;
         description: string;

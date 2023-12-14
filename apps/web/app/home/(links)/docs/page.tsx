@@ -1,5 +1,6 @@
 import { redirect } from 'next/navigation';
+import { formatRootUrl } from '@/lib/utils';
 
 export default function Docs() {
-  redirect('https://github.com/chroxify/feedbase');
+  redirect(formatRootUrl('docs'));
 }
