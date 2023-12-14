@@ -54,3 +54,40 @@ export const formatHtmlToMd = (htmlString: string): string => {
   return htmlString;
 };
 /* eslint-enable */
+
+// Create api key token
+export function generateApiToken(prefix: string, length: number): string {
+  const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let token = '';
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * charset.length);
+    token += charset.charAt(randomIndex);
+  }
+
+  return `${prefix}_${token}`;
+}
+
+interface SWRError extends Error {
+  status: number;
+}
+
+// Fetcher function for SWR
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function fetcher<JSON = any>(input: RequestInfo, init?: RequestInit): Promise<JSON> {
+  const res = await fetch(input, init);
+
+  if (!res.ok) {
+    const error = await res.text();
+    const err = new Error(error) as SWRError;
+    err.status = res.status;
+    throw err;
+  }
+
+  return res.json();
+}
+
+// Is valid email
+export function isValidEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}

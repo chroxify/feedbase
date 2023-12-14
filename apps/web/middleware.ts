@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createMiddlewareClient } from '@supabase/auth-helpers-nextjs';
+import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { PostgrestError } from '@supabase/supabase-js';
 
 export const config = {
@@ -17,10 +17,42 @@ export const config = {
 };
 
 export default async function middleware(req: NextRequest) {
-  const res = NextResponse.next();
-
   // Create a Supabase client configured to use cookies
-  const supabase = createMiddlewareClient({ req, res });
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        get(name: string) {
+          return req.cookies.get(name)?.value;
+        },
+        set(name: string, value: string, options: CookieOptions) {
+          req.cookies.set({
+            name,
+            value,
+            ...options,
+          });
+          NextResponse.next({
+            request: {
+              headers: req.headers,
+            },
+          });
+        },
+        remove(name: string, options: CookieOptions) {
+          req.cookies.set({
+            name,
+            value: '',
+            ...options,
+          });
+          NextResponse.next({
+            request: {
+              headers: req.headers,
+            },
+          });
+        },
+      },
+    }
+  );
 
   // Refresh session if expired - required for Server Components
   // https://supabase.com/docs/guides/auth/auth-helpers/nextjs#managing-session-with-middleware
@@ -64,20 +96,20 @@ export default async function middleware(req: NextRequest) {
       headers: {
         'x-pathname': path,
         'x-project': data?.project?.slug,
-        'x-powered-by': 'Luminar',
+        'x-powered-by': 'Feedbase',
       },
     });
   }
 
-  // rewrites for app pages
-  if (hostname === `app.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+  // rewrites for dash pages
+  if (hostname === `dash.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
     // protect all app pages with authentication except for /login, /signup and /invite/*
     if (!session.data.session && path !== '/login' && path !== '/signup' && !path.startsWith('/invite/')) {
       return NextResponse.redirect(new URL('/login', req.url));
     }
 
-    // rewrite / to /app
-    return NextResponse.rewrite(new URL(`/app${path === '/' ? '' : path}`, req.url), {
+    // rewrite / to /dash
+    return NextResponse.rewrite(new URL(`/dash${path === '/' ? '' : path}`, req.url), {
       headers: {
         'x-pathname': path,
         'x-project': path.split('/')[1],
@@ -110,7 +142,7 @@ export default async function middleware(req: NextRequest) {
     headers: {
       'x-pathname': path,
       'x-project': hostname.split('.')[0],
-      'x-powered-by': 'Luminar',
+      'x-powered-by': 'Feedbase',
     },
   });
 }

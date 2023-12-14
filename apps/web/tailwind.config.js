@@ -1,4 +1,4 @@
-const sharedConfig = require('@luminar/tailwind-config/tailwind.config.js');
+const sharedConfig = require('@feedbase/tailwind-config/tailwind.config.js');
 
 module.exports = {
   presets: [sharedConfig],

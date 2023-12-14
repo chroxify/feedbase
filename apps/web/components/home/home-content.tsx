@@ -48,7 +48,7 @@ export default function HomeContent() {
 
           {/* Description */}
           <p className='mb-8 mt-4 text-base font-extralight text-white/60 sm:text-lg'>
-            Create changelogs, roadmaps, and collect feedback with ease. Luminar provides the best user and
+            Create changelogs, roadmaps, and collect feedback with ease. Feedbase provides the best user and
             team experience, allowing you to focus on building your product.
           </p>
 

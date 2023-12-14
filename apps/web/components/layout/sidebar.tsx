@@ -24,7 +24,7 @@ export default async function Sidebar({
       </div>
       {/* Footer Buttons */}
       {/* <div className='flex w-full flex-col'>
-        <Link href='https://github.com/chroxify/luminar/issues/new' rel='noopener noreferrer' target='_blank'>
+        <Link href='https://github.com/chroxify/feedbase/issues/new' rel='noopener noreferrer' target='_blank'>
           <Button
             variant='secondary'
             className='w-full items-center justify-start  gap-1 border border-transparent p-1 text-secondary-foreground/50 hover:text-secondary-foreground hover:bg-transparent font-light group'>

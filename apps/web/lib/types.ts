@@ -11,6 +11,10 @@ export type TeamMemberProps = Database['public']['Tables']['profiles']['Row'] & 
 
 export type ProjectInviteProps = Database['public']['Tables']['project_invites'];
 
+export type ProjectApiKeyProps = Database['public']['Tables']['project_api_keys'];
+
+export type ProjectApiKeyWithoutTokenProps = Omit<ProjectApiKeyProps['Row'], 'token'>;
+
 export type ExtendedInviteProps = ProjectInviteProps['Row'] & {
   project: { name: string; slug: string; icon: string };
   creator: { full_name: string };
@@ -34,6 +38,7 @@ export type FeedbackWithUserProps = Database['public']['Tables']['feedback']['Ro
 
 export type FeedbackWithUserInputProps = Database['public']['Tables']['feedback']['Insert'] & {
   tags?: string[];
+  user?: ProfileProps['Update'];
 };
 
 export type FeedbackCommentProps = Database['public']['Tables']['feedback_comments'];

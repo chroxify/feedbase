@@ -1,12 +1,12 @@
 {
-    "theme_color": "#05060A",
-    "background_color": "#05060A",
+    "theme_color": "#06060A",
+    "background_color": "#06060A",
     "display": "standalone",
     "scope": "/",
     "start_url": "/",
-    "name": "Luminar",
-    "short_name": "Luminar",
-    "description": "The open-source solution for collecting feedback & communicating updates.",
+    "name": "Feedbase",
+    "short_name": "Feedbase",
+    "description": "The open-source solution for collecting feedback & communicating product updates.",
     "icons": [
       {
         "src": "/icon-192x192.png",

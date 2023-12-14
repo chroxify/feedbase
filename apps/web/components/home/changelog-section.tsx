@@ -28,13 +28,13 @@ export default function ChangelogSection() {
       </h1>
 
       <p className='text-foreground/60 mt-2 w-[800px] max-w-full text-center text-sm font-light sm:text-base'>
-        Luminar adds a touch of enjoyment to help you keep your users informed through an appealing changelog
+        Feedbase adds a touch of enjoyment to help you keep your users informed through an appealing changelog
         that&apos;s simple to create and distribute.
       </p>
 
       {/* CTA */}
       <Link
-        href={formatRootUrl('app', '/signup')}
+        href={formatRootUrl('dash', '/signup')}
         className='group relative mt-3 grid h-[36px] overflow-hidden rounded-md px-4 py-1 shadow-[0_1000px_0_0_hsl(0_0%_20%)_inset] transition-colors duration-200'>
         <span>
           <span className="spark mask-gradient animate-flip before:animate-rotate absolute inset-0 h-[100%] w-[100%] overflow-hidden rounded-md [mask:linear-gradient(white,_transparent_50%)] before:absolute before:aspect-square before:w-[200%] before:rotate-[-90deg] before:bg-[conic-gradient(from_0deg,transparent_0_340deg,white_360deg)] before:content-[''] before:[inset:0_auto_auto_50%] before:[translate:-50%_-15%]" />
@@ -65,7 +65,7 @@ export default function ChangelogSection() {
 
                 <div className='bg-background flex flex-col gap-1.5 rounded-b-md p-3'>
                   {/* url */}
-                  <span className='text-foreground/60 text-sm font-light'>hub.luminar.so</span>
+                  <span className='text-foreground/60 text-sm font-light'>hub.feedbase.app</span>
 
                   {/* Title */}
                   <span className='text-foreground text-sm font-medium'>OG Image support</span>
@@ -85,7 +85,7 @@ export default function ChangelogSection() {
             <div className='h-full p-7'>
               <h1 className='text-foreground text-lg font-medium'>Markdown support</h1>
               <p className='text-foreground/60 mt-2 text-sm font-light'>
-                Write changelog posts in markdown and Luminar will automatically convert it to HTML.
+                Write changelog posts in markdown and Feedbase will automatically convert it to HTML.
               </p>
 
               {/* Markdown */}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+import { createBrowserClient } from '@supabase/ssr';
 import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
 import { Input } from 'ui/components/ui/input';
@@ -30,7 +30,10 @@ export function UserAuthForm({
   //     secure: false,
   //   }
   // }
-  const supabase = createClientComponentClient();
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
 
   async function handleMailSignIn(event: React.SyntheticEvent) {
     setIsLoading(true);

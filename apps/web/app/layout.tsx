@@ -8,8 +8,8 @@ import { formatRootUrl } from '@/lib/utils';
 import { ThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
-  title: 'Luminar',
-  description: 'Collect feedback & communicating updates with ease.',
+  title: 'Feedbase',
+  description: 'Collect feedback & communicate product updates with ease.',
   metadataBase: new URL(formatRootUrl()),
   openGraph: {
     images: [
@@ -33,7 +33,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   maximumScale: 1,
-  themeColor: '#05060A',
+  themeColor: '#06060A',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

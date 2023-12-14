@@ -18,7 +18,7 @@ export const sendDiscordNotification = async (
     },
     body: JSON.stringify({
       username: `${project.name} | Feedback`,
-      avatar_url: project.icon ? project.icon : 'https://luminar.so/icon-512x512.png',
+      avatar_url: project.icon ? project.icon : 'https://feedbase.app/icon-512x512.png',
       content: projectConfig.integration_discord_role_id
         ? `<@&${projectConfig.integration_discord_role_id}>`
         : '',
@@ -26,7 +26,7 @@ export const sendDiscordNotification = async (
         {
           title: 'New Feedback Submission!',
           description: "You've received a new feedback submission.",
-          url: `https://luminar.app/${project.slug}/feedback/${feedback.id}`,
+          url: `https://feedbase.app/${project.slug}/feedback/${feedback.id}`,
           color: 0x05060a,
           fields: [
             {
@@ -46,8 +46,8 @@ export const sendDiscordNotification = async (
               'https://innmcibhgnhxpghxldrr.supabase.co/storage/v1/object/public/avatars/d304fdae-9ed5-4000-afbb-61a646b95e8b',
           },
           footer: {
-            text: 'Powered By Luminar',
-            icon_url: 'https://luminar.so/icon-512x512.png',
+            text: 'Powered By Feedbase',
+            icon_url: 'https://feedbase.app/icon-512x512.png',
           },
         },
       ],
@@ -71,14 +71,14 @@ export const sendDiscordConfirmation = async (
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      username: `Luminar | Feedback`,
-      avatar_url: 'https://luminar.so/icon-512x512.png',
+      username: `Feedbase | Feedback`,
+      avatar_url: 'https://feedbase.app/icon-512x512.png',
       content: roleId ? `<@&${roleId}>` : '',
       embeds: [
         {
           title: 'Discord Integration Enabled',
           description: "If you're seeing this, it means that your Discord integration is working correctly.",
-          url: `https://app.luminar.app/${projectSlug}`,
+          url: `https://dash.feedbase.app/${projectSlug}`,
           color: 0x05060a,
         },
       ],

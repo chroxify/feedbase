@@ -7,10 +7,10 @@ export default function Deploy() {
     <>
       <div className='flex h-full w-full flex-col items-center justify-center overflow-auto p-5 pt-32'>
         <h1 className='text-foreground gap-2 text-center text-4xl font-bold leading-tight'>
-          Deploy Luminar to Vercel
+          Deploy Feedbase to Vercel
         </h1>
         <p className='text-foreground/60 mt-2 text-center font-light md:w-2/3'>
-          You can deploy your own hosted instance of Luminar to Vercel, for free, in just a few clicks.
+          You can deploy your own hosted instance of Feedbase to Vercel, for free, in just a few clicks.
         </p>
 
         {/* Steps */}
@@ -56,7 +56,7 @@ export default function Deploy() {
               </p>
 
               <Link
-                href='https://github.com/chroxify/luminar?tab=readme-ov-file#deploy-your-own'
+                href='https://github.com/chroxify/feedbase?tab=readme-ov-file#deploy-your-own'
                 target='_blank'
                 rel='noopener noreferrer'>
                 <Button size='sm' className='border-background mt-3 border'>
@@ -84,7 +84,7 @@ export default function Deploy() {
               </p>
 
               <Link
-                href='https://github.com/chroxify/luminar/blob/main/.env.example'
+                href='https://github.com/chroxify/feedbase/blob/main/.env.example'
                 target='_blank'
                 rel='noopener noreferrer'>
                 <Button size='sm' className='border-background mt-3 border'>

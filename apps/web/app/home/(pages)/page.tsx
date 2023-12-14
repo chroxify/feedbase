@@ -28,18 +28,18 @@ export default function Landing() {
         </h1>
 
         <p className='text-foreground/60 mt-5 max-w-xs text-center text-sm font-light sm:block sm:max-w-lg sm:text-lg md:max-w-xl'>
-          Luminar simplifies feedback collection, feature prioritization, and product update sharing, allowing
-          you to focus on building.
+          Feedbase simplifies feedback collection, feature prioritization, and product update sharing,
+          allowing you to focus on building.
         </p>
 
         <div className='mt-5 flex w-full flex-row items-center justify-center gap-5'>
-          <Link href={formatRootUrl('app', '/signup')}>
+          <Link href={formatRootUrl('dash', '/signup')}>
             <Button className='border-background inline-flex rounded-full border'>Get Started</Button>
           </Link>
 
           <Link href='/github'>
             <button
-              className='hover:animate-background-shine text-foreground inline-flex h-9 items-center justify-center rounded-full border bg-[linear-gradient(110deg,#05060A,90%,#1e2631,95%,#05060A)] bg-[length:225%_100%] px-4 py-1 text-sm font-light transition-colors'
+              className='hover:animate-background-shine text-foreground inline-flex h-9 items-center justify-center rounded-full border bg-[linear-gradient(110deg,#06060A,90%,#1e2631,95%,#06060A)] bg-[length:225%_100%] px-4 py-1 text-sm font-light transition-colors'
               type='button'>
               Star on GitHub
             </button>
@@ -79,7 +79,7 @@ export default function Landing() {
         </p>
 
         <div className='mt-10 flex w-full flex-row items-center justify-center gap-5'>
-          <Link href={formatRootUrl('app', '/signup')}>
+          <Link href={formatRootUrl('dash', '/signup')}>
             <Button className='border-background inline-flex border'>Get Started</Button>
           </Link>
 
