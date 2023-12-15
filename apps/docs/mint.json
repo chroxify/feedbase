@@ -19,7 +19,7 @@
       "to": "#030303"
     }
   },
-  "openapi": "http://localhost:3001/api/v1",
+  "openapi": "https://api.feedbase.app/v1",
   "modeToggle": {
     "default": "dark",
     "isHidden": true
