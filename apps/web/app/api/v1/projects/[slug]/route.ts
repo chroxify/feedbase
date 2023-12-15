@@ -19,7 +19,14 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
 
 /*
     Update project by slug
-    PUT /api/v1/projects/[slug]
+    PATCH /api/v1/projects/[slug]
+    {
+      name: string,
+      slug: string,
+      icon: string,
+      icon_radius: string,
+      og_image: string
+    }
 */
 export async function PATCH(req: Request, context: { params: { slug: string } }) {
   const {

@@ -379,7 +379,7 @@ export const createProjectApiKey = (
     }
 
     // Generate API key token
-    const apiKeyToken = generateApiToken('lum', 20);
+    const apiKeyToken = generateApiToken('fb', 20);
     const shortToken = apiKeyToken.slice(0, 12);
 
     // Create API key

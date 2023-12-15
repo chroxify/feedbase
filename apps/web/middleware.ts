@@ -127,6 +127,16 @@ export default async function middleware(req: NextRequest) {
     });
   }
 
+  // rewrite /api to `/api` folder
+  if (hostname === `api.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+    return NextResponse.rewrite(new URL(`/api${path}`, req.url), {
+      headers: {
+        'x-pathname': path,
+        'x-project': path.split('/')[1],
+      },
+    });
+  }
+
   // rewrite everything else to `/[sub-domain]/[path] dynamic route
   return NextResponse.rewrite(new URL(`/${hostname.split('.')[0]}${path}`, req.url), {
     headers: {
