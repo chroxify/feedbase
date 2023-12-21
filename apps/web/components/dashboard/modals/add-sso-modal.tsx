@@ -182,7 +182,12 @@ export default function AddSSOAuthModal({
           <Button
             type='submit'
             onClick={enableSSO}
-            disabled={loginUrl === '' || jwtSecret === '' || isLoading}>
+            disabled={
+              loginUrl === '' ||
+              jwtSecret === '' ||
+              (!loginUrl.startsWith('http://') && !loginUrl.startsWith('https://')) ||
+              isLoading
+            }>
             {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
             Enable
           </Button>

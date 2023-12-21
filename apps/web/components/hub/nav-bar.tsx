@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@ui/components/ui/button';
 import { cn } from '@ui/lib/utils';
 import { satoshi } from '@ui/styles/fonts';
-import { ProfileProps, ProjectProps } from '@/lib/types';
+import { ProfileProps, ProjectConfigWithoutSecretProps, ProjectProps } from '@/lib/types';
 import UserDropdown from '../shared/user-dropdown';
 import AuthModal from './modals/login-signup-modal';
 
@@ -19,11 +19,13 @@ export default function Header({
   tabs,
   intialTab,
   project,
+  config,
   user,
 }: {
   tabs: TabProps[];
   intialTab: TabProps;
   project: ProjectProps['Row'];
+  config: ProjectConfigWithoutSecretProps;
   user: ProfileProps['Row'] | null;
 }) {
   const [currentTab, setCurrentTab] = useState(intialTab);
@@ -64,14 +66,22 @@ export default function Header({
           </div>
         </Link>
 
+        {/* User */}
+        {user ? <UserDropdown user={user} /> : null}
+
         {/* Login */}
-        {!user ? (
+        {!config.integration_sso_status && !user && (
           <AuthModal projectSlug={project?.slug || ''}>
             <Button variant='default'>Login</Button>
           </AuthModal>
-        ) : (
-          <UserDropdown user={user} />
         )}
+
+        {/* SSO */}
+        {config.integration_sso_status && !user ? (
+          <Link href={config.integration_sso_url || ''}>
+            <Button variant='default'>Login with {project?.name}</Button>
+          </Link>
+        ) : null}
       </div>
 
       {/* Navigation */}
