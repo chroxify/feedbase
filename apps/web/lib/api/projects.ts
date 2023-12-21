@@ -4,6 +4,7 @@ import {
   ProjectApiKeyProps,
   ProjectApiKeyWithoutTokenProps,
   ProjectConfigProps,
+  ProjectConfigWithoutSecretProps,
   ProjectProps,
   TeamMemberProps,
 } from '@/lib/types';
@@ -243,7 +244,7 @@ export const getProjectMembers = withProjectAuth<TeamMemberProps[]>(
 );
 
 // Get project config by slug
-export const getProjectConfigBySlug = withProjectAuth<ProjectConfigProps['Row']>(
+export const getProjectConfigBySlug = withProjectAuth<ProjectConfigWithoutSecretProps>(
   async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
@@ -253,7 +254,9 @@ export const getProjectConfigBySlug = withProjectAuth<ProjectConfigProps['Row']>
     // Get project config
     const { data: config, error: configError } = await supabase
       .from('project_configs')
-      .select()
+      .select(
+        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url'
+      )
       .eq('project_id', project!.id);
 
     // Check for errors
@@ -272,7 +275,7 @@ export const updateProjectConfigBySlug = (
   data: ProjectConfigProps['Update'],
   cType: 'server' | 'route'
 ) =>
-  withProjectAuth<ProjectConfigProps['Row']>(async (user, supabase, project, error) => {
+  withProjectAuth<ProjectConfigWithoutSecretProps>(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -324,9 +327,21 @@ export const updateProjectConfigBySlug = (
           data.custom_domain_verified !== undefined
             ? data.custom_domain_verified
             : config.custom_domain_verified,
+        integration_sso_status:
+          data.integration_sso_status !== undefined
+            ? data.integration_sso_status
+            : config.integration_sso_status,
+        integration_sso_url:
+          data.integration_sso_url !== undefined ? data.integration_sso_url : config.integration_sso_url,
+        integration_sso_secret:
+          data.integration_sso_secret !== undefined
+            ? data.integration_sso_secret
+            : config.integration_sso_secret,
       })
       .eq('id', config.id)
-      .select();
+      .select(
+        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url'
+      );
 
     // Check for errors
     if (updateError) {

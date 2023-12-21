@@ -9,7 +9,7 @@ import { Button } from 'ui/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/ui/card';
 import { Input } from 'ui/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'ui/components/ui/select';
-import { ProjectConfigProps, ProjectProps } from '@/lib/types';
+import { ProjectConfigWithoutSecretProps, ProjectProps } from '@/lib/types';
 import FileDrop from '@/components/shared/file-drop';
 
 export default function HubConfigCards({
@@ -17,10 +17,10 @@ export default function HubConfigCards({
   projectConfigData,
 }: {
   projectData: ProjectProps['Row'];
-  projectConfigData: ProjectConfigProps['Row'];
+  projectConfigData: ProjectConfigWithoutSecretProps;
 }) {
   const [project, setProject] = useState<ProjectProps['Row']>(projectData);
-  const [projectConfig, setProjectConfig] = useState<ProjectConfigProps['Row']>(projectConfigData);
+  const [projectConfig, setProjectConfig] = useState<ProjectConfigWithoutSecretProps>(projectConfigData);
   const [OGImage, setOGImage] = useState<string | null>(projectData.og_image || null);
   const router = useRouter();
 

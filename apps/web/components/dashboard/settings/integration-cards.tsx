@@ -12,20 +12,29 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from 'ui/components/ui/dropdown-menu';
-import { ProjectConfigProps } from '@/lib/types';
+import { ProjectConfigWithoutSecretProps } from '@/lib/types';
 import DiscordIntegrationModal from '@/components/dashboard/modals/connect-discord-modal';
 import DefaultTooltip from '@/components/shared/tooltip';
+import AddSSOAuthModal from '../modals/add-sso-modal';
+
+const integrationStatusMap: Record<string, string> = {
+  integration_discord_status: 'discord',
+  integration_sso_status: 'sso',
+  // Add other integrations as needed
+};
 
 export default function IntegrationCards({
   projectConfig,
   projectSlug,
 }: {
-  projectConfig: ProjectConfigProps['Row'];
+  projectConfig: ProjectConfigWithoutSecretProps;
   projectSlug: string;
 }) {
-  const [enabledIntegrations, setEnabledIntegrations] = useState<string[]>(
-    projectConfig.integration_discord_status ? ['discord'] : []
-  );
+  const initialIntegrations = Object.keys(integrationStatusMap)
+    .filter((key) => (projectConfig as Record<string, unknown>)[key])
+    .map((key) => integrationStatusMap[key]);
+
+  const [enabledIntegrations, setEnabledIntegrations] = useState<string[]>(initialIntegrations);
 
   async function disconnectIntegration(integration: string) {
     const promise = new Promise((resolve, reject) => {
@@ -126,6 +135,67 @@ export default function IntegrationCards({
                   </DropdownMenu>
                 ) : (
                   <DiscordIntegrationModal
+                    projectSlug={projectSlug}
+                    enabledIntegrations={enabledIntegrations}
+                    setEnabledIntegrations={setEnabledIntegrations}
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* SSO */}
+            <div className='col-span-2 flex h-full w-full flex-col rounded-md border sm:col-span-1'>
+              <div className='flex flex-row items-center space-x-2 border-b p-4'>
+                {/* Avatar */}
+                <Avatar>
+                  <AvatarImage src='https://feedbase.app/icon-512x512.png' alt='feedbase' />
+                  <AvatarFallback>FB</AvatarFallback>
+                </Avatar>
+
+                {/* Name and Description */}
+                <div className='flex flex-col'>
+                  <span className='text-foreground/70 text-sm'>Single Sign-On</span>
+
+                  <span className='text-foreground/50 text-xs font-light'>
+                    Allow your users to login with their existing accounts.
+                  </span>
+                </div>
+              </div>
+
+              <div className='flex flex-row items-center justify-between px-5 py-4'>
+                <div className='flex flex-col'>
+                  <span className='text-foreground/50 text-xs'>Status</span>
+                  {enabledIntegrations.includes('sso') ? (
+                    <span className='text-foreground/70 cursor-default text-sm font-light text-green-500'>
+                      Enabled
+                    </span>
+                  ) : (
+                    <span className='text-foreground/70 cursor-default text-sm font-light'>Disabled</span>
+                  )}
+                </div>
+
+                {enabledIntegrations.includes('sso') ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant='secondary'
+                        size='icon'
+                        className='text-foreground/50 hover:text-foreground h-8 w-5'>
+                        <MoreVertical className='h-5 w-5' />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align='end'>
+                      <DropdownMenuItem
+                        className='text-destructive focus:text-destructive/90 focus:bg-destructive/20'
+                        onSelect={() => {
+                          disconnectIntegration('sso');
+                        }}>
+                        Disable
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <AddSSOAuthModal
                     projectSlug={projectSlug}
                     enabledIntegrations={enabledIntegrations}
                     setEnabledIntegrations={setEnabledIntegrations}

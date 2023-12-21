@@ -1,0 +1,194 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { Check, Copy, RefreshCcw } from 'lucide-react';
+import { toast } from 'sonner';
+import { Button } from 'ui/components/ui/button';
+import {
+  Dialog,
+  DialogClose,
+  DialogCloseWrapper,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from 'ui/components/ui/dialog';
+import { Input } from 'ui/components/ui/input';
+import { Label } from 'ui/components/ui/label';
+import { Icons } from '@/components/shared/icons/icons-static';
+
+export default function AddSSOAuthModal({
+  projectSlug,
+  enabledIntegrations,
+  setEnabledIntegrations,
+}: {
+  projectSlug: string;
+  enabledIntegrations: string[];
+  setEnabledIntegrations: React.Dispatch<React.SetStateAction<string[]>>;
+}) {
+  const [open, setOpen] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [loginUrl, setLoginUrl] = useState<string>('');
+  const [jwtSecret, setJwtSecret] = useState<string>('');
+  const [copied, setCopied] = useState<boolean>(false);
+
+  // Generate random jwt secret
+  const generateJwtSecret = () => {
+    // 46 characters long random string
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const randomString = Array(32)
+      .fill(null)
+      .map(() => characters.charAt(Math.floor(Math.random() * characters.length)))
+      .join('');
+
+    setJwtSecret(randomString);
+  };
+
+  useEffect(() => {
+    generateJwtSecret();
+  }, []);
+
+  // Enable SSO
+  async function enableSSO() {
+    setIsLoading(true);
+
+    // Send request
+    const res = await fetch(`/api/v1/projects/${projectSlug}/config/integrations/sso`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        status: true,
+        url: loginUrl,
+        secret: jwtSecret,
+      }),
+    });
+
+    // Check for errors
+    if (!res.ok) {
+      toast.error('Failed to enable SSO');
+      setIsLoading(false);
+      return;
+    }
+
+    // Update enabled integrations
+    setEnabledIntegrations([...enabledIntegrations, 'sso']);
+
+    // Close modal
+    setOpen(false);
+    setIsLoading(false);
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+        <Button variant='outline' disabled={isLoading} className='text-foreground/70 font-normal'>
+          {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
+          Connect
+        </Button>
+      </DialogTrigger>
+      <DialogContent className='sm:max-w-[450px]'>
+        <DialogHeader>
+          <DialogTitle>Enable Single Sign-On</DialogTitle>
+          <DialogDescription>
+            Allow your users to sign in with their existing accounts.
+            <br />
+            Visit the{' '}
+            <Link
+              className='text-foreground/80 hover:text-foreground font-light hover:underline'
+              href='https://docs.feedbase.app/integrations/sso'>
+              documentation
+            </Link>{' '}
+            for more information.
+          </DialogDescription>
+        </DialogHeader>
+        <div className='flex flex-col gap-4'>
+          {/* Login Url */}
+          <div className='flex flex-col gap-2'>
+            <div className='flex flex-row items-center gap-2'>
+              <Label htmlFor='login'>Custom Login Url</Label>
+            </div>
+
+            <Input
+              id='login'
+              placeholder='https://yourdomain.com/sso/feedbase'
+              value={loginUrl}
+              onChange={(event) => {
+                setLoginUrl(event.target.value);
+              }}
+              className='col-span-3'
+            />
+
+            <Label className='text-foreground/50 text-xs font-extralight'>
+              The url to redirect users to when they click the login button.
+            </Label>
+          </div>
+
+          {/* Role */}
+          <div className='flex flex-col gap-2'>
+            <div className='flex flex-row items-center gap-2'>
+              <Label htmlFor='jwt'>JWT Secret</Label>
+            </div>
+
+            <div className='flex flex-row items-center gap-2'>
+              <div className='bg-background flex h-9 w-full flex-row items-center justify-between rounded-md border px-3'>
+                <span className='text-foreground/50 flex items-center justify-center text-sm font-extralight'>
+                  {jwtSecret}
+                </span>
+
+                <div className='flex flex-row items-center gap-2'>
+                  <button
+                    className='text-foreground/50 inline-flex h-9 w-5 cursor-pointer items-center justify-center'
+                    onClick={() => {
+                      navigator.clipboard.writeText(jwtSecret);
+                      setCopied(true);
+
+                      setTimeout(() => {
+                        setCopied(false);
+                      }, 2000);
+                    }}
+                    type='button'>
+                    {copied ? <Check className='h-4 w-4 text-green-500' /> : <Copy className='h-4 w-4' />}
+                  </button>
+                  <button
+                    className='text-foreground/50 inline-flex h-9 w-5 cursor-pointer items-center justify-center'
+                    onClick={generateJwtSecret}
+                    type='button'>
+                    <RefreshCcw className='h-4 w-4' />
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <Label className='text-foreground/50 text-xs font-extralight'>
+              The secret used to sign the JWT token on your server.
+            </Label>
+          </div>
+        </div>
+        <DialogFooter>
+          <DialogCloseWrapper>
+            <Button
+              variant='secondary'
+              onClick={() => {
+                setLoginUrl('');
+              }}>
+              Cancel
+            </Button>
+          </DialogCloseWrapper>
+          <Button
+            type='submit'
+            onClick={enableSSO}
+            disabled={loginUrl === '' || jwtSecret === '' || isLoading}>
+            {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
+            Enable
+          </Button>
+        </DialogFooter>
+        <DialogClose />
+      </DialogContent>
+    </Dialog>
+  );
+}
