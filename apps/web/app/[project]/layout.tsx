@@ -2,7 +2,7 @@ import { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 import { Separator } from 'ui/components/ui/separator';
-import { getProjectBySlug } from '@/lib/api/projects';
+import { getProjectBySlug, getProjectConfigBySlug } from '@/lib/api/projects';
 import { getCurrentUser } from '@/lib/api/user';
 import Header from '@/components/hub/nav-bar';
 
@@ -65,6 +65,13 @@ export default async function HubLayout({ children, params }: Props) {
     notFound();
   }
 
+  // Get project config
+  const { data: config } = await getProjectConfigBySlug(params.project, 'server', true, false);
+
+  if (!config) {
+    notFound();
+  }
+
   // Get current user
   const { data: user } = await getCurrentUser('server');
 
@@ -72,7 +79,7 @@ export default async function HubLayout({ children, params }: Props) {
     <main className='bg-root flex min-h-screen min-w-full flex-col justify-between selection:bg-[#8F9EFF]/20 selection:text-[#8F9EFF]'>
       <div className='flex h-full w-full flex-col items-center pt-5'>
         {/* Header */}
-        <Header tabs={tabs} intialTab={currentTab} project={project} user={user} />
+        <Header tabs={tabs} intialTab={currentTab} project={project} user={user} config={config} />
 
         {/* Separator with max screen width */}
         <Separator className='bg-border/60' />

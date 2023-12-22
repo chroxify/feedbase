@@ -1,11 +1,11 @@
-import { FeedbackWithUserProps, ProjectConfigProps, ProjectProps } from '../types';
+import { FeedbackWithUserProps, ProjectConfigWithoutSecretProps, ProjectProps } from '../types';
 import { formatHtmlToMd } from '../utils';
 
 // Helper function to send a Discord notification
 export const sendDiscordNotification = async (
   feedback: FeedbackWithUserProps,
   project: ProjectProps['Row'],
-  projectConfig: ProjectConfigProps['Row']
+  projectConfig: ProjectConfigWithoutSecretProps
 ) => {
   // Convert html syntax to markdown
   const markdownString = formatHtmlToMd(feedback.description);

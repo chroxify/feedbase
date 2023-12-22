@@ -29,7 +29,7 @@ import {
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/ui/tabs';
-import { ProjectApiKeyWithoutTokenProps, ProjectConfigProps, ProjectProps } from '@/lib/types';
+import { ProjectApiKeyWithoutTokenProps, ProjectConfigWithoutSecretProps, ProjectProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
 import DefaultTooltip from '@/components/shared/tooltip';
@@ -52,7 +52,7 @@ export default function GeneralConfigCards({
   projectConfig,
 }: {
   projectData: ProjectProps['Row'];
-  projectConfig: ProjectConfigProps['Row'];
+  projectConfig: ProjectConfigWithoutSecretProps;
 }) {
   const [project, setProject] = useState<ProjectProps['Row']>(projectData);
   const [domain, setDomain] = useState<string>(projectConfig?.custom_domain || '');

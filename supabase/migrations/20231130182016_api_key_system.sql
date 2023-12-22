@@ -151,3 +151,9 @@ as permissive
 for insert
 to public
 with check (is_allowed_api_token(((current_setting('request.headers'::text, true))::json ->> 'lumkey'::text), '{public_access}'::token_type[]));
+
+alter table "public"."project_configs" add column "integration_sso_secret" text;
+
+alter table "public"."project_configs" add column "integration_sso_status" boolean;
+
+alter table "public"."project_configs" add column "integration_sso_url" text;
