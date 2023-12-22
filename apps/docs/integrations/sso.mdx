@@ -1,0 +1,79 @@
+---
+title: 'Single Sign-On (SSO)'
+description: 'How to configure SSO authentication for your project'
+---
+
+# What is SSO?
+
+Single Sign-On (SSO) allows your users to log in to Feedbase using their existing account from your application. This means that your users don't have to create a new account for Feedbase before they can leave feedback.
+
+# How does it work?
+
+Here's a quick overview of how the SSO flow works:
+
+1. Your user clicks on the **Login with `{Your App}`** button on your feedbase hub.
+
+2. Feedbase redirects your user to your application's configured SSO login page. We'll send along a `redirect_to` parameter in the query string so that you can redirect your user back to Feedbase after they've logged in. E.g. `https://yourapp.com/sso/feedbase?redirect_to=https://{slug}.feedbase.app/feedback`.
+
+3. Your application authenticates the user and creates a custom JWT token.
+
+4. Your application redirects the user back to Feedbase with the custom JWT token and the `redirect_to` parameter. E.g. `https://{slug}.feedbase.app/api/v1/{slug}/sso?jwt={JWT}&redirect_to=https://feedbase.io/hub/your-hub-id`.
+
+5. Feedbase verifies the JWT token, authenticates the user, and redirects them to the `redirect_to` parameter.
+
+# Configuring SSO
+
+## Create a dedicated SSO login page
+
+The first step is to create a dedicated SSO login page in your application. This page will be used to authenticate your users and create a custom JWT token. 
+
+You can use any url for this page, but we recommend using a url like `https://yourapp.com/sso/feedbase` so that it's clear that this page is used for Feedbase SSO authentication.
+
+## Enable the SSO Integration in Feedbase
+
+Once you've created your SSO login page, you can enable the SSO integration in Feedbase. You can do this in your [Integration Settings](https://feedbase.io/hub/{slug}/settings/integrations) by clicking on the **Connect** button for the **Single Sign-On (SSO)** integration.
+
+This will open a modal which will ask you to enter the URL of your SSO login page. Enter the URL and copy the **JWT Secret** that Feedbase generates for you. You'll need to use this secret to sign the JWT tokens that you generate in your SSO login page.
+
+Finally, click on the **Enable** button to enable the SSO integration.
+
+## Authenticate your users and create a JWT token
+
+When users get redirected to your SSO login page, you'll need to authenticate them with your existing authentication system.
+
+Once you've authenticated your users, you'll need to create a JWT token and redirect them back to Feedbase with the token and the `redirect_to` parameter.
+
+Here's an example of how you can do this in Node.js:
+
+```js
+import jwt from 'jsonwebtoken';
+
+function createJwtToken(user) {
+  const payload = {
+    name: user.name,
+    email: user.email,
+    avatar_url: user.avatar_url, // Optional
+  };
+
+  // Do not expose your secret in your client side code!
+  return jwt.sign(payload, process.env.FEEDBASE_JWT_SECRET);
+}
+```
+
+## Redirect your users back to Feedbase
+
+Once you've created the JWT token, you'll need to redirect your users back to Feedbase with the token and the `redirect_to` parameter.
+
+Here's an example of the redirect URL that you'll need to use:
+
+<Note>If you are using a custom domain for your project, you'll need to replace `{slug}.feedbase.app` with your custom domain.</Note>
+
+```
+https://{slug}.feedbase.app/api/v1/{slug}/sso?jwt={JWT}&redirect_to={Redirect URL}
+```
+
+You'll need to replace the following placeholders:
+
+- `{slug}`: The slug of your project.
+- `{JWT}`: The JWT token that you created in the previous step.
+- `{Redirect URL}`: The URL that you want to redirect your users to after they've been authenticated.

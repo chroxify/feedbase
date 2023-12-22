@@ -65,7 +65,7 @@ export async function GET(req: NextRequest, context: { params: { slug: string } 
   const { error } = await supabase.auth.admin.createUser({
     email,
     password: email,
-    user_metadata: { full_name: payload.name },
+    user_metadata: { full_name: payload.name, avatar_url: payload.avatar_url ? payload.avatar_url : null },
     email_confirm: true,
   });
 

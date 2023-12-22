@@ -75,6 +75,10 @@
       "pages": ["self-hosting/vercel", "self-hosting/docker"]
     },
     {
+      "group": "Integrations",
+      "pages": ["integrations/sso"]
+    },
+    {
       "group": "API Documentation",
       "pages": ["api-reference/introduction"]
     },
