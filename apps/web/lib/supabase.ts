@@ -298,6 +298,7 @@ export interface Database {
           created_at: string;
           custom_domain: string | null;
           custom_domain_verified: boolean | null;
+          feedback_allow_anon_upvoting: boolean | null;
           id: string;
           integration_discord_role_id: string | null;
           integration_discord_status: boolean;
@@ -313,6 +314,7 @@ export interface Database {
           created_at?: string;
           custom_domain?: string | null;
           custom_domain_verified?: boolean | null;
+          feedback_allow_anon_upvoting?: boolean | null;
           id?: string;
           integration_discord_role_id?: string | null;
           integration_discord_status?: boolean;
@@ -328,6 +330,7 @@ export interface Database {
           created_at?: string;
           custom_domain?: string | null;
           custom_domain_verified?: boolean | null;
+          feedback_allow_anon_upvoting?: boolean | null;
           id?: string;
           integration_discord_role_id?: string | null;
           integration_discord_status?: boolean;
@@ -482,10 +485,6 @@ export interface Database {
           tokentype: Database['public']['Enums']['token_type'][];
         };
         Returns: boolean;
-      };
-      test: {
-        Args: Record<PropertyKey, never>;
-        Returns: undefined;
       };
     };
     Enums: {
