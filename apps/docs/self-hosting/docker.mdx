@@ -3,4 +3,96 @@ title: 'Install with Docker'
 description: 'How to self-host Feedbase using Docker'
 ---
 
-This documentation is currently still a work in progress. If you have any questions or want to contribute, please do so on [GitHub](https://feedbase.app/github).
+<Warning>Docker support is currently still not fully stable. Contributions via pull requests or issues are very welcome and appreciated.</Warning>
+
+## Create a new Supabase project
+
+<Tip> You can also self-host Supabase on your own infrastructure. [Learn more](https://supabase.io/docs/guides/self-hosting).</Tip>
+
+You'll need a Supabase account to get started. [Sign up](https://supabase.com/dashboard/sign-in) if you don't have one already.
+
+Once you've signed up, create a new project. You can do this by clicking on the "New Project" button or by following [this link](https://supabase.com/dashboard/new/_).
+
+### Migrate your database
+
+Once you've created a new project, you'll need to migrate your database. You can do this the following ways:
+
+<Accordion title="Using the Supabase CLI (Recommended)">
+    For this method, you'll need to install the Supabase CLI. View the installation instructions [here](https://github.com/supabase/cli?tab=readme-ov-file#install-the-cli).
+
+    <Steps>
+        <Step title="Clone the Feedbase repository">
+            ```bash
+            git clone https://github.com/chroxify/feedbase.git && cd feedbase
+            ```
+        </Step>
+        <Step title="Login to Supabase">
+            ```bash
+            supabase login
+            ```
+        </Step>
+        <Step title="Link your project">
+            ```bash
+            supabase link --project-ref <project-id>
+            ```
+
+            You can find your project ID in the URL of your Supabase project dashboard or via runnning `supabase projects list`.
+        </Step>
+
+        <Step title="Run the migrations">
+            ```bash
+            supabase db push
+            ```
+        </Step>
+    </Steps>
+
+    If everything went successful, you should be able to see a populated database in your Supabase dashboard.
+
+</Accordion>
+
+
+<Accordion title="Manually using the SQL Editor">
+    <Steps>
+        <Step title="Go to your Project's SQL Editor">
+            Click on the SQL tab in your project dashboard or follow [this link](https://supabase.com/dashboard/project/_/sql/new).
+        </Step>
+        <Step title="Run the migrations">
+            Copy and paste all the contents of each file in the [`supabase/migrations`](https://github.com/chroxify/feedbase/tree/main/supabase/migrations) folder of the Feedbase repository into the SQL editor and run them.
+        </Step>
+        <Step title="Verify the migrations">
+            If everything went successful, you should be able to see a populated database in your Supabase dashboard.
+        </Step>
+    </Steps>
+</Accordion>
+
+## Prepare your environment variables
+
+Once you've migrated your database, you'll need to prepare all necessary environment variables for the next step. 
+
+You can find a list of all environment variables and where to find them [here](https://github.com/chroxify/feedbase/blob/main/.env.example).
+
+## Installation
+
+1. Clone the Feedbase repository
+
+```bash
+git clone https://github.com/chroxify/feedbase.git && cd feedbase
+```
+
+2. Create a `.env` file
+
+```bash
+cp .env.example apps/web/.env
+```
+
+3. Build the Docker image
+
+```bash
+docker build -f apps/web/Dockerfile -t feedbase .
+```
+
+4. Run the Docker container
+
+```bash
+docker run feedbase
+```
