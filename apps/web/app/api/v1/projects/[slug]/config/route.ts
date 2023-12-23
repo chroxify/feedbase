@@ -27,8 +27,11 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
     }
 */
 export async function PATCH(req: Request, context: { params: { slug: string } }) {
-  const { changelog_preview_style: changelogPreviewStyle, changelog_twitter_handle: changelogTwitterHandle } =
-    (await req.json()) as ProjectConfigProps['Update'];
+  const {
+    changelog_preview_style: changelogPreviewStyle,
+    changelog_twitter_handle: changelogTwitterHandle,
+    feedback_allow_anon_upvoting: feedbackAllowAnonUpvoting,
+  } = (await req.json()) as ProjectConfigProps['Update'];
 
   // Update project config
   const { data: updatedProjectConfig, error } = await updateProjectConfigBySlug(
@@ -36,6 +39,7 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
     {
       changelog_preview_style: changelogPreviewStyle,
       changelog_twitter_handle: changelogTwitterHandle,
+      feedback_allow_anon_upvoting: feedbackAllowAnonUpvoting,
     },
     'route'
   );
