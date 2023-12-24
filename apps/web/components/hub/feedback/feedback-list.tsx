@@ -145,8 +145,10 @@ export default function FeedbackList({
 
     const promise = new Promise((resolve, reject) => {
       fetch(
-        `/api/v1/projects/${projectSlug}/feedback/${feedback.id}/upvotes?has_upvoted=${
-          projectConfig?.feedback_allow_anon_upvoting && !isLoggedIn ? !feedback.has_upvoted : ''
+        `/api/v1/projects/${projectSlug}/feedback/${feedback.id}/upvotes${
+          projectConfig?.feedback_allow_anon_upvoting && !isLoggedIn
+            ? `?has_upvoted=${!feedback.has_upvoted}`
+            : ''
         }`,
         {
           method: 'POST',
