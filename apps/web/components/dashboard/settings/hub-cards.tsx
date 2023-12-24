@@ -82,6 +82,10 @@ export default function HubConfigCards({
             projectConfig.changelog_preview_style !== projectConfigData.changelog_preview_style
               ? projectConfig.changelog_preview_style
               : undefined,
+          feedback_allow_anon_upvoting:
+            projectConfig.feedback_allow_anon_upvoting !== projectConfigData.feedback_allow_anon_upvoting
+              ? projectConfig.feedback_allow_anon_upvoting
+              : undefined,
         }),
       })
         .then((res) => res.json())
@@ -307,6 +311,51 @@ export default function HubConfigCards({
               // If the values are the same as the ones in the database or if they are empty
               projectConfig.changelog_preview_style === projectConfigData.changelog_preview_style &&
               projectConfig.changelog_twitter_handle === projectConfigData.changelog_twitter_handle
+            }
+            onClick={handleSaveProjectConfig}>
+            Save changes
+          </Button>
+        </CardFooter>
+      </Card>
+
+      {/* Feedback */}
+      <Card className='flex w-full flex-col '>
+        <CardHeader>
+          <CardTitle>Feedback</CardTitle>
+          <CardDescription>Configure your project&apos;s feedback.</CardDescription>
+        </CardHeader>
+        <CardContent className='flex flex-col space-y-4'>
+          {/* Anonymous Feedback */}
+          <div className='space-y-1'>
+            <Label className='text-foreground/70 text-sm font-light'>Anonymous Feedback Upvoting</Label>
+            <div className='flex h-10 w-full flex-row space-x-2'>
+              <Select
+                defaultValue={projectConfig.feedback_allow_anon_upvoting ? 'true' : 'false'}
+                onValueChange={(value) => {
+                  // Set the value
+                  setProjectConfig((prev) => ({ ...prev, feedback_allow_anon_upvoting: value === 'true' }));
+                }}>
+                <SelectTrigger className='max-w-xs text-sm font-extralight'>
+                  <SelectValue placeholder='Select a style' />
+                </SelectTrigger>
+                <SelectContent className='font-light'>
+                  <SelectItem value='true'>Enabled</SelectItem>
+                  <SelectItem value='false'>Disabled</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <Label className='text-foreground/50 text-xs font-extralight'>
+              Whether to allow anonymous feedback upvoting.
+            </Label>
+          </div>
+        </CardContent>
+        <CardFooter>
+          <Button
+            className='w-32'
+            disabled={
+              // If the values are the same as the ones in the database or if they are empty
+              projectConfig.feedback_allow_anon_upvoting === projectConfigData.feedback_allow_anon_upvoting
             }
             onClick={handleSaveProjectConfig}>
             Save changes

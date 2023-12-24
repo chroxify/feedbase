@@ -255,7 +255,7 @@ export const getProjectConfigBySlug = withProjectAuth<ProjectConfigWithoutSecret
     const { data: config, error: configError } = await supabase
       .from('project_configs')
       .select(
-        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url'
+        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting'
       )
       .eq('project_id', project!.id);
 
@@ -337,10 +337,14 @@ export const updateProjectConfigBySlug = (
           data.integration_sso_secret !== undefined
             ? data.integration_sso_secret
             : config.integration_sso_secret,
+        feedback_allow_anon_upvoting:
+          data.feedback_allow_anon_upvoting !== undefined
+            ? data.feedback_allow_anon_upvoting
+            : config.feedback_allow_anon_upvoting,
       })
       .eq('id', config.id)
       .select(
-        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url'
+        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting'
       );
 
     // Check for errors
