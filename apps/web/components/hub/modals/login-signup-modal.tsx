@@ -1,16 +1,15 @@
 'use client';
 
 import { useState } from 'react';
-import { Separator } from '@ui/components/ui/separator';
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'ui/components/ui/dialog';
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogTrigger,
+} from '@ui/components/ui/responsive-dialog';
+import { Separator } from '@ui/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/ui/tabs';
 import { UserAuthForm } from '@/components/user-auth-form';
 
@@ -26,15 +25,15 @@ export default function AuthModal({
   const [authType, setAuthType] = useState<'sign-in' | 'sign-up'>('sign-in');
 
   return (
-    <Dialog open={disabled ? false : undefined}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className='p-10 py-14 sm:max-w-[425px]'>
-        <DialogHeader className='flex flex-col items-center space-y-2'>
-          <DialogTitle>{authType === 'sign-in' ? 'Sign In' : 'Sign Up'}</DialogTitle>
-          <DialogDescription className='text-center'>
+    <ResponsiveDialog open={disabled ? false : undefined}>
+      <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      <ResponsiveDialogContent className='pb-4 sm:max-w-[425px] sm:p-10 sm:py-14'>
+        <ResponsiveDialogHeader className='flex flex-col items-center space-y-2'>
+          <ResponsiveDialogTitle>{authType === 'sign-in' ? 'Sign In' : 'Sign Up'}</ResponsiveDialogTitle>
+          <ResponsiveDialogDescription className='text-center'>
             {authType === 'sign-in' ? 'Sign in' : 'Sign up'} with your email address to continue.
-          </DialogDescription>
-        </DialogHeader>
+          </ResponsiveDialogDescription>
+        </ResponsiveDialogHeader>
         <Tabs
           defaultValue='sign-in'
           onValueChange={(value) => {
@@ -52,8 +51,7 @@ export default function AuthModal({
             <UserAuthForm authType='sign-up' buttonsClassname='bg-secondary/30 border-border/50' />
           </TabsContent>
         </Tabs>
-        <DialogClose />
-      </DialogContent>
-    </Dialog>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }

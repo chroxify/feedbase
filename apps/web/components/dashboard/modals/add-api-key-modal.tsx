@@ -1,21 +1,20 @@
 'use client';
 
 import { useState } from 'react';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogClose,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogTrigger,
+} from '@ui/components/ui/responsive-dialog';
 import { cn } from '@ui/lib/utils';
 import { Check, CheckIcon, ChevronDownIcon, ClipboardList } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogCloseWrapper,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'ui/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -90,9 +89,9 @@ export default function AddApiKeyDialog({
   return (
     <>
       {/* Create Dialog */}
-      <Dialog open={disabled ? false : open} onOpenChange={setOpen}>
-        <DialogTrigger>{children}</DialogTrigger>
-        <DialogContent className='sm:max-w-[425px]'>
+      <ResponsiveDialog open={disabled ? false : open} onOpenChange={setOpen}>
+        <ResponsiveDialogTrigger>{children}</ResponsiveDialogTrigger>
+        <ResponsiveDialogContent className='sm:max-w-[425px]'>
           <form
             onSubmit={(event) => {
               event.preventDefault();
@@ -101,10 +100,12 @@ export default function AddApiKeyDialog({
               createApiKey();
             }}
             className='flex flex-col gap-4'>
-            <DialogHeader>
-              <DialogTitle>Create a new API Key</DialogTitle>
-              <DialogDescription>Create a new API key for your project.</DialogDescription>
-            </DialogHeader>
+            <ResponsiveDialogHeader>
+              <ResponsiveDialogTitle>Create a new API Key</ResponsiveDialogTitle>
+              <ResponsiveDialogDescription>
+                Create a new API key for your project.
+              </ResponsiveDialogDescription>
+            </ResponsiveDialogHeader>
             <div className='flex flex-col gap-4'>
               {/* Project Name */}
               <div className='flex flex-col gap-2'>
@@ -189,8 +190,8 @@ export default function AddApiKeyDialog({
                 </Label>
               </div>
             </div>
-            <DialogFooter>
-              <DialogCloseWrapper>
+            <ResponsiveDialogFooter>
+              <ResponsiveDialogClose asChild>
                 <Button
                   variant='secondary'
                   type='button'
@@ -199,24 +200,23 @@ export default function AddApiKeyDialog({
                   }}>
                   Cancel
                 </Button>
-              </DialogCloseWrapper>
+              </ResponsiveDialogClose>
               <Button type='submit' disabled={name === '' || isLoading}>
                 {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
                 Create Key
               </Button>
-            </DialogFooter>
-            <DialogClose />
+            </ResponsiveDialogFooter>
           </form>
-        </DialogContent>
-      </Dialog>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
 
       {/* Token Dialog */}
-      <Dialog open={tokenOpen} onOpenChange={setTokenOpen}>
-        <DialogContent className='sm:max-w-[425px]'>
-          <DialogHeader>
-            <DialogTitle>View API Key</DialogTitle>
-            <DialogDescription>View your newly created API key.</DialogDescription>
-          </DialogHeader>
+      <ResponsiveDialog open={tokenOpen} onOpenChange={setTokenOpen}>
+        <ResponsiveDialogContent className='sm:max-w-[425px]'>
+          <ResponsiveDialogHeader>
+            <ResponsiveDialogTitle>View API Key</ResponsiveDialogTitle>
+            <ResponsiveDialogDescription>View your newly created API key.</ResponsiveDialogDescription>
+          </ResponsiveDialogHeader>
           <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center gap-2'>
               <Label htmlFor='name'>Name</Label>
@@ -246,8 +246,8 @@ export default function AddApiKeyDialog({
               Keep this key safe. You will not be able to view it again!
             </Label>
           </div>
-          <DialogFooter>
-            <DialogCloseWrapper>
+          <ResponsiveDialogFooter>
+            <ResponsiveDialogClose asChild>
               <Button
                 variant='secondary'
                 onClick={() => {
@@ -255,11 +255,10 @@ export default function AddApiKeyDialog({
                 }}>
                 Close
               </Button>
-            </DialogCloseWrapper>
-          </DialogFooter>
-          <DialogClose />
-        </DialogContent>
-      </Dialog>
+            </ResponsiveDialogClose>
+          </ResponsiveDialogFooter>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
     </>
   );
 }

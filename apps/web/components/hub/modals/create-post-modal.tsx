@@ -3,17 +3,16 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@ui/components/ui/button';
 import { Input } from '@ui/components/ui/input';
 import { Label } from '@ui/components/ui/label';
-import { toast } from 'sonner';
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'ui/components/ui/dialog';
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogTrigger,
+} from '@ui/components/ui/responsive-dialog';
+import { toast } from 'sonner';
 import { Icons } from '@/components/shared/icons/icons-static';
 import PostEditor from '@/components/shared/tiptap-editor';
 
@@ -77,13 +76,13 @@ export default function CreatePostModal({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className='sm:max-w-[425px]'>
-        <DialogHeader>
-          <DialogTitle>Create a new post</DialogTitle>
-          <DialogDescription>Have an idea or found a bug? Let us know!</DialogDescription>
-        </DialogHeader>
+    <ResponsiveDialog open={open} onOpenChange={setOpen}>
+      <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      <ResponsiveDialogContent className='sm:max-w-[425px]'>
+        <ResponsiveDialogHeader>
+          <ResponsiveDialogTitle>Create a new post</ResponsiveDialogTitle>
+          <ResponsiveDialogDescription>Have an idea or found a bug? Let us know!</ResponsiveDialogDescription>
+        </ResponsiveDialogHeader>
         <div className='flex flex-col gap-4'>
           {/* Project Name */}
           <div className='flex flex-col gap-2'>
@@ -117,7 +116,7 @@ export default function CreatePostModal({
             </Label>
           </div>
         </div>
-        <DialogFooter>
+        <ResponsiveDialogFooter>
           <Button
             type='submit'
             onClick={onSubmit}
@@ -125,9 +124,8 @@ export default function CreatePostModal({
             {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
             Submit Post
           </Button>
-        </DialogFooter>
-        <DialogClose />
-      </DialogContent>
-    </Dialog>
+        </ResponsiveDialogFooter>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }

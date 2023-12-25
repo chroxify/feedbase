@@ -1,19 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogClose,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogTrigger,
+} from '@ui/components/ui/responsive-dialog';
 import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogCloseWrapper,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'ui/components/ui/dialog';
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
 
@@ -67,13 +66,13 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
   }
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className='sm:max-w-[425px]'>
-        <DialogHeader>
-          <DialogTitle>Create a new project</DialogTitle>
-          <DialogDescription>Create a new project to get started.</DialogDescription>
-        </DialogHeader>
+    <ResponsiveDialog>
+      <ResponsiveDialogTrigger asChild>{trigger}</ResponsiveDialogTrigger>
+      <ResponsiveDialogContent className='sm:max-w-[425px]'>
+        <ResponsiveDialogHeader>
+          <ResponsiveDialogTitle>Create a new project</ResponsiveDialogTitle>
+          <ResponsiveDialogDescription>Create a new project to get started.</ResponsiveDialogDescription>
+        </ResponsiveDialogHeader>
         <div className='flex flex-col gap-4'>
           {/* Project Name */}
           <div className='flex flex-col gap-2'>
@@ -117,8 +116,8 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
             </Label>
           </div>
         </div>
-        <DialogFooter>
-          <DialogCloseWrapper>
+        <ResponsiveDialogFooter>
+          <ResponsiveDialogClose asChild>
             <Button
               variant='secondary'
               onClick={() => {
@@ -127,13 +126,12 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               }}>
               Cancel
             </Button>
-          </DialogCloseWrapper>
+          </ResponsiveDialogClose>
           <Button type='submit' onClick={onCreateProject} disabled={name === '' || slug === ''}>
             Create Project
           </Button>
-        </DialogFooter>
-        <DialogClose />
-      </DialogContent>
-    </Dialog>
+        </ResponsiveDialogFooter>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }
