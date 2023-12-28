@@ -2,19 +2,18 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogClose,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogTrigger,
+} from '@ui/components/ui/responsive-dialog';
 import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogCloseWrapper,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'ui/components/ui/dialog';
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
 import { ProfileProps } from '@/lib/types';
@@ -89,13 +88,13 @@ export default function UpdateProfileModal({
   }, [user]);
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className='w-full max-w-[475px] '>
-        <DialogHeader>
-          <DialogTitle>Profile</DialogTitle>
-          <DialogDescription>Edit your public profile.</DialogDescription>
-        </DialogHeader>
+    <ResponsiveDialog>
+      <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      <ResponsiveDialogContent className='w-full max-w-[475px] '>
+        <ResponsiveDialogHeader>
+          <ResponsiveDialogTitle>Profile</ResponsiveDialogTitle>
+          <ResponsiveDialogDescription>Edit your public profile.</ResponsiveDialogDescription>
+        </ResponsiveDialogHeader>
         <div className='flex flex-col gap-4'>
           {/* Profile Picture */}
           <div className='space-y-1'>
@@ -167,19 +166,18 @@ export default function UpdateProfileModal({
             </Label>
           </div>
         </div>
-        <DialogFooter>
-          <DialogCloseWrapper>
+        <ResponsiveDialogFooter>
+          <ResponsiveDialogClose asChild>
             <Button variant='secondary'>Cancel</Button>
-          </DialogCloseWrapper>
+          </ResponsiveDialogClose>
           <Button
             type='submit'
             onClick={onUpdateProfile}
             disabled={name === '' || (name === user.full_name && avatar === user.avatar_url)}>
             Update Profile
           </Button>
-        </DialogFooter>
-        <DialogClose />
-      </DialogContent>
-    </Dialog>
+        </ResponsiveDialogFooter>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }
