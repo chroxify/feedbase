@@ -1,5 +1,6 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { getFeedbackByID, getFeedbackUpvotersById, upvoteFeedbackByID } from '@/lib/api/feedback';
+import { getCurrentUser } from '@/lib/api/user';
 
 /*
   Get feedback upvotes
@@ -43,11 +44,19 @@ export async function GET(req: Request, context: { params: { slug: string; feedb
     Upvote a feedback
     POST /api/v1/projects/[slug]/feedback/[id]/upvote
 */
-export async function POST(req: Request, context: { params: { slug: string; feedbackId: string } }) {
+export async function POST(req: NextRequest, context: { params: { slug: string; feedbackId: string } }) {
+  const hasUpvoted = req.nextUrl.searchParams.get('has_upvoted');
+
+  // Get current user
+  const { data: isLoggedIn } = await getCurrentUser('route');
+
+  // Upvote feedback
   const { data: feedback, error } = await upvoteFeedbackByID(
     context.params.feedbackId,
     context.params.slug,
-    'route'
+    'route',
+    hasUpvoted ? hasUpvoted === 'true' : undefined,
+    !isLoggedIn
   );
 
   // If any errors thrown, return error

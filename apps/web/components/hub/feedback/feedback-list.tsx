@@ -9,7 +9,7 @@ import { ChevronUp, MessagesSquare } from 'lucide-react';
 import { toast } from 'sonner';
 import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
 import { PROSE_CN } from '@/lib/constants';
-import { FeedbackWithUserProps } from '@/lib/types';
+import { FeedbackWithUserProps, ProjectConfigWithoutSecretProps } from '@/lib/types';
 import AuthModal from '../modals/login-signup-modal';
 
 interface FeedbackWithTimeAgo extends FeedbackWithUserProps {
@@ -19,10 +19,12 @@ interface FeedbackWithTimeAgo extends FeedbackWithUserProps {
 export default function FeedbackList({
   feedback,
   projectSlug,
+  projectConfig,
   isLoggedIn,
 }: {
   feedback: FeedbackWithUserProps[];
   projectSlug: string;
+  projectConfig: ProjectConfigWithoutSecretProps | null;
   isLoggedIn: boolean;
 }) {
   // Update the feedback list with the timeAgo field
@@ -110,28 +112,51 @@ export default function FeedbackList({
 
   // Upvote feedback
   function onUpvote(feedback: FeedbackWithUserProps) {
-    // Update feedbackList
+    // Find index of feedback
     const index = feedbackList.findIndex((fb) => fb.id === feedback.id);
 
-    // Update feedbackList
+    // Create new feedback list
     const newFeedbackList = [...feedbackList];
 
-    // Update feedback
-    newFeedbackList[index].has_upvoted = !feedback.has_upvoted;
+    // Update feedback has_upvoted
+    const hasUpvoted =
+      projectConfig?.feedback_allow_anon_upvoting && !isLoggedIn
+        ? !JSON.parse(window?.localStorage?.getItem('upvotes') || '{}')[feedback.id]
+        : !feedback.has_upvoted;
 
-    // Update upvotes
-    newFeedbackList[index].upvotes = feedback.upvotes + (feedback.has_upvoted ? 1 : -1);
+    newFeedbackList[index] = {
+      ...newFeedbackList[index],
+      has_upvoted: hasUpvoted,
+      upvotes: feedback.upvotes + (hasUpvoted ? 1 : -1),
+    };
+
+    // Update feedback.has_upvoted for immediate UI feedback
+    feedback.has_upvoted = hasUpvoted;
 
     // Set feedbackList
     setFeedbackList(newFeedbackList);
 
+    // If anon upvoting is allowed, store new upvote state in local storage
+    if (projectConfig?.feedback_allow_anon_upvoting && !isLoggedIn) {
+      const upvotes = JSON.parse(window?.localStorage?.getItem('upvotes') || '{}');
+      upvotes[feedback.id] = hasUpvoted;
+      window?.localStorage?.setItem('upvotes', JSON.stringify(upvotes));
+    }
+
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/feedback/${feedback.id}/upvotes`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      fetch(
+        `/api/v1/projects/${projectSlug}/feedback/${feedback.id}/upvotes${
+          projectConfig?.feedback_allow_anon_upvoting && !isLoggedIn
+            ? `?has_upvoted=${!feedback.has_upvoted}`
+            : ''
+        }`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
@@ -156,12 +181,56 @@ export default function FeedbackList({
 
       // Set feedbackList
       setFeedbackList(newFeedbackList);
+
+      // If anon upvoting is allowed, store upvote state in localstorage
+      if (projectConfig?.feedback_allow_anon_upvoting) {
+        const upvotes = JSON.parse(window?.localStorage?.getItem('upvotes') || '{}');
+        upvotes[feedback.id] = newFeedbackList[index].has_upvoted;
+        window?.localStorage?.setItem('upvotes', JSON.stringify(upvotes));
+      }
     });
   }
 
   useEffect(() => {
     setFeedbackList(updateFeedbackListWithTimeAgo(feedback));
   }, [feedback, updateFeedbackListWithTimeAgo]);
+
+  // Helper function to compare feedback lists
+  // Needed for localstorage upvote state on mount
+  function areFeedbackListsEqual(list1: FeedbackWithUserProps[], list2: FeedbackWithUserProps[]) {
+    if (list1.length !== list2.length) {
+      return false;
+    }
+
+    for (let i = 0; i < list1.length; i++) {
+      if (list1[i].id !== list2[i].id || list1[i].has_upvoted !== list2[i].has_upvoted) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  // Set upvotes from localstorage
+  useEffect(() => {
+    if (projectConfig?.feedback_allow_anon_upvoting && !isLoggedIn) {
+      const upvotes = JSON.parse(window?.localStorage?.getItem('upvotes') || '{}');
+      const newFeedbackList = [...feedbackList];
+
+      for (const feedback of newFeedbackList) {
+        feedback.has_upvoted = upvotes[feedback.id] || false;
+      }
+
+      // Update feedbackList only if it has changed
+      setFeedbackList((prevFeedbackList) => {
+        // Update feedbackList only if it has changed
+        if (!areFeedbackListsEqual(newFeedbackList, prevFeedbackList)) {
+          return newFeedbackList;
+        }
+        return prevFeedbackList; // No change, return the previous state
+      });
+    }
+  }, [feedbackList, isLoggedIn, projectConfig]);
 
   return (
     <>
@@ -170,7 +239,9 @@ export default function FeedbackList({
           className='hover:bg-accent/30 group flex h-full w-full cursor-pointer flex-row items-stretch justify-between border border-b-0 transition-all first:rounded-t-md last:rounded-b-md last:border-b'
           key={feedback.id}>
           {/* Upvotes */}
-          <AuthModal projectSlug={projectSlug} disabled={isLoggedIn}>
+          <AuthModal
+            projectSlug={projectSlug}
+            disabled={isLoggedIn || projectConfig?.feedback_allow_anon_upvoting ? true : undefined}>
             <div className='flex items-center border-r'>
               {/* Upvotes */}
               <Button
@@ -178,7 +249,7 @@ export default function FeedbackList({
                 size='sm'
                 className='group/upvote flex h-full flex-col items-center rounded-sm px-4 transition-all duration-150 hover:bg-transparent active:scale-[85%]'
                 onClick={() => {
-                  if (!isLoggedIn) return;
+                  if (!isLoggedIn && !projectConfig?.feedback_allow_anon_upvoting) return;
 
                   onUpvote(feedback);
                 }}>

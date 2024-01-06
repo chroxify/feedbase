@@ -429,69 +429,101 @@ export const getFeedbackUpvotersById = withFeedbackAuth<ProfileProps['Row'][]>(
 );
 
 // Upvote feedback by ID
-export const upvoteFeedbackByID = withFeedbackAuth<FeedbackProps['Row']>(
-  async (user, supabase, feedback, project, error) => {
+export const upvoteFeedbackByID = (
+  id: string,
+  projectSlug: string,
+  cType: 'server' | 'route',
+  hasUserUpvoted = false,
+  isAnonymous = false
+) =>
+  withFeedbackAuth<FeedbackProps['Row']>(async (user, supabase, feedback, project, error) => {
+    // Set has upvoted
+    let hasUpvoted = hasUserUpvoted;
+
     // If any errors, return error
     if (error) {
       return { data: null, error };
     }
 
-    // Get user profile
-    const { data: userProfile, error: profileError } = await supabase
-      .from('profiles')
+    // Get project config
+    const { data: projectConfig, error: projectConfigError } = await supabase
+      .from('project_configs')
       .select()
-      .eq('id', user!.id)
+      .eq('project_id', project!.id)
       .single();
 
     // Check for errors
-    if (profileError) {
-      return { data: null, error: { message: profileError.message, status: 500 } };
+    if (projectConfigError) {
+      return { data: null, error: { message: projectConfigError.message, status: 500 } };
     }
 
-    // Check if user has already upvoted
-    const { data: upvoter, error: upvoterErrorCheck } = await supabase
-      .from('feedback_upvoters')
-      .select()
-      .eq('profile_id', userProfile.id)
-      .eq('feedback_id', feedback!.id);
-
-    // Check for errors
-    if (upvoterErrorCheck) {
-      return { data: null, error: { message: upvoterErrorCheck.message, status: 500 } };
+    // Check if anonymous upvoting is enabled
+    if (!projectConfig.feedback_allow_anon_upvoting && isAnonymous) {
+      return { data: null, error: { message: 'anonymous upvoting is not allowed.', status: 403 } };
     }
 
-    // Check if upvoter exists
-    if (upvoter && upvoter.length > 0) {
-      // Delete upvoter
-      const { error: deleteError } = await supabase
-        .from('feedback_upvoters')
-        .delete()
-        .eq('id', upvoter[0].id)
+    // Upvote for logged in users
+    if (!isAnonymous) {
+      // Get user profile
+      const { data: userProfile, error: profileError } = await supabase
+        .from('profiles')
         .select()
+        .eq('id', user!.id)
         .single();
 
       // Check for errors
-      if (deleteError) {
-        return { data: null, error: { message: deleteError.message, status: 500 } };
+      if (profileError) {
+        return { data: null, error: { message: profileError.message, status: 500 } };
       }
-    } else {
-      // Create upvoter
-      const { error: upvoterError } = await supabase
+
+      // Check if user has already upvoted
+      const { data: upvoter, error: upvoterErrorCheck } = await supabase
         .from('feedback_upvoters')
-        .insert({ profile_id: userProfile.id, feedback_id: feedback!.id })
         .select()
-        .single();
+        .eq('profile_id', userProfile.id)
+        .eq('feedback_id', feedback!.id);
 
       // Check for errors
-      if (upvoterError) {
-        return { data: null, error: { message: upvoterError.message, status: 500 } };
+      if (upvoterErrorCheck) {
+        return { data: null, error: { message: upvoterErrorCheck.message, status: 500 } };
       }
+
+      // Check if upvoter exists
+      if (upvoter && upvoter.length > 0) {
+        // Delete upvoter
+        const { error: deleteError } = await supabase
+          .from('feedback_upvoters')
+          .delete()
+          .eq('id', upvoter[0].id)
+          .select()
+          .single();
+
+        // Check for errors
+        if (deleteError) {
+          return { data: null, error: { message: deleteError.message, status: 500 } };
+        }
+      } else {
+        // Create upvoter
+        const { error: upvoterError } = await supabase
+          .from('feedback_upvoters')
+          .insert({ profile_id: userProfile.id, feedback_id: feedback!.id })
+          .select()
+          .single();
+
+        // Check for errors
+        if (upvoterError) {
+          return { data: null, error: { message: upvoterError.message, status: 500 } };
+        }
+      }
+
+      // Set has upvoted
+      hasUpvoted = upvoter && upvoter.length > 0;
     }
 
     // Update feedback upvotes
     const { data: updatedFeedback, error: updateError } = await supabase
       .from('feedback')
-      .update({ upvotes: feedback!.upvotes + (upvoter && upvoter.length > 0 ? -1 : 1) })
+      .update({ upvotes: feedback!.upvotes + (hasUpvoted ? -1 : 1) })
       .eq('id', feedback!.id)
       .select()
       .single();
@@ -503,8 +535,7 @@ export const upvoteFeedbackByID = withFeedbackAuth<FeedbackProps['Row']>(
 
     // Return feedback
     return { data: updatedFeedback, error: null };
-  }
-);
+  })(id, projectSlug, cType, !isAnonymous);
 
 // Get all feedback posts
 export const getAllProjectFeedback = withProjectAuth<FeedbackWithUserProps[]>(

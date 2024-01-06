@@ -2,20 +2,20 @@
 
 import { useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogClose,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogTrigger,
+} from '@ui/components/ui/responsive-dialog';
 import { cn } from '@ui/lib/utils';
 import { MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
-import {
-  Dialog,
-  DialogCloseWrapper,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'ui/components/ui/dialog';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -241,9 +241,10 @@ export default function FeedbackModal({
   }
 
   return (
-    <Dialog>
-      <DialogTrigger className={className}>{children}</DialogTrigger>
-      <DialogContent className='sm:min-w-[425px]'>
+    // TODO: Optimize for mobile
+    <ResponsiveDialog>
+      <ResponsiveDialogTrigger className={className}>{children}</ResponsiveDialogTrigger>
+      <ResponsiveDialogContent className='sm:min-w-[425px]'>
         <DropdownMenu modal={false}>
           <DropdownMenuTrigger asChild>
             <div className='hover:bg-secondary fixed right-8 top-7 rounded-sm p-1 opacity-80 transition-all hover:cursor-pointer hover:opacity-100'>
@@ -281,28 +282,28 @@ export default function FeedbackModal({
               Email submitter
             </DropdownMenuItem>
 
-            <DialogCloseWrapper className='w-full'>
+            <ResponsiveDialogClose className='w-full'>
               <DropdownMenuItem
                 className='flex flex-row items-center gap-2 font-extralight'
                 onClick={onDeleteFeedback}>
                 <Icons.Trash className='h-4 w-4 fill-white' />
                 Delete
               </DropdownMenuItem>
-            </DialogCloseWrapper>
+            </ResponsiveDialogClose>
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <DialogHeader className='text-left'>
-          <DialogTitle className='mr-5'>{feedback.title}</DialogTitle>
+        <ResponsiveDialogHeader className='text-left'>
+          <ResponsiveDialogTitle className='mr-5'>{feedback.title}</ResponsiveDialogTitle>
           {feedback.description ? (
-            <DialogDescription>
+            <ResponsiveDialogDescription>
               <div
                 className={cn('text-foreground/60 text-sm font-light', PROSE_CN)}
                 dangerouslySetInnerHTML={{ __html: feedback.description }}
               />
-            </DialogDescription>
+            </ResponsiveDialogDescription>
           ) : null}
-        </DialogHeader>
+        </ResponsiveDialogHeader>
 
         {/* Write Comment Text Area */}
         <div className='prose-invert flex w-full flex-col items-center justify-end rounded-sm border p-4'>
@@ -326,7 +327,7 @@ export default function FeedbackModal({
           </div>
         </div>
 
-        <DialogFooter className='flex w-full flex-row items-center gap-2 sm:justify-start'>
+        <ResponsiveDialogFooter className='flex w-full flex-row items-center gap-2 sm:justify-start'>
           {/* Status */}
           <StatusCombobox
             initialValue={feedback.status}
@@ -345,8 +346,8 @@ export default function FeedbackModal({
             onSelect={onUpdateTag}
             align='start'
           />
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </ResponsiveDialogFooter>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }

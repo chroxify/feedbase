@@ -1,19 +1,18 @@
 'use client';
 
 import { useState } from 'react';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogClose,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogTrigger,
+} from '@ui/components/ui/responsive-dialog';
 import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogCloseWrapper,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'ui/components/ui/dialog';
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
 import { sendDiscordConfirmation } from '@/lib/api/integrations';
@@ -101,18 +100,20 @@ export default function DiscordIntegrationModal({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <ResponsiveDialog open={open} onOpenChange={setOpen}>
+      <ResponsiveDialogTrigger asChild>
         <Button variant='outline' disabled={isLoading} className='text-foreground/70 font-normal'>
           {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
           Connect
         </Button>
-      </DialogTrigger>
-      <DialogContent className='sm:max-w-[450px]'>
-        <DialogHeader>
-          <DialogTitle>Connect Discord Integration</DialogTitle>
-          <DialogDescription>Recieve notifications directly in your Discord server.</DialogDescription>
-        </DialogHeader>
+      </ResponsiveDialogTrigger>
+      <ResponsiveDialogContent className='sm:max-w-[450px]'>
+        <ResponsiveDialogHeader>
+          <ResponsiveDialogTitle>Connect Discord Integration</ResponsiveDialogTitle>
+          <ResponsiveDialogDescription>
+            Recieve notifications directly in your Discord server.
+          </ResponsiveDialogDescription>
+        </ResponsiveDialogHeader>
         <div className='flex flex-col gap-4'>
           {/* Webhook */}
           <div className='flex flex-col gap-2'>
@@ -156,8 +157,8 @@ export default function DiscordIntegrationModal({
             </Label>
           </div>
         </div>
-        <DialogFooter>
-          <DialogCloseWrapper>
+        <ResponsiveDialogFooter>
+          <ResponsiveDialogClose>
             <Button
               variant='secondary'
               onClick={() => {
@@ -166,7 +167,7 @@ export default function DiscordIntegrationModal({
               }}>
               Cancel
             </Button>
-          </DialogCloseWrapper>
+          </ResponsiveDialogClose>
           <Button
             type='submit'
             onClick={onConnectDiscord}
@@ -179,9 +180,8 @@ export default function DiscordIntegrationModal({
             {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
             Connect
           </Button>
-        </DialogFooter>
-        <DialogClose />
-      </DialogContent>
-    </Dialog>
+        </ResponsiveDialogFooter>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }

@@ -2,18 +2,18 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogClose,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogTrigger,
+} from '@ui/components/ui/responsive-dialog';
 import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'ui/components/ui/dialog';
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
 import { Icons } from '@/components/shared/icons/icons-static';
@@ -76,9 +76,9 @@ export default function InviteMemberDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className='sm:max-w-[425px]'>
+    <ResponsiveDialog open={open} onOpenChange={setOpen}>
+      <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      <ResponsiveDialogContent className='sm:max-w-[425px]'>
         <form
           onSubmit={(event) => {
             event.preventDefault();
@@ -87,12 +87,12 @@ export default function InviteMemberDialog({
             sendInvite();
           }}
           className='flex flex-col gap-4'>
-          <DialogHeader>
-            <DialogTitle>Create Project Invitation</DialogTitle>
-            <DialogDescription>
+          <ResponsiveDialogHeader>
+            <ResponsiveDialogTitle>Create Project Invitation</ResponsiveDialogTitle>
+            <ResponsiveDialogDescription>
               Invite your team members to collaborate on this project. Invites expire after 7 days.
-            </DialogDescription>
-          </DialogHeader>
+            </ResponsiveDialogDescription>
+          </ResponsiveDialogHeader>
           <div className='flex flex-col gap-4'>
             {/* Project Name */}
             <div className='flex flex-col gap-2'>
@@ -115,15 +115,20 @@ export default function InviteMemberDialog({
               </Label>
             </div>
           </div>
-          <DialogFooter>
+          <ResponsiveDialogFooter>
+            <ResponsiveDialogClose>
+              <Button variant='secondary' disabled={isLoading} type='button'>
+                Cancel
+              </Button>
+            </ResponsiveDialogClose>
+
             <Button type='submit' disabled={email === '' || !validateEmail(email) || isLoading}>
               {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
               Send Invitation
             </Button>
-          </DialogFooter>
-          <DialogClose />
+          </ResponsiveDialogFooter>
         </form>
-      </DialogContent>
-    </Dialog>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }

@@ -226,7 +226,7 @@ export default function FeedbackTable({
             {/* User */}
             <Avatar className='h-6 w-6 gap-2 border'>
               <AvatarImage src={feedback.user.avatar_url || ''} alt={feedback.user.full_name} />
-              <AvatarFallback>{feedback.user.full_name}</AvatarFallback>
+              <AvatarFallback>{feedback.user.full_name.charAt(0)}</AvatarFallback>
             </Avatar>
           </div>
         </div>

@@ -2,20 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogClose,
+  ResponsiveDialogContent,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogTrigger,
+} from '@ui/components/ui/responsive-dialog';
 import { Check, Copy, RefreshCcw } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
-import {
-  Dialog,
-  DialogClose,
-  DialogCloseWrapper,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from 'ui/components/ui/dialog';
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
 import { Icons } from '@/components/shared/icons/icons-static';
@@ -84,17 +83,17 @@ export default function AddSSOAuthModal({
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
+    <ResponsiveDialog open={open} onOpenChange={setOpen}>
+      <ResponsiveDialogTrigger asChild>
         <Button variant='outline' disabled={isLoading} className='text-foreground/70 font-normal'>
           {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
           Connect
         </Button>
-      </DialogTrigger>
-      <DialogContent className='sm:max-w-[450px]'>
-        <DialogHeader>
-          <DialogTitle>Enable Single Sign-On</DialogTitle>
-          <DialogDescription>
+      </ResponsiveDialogTrigger>
+      <ResponsiveDialogContent className='sm:max-w-[450px]'>
+        <ResponsiveDialogHeader>
+          <ResponsiveDialogTitle>Enable Single Sign-On</ResponsiveDialogTitle>
+          <ResponsiveDialogDescription>
             Allow your users to sign in with their existing accounts.
             <br />
             Visit the{' '}
@@ -104,8 +103,8 @@ export default function AddSSOAuthModal({
               documentation
             </Link>{' '}
             for more information.
-          </DialogDescription>
-        </DialogHeader>
+          </ResponsiveDialogDescription>
+        </ResponsiveDialogHeader>
         <div className='flex flex-col gap-4'>
           {/* Login Url */}
           <div className='flex flex-col gap-2'>
@@ -169,8 +168,8 @@ export default function AddSSOAuthModal({
             </Label>
           </div>
         </div>
-        <DialogFooter>
-          <DialogCloseWrapper>
+        <ResponsiveDialogFooter>
+          <ResponsiveDialogClose>
             <Button
               variant='secondary'
               onClick={() => {
@@ -178,7 +177,7 @@ export default function AddSSOAuthModal({
               }}>
               Cancel
             </Button>
-          </DialogCloseWrapper>
+          </ResponsiveDialogClose>
           <Button
             type='submit'
             onClick={enableSSO}
@@ -191,9 +190,8 @@ export default function AddSSOAuthModal({
             {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
             Enable
           </Button>
-        </DialogFooter>
-        <DialogClose />
-      </DialogContent>
-    </Dialog>
+        </ResponsiveDialogFooter>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }

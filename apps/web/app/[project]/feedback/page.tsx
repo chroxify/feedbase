@@ -1,9 +1,10 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Separator } from '@ui/components/ui/separator';
-import { getProjectBySlug } from '@/lib/api/projects';
+import { getProjectBySlug, getProjectConfigBySlug } from '@/lib/api/projects';
 import { getPublicProjectFeedback } from '@/lib/api/public';
 import { getCurrentUser } from '@/lib/api/user';
+import { ProjectConfigWithoutSecretProps } from '@/lib/types';
 import FeedbackHeader from '@/components/hub/feedback/button-header';
 import FeedbackList from '@/components/hub/feedback/feedback-list';
 
@@ -37,6 +38,13 @@ export default async function Feedback({ params }: Props) {
     return <div>{error.message}</div>;
   }
 
+  // Fetch project config if user not logged in
+  let config: ProjectConfigWithoutSecretProps | null = null;
+  if (!user) {
+    const { data } = await getProjectConfigBySlug(params.project, 'server', true, false);
+    config = data;
+  }
+
   return (
     <div className='flex h-full w-full flex-col items-center gap-10 pb-10 selection:bg-[#8F9EFF]/20 selection:text-[#8F9EFF]'>
       <div className='flex w-full px-5 sm:px-10 md:px-10 lg:px-20'>
@@ -57,7 +65,12 @@ export default async function Feedback({ params }: Props) {
 
         {/* Main */}
         <div className='flex h-full w-full flex-col justify-between'>
-          <FeedbackList feedback={feedback} projectSlug={params.project} isLoggedIn={!!user} />
+          <FeedbackList
+            feedback={feedback}
+            projectSlug={params.project}
+            isLoggedIn={!!user}
+            projectConfig={config}
+          />
         </div>
       </div>
     </div>
