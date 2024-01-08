@@ -48,19 +48,20 @@ export default function Deploy() {
 
             <div className='z-10 flex w-full flex-col items-center justify-center gap-3'>
               <h1 className='text-foreground/80 group-hover:text-foreground select-none text-center text-2xl font-medium leading-tight transition-colors'>
-                Migrate the Supabase database
+                Fork the Supabase database
               </h1>
 
               <p className='text-foreground/60 group-hover:text-foreground/70 select-none text-center text-sm font-light transition-colors md:w-2/4'>
-                Once you have your Supabase project, you can migrate the necessary database schema.
+                Once you have your Supabase project, you can fork the Feedbase database schemas to your own
+                project.
               </p>
 
               <Link
-                href='https://github.com/chroxify/feedbase?tab=readme-ov-file#deploy-your-own'
+                href='https://supafork.com/new?repository_url=https://github.com/chroxify/feedbase'
                 target='_blank'
                 rel='noopener noreferrer'>
                 <Button size='sm' className='border-background mt-3 border'>
-                  View migration instructions
+                  Fork Supabase database
                 </Button>
               </Link>
             </div>
