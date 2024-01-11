@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Label } from '@radix-ui/react-label';
 import { cn } from '@ui/lib/utils';
+import { Check, Pen } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/ui/card';
@@ -11,6 +12,7 @@ import { Input } from 'ui/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'ui/components/ui/select';
 import { ProjectConfigWithoutSecretProps, ProjectProps } from '@/lib/types';
 import FileDrop from '@/components/shared/file-drop';
+import CustomizeThemeModal from '../modals/add-custom-theme-modal';
 
 export default function HubConfigCards({
   projectData,
@@ -24,7 +26,7 @@ export default function HubConfigCards({
   const [OGImage, setOGImage] = useState<string | null>(projectData.og_image || null);
   const router = useRouter();
 
-  async function handleSaveProject() {
+  async function handleSaveProject(noToast?: boolean) {
     const promise = new Promise((resolve, reject) => {
       fetch(`/api/v1/projects/${projectData.slug}`, {
         method: 'PATCH',
@@ -51,13 +53,15 @@ export default function HubConfigCards({
         });
     });
 
-    toast.promise(promise, {
-      loading: 'Updating project...',
-      success: 'Project updated successfully.',
-      error: (err) => {
-        return err;
-      },
-    });
+    if (!noToast) {
+      toast.promise(promise, {
+        loading: 'Updating project...',
+        success: 'Project updated successfully.',
+        error: (err) => {
+          return err;
+        },
+      });
+    }
 
     promise.then(() => {
       router.refresh();
@@ -85,6 +89,36 @@ export default function HubConfigCards({
           feedback_allow_anon_upvoting:
             projectConfig.feedback_allow_anon_upvoting !== projectConfigData.feedback_allow_anon_upvoting
               ? projectConfig.feedback_allow_anon_upvoting
+              : undefined,
+          custom_theme:
+            projectConfig.custom_theme !== projectConfigData.custom_theme
+              ? projectConfig.custom_theme
+              : undefined,
+          custom_theme_root:
+            projectConfig.custom_theme_root !== projectConfigData.custom_theme_root
+              ? projectConfig.custom_theme_root
+              : undefined,
+          custom_theme_primary_foreground:
+            projectConfig.custom_theme_primary_foreground !==
+            projectConfigData.custom_theme_primary_foreground
+              ? projectConfig.custom_theme_primary_foreground
+              : undefined,
+          custom_theme_background:
+            projectConfig.custom_theme_background !== projectConfigData.custom_theme_background
+              ? projectConfig.custom_theme_background
+              : undefined,
+          custom_theme_secondary_background:
+            projectConfig.custom_theme_secondary_background !==
+            projectConfigData.custom_theme_secondary_background
+              ? projectConfig.custom_theme_secondary_background
+              : undefined,
+          custom_theme_accent:
+            projectConfig.custom_theme_accent !== projectConfigData.custom_theme_accent
+              ? projectConfig.custom_theme_accent
+              : undefined,
+          custom_theme_border:
+            projectConfig.custom_theme_border !== projectConfigData.custom_theme_border
+              ? projectConfig.custom_theme_border
               : undefined,
         }),
       })
@@ -233,6 +267,56 @@ export default function HubConfigCards({
                 The OG Image used when sharing your project.
               </Label>
             </div>
+
+            {/* Theme */}
+            <div className='space-y-2'>
+              <Label className='text-foreground/70 text-sm font-light'>Theme</Label>
+              <div className='flex h-10 w-full flex-row gap-3'>
+                <Button
+                  size='icon'
+                  className={cn(
+                    'bg-root hover:bg-root h-7 w-7 rounded-full border',
+                    projectConfig.custom_theme === 'default' && 'ring-border ring-2 ring-offset-2'
+                  )}
+                  onClick={() => {
+                    setProjectConfig((prev) => ({ ...prev, custom_theme: 'default' }));
+                  }}>
+                  {projectConfig.custom_theme === 'default' && (
+                    <Check className='text-foreground h-3.5 w-3.5' />
+                  )}
+                  <span className='sr-only'>Light</span>
+                </Button>
+
+                <Button
+                  size='icon'
+                  className={cn(
+                    'h-7 w-7 rounded-full',
+                    projectConfig.custom_theme === 'light' && 'ring-foreground ring-2 ring-offset-2'
+                  )}
+                  onClick={() => {
+                    setProjectConfig((prev) => ({ ...prev, custom_theme: 'light' }));
+                  }}>
+                  {projectConfig.custom_theme === 'light' && <Check className='h-3.5 w-3.5 text-black' />}
+                  <span className='sr-only'>Light</span>
+                </Button>
+
+                <CustomizeThemeModal projectConfig={projectConfig} setProjectConfig={setProjectConfig}>
+                  <Button
+                    size='icon'
+                    variant='outline'
+                    className={cn(
+                      'h-7 w-7 rounded-full',
+                      projectConfig.custom_theme === 'custom' && 'ring-input ring-2 ring-offset-2'
+                    )}>
+                    <Pen className='text-foreground h-3 w-3' />
+                  </Button>
+                </CustomizeThemeModal>
+              </div>
+
+              <Label className='text-foreground/50 text-xs font-extralight'>
+                This will only be applied to your public hub.
+              </Label>
+            </div>
           </div>
         </CardContent>
         <CardFooter>
@@ -241,9 +325,54 @@ export default function HubConfigCards({
             disabled={
               (project.icon === projectData.icon || (!project.icon && !projectData.icon)) &&
               project.icon_radius === projectData.icon_radius &&
-              (OGImage === projectData.og_image || (!OGImage && !projectData.og_image))
+              (OGImage === projectData.og_image || (!OGImage && !projectData.og_image)) &&
+              projectConfig.custom_theme === projectConfigData.custom_theme &&
+              projectConfig.custom_theme_root === projectConfigData.custom_theme_root &&
+              projectConfig.custom_theme_primary_foreground ===
+                projectConfigData.custom_theme_primary_foreground &&
+              projectConfig.custom_theme_background === projectConfigData.custom_theme_background &&
+              projectConfig.custom_theme_secondary_background ===
+                projectConfigData.custom_theme_secondary_background &&
+              projectConfig.custom_theme_accent === projectConfigData.custom_theme_accent &&
+              projectConfig.custom_theme_border === projectConfigData.custom_theme_border
             }
-            onClick={handleSaveProject}>
+            onClick={() => {
+              // If both changed, save both
+              if (
+                !(
+                  (project.icon === projectData.icon || (!project.icon && !projectData.icon)) &&
+                  project.icon_radius === projectData.icon_radius &&
+                  (OGImage === projectData.og_image || (!OGImage && !projectData.og_image))
+                ) &&
+                !(
+                  projectConfig.custom_theme === projectConfigData.custom_theme &&
+                  projectConfig.custom_theme_root === projectConfigData.custom_theme_root &&
+                  projectConfig.custom_theme_primary_foreground ===
+                    projectConfigData.custom_theme_primary_foreground &&
+                  projectConfig.custom_theme_background === projectConfigData.custom_theme_background &&
+                  projectConfig.custom_theme_secondary_background ===
+                    projectConfigData.custom_theme_secondary_background &&
+                  projectConfig.custom_theme_accent === projectConfigData.custom_theme_accent &&
+                  projectConfig.custom_theme_border === projectConfigData.custom_theme_border
+                )
+              ) {
+                handleSaveProjectConfig();
+                handleSaveProject(true);
+                return;
+              }
+
+              // If only theme changed, save only the theme
+              if (
+                (project.icon === projectData.icon || (!project.icon && !projectData.icon)) &&
+                project.icon_radius === projectData.icon_radius &&
+                (OGImage === projectData.og_image || (!OGImage && !projectData.og_image))
+              ) {
+                handleSaveProjectConfig();
+              } else {
+                // If only project changed, save only the project
+                handleSaveProject();
+              }
+            }}>
             Save changes
           </Button>
         </CardFooter>

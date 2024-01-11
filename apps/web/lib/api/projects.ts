@@ -341,6 +341,25 @@ export const updateProjectConfigBySlug = (
           data.feedback_allow_anon_upvoting !== undefined
             ? data.feedback_allow_anon_upvoting
             : config.feedback_allow_anon_upvoting,
+        custom_theme: data.custom_theme !== undefined ? data.custom_theme : config.custom_theme,
+        custom_theme_root:
+          data.custom_theme_root !== undefined ? data.custom_theme_root : config.custom_theme_root,
+        custom_theme_primary_foreground:
+          data.custom_theme_primary_foreground !== undefined
+            ? data.custom_theme_primary_foreground
+            : config.custom_theme_primary_foreground,
+        custom_theme_background:
+          data.custom_theme_background !== undefined
+            ? data.custom_theme_background
+            : config.custom_theme_background,
+        custom_theme_secondary_background:
+          data.custom_theme_secondary_background !== undefined
+            ? data.custom_theme_secondary_background
+            : config.custom_theme_secondary_background,
+        custom_theme_accent:
+          data.custom_theme_accent !== undefined ? data.custom_theme_accent : config.custom_theme_accent,
+        custom_theme_border:
+          data.custom_theme_border !== undefined ? data.custom_theme_border : config.custom_theme_border,
       })
       .eq('id', config.id)
       .select(
