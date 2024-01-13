@@ -232,9 +232,10 @@ export default function CustomizeThemeModal({
               style={{ borderColor: colorScheme.border }}>
               <Icons.LogoText className='fill-foreground h-6 w-20' style={{ fill: colorScheme.foreground }} />
               <div
-                className='h-5 w-12 rounded-md bg-white'
-                style={{ backgroundColor: colorScheme.background }}
-              />
+                className='flex h-5 w-12 items-center justify-center rounded-md bg-white text-[10px]'
+                style={{ backgroundColor: colorScheme.background, color: colorScheme.foreground }}>
+                Login
+              </div>
             </div>
 
             {/* Body */}
@@ -253,36 +254,44 @@ export default function CustomizeThemeModal({
               <div className='flex w-full justify-between gap-1'>
                 <div className='flex gap-1'>
                   <div
-                    className='h-5 w-10 rounded-md border bg-white'
+                    className='flex h-5 w-10 items-center justify-center rounded-md border bg-white text-[10px]'
                     style={{
                       backgroundColor: colorScheme.secondary_background,
                       borderColor: colorScheme.border,
-                    }}
-                  />
+                      color: colorScheme.foreground,
+                    }}>
+                    New
+                  </div>
                   <div
-                    className='h-5 w-10 rounded-md border bg-white'
+                    className='flex h-5 w-10 items-center justify-center rounded-md border bg-white text-[10px]'
                     style={{
                       backgroundColor: colorScheme.secondary_background,
                       borderColor: colorScheme.border,
-                    }}
-                  />
+                      color: colorScheme.foreground,
+                    }}>
+                    Top
+                  </div>
                 </div>
 
                 <div className='flex gap-1'>
                   <div
-                    className='h-5 w-20 rounded-md border bg-white'
+                    className='flex h-5 w-20 items-center justify-start rounded-md border bg-white pl-1.5 text-[10px]'
                     style={{
                       backgroundColor: colorScheme.secondary_background,
                       borderColor: colorScheme.border,
-                    }}
-                  />
+                      color: colorScheme.foreground,
+                    }}>
+                    Search
+                  </div>
                   <div
-                    className='h-5 w-10 rounded-md border bg-white'
+                    className='flex h-5 w-10 items-center justify-center rounded-md border bg-white text-[10px]'
                     style={{
                       backgroundColor: colorScheme.secondary_background,
                       borderColor: colorScheme.border,
-                    }}
-                  />
+                      color: colorScheme.foreground,
+                    }}>
+                    Post
+                  </div>
                 </div>
               </div>
 
