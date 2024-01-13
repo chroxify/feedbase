@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { Badge } from '@ui/components/ui/badge';
 import {
   ResponsiveDialog,
   ResponsiveDialogClose,
@@ -75,7 +76,14 @@ export default function CustomizeThemeModal({
       <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
       <ResponsiveDialogContent className='sm:max-w-lg'>
         <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>Cutomize Theme</ResponsiveDialogTitle>
+          <ResponsiveDialogTitle className='flex flex-row items-center gap-2'>
+            Customize Theme{' '}
+            <Badge
+              variant='secondary'
+              className='border-border text-foreground/70 rounded-md border font-light'>
+              Experimental
+            </Badge>
+          </ResponsiveDialogTitle>
           <ResponsiveDialogDescription>Create your own color theme.</ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
         <div className='grid w-full grid-cols-2 gap-4'>
