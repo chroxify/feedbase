@@ -176,7 +176,7 @@ export default function ChangelogList({
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
-                          className='bg-destructive hover:bg-destructive/90 dark:text-foreground'
+                          className='bg-destructive hover:bg-destructive/90 text-foreground'
                           onClick={() => onDeleteChangelog(changelog)}>
                           Yes, delete
                         </AlertDialogAction>

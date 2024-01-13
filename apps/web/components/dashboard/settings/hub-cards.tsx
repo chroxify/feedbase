@@ -200,7 +200,7 @@ export default function HubConfigCards({
                       'bg-background hover:bg-background/90 group-hover:bg-background/90 flex h-full w-full cursor-pointer flex-col items-center justify-center border',
                       project.icon_radius
                     )}>
-                    <p className='absolute hidden text-xs text-gray-500 group-hover:block group-hover:transition-all group-hover:duration-300 dark:text-gray-400'>
+                    <p className='text-foreground/70 absolute hidden text-xs group-hover:block group-hover:transition-all group-hover:duration-300 '>
                       Upload
                     </p>
                     {/* <Image src='/favicon.ico' alt='Logo' width={40} height={40} className='h-full w-full rounded-md object-cover group-hover:opacity-0' /> */}
@@ -217,9 +217,7 @@ export default function HubConfigCards({
                         )}
                       />
                     ) : (
-                      <p className='absolute text-xs text-gray-500 group-hover:hidden dark:text-gray-400'>
-                        Upload
-                      </p>
+                      <p className='text-foreground/70 absolute text-xs group-hover:hidden'>Upload</p>
                     )}
                     <input id='dropzone-file' type='file' className='hidden' onChange={onChangePicture} />
                   </label>

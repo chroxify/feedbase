@@ -18,6 +18,7 @@ const Separator = React.forwardRef<
       className
     )}
     {...props}
+    data-separator
   />
 ));
 Separator.displayName = SeparatorPrimitive.Root.displayName;

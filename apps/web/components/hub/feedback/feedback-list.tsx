@@ -259,6 +259,13 @@ export default function FeedbackList({
                     'h-4 text-sm font-light transition-colors ',
                     feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
                   )}
+                  data-description
+                  style={{
+                    stroke:
+                      projectConfig?.custom_theme === 'custom' && feedback.has_upvoted
+                        ? `hsl(${projectConfig.custom_theme_primary_foreground})`
+                        : undefined,
+                  }}
                 />
 
                 {/* Upvotes */}
@@ -266,7 +273,14 @@ export default function FeedbackList({
                   className={cn(
                     'text-sm font-light transition-colors',
                     feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
-                  )}>
+                  )}
+                  data-description
+                  style={{
+                    color:
+                      projectConfig?.custom_theme === 'custom' && feedback.has_upvoted
+                        ? `hsl(${projectConfig.custom_theme_primary_foreground})`
+                        : undefined,
+                  }}>
                   {feedback.upvotes}
                 </div>
               </Button>
@@ -291,24 +305,32 @@ export default function FeedbackList({
             </div>
 
             {/* Author */}
-            <div className='text-foreground/60 flex select-none flex-row items-center justify-start gap-2 font-light'>
+            <div
+              className='text-foreground/60 flex select-none flex-row items-center justify-start gap-2 font-light'
+              data-description>
               {/* User */}
               <Avatar className='h-6 w-6 gap-2 border'>
                 <AvatarImage src={feedback.user.avatar_url || ''} alt={feedback.user.full_name} />
                 <AvatarFallback className='text-xs font-light'>{feedback.user.full_name[0]}</AvatarFallback>
               </Avatar>
               {/* Name */}
-              <span className='text-foreground/70 text-sm font-extralight'>{feedback.user.full_name}</span>·
-              {/* Time ago */}
-              <span className='text-foreground/50 text-xs font-extralight'>{feedback.timeAgo}</span>
+              <span className='text-foreground/70 text-sm font-extralight' data-description>
+                {feedback.user.full_name}
+              </span>
+              ·{/* Time ago */}
+              <span className='text-foreground/50 text-xs font-extralight' data-description>
+                {feedback.timeAgo}
+              </span>
             </div>
             {/* </div> */}
           </Link>
 
           {/* Comments Count */}
           <div className='text-foreground/50 hidden flex-row items-center justify-center gap-1.5 pl-2 pr-5 sm:flex'>
-            <MessagesSquare className='text-foreground/50 h-4 w-4' />
-            <span className='text-foreground/50 text-sm font-extralight'>{feedback.comment_count}</span>
+            <MessagesSquare className='text-foreground/50 h-4 w-4' data-description />
+            <span className='text-foreground/50 text-sm font-extralight' data-description>
+              {feedback.comment_count}
+            </span>
           </div>
         </div>
       ))}

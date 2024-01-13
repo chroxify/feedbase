@@ -17,6 +17,7 @@ import { Button } from 'ui/components/ui/button';
 import { Input } from 'ui/components/ui/input';
 import { Label } from 'ui/components/ui/label';
 import { ProjectConfigWithoutSecretProps } from '@/lib/types';
+import { hexToHSL, hslToHex } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
 
 // Helper component
@@ -61,12 +62,12 @@ export default function CustomizeThemeModal({
   setProjectConfig: React.Dispatch<React.SetStateAction<ProjectConfigWithoutSecretProps>>;
 }) {
   const [colorScheme, setColorScheme] = useState({
-    root: projectConfig.custom_theme_root || '',
-    background: projectConfig.custom_theme_background || '',
-    secondary_background: projectConfig.custom_theme_secondary_background || '',
-    foreground: projectConfig.custom_theme_primary_foreground || '',
-    accent: projectConfig.custom_theme_accent || '',
-    border: projectConfig.custom_theme_border || '',
+    root: hslToHex(projectConfig.custom_theme_root) || '',
+    background: hslToHex(projectConfig.custom_theme_background) || '',
+    secondary_background: hslToHex(projectConfig.custom_theme_secondary_background) || '',
+    foreground: hslToHex(projectConfig.custom_theme_primary_foreground) || '',
+    accent: hslToHex(projectConfig.custom_theme_accent) || '',
+    border: hslToHex(projectConfig.custom_theme_border) || '',
   });
 
   return (
@@ -321,15 +322,15 @@ export default function CustomizeThemeModal({
                 setProjectConfig((prev) => ({
                   ...prev,
                   custom_theme: 'custom',
-                  custom_theme_root: colorScheme.root,
-                  custom_theme_background: colorScheme.background,
-                  custom_theme_secondary_background: colorScheme.secondary_background,
-                  custom_theme_primary_foreground: colorScheme.foreground,
-                  custom_theme_accent: colorScheme.accent,
-                  custom_theme_border: colorScheme.border,
+                  custom_theme_root: hexToHSL(colorScheme.root) || '',
+                  custom_theme_background: hexToHSL(colorScheme.background) || '',
+                  custom_theme_secondary_background: hexToHSL(colorScheme.secondary_background) || '',
+                  custom_theme_primary_foreground: hexToHSL(colorScheme.foreground) || '',
+                  custom_theme_accent: hexToHSL(colorScheme.accent) || '',
+                  custom_theme_border: hexToHSL(colorScheme.border) || '',
                 }));
               }}>
-              Save theme
+              Set theme
             </Button>
           </ResponsiveDialogClose>
         </ResponsiveDialogFooter>

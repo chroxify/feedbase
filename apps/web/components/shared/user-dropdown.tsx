@@ -17,9 +17,11 @@ import LottiePlayer from './lottie-player';
 export default function UserDropdown({
   user,
   rediretOnLogout,
+  iconColor,
 }: {
   user: ProfileProps['Row'];
   rediretOnLogout?: string;
+  iconColor?: string | null;
 }) {
   const [isHover, setIsHover] = useState<string>('');
   const supabase = createBrowserClient(
@@ -56,7 +58,13 @@ export default function UserDropdown({
             onSelect={(e) => {
               e.preventDefault();
             }}>
-            <LottiePlayer lottieSrc={ProfileIcon} animate={isHover === 'Profile'} className='h-5 w-5' />
+            <LottiePlayer
+              lottieSrc={ProfileIcon}
+              animate={isHover === 'Profile'}
+              className='h-5 w-5'
+              initialColor={iconColor || undefined}
+              animationColor={iconColor || undefined}
+            />
 
             <div className='text-foreground/[85%] pb-[2px]'>Profile</div>
           </DropdownMenuItem>
@@ -72,7 +80,13 @@ export default function UserDropdown({
             setIsHover('');
           }}
           onClick={handleLogout}>
-          <LottiePlayer lottieSrc={LogoutIcon} animate={isHover === 'Logout'} className='h-5 w-5' />
+          <LottiePlayer
+            lottieSrc={LogoutIcon}
+            animate={isHover === 'Logout'}
+            className='h-5 w-5'
+            initialColor={iconColor || undefined}
+            animationColor={iconColor || undefined}
+          />
 
           <div className='text-foreground/[85%] pb-[2px]'>Logout</div>
         </DropdownMenuItem>

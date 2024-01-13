@@ -7,6 +7,7 @@ import { Button } from '@ui/components/ui/button';
 import { cn } from '@ui/lib/utils';
 import { satoshi } from '@ui/styles/fonts';
 import { ProfileProps, ProjectConfigWithoutSecretProps, ProjectProps } from '@/lib/types';
+import { hslToHex } from '@/lib/utils';
 import UserDropdown from '../shared/user-dropdown';
 import AuthModal from './modals/login-signup-modal';
 
@@ -67,7 +68,14 @@ export default function Header({
         </Link>
 
         {/* User */}
-        {user ? <UserDropdown user={user} /> : null}
+        {user ? (
+          <UserDropdown
+            user={user}
+            iconColor={
+              config.custom_theme === 'custom' ? hslToHex(config.custom_theme_primary_foreground) : undefined
+            }
+          />
+        ) : null}
 
         {/* Login */}
         {!config.integration_sso_status && !user && (
@@ -89,9 +97,13 @@ export default function Header({
         {tabs.map((tab) => (
           <Link
             href={tab.link}
-            className={cn('pb-[6px] first:-ml-3', tab.link === currentTab.link && 'border-b-2 border-white')}
+            className={cn(
+              'pb-[6px] first:-ml-3',
+              tab.link === currentTab.link && 'border-foreground border-b-2'
+            )}
             key={tab.name.toLowerCase()}>
             <Button
+              data-buttonType='tabs'
               variant='secondary'
               size='sm'
               className={cn(

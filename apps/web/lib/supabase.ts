@@ -298,7 +298,7 @@ export interface Database {
           created_at: string;
           custom_domain: string | null;
           custom_domain_verified: boolean | null;
-          custom_theme: Database['public']['Enums']['theme_type'] | null;
+          custom_theme: Database['public']['Enums']['theme_type'];
           custom_theme_accent: string | null;
           custom_theme_background: string | null;
           custom_theme_border: string | null;
@@ -321,7 +321,7 @@ export interface Database {
           created_at?: string;
           custom_domain?: string | null;
           custom_domain_verified?: boolean | null;
-          custom_theme?: Database['public']['Enums']['theme_type'] | null;
+          custom_theme?: Database['public']['Enums']['theme_type'];
           custom_theme_accent?: string | null;
           custom_theme_background?: string | null;
           custom_theme_border?: string | null;
@@ -344,7 +344,7 @@ export interface Database {
           created_at?: string;
           custom_domain?: string | null;
           custom_domain_verified?: boolean | null;
-          custom_theme?: Database['public']['Enums']['theme_type'] | null;
+          custom_theme?: Database['public']['Enums']['theme_type'];
           custom_theme_accent?: string | null;
           custom_theme_background?: string | null;
           custom_theme_border?: string | null;

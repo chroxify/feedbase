@@ -81,7 +81,9 @@ export default function CreatePostModal({
       <ResponsiveDialogContent className='sm:max-w-[425px]'>
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>Create a new post</ResponsiveDialogTitle>
-          <ResponsiveDialogDescription>Have an idea or found a bug? Let us know!</ResponsiveDialogDescription>
+          <ResponsiveDialogDescription data-description>
+            Have an idea or found a bug? Let us know!
+          </ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
         <div className='flex flex-col gap-4'>
           {/* Project Name */}
@@ -111,13 +113,14 @@ export default function CreatePostModal({
               <PostEditor content={content} setContent={setContent} className='min-h-[50px]' />
             </div>
 
-            <Label className='text-foreground/50 text-xs font-extralight'>
+            <Label className='text-foreground/50 text-xs font-extralight' data-description>
               You can use Markdown to format your post.
             </Label>
           </div>
         </div>
         <ResponsiveDialogFooter>
           <Button
+            variant='default'
             type='submit'
             onClick={onSubmit}
             disabled={!title || content.replace(/<[^>]*>?/gm, '').length === 0 || isLoading}>

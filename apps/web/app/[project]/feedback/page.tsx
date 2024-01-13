@@ -4,7 +4,6 @@ import { Separator } from '@ui/components/ui/separator';
 import { getProjectBySlug, getProjectConfigBySlug } from '@/lib/api/projects';
 import { getPublicProjectFeedback } from '@/lib/api/public';
 import { getCurrentUser } from '@/lib/api/user';
-import { ProjectConfigWithoutSecretProps } from '@/lib/types';
 import FeedbackHeader from '@/components/hub/feedback/button-header';
 import FeedbackList from '@/components/hub/feedback/feedback-list';
 
@@ -39,18 +38,14 @@ export default async function Feedback({ params }: Props) {
   }
 
   // Fetch project config if user not logged in
-  let config: ProjectConfigWithoutSecretProps | null = null;
-  if (!user) {
-    const { data } = await getProjectConfigBySlug(params.project, 'server', true, false);
-    config = data;
-  }
+  const { data: config } = await getProjectConfigBySlug(params.project, 'server', true, false);
 
   return (
     <div className='flex h-full w-full flex-col items-center gap-10 pb-10 selection:bg-[#8F9EFF]/20 selection:text-[#8F9EFF]'>
       <div className='flex w-full px-5 sm:px-10 md:px-10 lg:px-20'>
         <div className='flex w-full flex-col items-start gap-4'>
           <h1 className='text-3xl font-medium sm:text-4xl'>Feedback</h1>
-          <p className='text-foreground/70 text-base font-extralight sm:text-lg'>
+          <p className='text-foreground/70 text-base font-extralight sm:text-lg' data-description>
             Have a suggestion or found a bug? Let us know!
           </p>
         </div>
@@ -61,7 +56,7 @@ export default async function Feedback({ params }: Props) {
 
       {/* content */}
       <div className='flex h-full w-full flex-col items-center justify-center gap-5 px-5 sm:px-10 md:px-10 lg:px-20'>
-        <FeedbackHeader isLoggedIn={!!user} projectSlug={params.project} />
+        <FeedbackHeader isLoggedIn={!!user} projectSlug={params.project} projectConfig={config} />
 
         {/* Main */}
         <div className='flex h-full w-full flex-col justify-between'>

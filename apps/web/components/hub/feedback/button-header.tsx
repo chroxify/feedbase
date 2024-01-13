@@ -7,15 +7,18 @@ import { Input } from '@ui/components/ui/input';
 import { cn } from '@ui/lib/utils';
 import { Clock3, Flame, Search, Star } from 'lucide-react';
 import useCreateQueryString from '@/lib/hooks/use-create-query';
+import { ProjectConfigWithoutSecretProps } from '@/lib/types';
 import CreatePostModal from '../modals/create-post-modal';
 import AuthModal from '../modals/login-signup-modal';
 
 export default function FeedbackHeader({
   isLoggedIn,
   projectSlug,
+  projectConfig,
 }: {
   isLoggedIn: boolean;
   projectSlug: string;
+  projectConfig: ProjectConfigWithoutSecretProps | null;
 }) {
   const searchParams = useSearchParams();
   const createQueryString = useCreateQueryString(searchParams);
@@ -35,6 +38,7 @@ export default function FeedbackHeader({
         <div className='flex w-full flex-row items-center justify-start gap-2 md:w-fit'>
           {/* Newest */}
           <Button
+            data-buttonType='sort'
             variant='secondary'
             className={cn(
               'text-foreground/70 hover:text-foreground/80 border text-sm font-light transition-all duration-200',
@@ -44,6 +48,12 @@ export default function FeedbackHeader({
               setCurrentSort('');
               router.push(`${pathname}?${createQueryString('sort', '')}`);
             }}
+            style={{
+              backgroundColor:
+                projectConfig?.custom_theme === 'custom' && currentSort === ''
+                  ? `hsl(${projectConfig.custom_theme_secondary_background})`
+                  : undefined,
+            }}
             size='sm'>
             <Clock3 className='mr-1.5 h-4 w-4' />
             New
@@ -51,6 +61,7 @@ export default function FeedbackHeader({
 
           {/* Trending */}
           <Button
+            data-buttonType='sort'
             variant='secondary'
             className={cn(
               'text-foreground/70 hover:text-foreground/80 border text-sm font-light transition-all duration-200',
@@ -60,6 +71,12 @@ export default function FeedbackHeader({
               setCurrentSort('trending');
               router.push(`${pathname}?${createQueryString('sort', 'trending')}`);
             }}
+            style={{
+              backgroundColor:
+                projectConfig?.custom_theme === 'custom' && currentSort === 'trending'
+                  ? `hsl(${projectConfig.custom_theme_secondary_background})`
+                  : undefined,
+            }}
             size='sm'>
             <Flame className='mr-1 h-4 w-4' />
             Trending
@@ -67,6 +84,7 @@ export default function FeedbackHeader({
 
           {/* Most Upvotes */}
           <Button
+            data-buttonType='sort'
             variant='secondary'
             className={cn(
               'text-foreground/70 hover:text-foreground/80 border text-sm font-light transition-all duration-200',
@@ -75,6 +93,12 @@ export default function FeedbackHeader({
             onClick={() => {
               setCurrentSort('upvotes');
               router.push(`${pathname}?${createQueryString('sort', 'upvotes')}`);
+            }}
+            style={{
+              backgroundColor:
+                projectConfig?.custom_theme === 'custom' && currentSort === 'upvotes'
+                  ? `hsl(${projectConfig.custom_theme_secondary_background})`
+                  : undefined,
             }}
             size='sm'>
             <Star className='mr-1 h-4 w-4' />
@@ -95,7 +119,7 @@ export default function FeedbackHeader({
             />
 
             {/* Icon */}
-            <Search className='text-foreground/50 absolute left-3 h-4 w-4' />
+            <Search className='text-foreground/50 absolute left-3 h-4 w-4' data-description />
           </div>
 
           {isLoggedIn ? (
