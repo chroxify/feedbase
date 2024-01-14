@@ -38,7 +38,6 @@ export default function FeedbackHeader({
         <div className='flex w-full flex-row items-center justify-start gap-2 md:w-fit'>
           {/* Newest */}
           <Button
-            data-buttonType='sort'
             variant='secondary'
             className={cn(
               'text-foreground/70 hover:text-foreground/80 border text-sm font-light transition-all duration-200',
@@ -48,12 +47,6 @@ export default function FeedbackHeader({
               setCurrentSort('');
               router.push(`${pathname}?${createQueryString('sort', '')}`);
             }}
-            style={{
-              backgroundColor:
-                projectConfig?.custom_theme === 'custom' && currentSort === ''
-                  ? `hsl(${projectConfig.custom_theme_secondary_background})`
-                  : undefined,
-            }}
             size='sm'>
             <Clock3 className='mr-1.5 h-4 w-4' />
             New
@@ -61,7 +54,6 @@ export default function FeedbackHeader({
 
           {/* Trending */}
           <Button
-            data-buttonType='sort'
             variant='secondary'
             className={cn(
               'text-foreground/70 hover:text-foreground/80 border text-sm font-light transition-all duration-200',
@@ -71,12 +63,6 @@ export default function FeedbackHeader({
               setCurrentSort('trending');
               router.push(`${pathname}?${createQueryString('sort', 'trending')}`);
             }}
-            style={{
-              backgroundColor:
-                projectConfig?.custom_theme === 'custom' && currentSort === 'trending'
-                  ? `hsl(${projectConfig.custom_theme_secondary_background})`
-                  : undefined,
-            }}
             size='sm'>
             <Flame className='mr-1 h-4 w-4' />
             Trending
@@ -84,7 +70,6 @@ export default function FeedbackHeader({
 
           {/* Most Upvotes */}
           <Button
-            data-buttonType='sort'
             variant='secondary'
             className={cn(
               'text-foreground/70 hover:text-foreground/80 border text-sm font-light transition-all duration-200',
@@ -93,12 +78,6 @@ export default function FeedbackHeader({
             onClick={() => {
               setCurrentSort('upvotes');
               router.push(`${pathname}?${createQueryString('sort', 'upvotes')}`);
-            }}
-            style={{
-              backgroundColor:
-                projectConfig?.custom_theme === 'custom' && currentSort === 'upvotes'
-                  ? `hsl(${projectConfig.custom_theme_secondary_background})`
-                  : undefined,
             }}
             size='sm'>
             <Star className='mr-1 h-4 w-4' />
@@ -112,14 +91,14 @@ export default function FeedbackHeader({
             {/* Input */}
             <Input
               placeholder='Search posts'
-              className='border-border/60 text-foreground/70 h-9 w-full rounded-md border bg-transparent px-8 font-light placeholder:font-light'
+              className='text-foreground/70 h-9 w-full rounded-md border bg-transparent px-8 font-light placeholder:font-light'
               onChange={(e) => {
                 router.push(`${pathname}?${createQueryString('search', e.target.value)}`);
               }}
             />
 
             {/* Icon */}
-            <Search className='text-foreground/50 absolute left-3 h-4 w-4' data-description />
+            <Search className='text-foreground/50 absolute left-3 h-4 w-4' />
           </div>
 
           {isLoggedIn ? (

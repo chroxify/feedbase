@@ -46,7 +46,7 @@ export function CommentSortCombobox({ initialValue, onSelect, align = 'end' }: C
           <ChevronDown className='text-foreground/60 h-4 w-4' />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-[160px] p-0' align={align} data-popover>
+      <PopoverContent className='w-[160px] p-0' align={align}>
         <Command>
           <CommandGroup>
             {sortOptions.map((item) => (

@@ -103,7 +103,6 @@ export default function Header({
             )}
             key={tab.name.toLowerCase()}>
             <Button
-              data-buttonType='tabs'
               variant='secondary'
               size='sm'
               className={cn(

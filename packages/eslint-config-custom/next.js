@@ -36,6 +36,7 @@ module.exports = {
         project,
       },
     },
+    'import/core-modules': ['styled-jsx', 'styled-jsx/css'],
   },
   ignorePatterns: ['node_modules/', 'dist/'],
   rules,

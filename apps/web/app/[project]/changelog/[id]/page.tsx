@@ -80,9 +80,7 @@ export default async function ChangelogPage({ params }: Props) {
         <div className='relative flex'>
           <div className='flex w-full pb-4 md:w-[200px] md:pb-0'>
             <Link href='/changelog' className='h-fit w-fit select-none'>
-              <p
-                className='text-foreground/60 hover:text-foreground w-full text-sm font-light transition-colors'
-                data-description>
+              <p className='text-foreground/60 hover:text-foreground w-full text-sm font-light transition-colors'>
                 ← Back to Changelog
               </p>
             </Link>
@@ -92,7 +90,7 @@ export default async function ChangelogPage({ params }: Props) {
         {/* Content */}
         <div className='flex w-full flex-col'>
           <p className='text-foreground/70 w-full pb-4 text-sm font-light'>
-            <time className='sticky top-10' dateTime={changelog.publish_date!} data-description>
+            <time className='sticky top-10' dateTime={changelog.publish_date!}>
               {new Date(changelog.publish_date!).toLocaleDateString('en-US', {
                 year: 'numeric',
                 month: 'short',
@@ -128,7 +126,7 @@ export default async function ChangelogPage({ params }: Props) {
               <div className='flex flex-col'>
                 <p className='text-foreground/90 text-sm font-medium'>{changelog.author.full_name}</p>
                 <p className='text-foreground/70 w-full text-sm font-light'>
-                  <time className='sticky top-10' dateTime={changelog.publish_date!} data-description>
+                  <time className='sticky top-10' dateTime={changelog.publish_date!}>
                     {new Date(changelog.publish_date!).toLocaleDateString('en-US', {
                       year: 'numeric',
                       month: 'short',
@@ -176,8 +174,7 @@ export default async function ChangelogPage({ params }: Props) {
               <div>
                 <Link
                   href={`/changelog/${changelogs[changelogIndex - 1]?.slug}`}
-                  className='text-foreground/60 hover:text-foreground w-full text-sm font-light transition-colors'
-                  data-description>
+                  className='text-foreground/60 hover:text-foreground w-full text-sm font-light transition-colors'>
                   ← {changelogs[changelogIndex - 1]?.title}
                 </Link>
               </div>
@@ -188,8 +185,7 @@ export default async function ChangelogPage({ params }: Props) {
               <div>
                 <Link
                   href={`/changelog/${changelogs[changelogIndex + 1]?.slug}`}
-                  className='text-foreground/60 hover:text-foreground w-full text-sm font-light transition-colors'
-                  data-description>
+                  className='text-foreground/60 hover:text-foreground w-full text-sm font-light transition-colors'>
                   {changelogs[changelogIndex + 1]?.title} →
                 </Link>
               </div>

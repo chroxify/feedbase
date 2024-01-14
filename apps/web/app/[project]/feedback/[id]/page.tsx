@@ -102,9 +102,7 @@ export default async function FeedbackDetails({ params }: Props) {
           <div className='relative flex'>
             <div className='flex w-full pb-4 lg:w-[200px] lg:pb-0'>
               <Link href='/feedback' className='h-fit w-fit select-none'>
-                <p
-                  className='text-foreground/60 hover:text-foreground w-full text-sm font-light transition-colors'
-                  data-description>
+                <p className='text-foreground/60 hover:text-foreground w-full text-sm font-light transition-colors'>
                   ← Back to Posts
                 </p>
               </Link>
@@ -242,9 +240,7 @@ export default async function FeedbackDetails({ params }: Props) {
           <div className='flex h-full w-full flex-col gap-5 pl-5'>
             {/* Upvotes */}
             <div className='flex w-full flex-row items-center justify-between'>
-              <p className='text-foreground/70 text-sm font-light' data-description>
-                Upvotes
-              </p>
+              <p className='text-foreground/70 text-sm font-light'>Upvotes</p>
 
               {/* Upvotes */}
               <span className='text-foreground/90 text-sm font-light '>{feedback.upvotes}</span>
@@ -252,9 +248,7 @@ export default async function FeedbackDetails({ params }: Props) {
 
             {/* Status */}
             <div className='flex w-full flex-row items-center justify-between'>
-              <p className='text-foreground/70 text-sm font-light' data-description>
-                Status
-              </p>
+              <p className='text-foreground/70 text-sm font-light'>Status</p>
               {(() => {
                 if (feedback.status) {
                   const currentStatus =
@@ -275,9 +269,7 @@ export default async function FeedbackDetails({ params }: Props) {
 
             {/* Tags */}
             <div className='flex w-full flex-row items-center justify-between'>
-              <p className='text-foreground/70 text-sm font-light' data-description>
-                Tags
-              </p>
+              <p className='text-foreground/70 text-sm font-light'>Tags</p>
 
               {/* Grid with all tags */}
               <div className='flex w-full flex-row flex-wrap justify-end gap-2 pl-12'>
@@ -311,9 +303,7 @@ export default async function FeedbackDetails({ params }: Props) {
           <div className='flex h-full w-full flex-col gap-5 pl-5'>
             {/* Created */}
             <div className='flex w-full flex-row items-center justify-between'>
-              <p className='text-foreground/70 text-sm font-light' data-description>
-                Created
-              </p>
+              <p className='text-foreground/70 text-sm font-light'>Created</p>
 
               <p className='text-foreground/90 ml-2 text-sm font-light'>
                 {new Date(feedback.created_at).toLocaleDateString('en-US', {
@@ -326,9 +316,7 @@ export default async function FeedbackDetails({ params }: Props) {
 
             {/* Author */}
             <div className='flex w-full flex-row items-center justify-between'>
-              <p className='text-foreground/70 text-sm font-light' data-description>
-                Author
-              </p>
+              <p className='text-foreground/70 text-sm font-light'>Author</p>
 
               {/* Author */}
               <div className='text-foreground/60 flex flex-row items-center justify-start gap-2 font-light'>

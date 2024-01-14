@@ -68,11 +68,11 @@ export default async function Changelogs({ params }: Props) {
   }
 
   return (
-    <div className='flex h-full w-full flex-col gap-10 selection:bg-[#8F9EFF]/20 selection:text-[#8F9EFF]'>
+    <div className='flex h-full w-full flex-col gap-10'>
       <div className='flex items-center px-5 sm:px-10 md:px-10 lg:px-20'>
         <div className='flex w-full flex-col items-start gap-4'>
           <h1 className='text-3xl font-medium sm:text-4xl'>Changelog</h1>
-          <p className='text-foreground/70 text-base font-extralight sm:text-lg' data-description>
+          <p className='text-foreground/70 text-base font-extralight sm:text-lg'>
             All the latest updates, improvements, and fixes to {project.name}.
           </p>
 
@@ -83,11 +83,10 @@ export default async function Changelogs({ params }: Props) {
               projectConfig.changelog_twitter_handle !== '' && (
                 <>
                   <Link
-                    data-accent
                     href={`https://x.com/${projectConfig.changelog_twitter_handle}`}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='hover:text-foreground/95 text-[#8F9EFF] transition-colors duration-200'>
+                    className='hover:text-foreground/95 text-highlight transition-colors duration-200'>
                     Follow us on Twitter
                   </Link>
 
@@ -97,11 +96,10 @@ export default async function Changelogs({ params }: Props) {
 
             {/* RRS Update Feed */}
             <Link
-              data-accent
               href={`/api/v1/${params.project}/atom`}
               target='_blank'
               rel='noopener noreferrer'
-              className='hover:text-foreground/95 text-[#8F9EFF] transition-colors duration-200'>
+              className='hover:text-foreground/95 text-highlight transition-colors duration-200'>
               Subscribe to Atom Feed
             </Link>
           </div>
@@ -124,7 +122,7 @@ export default async function Changelogs({ params }: Props) {
                 <div className='relative flex'>
                   <div className='flex w-full pb-4 md:w-[200px] md:pb-0'>
                     <p className='text-foreground/60 w-full text-sm font-extralight'>
-                      <time className='sticky top-10' dateTime={changelog.publish_date!} data-description>
+                      <time className='sticky top-10' dateTime={changelog.publish_date!}>
                         {new Date(changelog.publish_date!).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'short',

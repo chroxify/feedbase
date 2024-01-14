@@ -37,6 +37,9 @@
  
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
+    
+    /* Selection & accent color */
+    --highlight: 231 100% 78%;
  
     --ring: 230 9% 13%; /* #20242c */
 
@@ -64,6 +67,7 @@
     --destructive-foreground: 0 0% 98%;
     --border: 240 5.9% 90%;
     --input: 240 5.9% 90%;
+    --highlight: 231 100% 78%;
     --ring: 240 5.9% 10%;
   }
 }
@@ -73,6 +77,6 @@
     @apply border-border;
   }
   body {
-    @apply bg-root text-foreground;
+    @apply bg-root text-foreground selection:bg-highlight/20 selection:text-highlight;
   }
 }

@@ -164,12 +164,12 @@ export default function CommentsList({
             </div>
           </div>
 
-          <Label className='text-foreground/50 text-xs font-extralight' data-description>
+          <Label className='text-foreground/50 text-xs font-extralight'>
             Pro Tip: You can use Markdown to format your comment.
           </Label>
         </>
       ) : (
-        <div className='flex w-full flex-col justify-between gap-4 rounded-md border border-[#8F9EFF]/40 bg-[#8F9EFF]/20 p-3 sm:h-10 sm:flex-row sm:items-center'>
+        <div className='border-highlight/40 bg-highlight/20 flex w-full flex-col justify-between gap-4 rounded-md border p-3 sm:h-10 sm:flex-row sm:items-center'>
           <p className='text-foreground/90 text-sm font-light'>
             Please authenticate to take part in the discussion.
           </p>
@@ -191,9 +191,7 @@ export default function CommentsList({
           {totalCommentsAndReplies === null ? (
             <Skeleton className='h-6 w-7 rounded-full' />
           ) : (
-            <p
-              className='text-foreground/80 bg-secondary select-none rounded-full px-[9px] py-1 text-xs font-light'
-              data-description>
+            <p className='text-foreground/80 bg-secondary select-none rounded-full px-[9px] py-1 text-xs font-light'>
               {totalCommentsAndReplies}
             </p>
           )}
@@ -215,9 +213,7 @@ export default function CommentsList({
         {/* Empty State */}
         {feedbackComments?.length === 0 && (
           <div className='flex h-full w-full flex-col items-center justify-center pt-10'>
-            <p className='text-foreground/60 pb-10 text-sm font-light' data-description>
-              No comments yet
-            </p>
+            <p className='text-foreground/60 pb-10 text-sm font-light'>No comments yet</p>
           </div>
         )}
       </div>
