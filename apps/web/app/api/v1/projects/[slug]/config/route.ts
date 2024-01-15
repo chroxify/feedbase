@@ -31,6 +31,13 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
     changelog_preview_style: changelogPreviewStyle,
     changelog_twitter_handle: changelogTwitterHandle,
     feedback_allow_anon_upvoting: feedbackAllowAnonUpvoting,
+    custom_theme: customTheme,
+    custom_theme_root: customThemeRoot,
+    custom_theme_primary_foreground: customThemePrimaryForeground,
+    custom_theme_background: customThemeBackground,
+    custom_theme_secondary_background: customThemeSecondaryBackground,
+    custom_theme_accent: customThemeAccent,
+    custom_theme_border: customThemeBorder,
   } = (await req.json()) as ProjectConfigProps['Update'];
 
   // Update project config
@@ -40,6 +47,13 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
       changelog_preview_style: changelogPreviewStyle,
       changelog_twitter_handle: changelogTwitterHandle,
       feedback_allow_anon_upvoting: feedbackAllowAnonUpvoting,
+      custom_theme: customTheme,
+      custom_theme_root: customThemeRoot,
+      custom_theme_primary_foreground: customThemePrimaryForeground,
+      custom_theme_background: customThemeBackground,
+      custom_theme_secondary_background: customThemeSecondaryBackground,
+      custom_theme_accent: customThemeAccent,
+      custom_theme_border: customThemeBorder,
     },
     'route'
   );

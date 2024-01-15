@@ -5,6 +5,8 @@ import { Separator } from 'ui/components/ui/separator';
 import { getProjectBySlug, getProjectConfigBySlug } from '@/lib/api/projects';
 import { getCurrentUser } from '@/lib/api/user';
 import Header from '@/components/hub/nav-bar';
+import CustomThemeWrapper from '@/components/hub/theme-wrapper';
+import { ThemeProvider as NextThemeProvider } from '@/components/theme-provider';
 
 type Props = {
   children: React.ReactNode;
@@ -76,19 +78,26 @@ export default async function HubLayout({ children, params }: Props) {
   const { data: user } = await getCurrentUser('server');
 
   return (
-    <main className='bg-root flex min-h-screen min-w-full flex-col justify-between selection:bg-[#8F9EFF]/20 selection:text-[#8F9EFF]'>
-      <div className='flex h-full w-full flex-col items-center pt-5'>
+    <CustomThemeWrapper projectConfig={config}>
+      <NextThemeProvider
+        attribute='class'
+        defaultTheme={
+          config.custom_theme === 'custom' ? undefined : config.custom_theme === 'light' ? 'light' : 'dark'
+        }>
         {/* Header */}
-        <Header tabs={tabs} intialTab={currentTab} project={project} user={user} config={config} />
+        <div className='flex h-full w-full flex-col items-center pt-5'>
+          {/* Header */}
+          <Header tabs={tabs} intialTab={currentTab} project={project} user={user} config={config} />
 
-        {/* Separator with max screen width */}
-        <Separator className='bg-border/60' />
+          {/* Separator with max screen width */}
+          <Separator className='bg-border/60' />
 
-        {/* Main content */}
-        <div className='flex h-full w-full flex-col items-start justify-start pt-10 lg:max-w-screen-xl'>
-          {children}
+          {/* Main content */}
+          <div className='flex h-full w-full flex-col items-start justify-start pt-10 lg:max-w-screen-xl'>
+            {children}
+          </div>
         </div>
-      </div>
+      </NextThemeProvider>
 
       {/* Powered by */}
       {/* TODO: Improve */}
@@ -102,6 +111,6 @@ export default async function HubLayout({ children, params }: Props) {
             Powered by Feedbase
         </Button>
       </div> */}
-    </main>
+    </CustomThemeWrapper>
   );
 }

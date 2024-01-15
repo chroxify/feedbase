@@ -4,7 +4,7 @@ import FeedbackHeader from '@/components/hub/feedback/button-header';
 
 export default function FeedbackLoading() {
   return (
-    <div className='flex h-full w-full flex-col items-center gap-10 pb-10 selection:bg-[#8F9EFF]/20 selection:text-[#8F9EFF]'>
+    <div className='flex h-full w-full flex-col items-center gap-10 pb-10'>
       <div className='flex w-full px-5 sm:px-10 md:px-10 lg:px-20'>
         <div className='flex w-full flex-col items-start gap-4'>
           <h1 className='text-3xl font-medium sm:text-4xl'>Feedback</h1>
@@ -19,7 +19,8 @@ export default function FeedbackLoading() {
 
       {/* Content */}
       <div className='flex h-full w-full flex-col items-center justify-center gap-5 px-5 sm:px-10 md:px-10 lg:px-20'>
-        <FeedbackHeader isLoggedIn={false} projectSlug='' /> {/* Provide placeholder values */}
+        <FeedbackHeader isLoggedIn={false} projectSlug='' projectConfig={null} />{' '}
+        {/* Provide placeholder values */}
         {/* Main */}
         <div className='flex h-full w-full flex-col justify-between'>
           {[1, 2, 3, 4, 5].map((index) => (

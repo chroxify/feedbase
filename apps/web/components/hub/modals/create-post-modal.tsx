@@ -118,6 +118,7 @@ export default function CreatePostModal({
         </div>
         <ResponsiveDialogFooter>
           <Button
+            variant='default'
             type='submit'
             onClick={onSubmit}
             disabled={!title || content.replace(/<[^>]*>?/gm, '').length === 0 || isLoading}>

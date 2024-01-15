@@ -7,15 +7,18 @@ import { Input } from '@ui/components/ui/input';
 import { cn } from '@ui/lib/utils';
 import { Clock3, Flame, Search, Star } from 'lucide-react';
 import useCreateQueryString from '@/lib/hooks/use-create-query';
+import { ProjectConfigWithoutSecretProps } from '@/lib/types';
 import CreatePostModal from '../modals/create-post-modal';
 import AuthModal from '../modals/login-signup-modal';
 
 export default function FeedbackHeader({
   isLoggedIn,
   projectSlug,
+  projectConfig,
 }: {
   isLoggedIn: boolean;
   projectSlug: string;
+  projectConfig: ProjectConfigWithoutSecretProps | null;
 }) {
   const searchParams = useSearchParams();
   const createQueryString = useCreateQueryString(searchParams);
@@ -88,7 +91,7 @@ export default function FeedbackHeader({
             {/* Input */}
             <Input
               placeholder='Search posts'
-              className='border-border/60 text-foreground/70 h-9 w-full rounded-md border bg-transparent px-8 font-light placeholder:font-light'
+              className='text-foreground/70 h-9 w-full rounded-md border bg-transparent px-8 font-light placeholder:font-light'
               onChange={(e) => {
                 router.push(`${pathname}?${createQueryString('search', e.target.value)}`);
               }}

@@ -298,6 +298,13 @@ export interface Database {
           created_at: string;
           custom_domain: string | null;
           custom_domain_verified: boolean | null;
+          custom_theme: Database['public']['Enums']['theme_type'];
+          custom_theme_accent: string | null;
+          custom_theme_background: string | null;
+          custom_theme_border: string | null;
+          custom_theme_primary_foreground: string | null;
+          custom_theme_root: string | null;
+          custom_theme_secondary_background: string | null;
           feedback_allow_anon_upvoting: boolean | null;
           id: string;
           integration_discord_role_id: string | null;
@@ -314,6 +321,13 @@ export interface Database {
           created_at?: string;
           custom_domain?: string | null;
           custom_domain_verified?: boolean | null;
+          custom_theme?: Database['public']['Enums']['theme_type'];
+          custom_theme_accent?: string | null;
+          custom_theme_background?: string | null;
+          custom_theme_border?: string | null;
+          custom_theme_primary_foreground?: string | null;
+          custom_theme_root?: string | null;
+          custom_theme_secondary_background?: string | null;
           feedback_allow_anon_upvoting?: boolean | null;
           id?: string;
           integration_discord_role_id?: string | null;
@@ -330,6 +344,13 @@ export interface Database {
           created_at?: string;
           custom_domain?: string | null;
           custom_domain_verified?: boolean | null;
+          custom_theme?: Database['public']['Enums']['theme_type'];
+          custom_theme_accent?: string | null;
+          custom_theme_background?: string | null;
+          custom_theme_border?: string | null;
+          custom_theme_primary_foreground?: string | null;
+          custom_theme_root?: string | null;
+          custom_theme_secondary_background?: string | null;
           feedback_allow_anon_upvoting?: boolean | null;
           id?: string;
           integration_discord_role_id?: string | null;
@@ -488,6 +509,7 @@ export interface Database {
       };
     };
     Enums: {
+      theme_type: 'default' | 'light' | 'custom';
       token_type: 'full_access' | 'public_access';
     };
     CompositeTypes: {

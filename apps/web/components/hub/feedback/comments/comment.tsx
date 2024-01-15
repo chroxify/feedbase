@@ -260,8 +260,8 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
                 }}>
                 <span
                   className={cn(
-                    'flex flex-row items-center gap-1 transition-all duration-200 hover:text-[#8F9EFF]',
-                    comment.has_upvoted ? 'text-[#8F9EFF]' : 'text-foreground/60'
+                    'hover:text-highlight flex flex-row items-center gap-1 transition-all duration-200',
+                    comment.has_upvoted ? 'text-highlight' : 'text-foreground/60'
                   )}>
                   {comment.has_upvoted ? 'Upvoted' : 'Upvote'}
                 </span>
@@ -275,7 +275,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
             <AuthModal projectSlug={projectSlug} disabled={user !== null}>
               <Button
                 variant='ghost'
-                className='text-foreground/60 -ml-2 text-sm font-light hover:bg-transparent hover:text-[#8F9EFF]'
+                className='text-foreground/60 hover:text-highlight -ml-2 text-sm font-light hover:bg-transparent'
                 size='sm'
                 onClick={() => {
                   if (!user) return;
@@ -289,7 +289,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
             {/* Share Button */}
             <Button
               variant='ghost'
-              className='text-foreground/60 -ml-2 text-sm font-light hover:bg-transparent hover:text-[#8F9EFF]'
+              className='text-foreground/60 hover:text-highlight -ml-2 text-sm font-light hover:bg-transparent'
               size='sm'
               onClick={() => {
                 navigator.clipboard.writeText(

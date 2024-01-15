@@ -38,7 +38,7 @@ export default function LottiePlayer({
   return (
     <DotLottiePlayer
       style={{ transform: '' }}
-      src={theme === 'dark' ? lottieSrc.light : lottieSrc.dark}
+      src={theme === undefined ? lottieSrc.light : theme === 'dark' ? lottieSrc.light : lottieSrc.dark}
       lottieRef={lottieRef}
       onEvent={(event) => {
         if (event === 'ready') {

@@ -20,7 +20,7 @@ export default function RichTextEditor({
     content: data.content,
     editorProps: {
       attributes: {
-        class: 'prose prose-sm sm:prose-base dark:prose-invert m-5 focus:outline-none',
+        class: 'prose prose-invert prose-sm sm:prose-base dark:prose-invert m-5 focus:outline-none',
       },
     },
     onUpdate: ({ editor }) => {
