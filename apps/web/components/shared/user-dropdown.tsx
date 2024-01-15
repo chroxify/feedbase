@@ -11,7 +11,8 @@ import {
 } from 'ui/components/ui/dropdown-menu';
 import { ProfileProps } from '@/lib/types';
 import UpdateProfileModal from '../dashboard/modals/edit-profile-modal';
-import { LogoutIcon, ProfileIcon } from './icons/icons-animated';
+import FeedbackModal from '../dashboard/modals/send-feedback-modal';
+import { ChatIcon, LogoutIcon, ProfileIcon } from './icons/icons-animated';
 import LottiePlayer from './lottie-player';
 
 export default function UserDropdown({
@@ -69,6 +70,31 @@ export default function UserDropdown({
             <div className='text-foreground/[85%] pb-[2px]'>Profile</div>
           </DropdownMenuItem>
         </UpdateProfileModal>
+
+        {/* Feedback */}
+        <FeedbackModal projectSlug='x'>
+          <DropdownMenuItem
+            className='flex flex-row items-center justify-start gap-2 hover:cursor-pointer'
+            onMouseEnter={() => {
+              setIsHover('Feedback');
+            }}
+            onMouseLeave={() => {
+              setIsHover('');
+            }}
+            onSelect={(e) => {
+              e.preventDefault();
+            }}>
+            <LottiePlayer
+              lottieSrc={ChatIcon}
+              animate={isHover === 'Feedback'}
+              className='h-5 w-5'
+              initialColor={iconColor || undefined}
+              animationColor={iconColor || undefined}
+            />
+
+            <div className='text-foreground/[85%] pb-[2px]'>Feedback</div>
+          </DropdownMenuItem>
+        </FeedbackModal>
 
         {/* Logout */}
         <DropdownMenuItem
