@@ -14,6 +14,11 @@ export type TeamMemberProps = Database['public']['Tables']['profiles']['Row'] & 
   joined_at: string;
 };
 
+export type NotificationProps = Database['public']['Tables']['notifications']['Row'] & {
+  project: { name: string; slug: string; icon: string };
+  initiator: { full_name: string };
+};
+
 export type ProjectInviteProps = Database['public']['Tables']['project_invites'];
 
 export type ProjectApiKeyProps = Database['public']['Tables']['project_api_keys'];

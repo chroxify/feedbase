@@ -224,6 +224,64 @@ export interface Database {
           },
         ];
       };
+      notifications: {
+        Row: {
+          comment_id: string | null;
+          created_at: string;
+          feedback_id: string;
+          has_archived: string[] | null;
+          id: string;
+          initiator_id: string | null;
+          project_id: string;
+          type: Database['public']['Enums']['notification_types'];
+        };
+        Insert: {
+          comment_id?: string | null;
+          created_at?: string;
+          feedback_id: string;
+          has_archived?: string[] | null;
+          id?: string;
+          initiator_id?: string | null;
+          project_id: string;
+          type: Database['public']['Enums']['notification_types'];
+        };
+        Update: {
+          comment_id?: string | null;
+          created_at?: string;
+          feedback_id?: string;
+          has_archived?: string[] | null;
+          id?: string;
+          initiator_id?: string | null;
+          project_id?: string;
+          type?: Database['public']['Enums']['notification_types'];
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'notifications_comment_id_fkey';
+            columns: ['comment_id'];
+            referencedRelation: 'feedback_comments';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'notifications_feedback_id_fkey';
+            columns: ['feedback_id'];
+            referencedRelation: 'feedback';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'notifications_initiator_id_fkey';
+            columns: ['initiator_id'];
+            referencedRelation: 'profiles';
+            referencedColumns: ['id'];
+          },
+          {
+            foreignKeyName: 'notifications_project_id_fkey';
+            columns: ['project_id'];
+            referencedRelation: 'projects';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       profiles: {
         Row: {
           avatar_url: string | null;
@@ -509,6 +567,7 @@ export interface Database {
       };
     };
     Enums: {
+      notification_types: 'comment' | 'post';
       theme_type: 'default' | 'light' | 'custom';
       token_type: 'full_access' | 'public_access';
     };
