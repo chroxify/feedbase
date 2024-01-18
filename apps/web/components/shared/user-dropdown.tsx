@@ -72,7 +72,7 @@ export default function UserDropdown({
         </UpdateProfileModal>
 
         {/* Feedback */}
-        <FeedbackModal projectSlug='x'>
+        <FeedbackModal projectSlug='hub'>
           <DropdownMenuItem
             className='flex flex-row items-center justify-start gap-2 hover:cursor-pointer'
             onMouseEnter={() => {
