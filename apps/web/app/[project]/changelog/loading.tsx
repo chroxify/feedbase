@@ -4,17 +4,17 @@ import { Skeleton } from '@ui/components/ui/skeleton';
 export default function ChangelogLoading() {
   return (
     <div className='flex h-full w-full flex-col gap-10'>
-      <div className='flex items-center px-5 sm:px-10 md:px-10 lg:px-20'>
+      <div className='flex w-full items-center px-5 sm:px-10 md:px-10 lg:px-20'>
         <div className='flex w-full flex-col items-start gap-4'>
-          <h1 className='text-3xl font-medium sm:text-4xl'>
-            <Skeleton className='h-8 w-[200px]' />
+          <h1 className='w-full max-w-[200px] text-3xl font-medium sm:text-4xl'>
+            <Skeleton className='h-8 w-full' />
           </h1>
-          <p className='text-foreground/70 text-base font-extralight sm:text-lg'>
-            <Skeleton className='h-5 w-[400px]' />
+          <p className='text-foreground/70 w-full max-w-[400px] text-base font-extralight sm:text-lg'>
+            <Skeleton className='h-5 w-full' />
           </p>
-          <div className='flex select-none flex-row items-center gap-4 text-sm'>
-            <Skeleton className='h-5 w-[200px]' />
-            <Skeleton className='h-5 w-[200px]' />
+          <div className='flex w-full max-w-[425px] select-none flex-row items-center gap-4 text-sm'>
+            <Skeleton className='h-5 w-1/2' />
+            <Skeleton className='h-5 w-1/2' />
           </div>
         </div>
       </div>
