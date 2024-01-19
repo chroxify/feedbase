@@ -6,6 +6,7 @@ import NavbarMobile from '@/components/layout/nav-bar-mobile';
 import Sidebar from '@/components/layout/sidebar';
 import TitleProvider from '@/components/layout/title-provider';
 import {
+  AnalyticsIcon,
   CalendarIcon,
   FeedbackIcon,
   SettingsIcon,
@@ -29,6 +30,11 @@ const tabs = [
     name: 'Roadmap (Soon)',
     icon: CalendarIcon,
     slug: 'roadmap',
+  },
+  {
+    name: 'Analytics',
+    icon: AnalyticsIcon,
+    slug: 'analytics',
   },
   {
     name: 'Settings',
