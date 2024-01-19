@@ -112,7 +112,7 @@ export default function ChangelogSection() {
         {/* And much more */}
         <BentoCardWrapper className='h-[465px] w-full min-w-[350px] xl:w-1/3'>
           <div className='p-7'>
-            <h1 className='text-foreground text-lg font-medium'>Recieve Updates</h1>
+            <h1 className='text-foreground text-lg font-medium'>Receive Updates</h1>
             <p className='text-foreground/60 mt-2 text-sm font-light'>
               Users can subscribe to your changelog to automatically get notified when you post an update.
             </p>

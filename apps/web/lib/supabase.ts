@@ -231,7 +231,7 @@ export interface Database {
           feedback_id: string;
           has_archived: string[] | null;
           id: string;
-          initiator_id: string | null;
+          initiator_id: string;
           project_id: string;
           type: Database['public']['Enums']['notification_types'];
         };
@@ -241,7 +241,7 @@ export interface Database {
           feedback_id: string;
           has_archived?: string[] | null;
           id?: string;
-          initiator_id?: string | null;
+          initiator_id: string;
           project_id: string;
           type: Database['public']['Enums']['notification_types'];
         };
@@ -251,7 +251,7 @@ export interface Database {
           feedback_id?: string;
           has_archived?: string[] | null;
           id?: string;
-          initiator_id?: string | null;
+          initiator_id?: string;
           project_id?: string;
           type?: Database['public']['Enums']['notification_types'];
         };
@@ -368,6 +368,8 @@ export interface Database {
           integration_discord_role_id: string | null;
           integration_discord_status: boolean;
           integration_discord_webhook: string | null;
+          integration_slack_status: boolean;
+          integration_slack_webhook: string | null;
           integration_sso_secret: string | null;
           integration_sso_status: boolean | null;
           integration_sso_url: string | null;
@@ -391,6 +393,8 @@ export interface Database {
           integration_discord_role_id?: string | null;
           integration_discord_status?: boolean;
           integration_discord_webhook?: string | null;
+          integration_slack_status?: boolean;
+          integration_slack_webhook?: string | null;
           integration_sso_secret?: string | null;
           integration_sso_status?: boolean | null;
           integration_sso_url?: string | null;
@@ -414,6 +418,8 @@ export interface Database {
           integration_discord_role_id?: string | null;
           integration_discord_status?: boolean;
           integration_discord_webhook?: string | null;
+          integration_slack_status?: boolean;
+          integration_slack_webhook?: string | null;
           integration_sso_secret?: string | null;
           integration_sso_status?: boolean | null;
           integration_sso_url?: string | null;
