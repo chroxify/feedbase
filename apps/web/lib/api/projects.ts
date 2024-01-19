@@ -255,7 +255,7 @@ export const getProjectConfigBySlug = withProjectAuth<ProjectConfigWithoutSecret
     const { data: config, error: configError } = await supabase
       .from('project_configs')
       .select(
-        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting, custom_theme, custom_theme_background, custom_theme_border, custom_theme_primary_foreground, custom_theme_root, custom_theme_secondary_background, custom_theme_accent'
+        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting, custom_theme, custom_theme_background, custom_theme_border, custom_theme_primary_foreground, custom_theme_root, custom_theme_secondary_background, custom_theme_accent, integration_slack_status, integration_slack_webhook'
       )
       .eq('project_id', project!.id);
 
@@ -360,10 +360,18 @@ export const updateProjectConfigBySlug = (
           data.custom_theme_accent !== undefined ? data.custom_theme_accent : config.custom_theme_accent,
         custom_theme_border:
           data.custom_theme_border !== undefined ? data.custom_theme_border : config.custom_theme_border,
+        integration_slack_status:
+          data.integration_slack_status !== undefined
+            ? data.integration_slack_status
+            : config.integration_slack_status,
+        integration_slack_webhook:
+          data.integration_slack_webhook !== undefined
+            ? data.integration_slack_webhook
+            : config.integration_slack_webhook,
       })
       .eq('id', config.id)
       .select(
-        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting, custom_theme, custom_theme_background, custom_theme_border, custom_theme_primary_foreground, custom_theme_root, custom_theme_secondary_background, custom_theme_accent'
+        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting, custom_theme, custom_theme_background, custom_theme_border, custom_theme_primary_foreground, custom_theme_root, custom_theme_secondary_background, custom_theme_accent, integration_slack_status, integration_slack_webhook'
       );
 
     // Check for errors

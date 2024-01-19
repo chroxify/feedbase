@@ -16,10 +16,12 @@ import { ProjectConfigWithoutSecretProps } from '@/lib/types';
 import DiscordIntegrationModal from '@/components/dashboard/modals/connect-discord-modal';
 import DefaultTooltip from '@/components/shared/tooltip';
 import AddSSOAuthModal from '../modals/add-sso-modal';
+import SlackIntegrationModal from '../modals/connect-slack-modal';
 
 const integrationStatusMap: Record<string, string> = {
   integration_discord_status: 'discord',
   integration_sso_status: 'sso',
+  integration_slack_status: 'slack',
   // Add other integrations as needed
 };
 
@@ -196,6 +198,72 @@ export default function IntegrationCards({
                   </DropdownMenu>
                 ) : (
                   <AddSSOAuthModal
+                    projectSlug={projectSlug}
+                    enabledIntegrations={enabledIntegrations}
+                    setEnabledIntegrations={setEnabledIntegrations}
+                  />
+                )}
+              </div>
+            </div>
+
+            {/* Discord */}
+            <div className='col-span-2 flex h-full w-full flex-col rounded-md border sm:col-span-1'>
+              <div className='flex flex-row items-center space-x-2 border-b p-4'>
+                {/* Avatar */}
+                <Avatar>
+                  <AvatarImage
+                    src='https://svgl.app/library/slack.svg'
+                    alt='slack'
+                    className='bg-[#501C51] p-2'
+                  />
+                  <AvatarFallback>SL</AvatarFallback>
+                </Avatar>
+
+                {/* Name and Description */}
+                <div className='flex flex-col'>
+                  <span className='text-foreground/70 text-sm'>Slack</span>
+
+                  <span className='text-foreground/50 text-xs font-light'>
+                    Receive notification directly in your Slack workspace.
+                  </span>
+                </div>
+              </div>
+
+              <div className='flex flex-row items-center justify-between px-5 py-4'>
+                <div className='flex flex-col'>
+                  <span className='text-foreground/50 text-xs'>Status</span>
+                  {enabledIntegrations.includes('slack') ? (
+                    <span className='text-foreground/70 cursor-default text-sm font-light text-green-500'>
+                      Connected
+                    </span>
+                  ) : (
+                    <span className='text-foreground/70 cursor-default text-sm font-light'>Disabled</span>
+                  )}
+                </div>
+
+                {enabledIntegrations.includes('slack') ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button
+                        variant='secondary'
+                        size='icon'
+                        className='text-foreground/50 hover:text-foreground h-8 w-5'>
+                        <MoreVertical className='h-5 w-5' />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align='end'>
+                      {/* TODO: Implement configure option wihtout having to disconnect */}
+                      <DropdownMenuItem
+                        className='text-destructive focus:text-destructive/90 focus:bg-destructive/20'
+                        onSelect={() => {
+                          disconnectIntegration('slack');
+                        }}>
+                        Disconnect
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <SlackIntegrationModal
                     projectSlug={projectSlug}
                     enabledIntegrations={enabledIntegrations}
                     setEnabledIntegrations={setEnabledIntegrations}

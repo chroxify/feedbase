@@ -7,7 +7,7 @@ import {
   ProfileProps,
 } from '../types';
 import { isValidEmail } from '../utils';
-import { sendDiscordNotification } from './integrations';
+import { sendDiscordNotification, sendSlackNotification } from './integrations';
 
 // Create a feedback post
 export const createFeedback = (
@@ -244,6 +244,12 @@ export const createFeedback = (
     if (projectConfig.integration_discord_status) {
       // Send Discord notification asynchronously without waiting for it to complete
       sendDiscordNotification(feedbackData, project!, projectConfig);
+    }
+
+    // Check if Slack integration is enabled
+    if (projectConfig.integration_slack_status) {
+      // Send Slack notification asynchronously without waiting for it to complete
+      sendSlackNotification(feedbackData, project!, projectConfig);
     }
 
     // Return feedback
