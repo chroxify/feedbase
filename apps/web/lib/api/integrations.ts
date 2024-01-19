@@ -1,5 +1,5 @@
 import { FeedbackWithUserProps, ProjectConfigWithoutSecretProps, ProjectProps } from '../types';
-import { formatHtmlToMd } from '../utils';
+import { formatHtmlToMd, formatRootUrl } from '../utils';
 
 // Helper function to send a Discord notification
 export const sendDiscordNotification = async (
@@ -26,7 +26,7 @@ export const sendDiscordNotification = async (
         {
           title: 'New Feedback Submission!',
           description: "You've received a new feedback submission.",
-          url: `https://feedbase.app/${project.slug}/feedback/${feedback.id}`,
+          url: formatRootUrl(project.slug, `/feedback/${feedback.id}`),
           color: 0x05060a,
           fields: [
             {
@@ -42,8 +42,7 @@ export const sendDiscordNotification = async (
           ],
           author: {
             name: feedback.user.full_name,
-            icon_url:
-              'https://innmcibhgnhxpghxldrr.supabase.co/storage/v1/object/public/avatars/d304fdae-9ed5-4000-afbb-61a646b95e8b',
+            icon_url: feedback.user.avatar_url,
           },
           footer: {
             text: 'Powered By Feedbase',
@@ -78,8 +77,80 @@ export const sendDiscordConfirmation = async (
         {
           title: 'Discord Integration Enabled',
           description: "If you're seeing this, it means that your Discord integration is working correctly.",
-          url: `https://dash.feedbase.app/${projectSlug}`,
+          url: formatRootUrl('dash', `/${projectSlug}`),
           color: 0x05060a,
+        },
+      ],
+    }),
+  });
+
+  // Return response
+  return response;
+};
+
+// Helper function to send a Slack notification
+export const sendSlackNotification = async (
+  feedback: FeedbackWithUserProps,
+  project: ProjectProps['Row'],
+  projectConfig: ProjectConfigWithoutSecretProps
+) => {
+  // Convert html syntax to markdown
+  const markdownString = formatHtmlToMd(feedback.description);
+
+  // Use an HTTP library or a Slack library to send the notification
+  const response = await fetch(projectConfig.integration_slack_webhook!, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      attachments: [
+        {
+          title: 'New Feedback Submission!',
+          text: "You've received a new feedback submission.",
+          color: '#05060a',
+          title_link: formatRootUrl(project.slug, `/feedback/${feedback.id}`),
+          fields: [
+            {
+              title: 'Title',
+              value: `\`\`\`${feedback.title}\`\`\``,
+              short: true,
+            },
+            {
+              title: 'Description',
+              value: `\`\`\`${markdownString}\`\`\``,
+              short: false,
+            },
+          ],
+          author_name: feedback.user.full_name,
+          author_icon: feedback.user.avatar_url,
+          footer: 'Powered By Feedbase',
+          footer_icon: 'https://feedbase.app/icon-512x512.png',
+          ts: Math.floor(Date.now() / 1000),
+        },
+      ],
+    }),
+  });
+
+  // Return response
+  return response;
+};
+
+// Helper function to send a Slack confirmation
+export const sendSlackConfirmation = async (projectSlug: string, webhook: string) => {
+  // Use an HTTP library or a Slack library to send the notification
+  const response = await fetch(webhook, {
+    method: 'POST',
+    body: JSON.stringify({
+      attachments: [
+        {
+          title: 'Slack Integration Enabled',
+          text: "If you're seeing this, it means that your Slack integration is working correctly.",
+          color: '#05060a',
+          title_link: formatRootUrl('dash', `/${projectSlug}`),
+          footer: 'Powered By Feedbase',
+          footer_icon: 'https://feedbase.app/icon-512x512.png',
+          ts: Math.floor(Date.now() / 1000),
         },
       ],
     }),
