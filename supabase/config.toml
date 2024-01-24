@@ -49,7 +49,7 @@ file_size_limit = "50MiB"
 # in emails.
 site_url = "http://localhost:3000"
 # A list of *exact* URLs that auth providers are permitted to redirect to post authentication.
-additional_redirect_urls = ["http://localhost:3000/auth/callback", "http://127.0.0.1:54321/auth/v1/callback", "http://x.localhost:3000/auth/callback", "http://x.localhost:3000/auth/callback?successRedirect=http://x.localhost:3000", "http://dash.localhost:3000/auth/callback", "http://dash.localhost:3000/auth/callback?successRedirect=http://dash.localhost:3000"]
+additional_redirect_urls = ["http://localhost:3000/auth/callback", "http://127.0.0.1:54321/auth/v1/callback", "http://x.localhost:3000/auth/callback", "http://x.localhost:3000/auth/callback?successRedirect=http://x.localhost:3000", "http://dash.localhost:3000/auth/callback", "http://dash.localhost:3000/auth/callback?successRedirect=http://dash.localhost:3000", "http://feedbase.localhost:3000/auth/callback", "http://feedbase.localhost:3000/auth/callback?successRedirect=http://feedbase.localhost:3000"]
 # How long tokens are valid for, in seconds. Defaults to 3600 (1 hour), maximum 604,800 (1 week).
 jwt_expiry = 3600
 # If disabled, the refresh token will never expire.

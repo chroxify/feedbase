@@ -102,7 +102,11 @@ export default async function middleware(req: NextRequest) {
   }
 
   // rewrites for dash pages
-  if (hostname === `dash.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+  if (
+    hostname === `dash.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` ||
+    (process.env.SUBDOMAIN_HOSTING === 'true' &&
+      hostname === `${process.env.DASHBOARD_SUBDOMAIN}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
+  ) {
     // protect all app pages with authentication except for /login, /signup and /invite/*
     if (!session.data.session && path !== '/login' && path !== '/signup' && !path.startsWith('/invite/')) {
       return NextResponse.redirect(new URL('/login', req.url));
