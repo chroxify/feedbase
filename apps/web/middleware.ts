@@ -77,7 +77,10 @@ export default async function middleware(req: NextRequest) {
       : null;
 
   // If the request is for a custom domain, rewrite to project paths
-  if (rootDomain !== process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
+  if (
+    rootDomain !== process.env.NEXT_PUBLIC_ROOT_DOMAIN ||
+    process.env.CUSTOM_DOMAIN_WHITELIST?.split(',').includes(hostname)
+  ) {
     // Retrieve the project from the database
     const { data, error } = (await supabase
       .from('project_configs')
