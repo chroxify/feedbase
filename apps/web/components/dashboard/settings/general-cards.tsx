@@ -456,12 +456,12 @@ export default function GeneralConfigCards({
                       <TabsList className='space-x-5 border-b-0 bg-transparent p-0'>
                         <TabsTrigger
                           value='a'
-                          className='rounded-none border-b border-transparent px-1 data-[state=active]:border-b data-[state=active]:border-white dark:data-[state=active]:bg-transparent'>
+                          className='rounded-none border-b border-transparent px-1 data-[state=active]:border-b data-[state=active]:border-white data-[state=active]:bg-transparent'>
                           A Record (Recommended)
                         </TabsTrigger>
                         <TabsTrigger
                           value='cname'
-                          className='rounded-none border-b border-transparent px-1 data-[state=active]:border-b data-[state=active]:border-white dark:data-[state=active]:bg-transparent'>
+                          className='rounded-none border-b border-transparent px-1 data-[state=active]:border-b data-[state=active]:border-white data-[state=active]:bg-transparent'>
                           CNAME Record
                         </TabsTrigger>
                       </TabsList>

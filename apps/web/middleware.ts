@@ -76,7 +76,7 @@ export default async function middleware(req: NextRequest) {
       ? `${hostname.split('.').slice(-2).join('.')}`
       : null;
 
-  // custom domain / only for everything else routes
+  // If the request is for a custom domain, rewrite to project paths
   if (rootDomain !== process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
     // Retrieve the project from the database
     const { data, error } = (await supabase
