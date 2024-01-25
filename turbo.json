@@ -12,6 +12,7 @@
     "VERCEL_TEAM_ID",
     "VERCEL_PROJECT_ID",
     "VERCEL_AUTH_TOKEN",
+    "CUSTOM_DOMAIN_WHITELIST",
     "NODE_ENV"
   ],
   "pipeline": {

@@ -74,6 +74,11 @@ export default async function HubLayout({ children, params }: Props) {
     notFound();
   }
 
+  // Check if custom domain is set and redirect to it
+  if (config.custom_domain && config.custom_domain_verified) {
+    redirect(`https://${config.custom_domain}`);
+  }
+
   // Get current user
   const { data: user } = await getCurrentUser('server');
 
