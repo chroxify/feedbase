@@ -103,7 +103,7 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
               Archive
             </TabsTrigger>
           </TabsList>
-          <TabsContent value='inbox' className='mt-0'>
+          <TabsContent value='inbox' className='mt-0 max-h-[540px] min-h-[450px] overflow-auto'>
             {isLoading ? (
               <div className='flex min-h-[450px] w-full flex-col items-center justify-center gap-2'>
                 <Icons.Spinner className='text-foreground/60 h-7 w-7 animate-spin ' />
@@ -127,7 +127,7 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
                   }`
                 )}
                 key={notification.id}
-                className='min-h-16 flex h-full w-full flex-row items-center gap-2 border-b px-3 py-5'>
+                className='min-h-16 hover:bg-foreground/5 flex h-full w-full flex-row items-center gap-2 border-b px-3 py-5 last:border-b-0'>
                 {/* Icon */}
                 {notification.project.icon ? (
                   <Avatar className='h-[40px] w-[40px] border hover:cursor-pointer'>
@@ -178,7 +178,7 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
               </Link>
             ))}
           </TabsContent>
-          <TabsContent value='archive' className='mt-0'>
+          <TabsContent value='archive' className='mt-0 max-h-[540px] min-h-[450px] overflow-auto'>
             {isLoading ? (
               <div className='flex min-h-[450px] w-full flex-col items-center justify-center gap-2'>
                 <Icons.Spinner className='text-foreground/60 h-7 w-7 animate-spin ' />
@@ -202,7 +202,7 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
                   }`
                 )}
                 key={notification.id}
-                className='min-h-16 flex h-full w-full flex-row items-center gap-2 border-b px-3 py-5'>
+                className='min-h-16 hover:bg-foreground/5 flex h-full w-full flex-row items-center gap-2 border-b px-3 py-5 last:border-b-0'>
                 {/* Icon */}
                 {notification.project.icon ? (
                   <Avatar className='h-[40px] w-[40px] border hover:cursor-pointer'>

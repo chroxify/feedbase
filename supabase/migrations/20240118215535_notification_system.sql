@@ -58,5 +58,8 @@ to authenticated
 using (true)
 with check (true);
 
+alter table "public"."project_configs" add column "custom_logo_href" text;
 
+alter table "public"."project_configs" add column "integration_slack_status" boolean not null default false;
 
+alter table "public"."project_configs" add column "integration_slack_webhook" text;
