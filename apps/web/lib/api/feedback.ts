@@ -246,6 +246,18 @@ export const createFeedback = (
       sendDiscordNotification(feedbackData, project!, projectConfig);
     }
 
+    // Create project notification
+    await supabase
+      .from('notifications')
+      .insert({
+        type: 'post',
+        project_id: project!.id,
+        initiator_id: user!.id,
+        feedback_id: feedbackData.id,
+      })
+      .select()
+      .single();
+    
     // Check if Slack integration is enabled
     if (projectConfig.integration_slack_status) {
       // Send Slack notification asynchronously without waiting for it to complete

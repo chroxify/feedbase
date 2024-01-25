@@ -64,6 +64,19 @@ export const createCommentForFeedbackById = (
       return { data: null, error: { message: feedbackError.message, status: 500 } };
     }
 
+    // Create project notification
+    await supabase
+      .from('notifications')
+      .insert({
+        type: 'comment',
+        project_id: project!.id,
+        initiator_id: user!.id,
+        feedback_id: data.feedback_id,
+        comment_id: comment.id,
+      })
+      .select()
+      .single();
+
     // Return comment
     return { data: comment, error: null };
   })(data.feedback_id, projectSlug, cType);
