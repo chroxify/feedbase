@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import { createFeedback, getAllProjectFeedback } from '@/lib/api/feedback';
 import { FeedbackWithUserInputProps } from '@/lib/types';
 
+export const config = {
+  runtime: 'edge',
+};
+
 /*
     Create Feedback
     POST /api/v1/projects/[slug]/feedback
