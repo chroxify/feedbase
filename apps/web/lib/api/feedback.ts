@@ -1,3 +1,4 @@
+import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
 import { withFeedbackAuth, withProjectAuth } from '../auth';
 import {
   FeedbackProps,
@@ -240,29 +241,39 @@ export const createFeedback = (
       return { data: null, error: { message: projectConfigError.message, status: 500 } };
     }
 
+    //! Note: The waitUntil function is currently a highly experimental api and might break in the future
+    // Once there is a better way to do this, it should be replaced
+    // https://github.com/vercel/next.js/issues/50522#issuecomment-1838593482
+
     // Check if Discord integration is enabled
     if (projectConfig.integration_discord_status) {
       // Send Discord notification asynchronously without waiting for it to complete
-      sendDiscordNotification(feedbackData, project!, projectConfig);
+      waitUntil(async () => {
+        sendDiscordNotification(feedbackData, project!, projectConfig);
+      });
     }
 
-    // Create project notification
-    await supabase
-      .from('notifications')
-      .insert({
-        type: 'post',
-        project_id: project!.id,
-        initiator_id: user!.id,
-        feedback_id: feedbackData.id,
-      })
-      .select()
-      .single();
-    
     // Check if Slack integration is enabled
     if (projectConfig.integration_slack_status) {
       // Send Slack notification asynchronously without waiting for it to complete
-      sendSlackNotification(feedbackData, project!, projectConfig);
+      waitUntil(async () => {
+        sendSlackNotification(feedbackData, project!, projectConfig);
+      });
     }
+
+    // Create project notification
+    waitUntil(async () => {
+      await supabase
+        .from('notifications')
+        .insert({
+          type: 'post',
+          project_id: project!.id,
+          initiator_id: user!.id,
+          feedback_id: feedbackData.id,
+        })
+        .select()
+        .single();
+    });
 
     // Return feedback
     return { data: feedback, error: null };

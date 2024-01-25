@@ -39,7 +39,6 @@ export default function RichTextEditor({
     editorProps: {
       attributes: {
         class: 'prose prose-sm dark:prose-invert focus:outline-none',
-        tabindex: '-1',
       },
     },
     onUpdate: ({ editor }) => {
