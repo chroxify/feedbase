@@ -67,6 +67,22 @@ export const getPublicProjectFeedback = withProjectAuth<FeedbackWithUserProps[]>
       feedback.tags = feedback.raw_tags as unknown as FeedbackTagProps['Row'][];
     });
 
+    // Get team members
+    const { data: teamMembers, error: teamMembersError } = await supabase
+      .from('project_members')
+      .select('profiles (full_name, avatar_url), *')
+      .eq('project_id', project!.id);
+
+    // Check for errors
+    if (teamMembersError) {
+      return { data: null, error: { message: teamMembersError.message, status: 500 } };
+    }
+
+    // Set team members
+    feedbackData.forEach((feedback) => {
+      feedback.user.isTeamMember = teamMembers.some((member) => member.member_id === feedback.user_id);
+    });
+
     // If user logged in, get upvoted feedback
     if (user) {
       // Get upvoters
