@@ -159,7 +159,8 @@ export const getUserNotifications = withUserAuth<NotificationProps[]>(async (use
     .in(
       'project_id',
       restructuredData.map((item) => item.id)
-    );
+    )
+    .neq('initiator_id', user.id);
 
   // Check for errors
   if (notificationsError) {
