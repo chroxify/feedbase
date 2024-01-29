@@ -76,8 +76,11 @@ export default async function middleware(req: NextRequest) {
       ? `${hostname.split('.').slice(-2).join('.')}`
       : null;
 
-  // custom domain / only for everything else routes
-  if (rootDomain !== process.env.NEXT_PUBLIC_ROOT_DOMAIN) {
+  // If the request is for a custom domain, rewrite to project paths
+  if (
+    rootDomain !== process.env.NEXT_PUBLIC_ROOT_DOMAIN ||
+    process.env.CUSTOM_DOMAIN_WHITELIST?.split(',').includes(hostname)
+  ) {
     // Retrieve the project from the database
     const { data, error } = (await supabase
       .from('project_configs')
@@ -102,7 +105,11 @@ export default async function middleware(req: NextRequest) {
   }
 
   // rewrites for dash pages
-  if (hostname === `dash.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
+  if (
+    hostname === `dash.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}` ||
+    (process.env.SUBDOMAIN_HOSTING === 'true' &&
+      hostname === `${process.env.DASHBOARD_SUBDOMAIN}.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
+  ) {
     // protect all app pages with authentication except for /login, /signup and /invite/*
     if (!session.data.session && path !== '/login' && path !== '/signup' && !path.startsWith('/invite/')) {
       return NextResponse.redirect(new URL('/login', req.url));

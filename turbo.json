@@ -15,6 +15,7 @@
     "TINYBIRD_API_URL",
     "TINYBIRD_API_KEY",
     "VERCEL",
+    "CUSTOM_DOMAIN_WHITELIST",
     "NODE_ENV"
   ],
   "pipeline": {

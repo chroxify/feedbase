@@ -54,6 +54,7 @@ const tabs = [
 export default async function HubLayout({ children, params }: Props) {
   const headerList = headers();
   const pathname = headerList.get('x-pathname');
+  const hostname = headerList.get('host');
   const currentTab = tabs.find((tab) => tab.link === `/${pathname!.split('/')[1]}`);
 
   if (!currentTab) {
@@ -72,6 +73,11 @@ export default async function HubLayout({ children, params }: Props) {
 
   if (!config) {
     notFound();
+  }
+
+  // Check if custom domain is set and redirect to it
+  if (config.custom_domain && config.custom_domain_verified && hostname !== config.custom_domain) {
+    redirect(`https://${config.custom_domain}`);
   }
 
   // Get current user

@@ -7,7 +7,7 @@ import { Button } from '@ui/components/ui/button';
 import { Separator } from '@ui/components/ui/separator';
 import { Skeleton } from '@ui/components/ui/skeleton';
 import { cn } from '@ui/lib/utils';
-import { MoreVertical } from 'lucide-react';
+import { BadgeCheck, MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   DropdownMenu,
@@ -189,9 +189,17 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
           {/* Author */}
           <div className='text-foreground/60 flex select-none flex-row items-center justify-start gap-2 font-light'>
             {/* User */}
-            <Avatar className='h-8 w-8 gap-2 border'>
-              <AvatarImage src={comment.user.avatar_url || ''} alt={comment.user.full_name} />
-              <AvatarFallback className='text-xs font-light'>{comment.user.full_name[0]}</AvatarFallback>
+            <Avatar className='h-8 w-8 gap-2 overflow-visible border'>
+              <div className='h-full w-full overflow-hidden rounded-full'>
+                <AvatarImage src={comment.user.avatar_url || ''} alt={comment.user.full_name} />
+                <AvatarFallback className='text-xs font-light'>{comment.user.full_name[0]}</AvatarFallback>
+                {/* If team member, add small verified badge to top of profile picture */}
+                {commentData.user.isTeamMember ? (
+                  <div className='bg-root absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full'>
+                    <BadgeCheck className='fill-highlight stroke-root outline-root z-10 h-4 w-4 outline-2' />
+                  </div>
+                ) : null}
+              </div>
             </Avatar>
             {/* Name */}
             <span className='text-foreground/90 text-sm'>{comment.user.full_name}</span>·{/* Time ago */}

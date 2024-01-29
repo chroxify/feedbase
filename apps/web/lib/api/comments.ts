@@ -64,6 +64,19 @@ export const createCommentForFeedbackById = (
       return { data: null, error: { message: feedbackError.message, status: 500 } };
     }
 
+    // Create project notification
+    await supabase
+      .from('notifications')
+      .insert({
+        type: 'comment',
+        project_id: project!.id,
+        initiator_id: user!.id,
+        feedback_id: data.feedback_id,
+        comment_id: comment.id,
+      })
+      .select()
+      .single();
+
     // Return comment
     return { data: comment, error: null };
   })(data.feedback_id, projectSlug, cType);
@@ -89,6 +102,21 @@ export const getCommentsForFeedbackById = withFeedbackAuth<FeedbackCommentWithUs
 
     // Convert comments to FeedbackCommentWithUserProps[]
     const feedbackData = comments as unknown as FeedbackCommentWithUserProps[];
+
+    // Get team members
+    const { data: teamMembers, error: teamMembersError } = await supabase
+      .from('project_members')
+      .select('profiles (full_name, avatar_url), *')
+      .eq('project_id', project!.id);
+
+    if (teamMembersError) {
+      return { data: null, error: { message: teamMembersError.message, status: 500 } };
+    }
+
+    // Set team members
+    feedbackData.forEach((comment) => {
+      comment.user.isTeamMember = teamMembers.some((member) => member.member_id === comment.user_id);
+    });
 
     // Check if user has upvoted any comments
     if (user) {

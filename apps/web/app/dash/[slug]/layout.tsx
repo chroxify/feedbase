@@ -2,6 +2,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { getCurrentUser, getUserProjects } from '@/lib/api/user';
 import { DASH_DOMAIN } from '@/lib/constants';
+import InboxPopover from '@/components/layout/inbox-popover';
 import NavbarMobile from '@/components/layout/nav-bar-mobile';
 import Sidebar from '@/components/layout/sidebar';
 import TitleProvider from '@/components/layout/title-provider';
@@ -89,7 +90,10 @@ export default async function DashboardLayout({ children }: { children: React.Re
             initialTitle={activeTabIndex === -1 ? '' : tabs[activeTabIndex].name}
             className='text-2xl font-semibold md:hidden'
           />
-          <UserDropdown user={user} />
+          <div className='flex flex-row items-center gap-2'>
+            <InboxPopover user={user} />
+            <UserDropdown user={user} />
+          </div>
         </div>
         <div className='flex h-full w-full flex-row justify-start p-5 pt-[64px]'>
           {/* Sidebar */}
