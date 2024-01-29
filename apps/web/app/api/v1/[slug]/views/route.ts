@@ -12,6 +12,11 @@ import { recordClick } from '@/lib/tinybird';
 export async function POST(req: NextRequest, context: { params: { slug: string } }) {
   const { feedbackId, changelogId } = await req.json();
 
+  // Check for Tinybird env vars
+  if (!process.env.TINYBIRD_API_URL || !process.env.TINYBIRD_API_KEY) {
+    return NextResponse.json({ error: 'Tinybird environment variables not set' }, { status: 500 });
+  }
+
   const data = await recordClick({
     req,
     projectId: context.params.slug,

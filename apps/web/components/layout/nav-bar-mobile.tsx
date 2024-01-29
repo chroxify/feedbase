@@ -25,6 +25,11 @@ const navTabs = [
     solid: Icons.CalendarSolid,
   },
   {
+    slug: 'analytics',
+    outline: Icons.AnalyticsOutline,
+    solid: Icons.AnalyticsSolid,
+  },
+  {
     slug: 'settings',
     outline: Icons.SettingsOutline,
     solid: Icons.SettingsSolid,
@@ -82,9 +87,11 @@ export default function NavbarMobile({
             )}>
             {/* Icon */}
             {activeTab === index ? (
-              <tab.solid className='h-5 w-5 fill-white' />
+              <tab.solid className={cn('h-5 w-5 fill-white', tab.slug === 'analytics' ? 'h-7 w-7' : '')} />
             ) : (
-              <tab.outline className='h-5 w-5 fill-white' />
+              <tab.outline
+                className={cn('h-5 w-5 fill-white', tab.slug === 'analytics' ? 'fill-none stroke-white' : '')}
+              />
             )}
           </Button>
         </Link>
