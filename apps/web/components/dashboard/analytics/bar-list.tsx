@@ -90,7 +90,7 @@ export default function BarList({ data, showData, title, maxItems }: BarListProp
                 Show more
               </Button>
             </ResponsiveDialogTrigger>
-            <ResponsiveDialogContent hideDraggable className='gap-0 p-0'>
+            <ResponsiveDialogContent hideDragger className='gap-0 p-0'>
               <ResponsiveDialogHeader className='flex flex-row items-center justify-between space-y-0 border-b px-4 py-6 sm:px-8'>
                 <ResponsiveDialogTitle>{title}</ResponsiveDialogTitle>
 
