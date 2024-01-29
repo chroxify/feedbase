@@ -46,7 +46,7 @@ const ResponsiveDialogDescription: React.FC<React.ComponentProps<typeof DialogDe
 const ResponsiveDialogFooter: React.FC<React.ComponentProps<typeof DialogFooter>> = (props) => {
   const { isPWA, isMobile } = useMediaQuery();
   return isMobile ? (
-    <DrawerFooter {...props} className={isPWA ? 'pb-10' : ''} />
+    <DrawerFooter {...props} style={{ paddingBottom: isPWA ? '40px' : undefined }} />
   ) : (
     <DialogFooter {...props} />
   );
@@ -61,14 +61,16 @@ const ResponsiveDialogContent: React.FC<
 };
 
 const ResponsiveDialogClose: React.FC<
-  React.ComponentProps<typeof DialogCloseWrapper> | React.ComponentProps<typeof DrawerClose>
+  | React.ComponentProps<typeof DialogCloseWrapper>
+  | (React.ComponentProps<typeof DrawerClose> & { hideCloseButton?: boolean })
 > = (props) => {
+  const { hideCloseButton, ...rest } = props as { hideCloseButton?: boolean };
   return useMediaQuery().isMobile ? (
-    <DrawerClose {...props} asChild />
+    <DrawerClose {...rest} asChild />
   ) : (
     <>
-      <DialogCloseWrapper {...props} />
-      <DialogClose />
+      <DialogCloseWrapper {...rest} />
+      {!hideCloseButton && <DialogClose />}
     </>
   );
 };
