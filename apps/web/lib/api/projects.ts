@@ -1,6 +1,7 @@
 import { decode } from 'base64-arraybuffer';
 import { withProjectAuth, withUserAuth } from '@/lib/auth';
 import {
+  AnalyticsProps,
   ProjectApiKeyProps,
   ProjectApiKeyWithoutTokenProps,
   ProjectConfigProps,
@@ -511,4 +512,129 @@ export const deleteProjectApiKey = (slug: string, keyId: string, cType: 'server'
 
     // Return deleted API key
     return { data: deletedApiKey, error: null };
+  })(slug, cType);
+
+// Get project analytics
+export const getProjectAnalytics = (
+  slug: string,
+  cType: 'server' | 'route',
+  data?: { start: string; end: string }
+) =>
+  withProjectAuth(async (user, supabase, project, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error };
+    }
+
+    // Check if tinybird variables are set
+    if (!process.env.TINYBIRD_API_URL || !process.env.TINYBIRD_API_KEY) {
+      return { data: null, error: { message: 'Tinybird variables not set.', status: 500 } };
+    }
+
+    // If no start or end, set default to 7 days ago and url encode (without Z at end)
+    const startDate = data?.start
+      ? data.start
+      : encodeURIComponent(new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()).slice(0, -1);
+    const endDate = data?.end
+      ? data.end
+      : encodeURIComponent(new Date(Date.now()).toISOString()).slice(0, -1);
+
+    // Fetch timeseries from Tinybird
+    const timeseries = await fetch(
+      `${process.env.TINYBIRD_API_URL}/v0/pipes/timeseries.json?end=${endDate}&start=${startDate}&project=${project?.slug}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+        },
+      }
+    ).then((res) => res.json());
+
+    // Check for errors
+    if (timeseries.error) {
+      return { data: null, error: { message: timeseries.error, status: 500 } };
+    }
+
+    // Fetch top feedback from Tinybird
+    const topFeedback = (await fetch(
+      `${process.env.TINYBIRD_API_URL}/v0/pipes/top_feedback.json?project=${project?.slug}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+        },
+      }
+    ).then((res) => res.json())) as { data: AnalyticsProps; error: string };
+
+    // Check for errors
+    if (topFeedback.error) {
+      return { data: null, error: { message: topFeedback.error, status: 500 } };
+    }
+
+    // Fetch top changelogs from Tinybird
+    const topChangelogs = (await fetch(
+      `${process.env.TINYBIRD_API_URL}/v0/pipes/top_changelogs.json?project=${project?.slug}`,
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+        },
+      }
+    ).then((res) => res.json())) as { data: AnalyticsProps; error: string };
+
+    // Check for errors
+    if (topChangelogs.error) {
+      return { data: null, error: { message: topChangelogs.error, status: 500 } };
+    }
+
+    // Get all feedback for project
+    const { data: feedback, error: feedbackError } = await supabase
+      .from('feedback')
+      .select()
+      .eq('project_id', project!.id);
+
+    // Check for errors
+    if (feedbackError) {
+      return { data: null, error: { message: feedbackError.message, status: 500 } };
+    }
+
+    // Get all changelogs for project
+    const { data: changelogs, error: changelogsError } = await supabase
+      .from('changelogs')
+      .select()
+      .eq('project_id', project!.id);
+
+    // Check for errors
+    if (changelogsError) {
+      return { data: null, error: { message: changelogsError.message, status: 500 } };
+    }
+
+    // Restructure topFeedback data to show feedback title instead of id
+    const restructuredTopFeedback = topFeedback.data.map((item) => {
+      const feedbackData = feedback.find((feedback) => feedback.id === item.key);
+
+      return {
+        ...item,
+        key: feedbackData?.title || item.key,
+      };
+    });
+
+    // Restructure topChangelogs data to show changelog title instead of id
+    const restructuredTopChangelogs = topChangelogs.data.map((item) => {
+      const changelogData = changelogs.find((changelog) => changelog.id === item.key);
+
+      return {
+        ...item,
+        key: changelogData?.title || item.key,
+      };
+    });
+
+    // Return analytics
+    return {
+      data: {
+        timeseries: timeseries.data as AnalyticsProps,
+        topFeedback: restructuredTopFeedback.filter((feedback) => feedback.key !== '_root') as AnalyticsProps,
+        topChangelogs: restructuredTopChangelogs.filter(
+          (changelog) => changelog.key !== '_root'
+        ) as AnalyticsProps,
+      },
+      error: null,
+    };
   })(slug, cType);

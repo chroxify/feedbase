@@ -25,6 +25,12 @@ export type ExtendedInviteProps = ProjectInviteProps['Row'] & {
   creator: { full_name: string };
 };
 
+export type AnalyticsProps = {
+  key: string;
+  clicks: number;
+  visitors: number;
+}[];
+
 export type ChangelogProps = Database['public']['Tables']['changelogs'];
 
 export type ChangelogWithAuthorProps = Database['public']['Tables']['changelogs']['Row'] & {

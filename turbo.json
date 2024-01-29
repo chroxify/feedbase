@@ -12,6 +12,9 @@
     "VERCEL_TEAM_ID",
     "VERCEL_PROJECT_ID",
     "VERCEL_AUTH_TOKEN",
+    "TINYBIRD_API_URL",
+    "TINYBIRD_API_KEY",
+    "VERCEL",
     "NODE_ENV"
   ],
   "pipeline": {
