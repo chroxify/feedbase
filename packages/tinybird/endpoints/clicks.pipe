@@ -1,0 +1,24 @@
+NODE clicks_node
+SQL >
+
+    %
+    SELECT COUNT(*)
+    FROM click_events
+    WHERE
+        project IN {{ Array(project, 'String') }}
+        {% if defined(feedbackId) %}
+            AND feedbackId IN {{ Array(feedbackId, 'String') }}
+        {% end %}
+        {% if defined(changelogId) %}
+            AND changelogId IN {{ Array(changelogId, 'String') }}
+        {% end %}
+        {% if defined(country) %} AND country = {{ country }} {% end %}
+        {% if defined(city) %} AND city = {{ city }} {% end %}
+        {% if defined(device) %} AND device = {{ device }} {% end %}
+        {% if defined(browser) %} AND browser = {{ browser }} {% end %}
+        {% if defined(os) %} AND os = {{ os }} {% end %}
+        {% if defined(referer) %} AND referer = {{ referer }} {% end %}
+        {% if defined(start) %} AND timestamp >= {{ DateTime64(start) }} {% end %}
+        {% if defined(end) %} AND timestamp <= {{ DateTime64(end) }} {% end %}
+
+

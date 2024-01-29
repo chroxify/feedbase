@@ -19,3 +19,4 @@ export const LogoutIcon = createIconObject('logout');
 export const ProfileIcon = createIconObject('profile');
 export const SearchIcon = createIconObject('search');
 export const ChatIcon = createIconObject('chat');
+export const AnalyticsIcon = createIconObject('analytics');

@@ -9,6 +9,7 @@ import { getCommentsForFeedbackById } from '@/lib/api/comments';
 import { getPublicProjectFeedback } from '@/lib/api/public';
 import { getCurrentUser } from '@/lib/api/user';
 import { PROSE_CN } from '@/lib/constants';
+import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
 import CommentsList from '@/components/hub/feedback/comments/comments-list';
 
 type Props = {
@@ -94,7 +95,7 @@ export default async function FeedbackDetails({ params }: Props) {
   const { data: user } = await getCurrentUser('server');
 
   return (
-    <>
+    <AnalyticsWrapper projectSlug={params.project} feedbackId={params.id}>
       {/* // Row Splitting up date and Content  */}
       <div className='relative flex w-full flex-row px-5 sm:px-10 md:px-8 lg:px-10' key={feedback.id}>
         <div className='flex h-full w-full flex-col md:w-5/6 md:border-r md:pr-5 lg:flex-row'>
@@ -350,6 +351,6 @@ export default async function FeedbackDetails({ params }: Props) {
           </div>
         </div>
       </div>
-    </>
+    </AnalyticsWrapper>
   );
 }

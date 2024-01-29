@@ -7,10 +7,9 @@ export default function FeedbackPageLoading() {
       <div className='flex h-full w-full flex-col md:w-5/6 md:border-r md:pr-5 lg:flex-row'>
         <div className='relative flex pr-5'>
           <div className='flex w-full max-w-[150px] pb-4 lg:pb-0'>
-            <Skeleton className='h-5 w-full' />
+            <Skeleton className='h-5 w-[150px]' />
           </div>
         </div>
-
         <div className='flex h-screen w-full flex-col gap-5'>
           <div className='flex w-full flex-col gap-4'>
             <h1 className='text-foreground/100 max-w-96 w-full text-2xl font-bold'>

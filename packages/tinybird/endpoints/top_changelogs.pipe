@@ -1,0 +1,33 @@
+TOKEN "top_changelog_endpoint_read_6741" READ
+
+NODE top_changelog_node
+SQL >
+
+    %
+    WITH ClickEventsCount AS (
+        SELECT
+            changelogId as key,
+            COUNT(*) as clicks,
+            COUNT(DISTINCT sessionId) as visitors
+        FROM click_events
+        WHERE
+            project IN {{ Array(project, 'String') }}
+            {% if defined(country) %} AND country = {{ country }} {% end %}
+            {% if defined(city) %} AND city = {{ city }} {% end %}
+            {% if defined(device) %} AND device = {{ device }} {% end %}
+            {% if defined(browser) %} AND browser = {{ browser }} {% end %}
+            {% if defined(os) %} AND os = {{ os }} {% end %}
+            {% if defined(referer) %} AND referer = {{ referer }} {% end %}
+            {% if defined(start) %} AND timestamp >= {{ DateTime64(start) }} {% end %}
+            {% if defined(end) %} AND timestamp <= {{ DateTime64(end) }} {% end %}
+        GROUP BY changelogId
+    )
+
+    SELECT
+        c.key,
+        c.clicks,
+        c.visitors
+    FROM ClickEventsCount c
+    ORDER BY c.clicks DESC, c.key
+
+

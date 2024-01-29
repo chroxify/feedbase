@@ -6,6 +6,7 @@ import { fontMono } from '@ui/styles/fonts';
 import { Separator } from 'ui/components/ui/separator';
 import { getProjectBySlug, getProjectConfigBySlug } from '@/lib/api/projects';
 import { getPublicProjectChangelogs } from '@/lib/api/public';
+import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
 
 type Props = {
   params: { project: string };
@@ -68,7 +69,7 @@ export default async function Changelogs({ params }: Props) {
   }
 
   return (
-    <div className='flex h-full w-full flex-col gap-10'>
+    <AnalyticsWrapper className='flex h-full w-full flex-col gap-10' projectSlug={params.project}>
       <div className='flex items-center px-5 sm:px-10 md:px-10 lg:px-20'>
         <div className='flex w-full flex-col items-start gap-4'>
           <h1 className='text-3xl font-medium sm:text-4xl'>Changelog</h1>
@@ -192,6 +193,6 @@ export default async function Changelogs({ params }: Props) {
           </div>
         )}
       </div>
-    </div>
+    </AnalyticsWrapper>
   );
 }

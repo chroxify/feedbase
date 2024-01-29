@@ -4,6 +4,7 @@ import { Separator } from '@ui/components/ui/separator';
 import { getProjectBySlug, getProjectConfigBySlug } from '@/lib/api/projects';
 import { getPublicProjectFeedback } from '@/lib/api/public';
 import { getCurrentUser } from '@/lib/api/user';
+import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
 import FeedbackHeader from '@/components/hub/feedback/button-header';
 import FeedbackList from '@/components/hub/feedback/feedback-list';
 
@@ -41,7 +42,8 @@ export default async function Feedback({ params }: Props) {
   const { data: config } = await getProjectConfigBySlug(params.project, 'server', true, false);
 
   return (
-    <div className='flex h-full w-full flex-col items-center gap-10 pb-10'>
+    <AnalyticsWrapper className='items-center gap-10 pb-10' projectSlug={params.project}>
+      {/* Header */}
       <div className='flex w-full px-5 sm:px-10 md:px-10 lg:px-20'>
         <div className='flex w-full flex-col items-start gap-4'>
           <h1 className='text-3xl font-medium sm:text-4xl'>Feedback</h1>
@@ -68,6 +70,6 @@ export default async function Feedback({ params }: Props) {
           />
         </div>
       </div>
-    </div>
+    </AnalyticsWrapper>
   );
 }

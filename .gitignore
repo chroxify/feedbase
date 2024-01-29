@@ -44,4 +44,8 @@ next-env.d.ts
 **/public/worker-*.js
 **/public/sw.js.map
 **/public/workbox-*.js.map
-**/public/worker-*.js.map
+**/public/worker-*.js.map.tinyb
+
+# tinybird
+.venv
+.tinyb

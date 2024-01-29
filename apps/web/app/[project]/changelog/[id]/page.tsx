@@ -8,6 +8,7 @@ import { fontMono } from '@ui/styles/fonts';
 import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
 import { getPublicProjectChangelogs } from '@/lib/api/public';
 import { formatRootUrl } from '@/lib/utils';
+import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
 import { Icons } from '@/components/shared/icons/icons-static';
 
 type Props = {
@@ -72,7 +73,7 @@ export default async function ChangelogPage({ params }: Props) {
   }
 
   return (
-    <>
+    <AnalyticsWrapper projectSlug={params.project} changelogId={changelog.id}>
       {/* // Row Splitting up date and Content  */}
       <div
         className='relative flex w-full flex-col px-5 sm:px-10 md:flex-row md:px-10 lg:px-20'
@@ -196,6 +197,6 @@ export default async function ChangelogPage({ params }: Props) {
           </div>
         </div>
       </div>
-    </>
+    </AnalyticsWrapper>
   );
 }

@@ -1,7 +1,7 @@
 import './globals.css';
 import { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { cn } from '@ui/lib/utils';
-import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GeistSans } from 'geist/font';
 import { Toaster } from 'sonner';
@@ -40,7 +40,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en' suppressHydrationWarning>
       <body className='feedbase-hub'>
-        <Analytics />
+        {process.env.NODE_ENV === 'production' && (
+          <Script
+            defer
+            src='https://eu.umami.is/script.js'
+            data-website-id='3b6e5bd9-a7f1-41fe-9486-740daf1adaee'
+          />
+        )}
         <SpeedInsights />
         <Toaster closeButton />
         <main className={cn('bg-root flex min-h-screen w-full flex-col items-center', GeistSans.className)}>

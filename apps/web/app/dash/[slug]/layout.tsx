@@ -7,6 +7,7 @@ import NavbarMobile from '@/components/layout/nav-bar-mobile';
 import Sidebar from '@/components/layout/sidebar';
 import TitleProvider from '@/components/layout/title-provider';
 import {
+  AnalyticsIcon,
   CalendarIcon,
   FeedbackIcon,
   SettingsIcon,
@@ -30,6 +31,11 @@ const tabs = [
     name: 'Roadmap (Soon)',
     icon: CalendarIcon,
     slug: 'roadmap',
+  },
+  {
+    name: 'Analytics',
+    icon: AnalyticsIcon,
+    slug: 'analytics',
   },
   {
     name: 'Settings',
@@ -71,7 +77,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
   const activeTabIndex = tabs.findIndex((tab) => pathname?.includes(tab.slug));
 
   return (
-    <main className='bg-root flex min-h-screen min-w-full justify-center overflow-hidden'>
+    <main className='bg-root flex min-h-screen w-full min-w-full justify-center overflow-hidden'>
       <div className='flex h-full w-full flex-col items-center lg:max-w-screen-xl'>
         {/* Header with logo and hub button */}
         {/* BUG: Find a way to solve issue of scroll bar getting removed on avatar dialog open */}
