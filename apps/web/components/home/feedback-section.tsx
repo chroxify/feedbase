@@ -165,6 +165,7 @@ export default function FeedbackSection() {
                 placeholder='Write your comment here...'
                 characterLimit={50}
                 className='overflow-auto'
+                proseInvert
               />
 
               {/* Bottom Row */}

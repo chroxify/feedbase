@@ -308,7 +308,7 @@ export default function DashboardSection() {
         </div>
 
         {/* Integrations */}
-        <BentoCardWrapper className='h-[295px] w-full min-w-[350px] xl:w-1/3'>
+        <BentoCardWrapper className='h-full min-h-[295px] w-full min-w-[350px] xl:w-1/3'>
           <div className='p-7'>
             <h1 className='text-lg font-medium text-white'>Integrations</h1>
             <p className='mt-2 text-sm font-light text-white/60'>

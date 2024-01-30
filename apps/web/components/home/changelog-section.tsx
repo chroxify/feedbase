@@ -81,7 +81,7 @@ export default function ChangelogSection() {
           </BentoCardWrapper>
 
           {/* Markdown */}
-          <BentoCardWrapper className='h-[465px] w-full min-w-[350px]'>
+          <BentoCardWrapper className='h-full min-h-[465px] w-full min-w-[350px]'>
             <div className='h-full p-7'>
               <h1 className='text-foreground text-lg font-medium'>Markdown support</h1>
               <p className='text-foreground/60 mt-2 text-sm font-light'>
@@ -92,7 +92,7 @@ export default function ChangelogSection() {
               <div className='mt-5 flex h-[313px] flex-col gap-1.5'>
                 <Label className='text-foreground/60 text-sm font-light'>Editor</Label>
                 <div className='flex h-1/2 flex-col gap-1.5 overflow-auto rounded-md border p-3'>
-                  <RichTextEditor content={changelogContent} setContent={setChangelogContent} className='' />
+                  <RichTextEditor content={changelogContent} setContent={setChangelogContent} proseInvert />
                 </div>
 
                 {/* Preview */}
@@ -110,7 +110,7 @@ export default function ChangelogSection() {
         </div>
 
         {/* And much more */}
-        <BentoCardWrapper className='h-[465px] w-full min-w-[350px] xl:w-1/3'>
+        <BentoCardWrapper className='h-full min-h-[465px] w-full min-w-[350px] xl:w-1/3'>
           <div className='p-7'>
             <h1 className='text-foreground text-lg font-medium'>Receive Updates</h1>
             <p className='text-foreground/60 mt-2 text-sm font-light'>
@@ -121,7 +121,7 @@ export default function ChangelogSection() {
             <div className='mt-5 flex h-[280px] flex-col items-start justify-evenly'>
               {/* Twitter */}
               <div className='flex h-14 flex-row items-center gap-5'>
-                <div className='border-border/50 flex h-full w-14 items-center justify-center rounded-lg border bg-[#1DA1F2]/10'>
+                <div className='border-border/50 flex h-full min-w-[56px] items-center justify-center rounded-lg border bg-[#1DA1F2]/10'>
                   <Icons.Twitter className='h-8 w-8 text-[#1DA1F2]/80' />
                 </div>
 
@@ -136,7 +136,7 @@ export default function ChangelogSection() {
 
               {/* Email */}
               <div className='flex h-14 flex-row items-center gap-5'>
-                <div className='border-border/50 flex h-full w-14 items-center justify-center rounded-lg border bg-[#D44638]/10'>
+                <div className='border-border/50 flex h-full min-w-[56px] items-center justify-center rounded-lg border bg-[#D44638]/10'>
                   <MailIcon className='h-8 w-8 stroke-[1.5px] text-[#D44638]/80' />
                 </div>
 
@@ -151,7 +151,7 @@ export default function ChangelogSection() {
 
               {/* RSS */}
               <div className='flex h-14 flex-row items-center gap-5'>
-                <div className='border-border/50 flex h-full w-14 items-center justify-center rounded-lg border bg-[#FFA500]/10'>
+                <div className='border-border/50 flex h-full min-w-[56px] items-center justify-center rounded-lg border bg-[#FFA500]/10'>
                   <RssIcon className='h-8 w-8 stroke-[1.5px] text-[#FFA500]/80' />
                 </div>
 

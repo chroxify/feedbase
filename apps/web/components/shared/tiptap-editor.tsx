@@ -16,12 +16,14 @@ export default function RichTextEditor({
   placeholder,
   className,
   characterLimit,
+  proseInvert,
 }: {
   content: string;
   setContent: React.Dispatch<React.SetStateAction<string>>;
   placeholder?: string;
   className?: string;
   characterLimit?: number;
+  proseInvert?: boolean;
 }) {
   const editor = useEditor({
     extensions: [
@@ -38,7 +40,7 @@ export default function RichTextEditor({
     content,
     editorProps: {
       attributes: {
-        class: 'prose prose-sm dark:prose-invert focus:outline-none',
+        class: `prose prose-sm dark:prose-invert focus:outline-none${proseInvert ? ' prose-invert' : ''}`,
       },
     },
     onUpdate: ({ editor }) => {
