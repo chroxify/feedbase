@@ -9,7 +9,7 @@ import {
   ProjectProps,
   TeamMemberProps,
 } from '@/lib/types';
-import { generateApiToken, isSlugValid } from '@/lib/utils';
+import { generateApiToken, isSlugValid, isValidUrl } from '@/lib/utils';
 
 // Get Project
 export const getProjectBySlug = withProjectAuth<ProjectProps['Row']>(
@@ -256,7 +256,7 @@ export const getProjectConfigBySlug = withProjectAuth<ProjectConfigWithoutSecret
     const { data: config, error: configError } = await supabase
       .from('project_configs')
       .select(
-        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting, custom_theme, custom_theme_background, custom_theme_border, custom_theme_primary_foreground, custom_theme_root, custom_theme_secondary_background, custom_theme_accent, integration_slack_status, integration_slack_webhook'
+        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting, custom_theme, custom_theme_background, custom_theme_border, custom_theme_primary_foreground, custom_theme_root, custom_theme_secondary_background, custom_theme_accent, integration_slack_status, integration_slack_webhook, logo_redirect_url'
       )
       .eq('project_id', project!.id);
 
@@ -299,6 +299,22 @@ export const updateProjectConfigBySlug = (
       return {
         data: null,
         error: { message: 'changelog_preview_style must be one of: summary, content', status: 400 },
+      };
+    }
+
+    // Validate logo_redirect_url
+    if (data.logo_redirect_url && !isValidUrl(data.logo_redirect_url)) {
+      return {
+        data: null,
+        error: { message: 'logo_redirect_url must be a valid URL', status: 400 },
+      };
+    }
+
+    // Validate sso_url
+    if (data.integration_sso_url && !isValidUrl(data.integration_sso_url)) {
+      return {
+        data: null,
+        error: { message: 'integration_sso_url must be a valid URL', status: 400 },
       };
     }
 
@@ -369,10 +385,12 @@ export const updateProjectConfigBySlug = (
           data.integration_slack_webhook !== undefined
             ? data.integration_slack_webhook
             : config.integration_slack_webhook,
+        logo_redirect_url:
+          data.logo_redirect_url !== undefined ? data.logo_redirect_url : config.logo_redirect_url,
       })
       .eq('id', config.id)
       .select(
-        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting, custom_theme, custom_theme_background, custom_theme_border, custom_theme_primary_foreground, custom_theme_root, custom_theme_secondary_background, custom_theme_accent, integration_slack_status, integration_slack_webhook'
+        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting, custom_theme, custom_theme_background, custom_theme_border, custom_theme_primary_foreground, custom_theme_root, custom_theme_secondary_background, custom_theme_accent, integration_slack_status, integration_slack_webhook, logo_redirect_url'
       );
 
     // Check for errors

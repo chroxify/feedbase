@@ -38,6 +38,7 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
     custom_theme_secondary_background: customThemeSecondaryBackground,
     custom_theme_accent: customThemeAccent,
     custom_theme_border: customThemeBorder,
+    logo_redirect_url: logoRedirectUrl,
   } = (await req.json()) as ProjectConfigProps['Update'];
 
   // Update project config
@@ -54,6 +55,7 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
       custom_theme_secondary_background: customThemeSecondaryBackground,
       custom_theme_accent: customThemeAccent,
       custom_theme_border: customThemeBorder,
+      logo_redirect_url: logoRedirectUrl,
     },
     'route'
   );

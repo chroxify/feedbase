@@ -120,6 +120,10 @@ export default function HubConfigCards({
             projectConfig.custom_theme_border !== projectConfigData.custom_theme_border
               ? projectConfig.custom_theme_border
               : undefined,
+          logo_redirect_url:
+            projectConfig.logo_redirect_url !== projectConfigData.logo_redirect_url
+              ? projectConfig.logo_redirect_url
+              : undefined,
         }),
       })
         .then((res) => res.json())
@@ -314,6 +318,21 @@ export default function HubConfigCards({
               <Label className='text-foreground/50 text-xs font-extralight'>
                 This will only be applied to your public hub.
               </Label>
+
+              <div className='space-y-1'>
+                <Label className='text-foreground/70 text-sm font-light'>Logo Redirect Url</Label>
+                <Input
+                  className='w-full max-w-xs'
+                  placeholder='https://example.com'
+                  value={projectConfig.logo_redirect_url || ''}
+                  onChange={(e) => {
+                    setProjectConfig((prev) => ({ ...prev, logo_redirect_url: e.target.value }));
+                  }}
+                />
+                <Label className='text-foreground/50 text-xs font-extralight'>
+                  The url to redirect to when clicking on the logo. (Blank to disable)
+                </Label>
+              </div>
             </div>
           </div>
         </CardContent>
@@ -332,7 +351,8 @@ export default function HubConfigCards({
               projectConfig.custom_theme_secondary_background ===
                 projectConfigData.custom_theme_secondary_background &&
               projectConfig.custom_theme_accent === projectConfigData.custom_theme_accent &&
-              projectConfig.custom_theme_border === projectConfigData.custom_theme_border
+              projectConfig.custom_theme_border === projectConfigData.custom_theme_border &&
+              projectConfig.logo_redirect_url === projectConfigData.logo_redirect_url
             }
             onClick={() => {
               // If both changed, save both
@@ -351,7 +371,8 @@ export default function HubConfigCards({
                   projectConfig.custom_theme_secondary_background ===
                     projectConfigData.custom_theme_secondary_background &&
                   projectConfig.custom_theme_accent === projectConfigData.custom_theme_accent &&
-                  projectConfig.custom_theme_border === projectConfigData.custom_theme_border
+                  projectConfig.custom_theme_border === projectConfigData.custom_theme_border &&
+                  projectConfig.logo_redirect_url === projectConfigData.logo_redirect_url
                 )
               ) {
                 handleSaveProjectConfig();

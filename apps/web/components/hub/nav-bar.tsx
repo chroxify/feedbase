@@ -45,7 +45,9 @@ export default function Header({
       {/* Branding & User */}
       <div className='flex w-full flex-row items-center justify-between'>
         {/* Branding */}
-        <Link className='flex cursor-pointer select-none flex-row items-center gap-3' href='/'>
+        <Link
+          className='flex cursor-pointer select-none flex-row items-center gap-3'
+          href={config.logo_redirect_url || '/'}>
           {/* Logo Image */}
           {project?.icon ? (
             <img

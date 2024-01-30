@@ -69,7 +69,8 @@ export default function AddSSOAuthModal({
 
     // Check for errors
     if (!res.ok) {
-      toast.error('Failed to enable SSO');
+      const data = await res.json();
+      toast.error(data.error);
       setIsLoading(false);
       return;
     }

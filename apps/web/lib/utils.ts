@@ -181,3 +181,15 @@ export function hslToHex(hsl: string | null) {
 
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`;
 }
+
+// is valid url
+export function isValidUrl(url: string): boolean {
+  if (
+    !/https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9]{1,6}\b(?:[-a-zA-Z0-9()!@:%_+.~#?&//=]*)/i.test(
+      url.toLowerCase()
+    )
+  ) {
+    return false;
+  }
+  return true;
+}

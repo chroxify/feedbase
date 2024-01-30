@@ -373,6 +373,7 @@ export interface Database {
           integration_sso_secret: string | null;
           integration_sso_status: boolean | null;
           integration_sso_url: string | null;
+          logo_redirect_url: string | null;
           project_id: string;
         };
         Insert: {
@@ -398,6 +399,7 @@ export interface Database {
           integration_sso_secret?: string | null;
           integration_sso_status?: boolean | null;
           integration_sso_url?: string | null;
+          logo_redirect_url?: string | null;
           project_id: string;
         };
         Update: {
@@ -423,6 +425,7 @@ export interface Database {
           integration_sso_secret?: string | null;
           integration_sso_status?: boolean | null;
           integration_sso_url?: string | null;
+          logo_redirect_url?: string | null;
           project_id?: string;
         };
         Relationships: [
