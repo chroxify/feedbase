@@ -10,7 +10,7 @@ export default async function AnalyticsPage({ params }: { params: { slug: string
   }
 
   return (
-    <div className='flex h-full w-full flex-col gap-10 overflow-y-auto pt-10'>
+    <div className='flex h-full w-full flex-col gap-10 overflow-y-auto pt-3 md:pt-10'>
       <AnalyticsCards
         analyticsData={data.timeseries}
         topFeedbackData={data.topFeedback}
