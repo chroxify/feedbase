@@ -406,3 +406,26 @@ const sendChangelogEmail = async (
     }
   });
 };
+
+// Get changelog subscribers
+export const getChangelogSubscribers = (slug: string, cType: 'server' | 'route') =>
+  withProjectAuth<{ id: string; email: string }[]>(async (user, supabase, project, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error };
+    }
+
+    // Get subscribers
+    const { data: subscribers, error: subscribersError } = await supabase
+      .from('changelog_subscribers')
+      .select('id, email')
+      .eq('project_id', project!.id);
+
+    // Check for errors
+    if (subscribersError) {
+      return { data: null, error: { message: subscribersError.message, status: 500 } };
+    }
+
+    // Return subscribers
+    return { data: subscribers, error: null };
+  })(slug, cType);

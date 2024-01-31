@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Label } from '@radix-ui/react-label';
 import { cn } from '@ui/lib/utils';
-import { Check, Pen } from 'lucide-react';
+import { Check, Download, Pen } from 'lucide-react';
 import { toast } from 'sonner';
 import { Button } from 'ui/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/ui/card';
@@ -149,6 +149,38 @@ export default function HubConfigCards({
 
     promise.then(() => {
       router.refresh();
+    });
+  }
+
+  // Handle download subscribers
+  async function handleDownloadSubscribers() {
+    const promise = new Promise((resolve, reject) => {
+      fetch(`/api/v1/projects/${projectData.slug}/changelogs/subscribers`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => res.blob())
+        .then((blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `subscribers-${projectData.slug}.csv`;
+          a.click();
+          resolve(true);
+        })
+        .catch((err) => {
+          reject(err.message);
+        });
+    });
+
+    toast.promise(promise, {
+      loading: 'Fetching subscribers...',
+      success: 'Download is ready.',
+      error: (err) => {
+        return err;
+      },
     });
   }
 
@@ -449,6 +481,21 @@ export default function HubConfigCards({
 
             <Label className='text-foreground/50 text-xs font-extralight'>
               Whether to show summary or content as preview.
+            </Label>
+          </div>
+
+          {/* Download Email Audience */}
+          <div className='flex flex-col space-y-1'>
+            <Label className='text-foreground/70 text-sm font-light'>Email Subscribers</Label>
+            <Button
+              variant='outline'
+              className='text-foreground/70 w-[160px] font-light'
+              onClick={handleDownloadSubscribers}>
+              <Download className='mr-2 h-4 w-4' />
+              Download List
+            </Button>
+            <Label className='text-foreground/50 text-xs font-extralight'>
+              Download a list of your changelog audience.
             </Label>
           </div>
         </CardContent>

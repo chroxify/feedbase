@@ -31,5 +31,9 @@ for select
 to public
 using (true);
 
-
-
+create policy "Enable delete access for all users"
+on "public"."changelog_subscribers"
+as permissive
+for delete
+to public
+using (true);
