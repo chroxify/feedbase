@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { deleteChangelog, updateChangelog } from '@/lib/api/changelogs';
 
+export const runtime = 'edge';
+
 /*
     Update project changelog
     PUT /api/v1/projects/[slug]/changelogs/[id]
