@@ -153,3 +153,39 @@ export const subscribeToProjectChangelogs = (projectSlug: string, email: string)
     // Return subscriber
     return { data: subscriber, error: null };
   })(projectSlug, 'server', true, false);
+
+// Unsubscribe from project changelogs
+export const unsubscribeFromProjectChangelogs = (projectSlug: string, subId: string) =>
+  withProjectAuth<ChangelogWithAuthorProps[]>(async (user, supabase, project, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error };
+    }
+
+    // Check if subscriber exists
+    const { data: existingSubscriber } = await supabase
+      .from('changelog_subscribers')
+      .select()
+      .eq('id', subId)
+      .single();
+
+    // If subscriber doesn't exist, return error
+    if (!existingSubscriber) {
+      return { data: null, error: { message: 'Subscriber does not exist.', status: 400 } };
+    }
+
+    // Delete subscriber
+    const { data, error: deleteError } = await supabase
+      .from('changelog_subscribers')
+      .delete()
+      .eq('id', subId)
+      .single();
+
+    // Check for errors
+    if (deleteError) {
+      return { data: null, error: { message: deleteError.message, status: 500 } };
+    }
+
+    // Return success
+    return { data, error: null };
+  })(projectSlug, 'server', true, false);

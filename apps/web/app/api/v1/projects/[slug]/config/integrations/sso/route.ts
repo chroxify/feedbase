@@ -14,8 +14,8 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
   const { status, url, secret } = await req.json();
 
   if (status && (!url || !secret)) {
-    return new Response(
-      JSON.stringify({ error: 'url and secret are required when enabling SSO integration.' }),
+    return NextResponse.json(
+      { error: 'url and secret are required when enabling SSO integration.' },
       { status: 400 }
     );
   }
