@@ -34,6 +34,7 @@ export const sendBatchEmails = async ({
   emails,
   subject,
   reactEmails,
+  headers,
   marketing,
   test = process.env.NODE_ENV === 'development',
 }: {
@@ -41,6 +42,7 @@ export const sendBatchEmails = async ({
   subject: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   reactEmails: ReactElement<any, string | JSXElementConstructor<any>>[];
+  headers?: Record<string, string>[];
   marketing?: boolean;
   test?: boolean;
 }) => {
@@ -54,11 +56,16 @@ export const sendBatchEmails = async ({
     throw new Error('emails and reactEmails arrays must be the same length.');
   }
 
+  if (headers && emails.length !== headers.length) {
+    throw new Error('emails and headers arrays must be the same length.');
+  }
+
   return resend.batch.create(
     emails.map((email) => ({
       from: marketing ? 'Christo from Feedbase <christo@feedbase.app>' : 'Feedbase <system@feedbase.app>',
       to: test ? 'delivered@resend.dev' : email,
       subject,
+      headers: headers ? headers[emails.indexOf(email)] : undefined,
       react: reactEmails[emails.indexOf(email)],
     }))
   );

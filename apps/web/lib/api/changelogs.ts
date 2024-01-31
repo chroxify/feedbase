@@ -4,7 +4,7 @@ import ChangelogEmail from '@/emails/changelog-email';
 import { decode } from 'base64-arraybuffer';
 import { withProjectAuth } from '@/lib/auth';
 import { ChangelogProps, ChangelogWithAuthorProps, ProfileProps, ProjectProps } from '@/lib/types';
-import { isSlugValid } from '../utils';
+import { formatRootUrl, isSlugValid } from '../utils';
 
 // Create Changelog
 export const createChangelog = (slug: string, data: ChangelogProps['Insert'], cType: 'server' | 'route') =>
@@ -385,8 +385,13 @@ const sendChangelogEmail = async (
     const { error: emailError } = await sendBatchEmails({
       emails: group,
       subject: `${project.name} Update: ${data.title}`,
+      headers: group.map((email) => ({
+        'List-Unsubscribe': formatRootUrl(
+          project.slug,
+          `/changelogs/unsubscribe?subId=${subscribers.find((subscriber) => subscriber.email === email)!.id}`
+        ),
+      })),
       reactEmails: emails,
-      test: false,
     }).then((data) => {
       if (data.error) {
         return { data: null, error: { message: data.error.message, status: 500 } };
