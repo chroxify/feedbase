@@ -2,6 +2,8 @@ import { NextResponse } from 'next/server';
 import { createChangelog, getAllProjectChangelogs } from '@/lib/api/changelogs';
 import { ChangelogProps } from '@/lib/types';
 
+export const runtime = 'edge';
+
 /* 
     Create Changelog
     POST /api/v1/projects/[slug]/changelogs

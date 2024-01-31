@@ -1,7 +1,10 @@
+import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
+import { sendBatchEmails } from '@/emails';
+import ChangelogEmail from '@/emails/changelog-email';
 import { decode } from 'base64-arraybuffer';
 import { withProjectAuth } from '@/lib/auth';
-import { ChangelogProps, ChangelogWithAuthorProps } from '@/lib/types';
-import { isSlugValid } from '../utils';
+import { ChangelogProps, ChangelogWithAuthorProps, ProfileProps, ProjectProps } from '@/lib/types';
+import { formatRootUrl, isSlugValid } from '../utils';
 
 // Create Changelog
 export const createChangelog = (slug: string, data: ChangelogProps['Insert'], cType: 'server' | 'route') =>
@@ -68,6 +71,37 @@ export const createChangelog = (slug: string, data: ChangelogProps['Insert'], cT
     // Check for errors
     if (changelogError) {
       return { data: null, error: { message: changelogError.message, status: 500 } };
+    }
+
+    // Send email to subscribers
+    if (data.published) {
+      waitUntil(async () => {
+        // Get subscribers
+        const { data: subscribers, error: subscribersError } = await supabase
+          .from('changelog_subscribers')
+          .select('id, email')
+          .eq('project_id', project!.id);
+
+        // Check for errors
+        if (subscribersError) {
+          return { data: null, error: { message: subscribersError.message, status: 500 } };
+        }
+
+        // Get user profile
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select()
+          .eq('id', user!.id)
+          .single();
+
+        // Check for errors
+        if (profileError) {
+          return { data: null, error: { message: profileError.message, status: 500 } };
+        }
+
+        // Send email
+        await sendChangelogEmail(subscribers, project!, changelog[0], profile);
+      });
     }
 
     // Return project
@@ -202,6 +236,52 @@ export const updateChangelog = (
         .replace(/ /g, '-');
     }
 
+    // Get current changelog
+    const { data: currentChangelog, error: currentChangelogError } = await supabase
+      .from('changelogs')
+      .select()
+      .eq('id', id)
+      .single();
+
+    // Check for errors
+    if (currentChangelogError) {
+      return { data: null, error: { message: currentChangelogError.message, status: 500 } };
+    } else if (!currentChangelog) {
+      return { data: null, error: { message: 'changelog not found', status: 404 } };
+    }
+
+    // Check if status has changed to published
+    if (data.published && !currentChangelog.published) {
+      // Send email to subscribers
+      waitUntil(async () => {
+        // Get subscribers
+        const { data: subscribers, error: subscribersError } = await supabase
+          .from('changelog_subscribers')
+          .select('id, email')
+          .eq('project_id', project!.id);
+
+        // Check for errors
+        if (subscribersError) {
+          return { data: null, error: { message: subscribersError.message, status: 500 } };
+        }
+
+        // Get user profile
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select()
+          .eq('id', user!.id)
+          .single();
+
+        // Check for errors
+        if (profileError) {
+          return { data: null, error: { message: profileError.message, status: 500 } };
+        }
+
+        // Send email
+        await sendChangelogEmail(subscribers, project!, currentChangelog, profile);
+      });
+    }
+
     // Update Changelog
     const { data: changelog, error: changelogError } = await supabase
       .from('changelogs')
@@ -252,4 +332,100 @@ export const deleteChangelog = (id: string, slug: string, cType: 'server' | 'rou
 
     // Return changelog
     return { data: deletedChangelog[0], error: null };
+  })(slug, cType);
+
+// Send changelog email
+const sendChangelogEmail = async (
+  subscribers: { id: string; email: string }[],
+  project: ProjectProps['Row'],
+  data: ChangelogProps['Row'],
+  user: ProfileProps['Row']
+) => {
+  // If no subscribers, return
+  if (subscribers.length === 0) {
+    return { data: null, error: null };
+  }
+
+  // Split subscribers into groups of max. 100
+  const subscriberGroups = subscribers.reduce<string[][]>((resultArray, item, index): string[][] => {
+    const chunkIndex = Math.floor(index / 100);
+
+    if (!resultArray[chunkIndex]) {
+      resultArray[chunkIndex] = [];
+    }
+
+    resultArray[chunkIndex].push(item.email);
+
+    return resultArray;
+  }, []);
+
+  // Send email to each group
+  subscriberGroups.forEach(async (group) => {
+    // For each group, create react emails
+    const emails = group.map((email) =>
+      ChangelogEmail({
+        subId: subscribers.find((subscriber) => subscriber.email === email)!.id,
+        projectSlug: project.slug,
+        changelog: {
+          title: data.title,
+          summary: data.summary!,
+          content: data.content!,
+          image: data.image!,
+          publish_date: data.publish_date!,
+          slug: data.slug,
+          author: {
+            full_name: user.full_name,
+            avatar_url: user.avatar_url!,
+          },
+        },
+      })
+    );
+
+    // Send emails
+    const { error: emailError } = await sendBatchEmails({
+      emails: group,
+      subject: `${project.name} Update: ${data.title}`,
+      headers: group.map((email) => ({
+        'List-Unsubscribe': formatRootUrl(
+          project.slug,
+          `/changelogs/unsubscribe?subId=${subscribers.find((subscriber) => subscriber.email === email)!.id}`
+        ),
+      })),
+      reactEmails: emails,
+    }).then((data) => {
+      if (data.error) {
+        return { data: null, error: { message: data.error.message, status: 500 } };
+      }
+
+      return { data, error: null };
+    });
+
+    // Check for errors
+    if (emailError) {
+      return { data: null, error: { message: emailError.message, status: 500 } };
+    }
+  });
+};
+
+// Get changelog subscribers
+export const getChangelogSubscribers = (slug: string, cType: 'server' | 'route') =>
+  withProjectAuth<{ id: string; email: string }[]>(async (user, supabase, project, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error };
+    }
+
+    // Get subscribers
+    const { data: subscribers, error: subscribersError } = await supabase
+      .from('changelog_subscribers')
+      .select('id, email')
+      .eq('project_id', project!.id);
+
+    // Check for errors
+    if (subscribersError) {
+      return { data: null, error: { message: subscribersError.message, status: 500 } };
+    }
+
+    // Return subscribers
+    return { data: subscribers, error: null };
   })(slug, cType);

@@ -95,13 +95,21 @@ export default async function middleware(req: NextRequest) {
     }
 
     // If the project exists, rewrite the request to the project's folder
-    return NextResponse.rewrite(new URL(`/${data?.project?.slug}${path}`, req.url), {
-      headers: {
-        'x-pathname': path,
-        'x-project': data?.project?.slug,
-        'x-powered-by': 'Feedbase',
-      },
-    });
+    return NextResponse.rewrite(
+      new URL(
+        `/${data?.project?.slug}${path}${
+          req.nextUrl.searchParams ? `?${req.nextUrl.searchParams.toString()}` : ''
+        }`,
+        req.url
+      ),
+      {
+        headers: {
+          'x-pathname': path,
+          'x-project': data?.project?.slug,
+          'x-powered-by': 'Feedbase',
+        },
+      }
+    );
   }
 
   // rewrites for dash pages
@@ -145,11 +153,19 @@ export default async function middleware(req: NextRequest) {
   }
 
   // rewrite everything else to `/[sub-domain]/[path] dynamic route
-  return NextResponse.rewrite(new URL(`/${hostname.split('.')[0]}${path}`, req.url), {
-    headers: {
-      'x-pathname': path,
-      'x-project': hostname.split('.')[0],
-      'x-powered-by': 'Feedbase',
-    },
-  });
+  return NextResponse.rewrite(
+    new URL(
+      `/${hostname.split('.')[0]}${path}${
+        req.nextUrl.searchParams ? `?${req.nextUrl.searchParams.toString()}` : ''
+      }`,
+      req.url
+    ),
+    {
+      headers: {
+        'x-pathname': path,
+        'x-project': hostname.split('.')[0],
+        'x-powered-by': 'Feedbase',
+      },
+    }
+  );
 }

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "dev:email": "email dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
@@ -25,7 +26,7 @@
     "@radix-ui/react-slot": "^1.0.2",
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-tabs": "^1.0.4",
-    "@react-email/components": "0.0.12-canary.0",
+    "@react-email/components": "0.0.14",
     "@react-email/tailwind": "0.0.13-canary.1",
     "@supabase/ssr": "^0.0.10",
     "@supabase/supabase-js": "latest",
@@ -74,6 +75,7 @@
     "@types/react-dom": "18.2.8",
     "encoding": "^0.1.13",
     "eslint-config-custom": "workspace:*",
+    "react-email": "^2.0.0",
     "tsconfig": "workspace:*",
     "typescript": "5.1.3"
   }
