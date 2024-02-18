@@ -67,13 +67,48 @@ Once you've created a new project, you'll need to migrate your database. You can
     </Steps>
 </Accordion>
 
+### Configure Supabase Authentication
+
+Once you've migrated your database, head over to the [Url Configuration](https://supabase.com/docs/guides/auth#3-configure-redirect-uri) settings and add the following site and redirect URLs:
+
+Site URL: `https://<your-domain>.com`
+
+Redirect URLs: `https://**.<your-domain>.com/**`
+
 ## Prepare your environment variables
 
 Once you've migrated your database, you'll need to prepare all necessary environment variables for the next step. 
 
 You can find a list of all environment variables and where to find them [here](https://github.com/chroxify/feedbase/blob/main/.env.example).
 
+### For hosting on a subdomain
+
+<Tip>This is genuinely recommended if you already host a landing page on your root domain (e.g. `https://your-domain.com`).</Tip>
+
+If you're planning hosting Feedbase on a subdomain, meaning your Feedbase instance (admin dashboard) will be accessible at `https://<subdomain>.your-domain.com`, you'll need to set the following environment variables:
+
+- `SUBDOMAIN_HOSTING`: Set this to `true`
+- `DASHBOARD_SUBDOMAIN`: Set this to the subdomain the **Feedbase dashboard** (**NOT** the public hubs, those have to be handled via custom domains in the dashboard) will be hosted on (e.g. `feedbase`)
+- `CUSTOM_DOMAIN_WHITELIST`: A comma separated list of custom domains with the same root domain as the one you are hosting on. This is used to whitelist custom domains for the public hubs. For example, if you are hosting on `feedbase.your-domain.com`, you can add `feedback.your-domain.com` and `feedback2.your-domain.com` to the list and then assign them to you're project in the Feedbase dashboard.
+
 ## Deploy to Vercel
 
 Finally, you can deploy your Feedbase instance to Vercel by following the instructions [here](https://feedbase.app/deploy-vercel).
 
+## Troubleshooting
+
+If you run into any issues, feel free to reach out to us on [Discord](https://feedbase.app/discord) or open an issue on the [Feedbase repository](https://feedbase.app/github). 
+
+### Common issues
+
+#### Vercel deployment fails with `Error: No Output Directory named "public" found after the Build completed`
+
+This error occurs due to the monorepo structure of the Feedbase repository. To fix this, head over to your Project Settings > General and set the "Root Directory" to `apps/web`.
+
+#### Deployment page shows `404: NOT_FOUND` Vercel error
+
+This usually occurs when the Build and Deployment settinsg are misconfigured. To fix this, head over to your Project Settings > General and select the "Framework Preset" to "Next.js".
+
+#### Feedbase pages show 404 errors
+
+This is often due to misconfigured subdomain environment variables. Please refer to the [Prepare your environment variables](#prepare-your-environment-variables) section and ensure that all necessary environment variables are set correctly.
