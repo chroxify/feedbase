@@ -33,6 +33,7 @@
     "@tailwindcss/typography": "^0.5.10",
     "@tiptap/extension-character-count": "^2.1.12",
     "@tiptap/extension-highlight": "^2.1.11",
+    "@tiptap/extension-link": "^2.2.4",
     "@tiptap/extension-placeholder": "^2.1.11",
     "@tiptap/extension-typography": "^2.1.11",
     "@tiptap/pm": "^2.1.11",

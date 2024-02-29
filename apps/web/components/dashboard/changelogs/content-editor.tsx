@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { Highlight } from '@tiptap/extension-highlight';
+import { Link } from '@tiptap/extension-link';
 import { Typography } from '@tiptap/extension-typography';
 import { AnyExtension, EditorContent, useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
@@ -16,7 +17,16 @@ export default function RichTextEditor({
   setData: React.Dispatch<React.SetStateAction<ChangelogProps['Row']>>;
 }) {
   const editor = useEditor({
-    extensions: [StarterKit as AnyExtension, Highlight, Typography],
+    extensions: [
+      StarterKit as AnyExtension,
+      Highlight,
+      Link.configure({
+        HTMLAttributes: {
+          class: 'cursor-pointer',
+        },
+      }),
+      Typography,
+    ],
     content: data.content,
     editorProps: {
       attributes: {

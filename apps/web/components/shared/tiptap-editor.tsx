@@ -4,6 +4,7 @@ import './placeholder.css';
 import React from 'react';
 import { CharacterCount } from '@tiptap/extension-character-count';
 import { Highlight } from '@tiptap/extension-highlight';
+import { Link } from '@tiptap/extension-link';
 import { Placeholder } from '@tiptap/extension-placeholder';
 import { Typography } from '@tiptap/extension-typography';
 import { AnyExtension, EditorContent, useEditor } from '@tiptap/react';
@@ -30,6 +31,11 @@ export default function RichTextEditor({
       StarterKit as AnyExtension,
       Highlight,
       Typography,
+      Link.configure({
+        HTMLAttributes: {
+          class: 'cursor-pointer',
+        },
+      }),
       Placeholder.configure({
         placeholder: placeholder || 'Write something...',
       }),
