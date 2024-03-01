@@ -113,13 +113,13 @@ export function CreateTagModal({
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
       <CommandInput placeholder='Search color...' autoFocus className='font-light' />
-      <CommandList>
+      <CommandList className='my-2' style={{ scrollbarWidth: 'none' }}>
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup className='p-2'>
+        <CommandGroup className='p-0'>
           {colors.map((color) => (
             <CommandItem
               key={color.name.toLowerCase()}
-              onSelect={(value) => {
+              onSelect={() => {
                 onCreateTag(color.hex);
                 setOpen(false);
               }}

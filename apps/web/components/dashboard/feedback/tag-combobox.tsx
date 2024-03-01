@@ -4,7 +4,7 @@ import * as React from 'react';
 import { cn } from '@ui/lib/utils';
 import { Check, ChevronDown } from 'lucide-react';
 import { Button } from 'ui/components/ui/button';
-import { Command, CommandGroup, CommandInput, CommandItem } from 'ui/components/ui/command';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from 'ui/components/ui/command';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from 'ui/components/ui/dropdown-menu';
 import { CreateTagModal } from '../modals/add-tag-modal';
 
@@ -188,6 +188,9 @@ export function TagCombobox({
               </CommandItem>
             ))}
             <EmptyItem />
+            <CommandEmpty className='text-muted-foreground w-full p-2 text-center text-xs font-extralight'>
+              No tags found, start typing to create a new tag
+            </CommandEmpty>
           </CommandGroup>
         </Command>
       </DropdownMenuContent>
