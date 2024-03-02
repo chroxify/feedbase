@@ -80,6 +80,11 @@ export default async function HubLayout({ children, params }: Props) {
     redirect(`https://${config.custom_domain}`);
   }
 
+  // Check if any modules are disabled and remove them from the tabs
+  if (!config.changelog_enabled) {
+    tabs.splice(1, 1);
+  }
+
   // Get current user
   const { data: user } = await getCurrentUser('server');
 

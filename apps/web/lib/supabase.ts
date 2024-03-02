@@ -3,6 +3,34 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 export interface Database {
   public: {
     Tables: {
+      changelog_subscribers: {
+        Row: {
+          created_at: string;
+          email: string;
+          id: string;
+          project_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          email: string;
+          id?: string;
+          project_id: string;
+        };
+        Update: {
+          created_at?: string;
+          email?: string;
+          id?: string;
+          project_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'changelog_subscribers_project_id_fkey';
+            columns: ['project_id'];
+            referencedRelation: 'projects';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
       changelogs: {
         Row: {
           author_id: string;
@@ -351,6 +379,7 @@ export interface Database {
       };
       project_configs: {
         Row: {
+          changelog_enabled: boolean;
           changelog_preview_style: string;
           changelog_twitter_handle: string | null;
           created_at: string;
@@ -377,6 +406,7 @@ export interface Database {
           project_id: string;
         };
         Insert: {
+          changelog_enabled?: boolean;
           changelog_preview_style?: string;
           changelog_twitter_handle?: string | null;
           created_at?: string;
@@ -403,6 +433,7 @@ export interface Database {
           project_id: string;
         };
         Update: {
+          changelog_enabled?: boolean;
           changelog_preview_style?: string;
           changelog_twitter_handle?: string | null;
           created_at?: string;
@@ -538,6 +569,24 @@ export interface Database {
           name?: string;
           og_image?: string | null;
           slug?: string;
+        };
+        Relationships: [];
+      };
+      spaces: {
+        Row: {
+          created_at: string;
+          id: string;
+          name: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          name: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          name?: string;
         };
         Relationships: [];
       };

@@ -37,3 +37,5 @@ as permissive
 for delete
 to public
 using (true);
+
+alter table "public"."project_configs" add column "changelog_enabled" boolean not null default true;

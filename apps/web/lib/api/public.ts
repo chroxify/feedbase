@@ -1,5 +1,10 @@
 import { withProjectAuth } from '@/lib/auth';
-import { ChangelogWithAuthorProps, FeedbackTagProps, FeedbackWithUserProps } from '@/lib/types';
+import {
+  ChangelogSubscriberProps,
+  ChangelogWithAuthorProps,
+  FeedbackTagProps,
+  FeedbackWithUserProps,
+} from '@/lib/types';
 
 // Get Public Project Changelogs
 export const getPublicProjectChangelogs = withProjectAuth<ChangelogWithAuthorProps[]>(
@@ -114,7 +119,7 @@ export const getPublicProjectFeedback = withProjectAuth<FeedbackWithUserProps[]>
 
 // Subscribe to project changelogs
 export const subscribeToProjectChangelogs = (projectSlug: string, email: string) =>
-  withProjectAuth<ChangelogWithAuthorProps[]>(async (user, supabase, project, error) => {
+  withProjectAuth<ChangelogSubscriberProps['Row']>(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };

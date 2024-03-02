@@ -10,6 +10,7 @@ import { Button } from 'ui/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/ui/card';
 import { Input } from 'ui/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'ui/components/ui/select';
+import { Switch } from 'ui/components/ui/switch';
 import { ProjectConfigWithoutSecretProps, ProjectProps } from '@/lib/types';
 import FileDrop from '@/components/shared/file-drop';
 import CustomizeThemeModal from '../modals/add-custom-theme-modal';
@@ -123,6 +124,10 @@ export default function HubConfigCards({
           logo_redirect_url:
             projectConfig.logo_redirect_url !== projectConfigData.logo_redirect_url
               ? projectConfig.logo_redirect_url
+              : undefined,
+          changelog_enabled:
+            projectConfig.changelog_enabled !== projectConfigData.changelog_enabled
+              ? projectConfig.changelog_enabled
               : undefined,
         }),
       })
@@ -431,22 +436,45 @@ export default function HubConfigCards({
 
       {/* Changelog */}
       <Card className='flex w-full flex-col '>
-        <CardHeader>
-          <CardTitle>Changelog</CardTitle>
-          <CardDescription>Configure your project&apos;s changelog.</CardDescription>
+        <CardHeader className='flex flex-row items-center justify-between space-y-0'>
+          <div className='flex flex-col gap-1.5'>
+            <CardTitle>Changelog</CardTitle>
+            <CardDescription>Configure your project&apos;s changelog.</CardDescription>
+          </div>
+
+          <div className='flex flex-row items-center gap-2'>
+            <Label
+              className={cn(
+                'text-sm font-light',
+                projectConfig.changelog_enabled ? 'text-text-foreground' : 'text-muted-foreground'
+              )}>
+              {projectConfig.changelog_enabled ? 'Enabled' : 'Disabled'}
+            </Label>
+            <Switch
+              checked={projectConfig.changelog_enabled}
+              onCheckedChange={() => {
+                setProjectConfig((prev) => ({ ...prev, changelog_enabled: !prev.changelog_enabled }));
+              }}
+            />
+          </div>
         </CardHeader>
         <CardContent className='flex flex-col space-y-4'>
           {/* Name & Slug Config */}
           <div className='flex h-full w-full flex-col space-y-3'>
             <div className='space-y-1'>
               <Label className='text-foreground/70 text-sm font-light'>Twitter</Label>
-              <div className='bg-background focus-within:ring-ring ring-offset-root flex h-9 w-full max-w-xs rounded-md border text-sm font-extralight transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
+              <div
+                className={cn(
+                  'bg-background focus-within:ring-ring ring-offset-root flex h-9 w-full max-w-xs rounded-md border text-sm font-extralight transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1',
+                  !projectConfig.changelog_enabled && 'opacity-50'
+                )}>
                 <div className='text-foreground/50 bg-accent flex select-none items-center justify-center rounded-l-md border-r px-3'>
                   @
                 </div>
                 <Input
                   className='h-full w-full border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0'
                   placeholder='username'
+                  disabled={!projectConfig.changelog_enabled}
                   value={projectConfig.changelog_twitter_handle || ''}
                   onChange={(e) => {
                     setProjectConfig((prev) => ({ ...prev, changelog_twitter_handle: e.target.value }));
@@ -464,6 +492,7 @@ export default function HubConfigCards({
             <Label className='text-foreground/70 text-sm font-light'>Preview Style</Label>
             <div className='flex h-10 w-full flex-row space-x-2'>
               <Select
+                disabled={!projectConfig.changelog_enabled}
                 defaultValue={projectConfig.changelog_preview_style || 'rounded-md'}
                 onValueChange={(value) => {
                   // Set the value
@@ -505,7 +534,8 @@ export default function HubConfigCards({
             disabled={
               // If the values are the same as the ones in the database or if they are empty
               projectConfig.changelog_preview_style === projectConfigData.changelog_preview_style &&
-              projectConfig.changelog_twitter_handle === projectConfigData.changelog_twitter_handle
+              projectConfig.changelog_twitter_handle === projectConfigData.changelog_twitter_handle &&
+              projectConfig.changelog_enabled === projectConfigData.changelog_enabled
             }
             onClick={handleSaveProjectConfig}>
             Save changes

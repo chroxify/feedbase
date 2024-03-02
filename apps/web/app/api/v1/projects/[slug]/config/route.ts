@@ -28,6 +28,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
 */
 export async function PATCH(req: Request, context: { params: { slug: string } }) {
   const {
+    changelog_enabled: changelogEnabled,
     changelog_preview_style: changelogPreviewStyle,
     changelog_twitter_handle: changelogTwitterHandle,
     feedback_allow_anon_upvoting: feedbackAllowAnonUpvoting,
@@ -45,6 +46,7 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
   const { data: updatedProjectConfig, error } = await updateProjectConfigBySlug(
     context.params.slug,
     {
+      changelog_enabled: changelogEnabled,
       changelog_preview_style: changelogPreviewStyle,
       changelog_twitter_handle: changelogTwitterHandle,
       feedback_allow_anon_upvoting: feedbackAllowAnonUpvoting,
