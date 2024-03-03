@@ -1,13 +1,6 @@
 <p align="center" style="margin-top: 120px">
   <h3 align="center">The Open-Source Product Management Tool
-   </h3>
-
-  <p align="center">
-  <i>
-  Note: Feedbase is currently in early stages of development, therefore bugs and issues are expected. <br />
-  Please report any issues you find <a href="https://github.com/chroxify/feedbase/issues/new">here</a>.
-  </i>
-  </p>
+  </h3>
   
   <p align="center">
     <a href="https://feedbase.app"><strong>Learn more »</strong></a>

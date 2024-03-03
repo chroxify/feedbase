@@ -312,6 +312,7 @@ export default function FeedbackModal({
             content={commentContent}
             setContent={setCommentContent}
             placeholder='Write your comment here...'
+            proseInvert
           />
 
           {/* Bottom Row */}
