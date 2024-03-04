@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { fontMono } from '@ui/styles/fonts';
-import { CheckIcon, ClipboardList, MoreVertical } from 'lucide-react';
+import { CheckIcon, ClipboardList, Download, MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
 import useSWR from 'swr';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from 'ui/components/ui/accordion';
@@ -328,6 +328,35 @@ export default function GeneralConfigCards({
     },
     [projectData]
   );
+
+  // handle export feedback
+  function handleExportFeedback() {
+    const promise = new Promise((resolve, reject) => {
+      fetch(`/api/v1/projects/${projectData.slug}/feedback/export`)
+        .then((res) => res.blob())
+        .then((blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${projectData.name}-${Date.now()}.csv`;
+          document.body.appendChild(a);
+          a.click();
+          a.remove();
+          resolve('Feedback exported successfully.');
+        })
+        .catch((err) => {
+          reject(err.message);
+        });
+    });
+
+    toast.promise(promise, {
+      loading: 'Exporting feedback...',
+      success: 'Feedback exported successfully.',
+      error: (err) => {
+        return err;
+      },
+    });
+  }
 
   // While domain is unverified, check each 5 seconds if it's verified
   useEffect(() => {
@@ -871,6 +900,23 @@ export default function GeneralConfigCards({
             </DefaultTooltip>
           </AddApiKeyDialog>
         </CardFooter>
+      </Card>
+
+      {/* Export / Import data */}
+      <Card className='flex w-full flex-col '>
+        <CardHeader>
+          <CardTitle>Export</CardTitle>
+          <CardDescription>Export all your project&apos;s data in a CSV file.</CardDescription>
+        </CardHeader>
+        <CardContent className='flex flex-row space-x-4'>
+          <Button
+            variant='outline'
+            onClick={handleExportFeedback}
+            className='text-foreground/70 w-fit font-light'>
+            <Download className='mr-2 h-4 w-4' />
+            Export data
+          </Button>
+        </CardContent>
       </Card>
 
       {/* Delete Project Card */}
