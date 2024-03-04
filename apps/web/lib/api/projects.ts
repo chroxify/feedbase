@@ -627,18 +627,30 @@ export const getProjectAnalytics = (
     }
 
     // Restructure topFeedback data to show feedback title instead of id
-    const restructuredTopFeedback = topFeedback.data.map((item) => {
-      const feedbackData = feedback.find((feedback) => feedback.id === item.key);
+    const restructuredTopFeedback = topFeedback.data
+      .map((item) => {
+        const feedbackData = feedback.find((feedback) => feedback.id === item.key);
 
-      return {
-        ...item,
-        key: feedbackData?.title || item.key,
-      };
-    });
+        // Skip if no matching feedback id found
+        if (!feedbackData) {
+          return null;
+        }
+
+        return {
+          ...item,
+          key: feedbackData.title || item.key,
+        };
+      })
+      .filter(Boolean); // Remove null values
 
     // Restructure topChangelogs data to show changelog title instead of id
     const restructuredTopChangelogs = topChangelogs.data.map((item) => {
       const changelogData = changelogs.find((changelog) => changelog.id === item.key);
+
+      // Skip if no matching changelog id found
+      if (!changelogData) {
+        return null;
+      }
 
       return {
         ...item,
@@ -650,9 +662,11 @@ export const getProjectAnalytics = (
     return {
       data: {
         timeseries: timeseries.data as AnalyticsProps,
-        topFeedback: restructuredTopFeedback.filter((feedback) => feedback.key !== '_root') as AnalyticsProps,
+        topFeedback: restructuredTopFeedback.filter(
+          (feedback) => feedback && feedback.key !== '_root'
+        ) as AnalyticsProps,
         topChangelogs: restructuredTopChangelogs.filter(
-          (changelog) => changelog.key !== '_root'
+          (changelog) => changelog && changelog.key !== '_root'
         ) as AnalyticsProps,
       },
       error: null,
