@@ -77,26 +77,58 @@ You can find a list of all environment variables and where to find them [here](h
 
 ## Installation
 
-1. Clone the Feedbase repository
+1. Clone the Feedbase repository.
 
 ```bash
 git clone https://github.com/chroxify/feedbase.git && cd feedbase
 ```
 
-2. Create a `.env` file
+2. Create a `.env` file.
 
 ```bash
-cp .env.example apps/web/.env
+cp .env.example .env
 ```
 
-3. Build the Docker image
+3. Update the `.env` file with your environment variables.
 
-```bash
-docker build -f apps/web/Dockerfile -t feedbase .
-```
+4. Either run the pre-built Docker image or build and run the Docker image yourself.
+<Accordion title="Run using pre-built Docker image (Recommended)">
+    <Steps>
+        <Step title="Pull the Docker image">
+            ```bash
+            docker pull chroxify/feedbase
+            ```
+        </Step>
+        <Step title="Run the Docker image">
+            <Note>If you don't want to run the container in detached mode, you can remove the `-d` flag.</Note>
 
-4. Run the Docker container
+            ```bash
+            docker run -d --env-file .env -p 3000:3000 chroxify/feedbase
+            ```
+        </Step>
+        <Step title="Verify the installation">
+            If everything went successful, you should be able to see a running Feedbase instance by visiting `http://localhost:3000` in your browser.
+        </Step>
+    </Steps>
+</Accordion>
 
-```bash
-docker run feedbase
-```
+<Accordion title="Build and run the Docker image">
+    <Steps>
+        <Step title="Build the Docker image">
+            ```bash
+            docker build -f apps/web/Dockerfile -t feedbase .
+            ```
+        </Step>
+
+        <Step title="Run the Docker image">
+            <Note>If you don't want to run the container in detached mode, you can remove the `-d` flag.</Note>
+
+            ```bash
+            docker run -d --env-file .env -p 3000:3000 feedbase
+            ```
+        </Step>
+        <Step title="Verify the installation">
+            If everything went successful, you should be able to see a running Feedbase instance by visiting `http://localhost:3000` in your browser.
+        </Step>
+    </Steps>
+</Accordion>
