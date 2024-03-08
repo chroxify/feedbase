@@ -1,11 +1,9 @@
 /** @type {import('next').NextConfig} */
 
-// Supabase url from .env file
-if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-  throw new Error('Missing env.NEXT_PUBLIC_SUPABASE_URL or env.NEXT_PUBLIC_SUPABASE_ANON_KEY');
+let hostPath = ['http', 'localhost', '3000'];
+if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
+  hostPath = process.env.NEXT_PUBLIC_SUPABASE_URL.split(':');
 }
-
-const hostPath = process.env.NEXT_PUBLIC_SUPABASE_URL.split(':');
 
 const withPWA = require('next-pwa')({
   dest: 'public',

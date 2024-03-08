@@ -69,12 +69,11 @@ export default async function middleware(req: NextRequest) {
   const path = url.pathname;
 
   // Get root domain
-  const rootDomain =
-    process.env.NODE_ENV === 'development'
-      ? hostname.split('.').slice(-1)[0]
-      : hostname.split('.').length >= 2
-      ? `${hostname.split('.').slice(-2).join('.')}`
-      : null;
+  const rootDomain = hostname.includes('localhost')
+    ? hostname.split('.').slice(-1)[0]
+    : hostname.split('.').length >= 2
+    ? `${hostname.split('.').slice(-2).join('.')}`
+    : null;
 
   // If the request is for a custom domain, rewrite to project paths
   if (
