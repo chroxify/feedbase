@@ -13,7 +13,7 @@ export default function ToggleThemeButton() {
 
   return (
     <Button
-      variant='secondary'
+      variant='ghost'
       className='text-secondary-foreground/40 hover:text-secondary-foreground/90 w-full  items-center justify-start gap-1 border border-transparent p-1 hover:bg-transparent'
       onClick={() => {
         toggleTheme();

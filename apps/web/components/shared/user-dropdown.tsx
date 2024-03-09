@@ -40,7 +40,7 @@ export default function UserDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Avatar className='h-[34px] w-[34px] border hover:cursor-pointer'>
+        <Avatar className='h-8 w-8 border hover:cursor-pointer'>
           <AvatarImage src={user.avatar_url || ''} alt={user.full_name} />
           <AvatarFallback className='select-none text-sm font-light'>{user.full_name[0]}</AvatarFallback>
         </Avatar>

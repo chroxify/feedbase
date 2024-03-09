@@ -1,4 +1,5 @@
 import { Database } from '@/lib/supabase';
+import { IconObject } from '@/components/shared/icons/icons-animated';
 
 // DB Types
 export type ProjectProps = Database['public']['Tables']['projects'];
@@ -80,14 +81,13 @@ export type ApiResponse<T, E extends ErrorProps | null = ErrorProps | null> = Pr
   E extends null ? { data: T; error: null } : { data: null; error: E }
 >;
 
-export interface NavbarTabProps {
+export interface SidebarTabProps {
   name: string;
-  icon: {
-    dark: Record<string, unknown> | string;
-    light: Record<string, unknown> | string;
-  };
+  icon: IconObject;
   slug: string;
 }
+
+export type SidebarTabsProps = Record<string, SidebarTabProps[]>;
 
 export interface CategoryTabProps {
   name: string;

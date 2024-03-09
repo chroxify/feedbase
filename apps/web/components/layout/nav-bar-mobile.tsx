@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@ui/lib/utils';
 import { Button } from 'ui/components/ui/button';
-import { NavbarTabProps, ProjectProps } from '@/lib/types';
+import { ProjectProps, SidebarTabProps, SidebarTabsProps } from '@/lib/types';
 import { Icons } from '../shared/icons/icons-static';
 
 const navTabs = [
@@ -38,25 +38,26 @@ const navTabs = [
 
 export default function NavbarMobile({
   tabs,
-  activeTabIndex,
+  initialTab,
   currentProject,
 }: {
-  tabs: NavbarTabProps[];
-  activeTabIndex: number;
+  tabs: SidebarTabsProps;
+  initialTab: SidebarTabProps;
   currentProject: ProjectProps['Row'];
 }) {
-  const [activeTab, setActiveTab] = useState(activeTabIndex);
+  const [activeTab, setActiveTab] = useState(initialTab.slug);
   const [isPWA, setIsPWA] = useState(false);
   const pathname = usePathname();
 
   // Check current active tab based on url
   useEffect(() => {
     // Check if any of the tab slugs are in the pathname
-    const currentTab = tabs.findIndex((tab) => pathname.split('/')[2] === tab.slug);
+    const rawTabs = Object.values(tabs).flat();
+    const currentTab = rawTabs.findIndex((tab) => pathname.includes(tab.slug));
 
     // If tab is found, set it as active
     if (currentTab !== -1) {
-      setActiveTab(currentTab);
+      setActiveTab(rawTabs[currentTab].slug);
     }
   }, [pathname, tabs]);
 
@@ -86,7 +87,7 @@ export default function NavbarMobile({
               'items-centerjustify-center h-full w-full gap-1 border border-transparent p-2 hover:bg-transparent'
             )}>
             {/* Icon */}
-            {activeTab === index ? (
+            {activeTab === tab.slug ? (
               <tab.solid className={cn('h-5 w-5 fill-white', tab.slug === 'analytics' ? 'h-7 w-7' : '')} />
             ) : (
               <tab.outline

@@ -1,14 +1,10 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { IconObject } from '@/components/shared/icons/icons-animated';
+import { SidebarTabsProps } from '@/lib/types';
 
 interface TitleProviderProps {
-  tabs: {
-    name: string;
-    icon: IconObject;
-    slug: string;
-  }[];
+  tabs: SidebarTabsProps;
   initialTitle: string;
   className?: string;
 }
@@ -16,7 +12,9 @@ interface TitleProviderProps {
 export default function TitleProvider({ tabs, initialTitle, className }: TitleProviderProps) {
   const pathname = usePathname();
 
-  const currentTitle = tabs.find((tab) => pathname?.includes(tab.slug))?.name;
+  const currentTitle = Object.values(tabs)
+    .flat()
+    .find((tab) => pathname.includes(tab.slug))?.name;
 
   return <div className={className}>{currentTitle || initialTitle}</div>;
 }

@@ -175,9 +175,9 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
       <Drawer>
         <DrawerTrigger>
           <Button
-            variant='secondary'
+            variant='ghost'
             size='icon'
-            className='text-foreground/70 hover:text-foreground relative h-[34px] w-[34px] rounded-full border'>
+            className='text-foreground/70 hover:text-foreground relative h-8 w-8 rounded-full border'>
             <Bell className='h-4 w-4' />
             {inboxNotifications?.length !== 0 && !isLoading && (
               <span className='bg-foreground absolute -right-[1px] -top-[1px] h-2.5 w-2.5 rounded-full' />
@@ -224,9 +224,9 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
     <Popover>
       <PopoverTrigger>
         <Button
-          variant='secondary'
+          variant='ghost'
           size='icon'
-          className='text-foreground/70 hover:text-foreground relative h-[34px] w-[34px] rounded-full border'>
+          className='text-foreground/70 hover:text-foreground relative h-8 w-8 rounded-full border'>
           <Bell className='h-4 w-4' />
           {inboxNotifications?.length !== 0 && !isLoading && (
             <span className='bg-foreground absolute -right-[1px] -top-[1px] h-2.5 w-2.5 rounded-full' />

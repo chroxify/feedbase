@@ -1,26 +1,21 @@
-import { NavbarTabProps, ProjectProps } from '@/lib/types';
+import { ProjectProps, SidebarTabProps, SidebarTabsProps } from '@/lib/types';
 import NavTabs from '@/components/layout/nav-tabs';
-import ProjectDropdown from '@/components/layout/project-dropdown';
+import ToggleThemeButton from './theme-button';
 
 export default async function Sidebar({
   tabs,
-  projects,
-  activeTabIndex,
+  initialTab,
   currentProject,
 }: {
-  tabs: NavbarTabProps[];
-  projects: ProjectProps['Row'][];
-  activeTabIndex: number;
+  tabs: SidebarTabsProps;
+  initialTab: SidebarTabProps;
   currentProject: ProjectProps['Row'];
 }) {
   return (
-    <div className='fixed z-50 hidden h-full min-w-[200px] flex-col items-center justify-between md:flex'>
+    <div className='fixed z-50 hidden h-full min-w-[240px] flex-col items-center justify-between border-r p-5 pb-20 md:flex'>
       <div className='flex w-full flex-col gap-y-10'>
-        {/* Projects */}
-        <ProjectDropdown projects={projects} activeProject={currentProject} />
-
         {/* Main Tabs */}
-        <NavTabs tabs={tabs} initialTabIndex={activeTabIndex} projectSlug={currentProject.slug} />
+        <NavTabs tabs={tabs} initialTab={initialTab} projectSlug={currentProject.slug} />
       </div>
       {/* Footer Buttons */}
       {/* <div className='flex w-full flex-col'>
@@ -35,7 +30,7 @@ export default async function Sidebar({
               className='h-5 w-5'
               /> 
               <ExclamationCircleIcon className='h-5 w-5' />
-              <Icons.chat className='h-[18px] w-[18px] fill-secondary-foreground/50 group-hover:fill-secondary-foreground transition-colors' />
+              <Icons.Chat className='h-[18px] w-[18px] fill-secondary-foreground/50 group-hover:fill-secondary-foreground transition-colors' />
             </div>
             Feedback
           </Button>
@@ -51,8 +46,9 @@ export default async function Sidebar({
             Sign out
           </Button>
         </form>
-      </div> */}
-      {/* <ToggleThemeButton /> */}
+      </div>
+      <ToggleThemeButton /> */}
+      <ToggleThemeButton />
     </div>
   );
 }
