@@ -93,7 +93,7 @@ export default function IntegrationCards({
                 <div className='flex flex-col'>
                   <span className='text-foreground/70 text-sm'>Discord</span>
 
-                  <span className='text-foreground/50 text-xs font-light'>
+                  <span className='text-foreground/50 text-xs '>
                     Receive notification directly in your Discord server.
                   </span>
                 </div>
@@ -103,11 +103,11 @@ export default function IntegrationCards({
                 <div className='flex flex-col'>
                   <span className='text-foreground/50 text-xs'>Status</span>
                   {enabledIntegrations.includes('discord') ? (
-                    <span className='text-foreground/70 cursor-default text-sm font-light text-green-500'>
+                    <span className='text-foreground/70 cursor-default text-sm  text-green-500'>
                       Connected
                     </span>
                   ) : (
-                    <span className='text-foreground/70 cursor-default text-sm font-light'>Disabled</span>
+                    <span className='text-foreground/70 cursor-default text-sm '>Disabled</span>
                   )}
                 </div>
 
@@ -115,7 +115,7 @@ export default function IntegrationCards({
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
-                        variant='secondary'
+                        variant='ghost'
                         size='icon'
                         className='text-foreground/50 hover:text-foreground h-8 w-5'>
                         <MoreVertical className='h-5 w-5' />
@@ -158,7 +158,7 @@ export default function IntegrationCards({
                 <div className='flex flex-col'>
                   <span className='text-foreground/70 text-sm'>Single Sign-On</span>
 
-                  <span className='text-foreground/50 text-xs font-light'>
+                  <span className='text-foreground/50 text-xs '>
                     Allow your users to login with their existing accounts.
                   </span>
                 </div>
@@ -168,11 +168,9 @@ export default function IntegrationCards({
                 <div className='flex flex-col'>
                   <span className='text-foreground/50 text-xs'>Status</span>
                   {enabledIntegrations.includes('sso') ? (
-                    <span className='text-foreground/70 cursor-default text-sm font-light text-green-500'>
-                      Enabled
-                    </span>
+                    <span className='text-foreground/70 cursor-default text-sm  text-green-500'>Enabled</span>
                   ) : (
-                    <span className='text-foreground/70 cursor-default text-sm font-light'>Disabled</span>
+                    <span className='text-foreground/70 cursor-default text-sm '>Disabled</span>
                   )}
                 </div>
 
@@ -180,7 +178,7 @@ export default function IntegrationCards({
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
-                        variant='secondary'
+                        variant='ghost'
                         size='icon'
                         className='text-foreground/50 hover:text-foreground h-8 w-5'>
                         <MoreVertical className='h-5 w-5' />
@@ -223,7 +221,7 @@ export default function IntegrationCards({
                 <div className='flex flex-col'>
                   <span className='text-foreground/70 text-sm'>Slack</span>
 
-                  <span className='text-foreground/50 text-xs font-light'>
+                  <span className='text-foreground/50 text-xs '>
                     Receive notification directly in your Slack workspace.
                   </span>
                 </div>
@@ -233,11 +231,11 @@ export default function IntegrationCards({
                 <div className='flex flex-col'>
                   <span className='text-foreground/50 text-xs'>Status</span>
                   {enabledIntegrations.includes('slack') ? (
-                    <span className='text-foreground/70 cursor-default text-sm font-light text-green-500'>
+                    <span className='text-foreground/70 cursor-default text-sm  text-green-500'>
                       Connected
                     </span>
                   ) : (
-                    <span className='text-foreground/70 cursor-default text-sm font-light'>Disabled</span>
+                    <span className='text-foreground/70 cursor-default text-sm '>Disabled</span>
                   )}
                 </div>
 
@@ -245,7 +243,7 @@ export default function IntegrationCards({
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
-                        variant='secondary'
+                        variant='ghost'
                         size='icon'
                         className='text-foreground/50 hover:text-foreground h-8 w-5'>
                         <MoreVertical className='h-5 w-5' />
@@ -285,7 +283,7 @@ export default function IntegrationCards({
                 <div className='flex flex-col'>
                   <span className='text-foreground/70 text-sm'>Github</span>
 
-                  <span className='text-foreground/50 text-xs font-light'>
+                  <span className='text-foreground/50 text-xs '>
                     Automate Changelogs, Roadmaps and more with Github.
                   </span>
                 </div>
@@ -319,7 +317,7 @@ export default function IntegrationCards({
                 <div className='flex flex-col'>
                   <span className='text-foreground/70 text-sm'>Linear</span>
 
-                  <span className='text-foreground/50 text-xs font-light'>
+                  <span className='text-foreground/50 text-xs '>
                     Connect Roadmap, Changelogs, Issues and more.
                   </span>
                 </div>

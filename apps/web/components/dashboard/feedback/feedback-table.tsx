@@ -111,9 +111,7 @@ export default function FeedbackTable({
         <Card className=' flex w-full flex-col items-center justify-center p-10 sm:p-20'>
           <CardHeader className='items-center text-center '>
             <CardTitle className='text-2xl font-medium'>No feedback matches your search</CardTitle>
-            <CardDescription className='font-light'>
-              Try adjusting the filters or search term.
-            </CardDescription>
+            <CardDescription className=''>Try adjusting the filters or search term.</CardDescription>
           </CardHeader>
         </Card>
       )}
@@ -127,7 +125,7 @@ export default function FeedbackTable({
           <div className='flex h-full w-full min-w-0 flex-row items-center'>
             {/* Upvotes */}
             <Button
-              variant='secondary'
+              variant='ghost'
               size='sm'
               className='flex h-11 flex-col items-center rounded-sm py-1 transition-all duration-150 hover:bg-transparent active:scale-[85%]'
               onClick={() => {
@@ -136,7 +134,7 @@ export default function FeedbackTable({
               {/* Arrow */}
               <ChevronUp
                 className={cn(
-                  'group-hover:text-foreground text-sm font-light transition-colors',
+                  'group-hover:text-foreground text-sm  transition-colors',
                   feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
                 )}
               />
@@ -144,7 +142,7 @@ export default function FeedbackTable({
               {/* Upvotes */}
               <div
                 className={cn(
-                  'group-hover:text-foreground text-sm font-light transition-colors',
+                  'group-hover:text-foreground text-sm  transition-colors',
                   feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
                 )}>
                 {feedback.upvotes}
@@ -158,7 +156,7 @@ export default function FeedbackTable({
               key={feedback.id}
               feedback={feedbackList.find((fb) => fb.id === feedback.id) || feedback}
               className='flex h-full w-full cursor-pointer items-center text-start'>
-              <span className='text-foreground/95 line-clamp-1 pr-1 font-light'>{feedback.title}</span>
+              <span className='text-foreground/95 line-clamp-1 pr-1 '>{feedback.title}</span>
             </FeedbackModal>
           </div>
 
@@ -183,7 +181,7 @@ export default function FeedbackTable({
                     {/* Tag color */}
                     <div className='h-2 w-2 rounded-full' style={{ backgroundColor: tag.color }} />
                     {/* Tag name */}
-                    <div className='text-foreground/60 group-hover/tag:text-foreground/80 text-xs font-light transition-colors'>
+                    <div className='text-foreground/60 group-hover/tag:text-foreground/80 text-xs  transition-colors'>
                       {tag.name}
                     </div>
                   </button>
@@ -219,7 +217,7 @@ export default function FeedbackTable({
             })()}
 
             {/* Date */}
-            <div className='text-foreground/50 cursor-default select-none text-center text-xs font-extralight'>
+            <div className='text-foreground/50 cursor-default select-none text-center text-xs font-light'>
               {formatDate(new Date(feedback.created_at))}
             </div>
 

@@ -111,7 +111,7 @@ export function WaitlistModal({
       <DialogContent className='max-w-sm rounded-lg p-9 selection:bg-teal-700/20 selection:text-teal-400'>
         <DialogHeader className='flex flex-col items-center pb-2 pt-5'>
           <DialogTitle className='pb-2 font-normal'>Request Access</DialogTitle>
-          <DialogDescription className='text-center font-extralight text-white/50'>
+          <DialogDescription className='text-center font-light text-white/50'>
             Request access to the Feedbase beta today and we&apos;ll get back to you as soon as possible.
           </DialogDescription>
         </DialogHeader>
@@ -119,7 +119,7 @@ export function WaitlistModal({
           {/* Name */}
           <div className='flex flex-col gap-3'>
             <div className='flex flex-row items-center gap-2'>
-              <Label htmlFor='email' className='font-extralight text-white/60'>
+              <Label htmlFor='email' className='font-light text-white/60'>
                 Full Name
               </Label>
             </div>
@@ -138,7 +138,7 @@ export function WaitlistModal({
           {/* Email */}
           <div className='flex flex-col gap-3'>
             <div className='flex flex-row items-center gap-2'>
-              <Label htmlFor='email' className='font-extralight text-white/60'>
+              <Label htmlFor='email' className='font-light text-white/60'>
                 Email address
               </Label>
             </div>

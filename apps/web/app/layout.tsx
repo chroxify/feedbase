@@ -6,6 +6,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GeistSans } from 'geist/font';
 import { Toaster } from 'sonner';
 import { formatRootUrl } from '@/lib/utils';
+import { ThemeProvider as NextThemeProvider } from '@/components/theme-provider';
 
 export const metadata: Metadata = {
   title: 'Feedbase',
@@ -49,9 +50,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
         <SpeedInsights />
         <Toaster closeButton />
-        <main className={cn('bg-root flex min-h-screen w-full flex-col items-center', GeistSans.className)}>
-          {children}
-        </main>
+        <NextThemeProvider attribute='class'>
+          <main className={cn('bg-root flex min-h-screen w-full flex-col items-center', GeistSans.className)}>
+            {children}
+          </main>
+        </NextThemeProvider>
       </body>
     </html>
   );

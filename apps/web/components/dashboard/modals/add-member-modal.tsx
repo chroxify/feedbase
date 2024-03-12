@@ -110,14 +110,14 @@ export default function InviteMemberDialog({
                 className='col-span-3'
               />
 
-              <Label className='text-foreground/50 text-xs font-extralight'>
+              <Label className='text-foreground/50 text-xs font-light'>
                 Your team member&apos;s email address.
               </Label>
             </div>
           </div>
           <ResponsiveDialogFooter>
             <ResponsiveDialogClose>
-              <Button variant='secondary' disabled={isLoading} type='button'>
+              <Button variant='outline' disabled={isLoading} type='button'>
                 Cancel
               </Button>
             </ResponsiveDialogClose>

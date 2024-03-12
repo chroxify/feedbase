@@ -118,7 +118,7 @@ export default function SlackIntegrationModal({
               className='col-span-3'
             />
 
-            <Label className='text-foreground/50 text-xs font-extralight'>
+            <Label className='text-foreground/50 text-xs font-light'>
               The Slack webhook url to send notifications to.
             </Label>
           </div>
@@ -126,7 +126,7 @@ export default function SlackIntegrationModal({
         <ResponsiveDialogFooter>
           <ResponsiveDialogClose>
             <Button
-              variant='secondary'
+              variant='outline'
               onClick={() => {
                 setWebhook('');
               }}>

@@ -87,7 +87,7 @@ export default function FeedbackModal({
 
         <div className='flex flex-col items-center gap-3'>
           <Input
-            className='bg-root h-10 rounded-lg py-2 font-light'
+            className='bg-root h-10 rounded-lg py-2 '
             placeholder='Feedback Title'
             value={title}
             onChange={(event) => {
@@ -95,7 +95,7 @@ export default function FeedbackModal({
             }}
           />
           <Textarea
-            className='bg-root min-h-[120px] rounded-lg p-4 font-light'
+            className='bg-root min-h-[120px] rounded-lg p-4 '
             placeholder="I'd love to see..."
             value={description}
             onChange={(event) => {

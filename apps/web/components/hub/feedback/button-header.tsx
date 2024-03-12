@@ -38,9 +38,9 @@ export default function FeedbackHeader({
         <div className='flex w-full flex-row items-center justify-start gap-2 md:w-fit'>
           {/* Newest */}
           <Button
-            variant='secondary'
+            variant='outline'
             className={cn(
-              'text-foreground/70 hover:text-foreground/80 border text-sm font-light transition-all duration-200',
+              'text-foreground/70 hover:text-foreground/80 border text-sm  transition-all duration-200',
               currentSort === '' && 'bg-secondary ring-ring/80 text-foreground/80 ring-1'
             )}
             onClick={() => {
@@ -54,9 +54,9 @@ export default function FeedbackHeader({
 
           {/* Trending */}
           <Button
-            variant='secondary'
+            variant='outline'
             className={cn(
-              'text-foreground/70 hover:text-foreground/80 border text-sm font-light transition-all duration-200',
+              'text-foreground/70 hover:text-foreground/80 border text-sm  transition-all duration-200',
               currentSort === 'trending' && 'bg-secondary ring-ring/80 text-foreground/80 ring-1'
             )}
             onClick={() => {
@@ -70,9 +70,9 @@ export default function FeedbackHeader({
 
           {/* Most Upvotes */}
           <Button
-            variant='secondary'
+            variant='outline'
             className={cn(
-              'text-foreground/70 hover:text-foreground/80 border text-sm font-light transition-all duration-200',
+              'text-foreground/70 hover:text-foreground/80 border text-sm  transition-all duration-200',
               currentSort === 'upvotes' && 'bg-secondary ring-ring/80 text-foreground/80 ring-1'
             )}
             onClick={() => {
@@ -91,7 +91,7 @@ export default function FeedbackHeader({
             {/* Input */}
             <Input
               placeholder='Search posts'
-              className='text-foreground/70 h-9 w-full rounded-md border bg-transparent px-8 font-light placeholder:font-light'
+              className='text-foreground/70 placeholder: h-9 w-full rounded-md border bg-transparent  px-8'
               onChange={(e) => {
                 router.push(`${pathname}?${createQueryString('search', e.target.value)}`);
               }}

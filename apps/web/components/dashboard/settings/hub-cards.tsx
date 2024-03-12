@@ -231,7 +231,7 @@ export default function HubConfigCards({
             {/* Project Logo */}
             <div className='flex h-full w-full flex-col space-y-4'>
               <div className='space-y-1'>
-                <Label className='text-foreground/70 text-sm font-light'>Logo</Label>
+                <Label className='text-foreground/70 text-sm '>Logo</Label>
 
                 {/* File Upload */}
                 <div className='group flex h-16 w-16 items-center justify-center transition-all'>
@@ -264,24 +264,22 @@ export default function HubConfigCards({
                   </label>
                 </div>
 
-                <Label className='text-foreground/50 text-xs font-extralight'>
-                  Recommended size is 256x256.
-                </Label>
+                <Label className='text-foreground/50 text-xs'>Recommended size is 256x256.</Label>
               </div>
             </div>
 
             <div className='space-y-1'>
-              <Label className='text-foreground/70 text-sm font-light'>Logo Radius</Label>
+              <Label className='text-foreground/70 text-sm '>Logo Radius</Label>
               <div className='flex h-10 w-full flex-row space-x-2'>
                 <Select
                   defaultValue={project.icon_radius || 'rounded-md'}
                   onValueChange={(value) => {
                     setProject((prev) => ({ ...prev, icon_radius: value }));
                   }}>
-                  <SelectTrigger className='w-[160px] text-sm font-extralight'>
+                  <SelectTrigger className='w-[160px] text-sm'>
                     <SelectValue placeholder='Select a radius' />
                   </SelectTrigger>
-                  <SelectContent className='font-light'>
+                  <SelectContent className=''>
                     <SelectItem value='rounded-md'>Rounded</SelectItem>
                     <SelectItem value='rounded-none'>Square</SelectItem>
                     <SelectItem value='rounded-full'>Circle</SelectItem>
@@ -289,27 +287,25 @@ export default function HubConfigCards({
                 </Select>
               </div>
 
-              <Label className='text-foreground/50 text-xs font-extralight'>
-                This is the radius of your logo.
-              </Label>
+              <Label className='text-foreground/50 text-xs'>This is the radius of your logo.</Label>
             </div>
 
             {/* OG Image */}
             <div className='max-w-xs space-y-1'>
               <FileDrop
-                labelComponent={<Label className='text-foreground/70 text-sm font-light'>OG Image</Label>}
+                labelComponent={<Label className='text-foreground/70 text-sm '>OG Image</Label>}
                 image={OGImage}
                 setImage={setOGImage}
               />
 
-              <Label className='text-foreground/50 text-xs font-extralight'>
+              <Label className='text-foreground/50 text-xs'>
                 The OG Image used when sharing your project.
               </Label>
             </div>
 
             {/* Theme */}
             <div className='space-y-2'>
-              <Label className='text-foreground/70 text-sm font-light'>Theme</Label>
+              <Label className='text-foreground/70 text-sm '>Theme</Label>
               <div className='flex h-10 w-full flex-row gap-3'>
                 <Button
                   size='icon'
@@ -352,12 +348,12 @@ export default function HubConfigCards({
                 </CustomizeThemeModal>
               </div>
 
-              <Label className='text-foreground/50 text-xs font-extralight'>
+              <Label className='text-foreground/50 text-xs'>
                 This will only be applied to your public hub.
               </Label>
 
               <div className='space-y-1'>
-                <Label className='text-foreground/70 text-sm font-light'>Logo Redirect Url</Label>
+                <Label className='text-foreground/70 text-sm '>Logo Redirect Url</Label>
                 <Input
                   className='w-full max-w-xs'
                   placeholder='https://example.com'
@@ -366,7 +362,7 @@ export default function HubConfigCards({
                     setProjectConfig((prev) => ({ ...prev, logo_redirect_url: e.target.value }));
                   }}
                 />
-                <Label className='text-foreground/50 text-xs font-extralight'>
+                <Label className='text-foreground/50 text-xs'>
                   The url to redirect to when clicking on the logo. (Blank to disable)
                 </Label>
               </div>
@@ -445,7 +441,7 @@ export default function HubConfigCards({
           <div className='flex flex-row items-center gap-2'>
             <Label
               className={cn(
-                'text-sm font-light',
+                'text-sm ',
                 projectConfig.changelog_enabled ? 'text-text-foreground' : 'text-muted-foreground'
               )}>
               {projectConfig.changelog_enabled ? 'Enabled' : 'Disabled'}
@@ -462,10 +458,10 @@ export default function HubConfigCards({
           {/* Name & Slug Config */}
           <div className='flex h-full w-full flex-col space-y-3'>
             <div className='space-y-1'>
-              <Label className='text-foreground/70 text-sm font-light'>Twitter</Label>
+              <Label className='text-foreground/70 text-sm '>Twitter</Label>
               <div
                 className={cn(
-                  'bg-background focus-within:ring-ring ring-offset-root flex h-9 w-full max-w-xs rounded-md border text-sm font-extralight transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1',
+                  'bg-background focus-within:ring-ring ring-offset-root flex h-8 w-full max-w-xs rounded-md border text-sm transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1',
                   !projectConfig.changelog_enabled && 'opacity-50'
                 )}>
                 <div className='text-foreground/50 bg-accent flex select-none items-center justify-center rounded-l-md border-r px-3'>
@@ -481,7 +477,7 @@ export default function HubConfigCards({
                   }}
                 />
               </div>
-              <Label className='text-foreground/50 text-xs font-extralight'>
+              <Label className='text-foreground/50 text-xs'>
                 Twitter handle linked in your changelog. (Blank to disable)
               </Label>
             </div>
@@ -489,7 +485,7 @@ export default function HubConfigCards({
 
           {/* Preview Style */}
           <div className='space-y-1'>
-            <Label className='text-foreground/70 text-sm font-light'>Preview Style</Label>
+            <Label className='text-foreground/70 text-sm '>Preview Style</Label>
             <div className='flex h-10 w-full flex-row space-x-2'>
               <Select
                 disabled={!projectConfig.changelog_enabled}
@@ -498,34 +494,32 @@ export default function HubConfigCards({
                   // Set the value
                   setProjectConfig((prev) => ({ ...prev, changelog_preview_style: value }));
                 }}>
-                <SelectTrigger className='max-w-xs text-sm font-extralight'>
+                <SelectTrigger className='max-w-xs text-sm'>
                   <SelectValue placeholder='Select a style' />
                 </SelectTrigger>
-                <SelectContent className='font-light'>
+                <SelectContent className=''>
                   <SelectItem value='summary'>Summary</SelectItem>
                   <SelectItem value='content'>Content</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <Label className='text-foreground/50 text-xs font-extralight'>
+            <Label className='text-foreground/50 text-xs '>
               Whether to show summary or content as preview.
             </Label>
           </div>
 
           {/* Download Email Audience */}
           <div className='flex flex-col space-y-1'>
-            <Label className='text-foreground/70 text-sm font-light'>Email Subscribers</Label>
+            <Label className='text-foreground/70 text-sm '>Email Subscribers</Label>
             <Button
               variant='outline'
-              className='text-foreground/70 w-[160px] font-light'
+              className='text-foreground/70 w-[160px] '
               onClick={handleDownloadSubscribers}>
               <Download className='mr-2 h-4 w-4' />
               Download List
             </Button>
-            <Label className='text-foreground/50 text-xs font-extralight'>
-              Download a list of your changelog audience.
-            </Label>
+            <Label className='text-foreground/50 text-xs '>Download a list of your changelog audience.</Label>
           </div>
         </CardContent>
         <CardFooter>
@@ -552,7 +546,7 @@ export default function HubConfigCards({
         <CardContent className='flex flex-col space-y-4'>
           {/* Anonymous Feedback */}
           <div className='space-y-1'>
-            <Label className='text-foreground/70 text-sm font-light'>Anonymous Feedback Upvoting</Label>
+            <Label className='text-foreground/70 text-sm '>Anonymous Feedback Upvoting</Label>
             <div className='flex h-10 w-full flex-row space-x-2'>
               <Select
                 defaultValue={projectConfig.feedback_allow_anon_upvoting ? 'true' : 'false'}
@@ -560,17 +554,17 @@ export default function HubConfigCards({
                   // Set the value
                   setProjectConfig((prev) => ({ ...prev, feedback_allow_anon_upvoting: value === 'true' }));
                 }}>
-                <SelectTrigger className='max-w-xs text-sm font-extralight'>
+                <SelectTrigger className='max-w-xs text-sm '>
                   <SelectValue placeholder='Select a style' />
                 </SelectTrigger>
-                <SelectContent className='font-light'>
+                <SelectContent className=''>
                   <SelectItem value='true'>Enabled</SelectItem>
                   <SelectItem value='false'>Disabled</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <Label className='text-foreground/50 text-xs font-extralight'>
+            <Label className='text-foreground/50 text-xs '>
               Whether to allow anonymous feedback upvoting.
             </Label>
           </div>

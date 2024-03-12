@@ -117,7 +117,7 @@ export default async function HubLayout({ children, params }: Props) {
             variant='secondary'
             size='sm'
             className={cn(
-              'text-foreground/80 font-light inline-flex items-center rounded-lg px-3 py-1 w-fit text-md hover:text-foreground',
+              'text-foreground/80  inline-flex items-center rounded-lg px-3 py-1 w-fit text-md hover:text-foreground',
             )}>
             Powered by Feedbase
         </Button>

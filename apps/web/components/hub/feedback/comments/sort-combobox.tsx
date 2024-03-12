@@ -33,11 +33,11 @@ export function CommentSortCombobox({ initialValue, onSelect, align = 'end' }: C
           aria-expanded={open}
           variant='outline'
           className={cn(
-            'text-foreground/60 bg-root hover:bg-accent/50 hover:text-foreground/90 group flex h-7 w-fit items-center justify-between gap-1.5 font-extralight transition-colors'
+            'text-foreground/60 bg-root hover:bg-accent/50 hover:text-foreground/90 group flex h-7 w-fit items-center justify-between gap-1.5 font-light transition-colors'
           )}
           size='sm'>
           {currentItem ? (
-            <div className='flex flex-row items-center gap-[6px] font-extralight'>{currentItem}</div>
+            <div className='flex flex-row items-center gap-[6px] font-light'>{currentItem}</div>
           ) : (
             'Sort'
           )}
@@ -57,7 +57,7 @@ export function CommentSortCombobox({ initialValue, onSelect, align = 'end' }: C
                   setOpen(false);
                   onSelect?.(currentItem?.toLowerCase() === currentValue ? '' : currentValue);
                 }}
-                className='flex flex-row items-center gap-[6px] font-extralight'>
+                className='flex flex-row items-center gap-[6px] font-light'>
                 {item}
 
                 {/* Checkmark */}

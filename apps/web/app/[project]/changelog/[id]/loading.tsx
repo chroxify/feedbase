@@ -34,7 +34,7 @@ export default function ChangelogPageLoading() {
               <p className='text-foreground/90 text-sm font-medium'>
                 <Skeleton className='h-4 w-full' />
               </p>
-              <p className='text-foreground/70 w-1/2 text-sm font-light'>
+              <p className='text-foreground/70 w-1/2 text-sm '>
                 <Skeleton className='h-4 w-full' />
               </p>
             </div>

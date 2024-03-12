@@ -98,7 +98,7 @@ export default function UpdateProfileModal({
         <div className='flex flex-col gap-4'>
           {/* Profile Picture */}
           <div className='space-y-1'>
-            <Label className='text-foreground/70 text-sm font-light'>Avatar</Label>
+            <Label className='text-foreground/70 text-sm '>Avatar</Label>
 
             {/* File Upload */}
             <div className='group flex h-[65px] w-[65px] items-center justify-center transition-all'>
@@ -124,7 +124,7 @@ export default function UpdateProfileModal({
               </label>
             </div>
 
-            <Label className='text-foreground/50 text-xs font-extralight'>
+            <Label className='text-foreground/50 text-xs font-light'>
               Your profile picture, displayed publicly.
             </Label>
           </div>
@@ -146,7 +146,7 @@ export default function UpdateProfileModal({
               tabIndex={-1}
             />
 
-            <Label className='text-foreground/50 text-xs font-extralight'>
+            <Label className='text-foreground/50 text-xs font-light'>
               Your full name, displayed publicly.
             </Label>
           </div>
@@ -159,14 +159,12 @@ export default function UpdateProfileModal({
 
             <Input id='email' value={user.email} disabled className='col-span-3' />
 
-            <Label className='text-foreground/50 text-xs font-extralight'>
-              Your email address used to login.
-            </Label>
+            <Label className='text-foreground/50 text-xs font-light'>Your email address used to login.</Label>
           </div>
         </div>
         <ResponsiveDialogFooter>
           <ResponsiveDialogClose asChild>
-            <Button variant='secondary'>Cancel</Button>
+            <Button variant='outline'>Cancel</Button>
           </ResponsiveDialogClose>
           <Button
             type='submit'

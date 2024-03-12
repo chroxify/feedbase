@@ -50,7 +50,7 @@ export default function BarList({ data, showData, title, maxItems }: BarListProp
                   )}%`,
                 }}
               />
-              <span className='text-foreground/90 z-10 mx-2 my-1.5 line-clamp-1 h-fit w-full cursor-default text-sm font-light'>
+              <span className='text-foreground/90 z-10 mx-2 my-1.5 line-clamp-1 h-fit w-full cursor-default text-sm '>
                 {d.key}
               </span>
             </div>
@@ -80,13 +80,13 @@ export default function BarList({ data, showData, title, maxItems }: BarListProp
 
       {/* If there are more than maxItems, show a "more" label */}
       {maxItems && data.length > maxItems ? (
-        <div className='text-foreground/60 from-root to-root/0 absolute bottom-0 z-10 flex h-20 w-full items-end justify-center bg-gradient-to-t text-sm font-light'>
+        <div className='text-foreground/60 from-root to-root/0 absolute bottom-0 z-10 flex h-20 w-full items-end justify-center bg-gradient-to-t text-sm '>
           <ResponsiveDialog>
             <ResponsiveDialogTrigger>
               <Button
                 variant='outline'
                 size='sm'
-                className='bg-root text-foreground/90 hover:bg-secondary mb-2 rounded-full text-sm font-light'>
+                className='bg-root text-foreground/90 hover:bg-secondary mb-2 rounded-full text-sm '>
                 Show more
               </Button>
             </ResponsiveDialogTrigger>
@@ -95,8 +95,8 @@ export default function BarList({ data, showData, title, maxItems }: BarListProp
                 <ResponsiveDialogTitle>{title}</ResponsiveDialogTitle>
 
                 <div className='flex flex-row items-center justify-between gap-3'>
-                  <span className='text-foreground/60 text-sm font-light'>Visitors</span>
-                  <span className='text-foreground/60 text-sm font-light'>Views</span>
+                  <span className='text-foreground/60 text-sm '>Visitors</span>
+                  <span className='text-foreground/60 text-sm '>Views</span>
                 </div>
               </ResponsiveDialogHeader>
 
@@ -109,7 +109,7 @@ export default function BarList({ data, showData, title, maxItems }: BarListProp
                   <Button
                     variant='outline'
                     size='sm'
-                    className='bg-background text-foreground/90 w-full text-sm font-light'>
+                    className='bg-background text-foreground/90 w-full text-sm '>
                     Close
                   </Button>
                 </ResponsiveDialogClose>

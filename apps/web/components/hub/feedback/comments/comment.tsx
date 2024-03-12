@@ -187,12 +187,12 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
       <div className='flex flex-row items-center justify-between'>
         <div className='flex flex-row items-center gap-2'>
           {/* Author */}
-          <div className='text-foreground/60 flex select-none flex-row items-center justify-start gap-2 font-light'>
+          <div className='text-foreground/60 flex select-none flex-row items-center justify-start gap-2 '>
             {/* User */}
             <Avatar className='h-8 w-8 gap-2 overflow-visible border'>
               <div className='h-full w-full overflow-hidden rounded-full'>
                 <AvatarImage src={comment.user.avatar_url || ''} alt={comment.user.full_name} />
-                <AvatarFallback className='text-xs font-light'>{comment.user.full_name[0]}</AvatarFallback>
+                <AvatarFallback className='text-xs '>{comment.user.full_name[0]}</AvatarFallback>
                 {/* If team member, add small verified badge to top of profile picture */}
                 {commentData.user.isTeamMember ? (
                   <div className='bg-root absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full'>
@@ -206,7 +206,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
             {!timeAgo ? (
               <Skeleton className='h-4 w-20 rounded-sm' />
             ) : (
-              <span className='text-foreground/50 text-xs font-extralight'>{timeAgo}</span>
+              <span className='text-foreground/50 text-xs font-light'>{timeAgo}</span>
             )}
           </div>
         </div>
@@ -224,7 +224,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
             </DropdownMenuTrigger>
             <DropdownMenuContent align='end' className='w-[160px]'>
               <DropdownMenuItem
-                className='text-destructive focus:text-destructive flex flex-row items-center gap-2 font-light'
+                className='text-destructive focus:text-destructive flex flex-row items-center gap-2 '
                 onClick={onDelete}>
                 <Icons.Trash className='fill-destructive h-4 w-4' />
                 Delete
@@ -247,7 +247,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
         <div className='flex h-full w-full flex-col gap-1 pl-5'>
           {/* Comment Content html */}
           <div
-            className='prose dark:prose-invert prose-p:font-extralight prose-zinc text-foreground/70 prose-headings:font-medium prose-headings:text-foreground/80 prose-strong:text-foreground/80 prose-strong:font-normal prose-code:text-foreground/70 prose-code:font-light prose-code:font-monospace prose-blockquote:text-foreground/80 prose-blockquote:font-normal pl-0.5 text-sm font-light'
+            className='prose dark:prose-invert prose-p:font-light prose-zinc text-foreground/70 prose-headings:font-medium prose-headings:text-foreground/80 prose-strong:text-foreground/80 prose-strong:font-normal prose-code:text-foreground/70 prose-code: prose-code:font-monospace prose-blockquote:text-foreground/80 prose-blockquote:font-normal pl-0.5 text-sm '
             dangerouslySetInnerHTML={{ __html: comment.content }}
           />
 
@@ -258,7 +258,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
               <Button
                 variant='ghost'
                 className={cn(
-                  'text-foreground/60 hover:text-foreground/60 -ml-2 gap-1.5 text-sm font-light hover:bg-transparent'
+                  'text-foreground/60 hover:text-foreground/60 -ml-2 gap-1.5 text-sm  hover:bg-transparent'
                 )}
                 size='sm'
                 onClick={() => {
@@ -283,7 +283,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
             <AuthModal projectSlug={projectSlug} disabled={user !== null}>
               <Button
                 variant='ghost'
-                className='text-foreground/60 hover:text-highlight -ml-2 text-sm font-light hover:bg-transparent'
+                className='text-foreground/60 hover:text-highlight -ml-2 text-sm  hover:bg-transparent'
                 size='sm'
                 onClick={() => {
                   if (!user) return;
@@ -297,7 +297,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
             {/* Share Button */}
             <Button
               variant='ghost'
-              className='text-foreground/60 hover:text-highlight -ml-2 text-sm font-light hover:bg-transparent'
+              className='text-foreground/60 hover:text-highlight -ml-2 text-sm  hover:bg-transparent'
               size='sm'
               onClick={() => {
                 navigator.clipboard.writeText(
@@ -325,7 +325,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
                 {/* Submit Button */}
                 <Button
                   variant='outline'
-                  className='text-foreground/60 flex h-8 items-center justify-between border font-extralight sm:w-fit'
+                  className='text-foreground/60 flex h-8 items-center justify-between border font-light sm:w-fit'
                   size='sm'
                   onClick={onPostReply}
                   disabled={

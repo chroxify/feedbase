@@ -85,10 +85,10 @@ export default function SubscribeToEmailUpdates({
                 onChange={(event) => {
                   setEmail(event.target.value);
                 }}
-                className='bg-secondary/30 font-light'
+                className='bg-secondary/30 '
               />
 
-              <Label className='text-foreground/50 text-xs font-extralight'>
+              <Label className='text-foreground/50 text-xs font-light'>
                 We only send you latest changelogs. No spam. Unsubscribe anytime.
               </Label>
             </div>

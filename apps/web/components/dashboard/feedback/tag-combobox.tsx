@@ -44,14 +44,14 @@ export function TagCombobox({
       <>
         <CreateTagModal open={openColorDialog} setOpen={setOpenColorDialog} tagName={search} demo={demo} />
         <CommandItem
-          className='flex flex-row items-center gap-2 font-extralight'
+          className='flex flex-row items-center gap-2 font-light'
           key={search}
           value={search}
           onSelect={() => {
             // Close the dropdown
             setOpenColorDialog(true);
           }}>
-          Create tag:&nbsp;<span className='text-foreground/60 font-extralight'>&quot;{search}&quot;</span>
+          Create tag:&nbsp;<span className='text-foreground/60 font-light'>&quot;{search}&quot;</span>
         </CommandItem>
       </>
     );
@@ -80,14 +80,14 @@ export function TagCombobox({
           aria-expanded={open}
           variant='outline'
           className={cn(
-            'text-foreground/60 flex h-8 w-1/4 items-center justify-between gap-2 font-extralight sm:w-fit',
+            'text-foreground/60 flex h-8 w-1/4 items-center justify-between gap-2 font-light sm:w-fit',
             triggerClassName
           )}
           size='sm'>
           {/* TODO: Do not nest ternary expressions */}
           {tags && tags.length > 0 ? (
             tags.length === 1 ? (
-              <div className='mt-[1px] flex flex-row items-center gap-2 font-extralight '>
+              <div className='mt-[1px] flex flex-row items-center gap-2 font-light '>
                 {/* Tag color */}
                 <div
                   className='h-2 w-2 rounded-full'
@@ -101,7 +101,7 @@ export function TagCombobox({
                 {projectTags.find((item) => item.value.toLowerCase() === tags[0].toLowerCase())?.label}
               </div>
             ) : (
-              <div className='flex flex-row items-center gap-2 font-extralight'>
+              <div className='flex flex-row items-center gap-2 font-light'>
                 {/* Tag colors */}
                 <div className='mt-[1px] flex flex-row items-center space-x-[-1.5px]'>
                   {currentTags.map((tag) => (
@@ -115,7 +115,7 @@ export function TagCombobox({
                   ))}
                 </div>
                 {/* Tag name */}
-                <span className='text-foreground/60 font-extralight'>{currentTags.length} Tags</span>
+                <span className='text-foreground/60 font-light'>{currentTags.length} Tags</span>
               </div>
             )
           ) : (
@@ -144,7 +144,7 @@ export function TagCombobox({
           }}>
           <CommandInput
             placeholder='Search tags...'
-            className='h-9 font-extralight'
+            className='h-9 font-light'
             value={search}
             onValueChange={setSearch}
             autoFocus
@@ -173,7 +173,7 @@ export function TagCombobox({
                     }
                   }
                 }}
-                className='flex flex-row items-center gap-2 font-extralight'>
+                className='flex flex-row items-center gap-2 font-light'>
                 {/* Tag color */}
                 <div className='mt-[1px] h-2 w-2 rounded-full' style={{ backgroundColor: item.color }} />
                 {item.label}
@@ -188,7 +188,7 @@ export function TagCombobox({
               </CommandItem>
             ))}
             <EmptyItem />
-            <CommandEmpty className='text-muted-foreground w-full p-2 text-center text-xs font-extralight'>
+            <CommandEmpty className='text-muted-foreground w-full p-2 text-center text-xs font-light'>
               No tags found, start typing to create a new tag
             </CommandEmpty>
           </CommandGroup>

@@ -31,7 +31,7 @@ export default async function Feedback({
         <Card className=' flex w-full flex-col items-center justify-center p-10 sm:p-20'>
           <CardHeader className='items-center text-center '>
             <CardTitle className='text-2xl font-medium'>No feedback yet</CardTitle>
-            <CardDescription className='font-light'>
+            <CardDescription className=''>
               Once somone submits feedback, it will show up here. Make sure to share it so others can vote on
               it!
             </CardDescription>

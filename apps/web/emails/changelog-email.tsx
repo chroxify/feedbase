@@ -95,7 +95,7 @@ export default function ChangelogEmail({ subId, projectSlug, changelog }: Change
 
             {/* Content as html */}
             <div
-              className='prose prose-p:font-light prose-zinc prose-headings:font-medium prose-headings:text-black/80 prose-strong:text-black/80 prose-strong:font-normal prose-code:text-black/70 prose-code:font-normal prose-blockquote:text-black/80 prose-blockquote:font-normal w-0 min-w-full font-normal text-black/70'
+              className='prose prose-zinc prose-headings:font-medium prose-headings:text-black/80 prose-strong:text-black/80 prose-strong:font-normal prose-code:text-black/70 prose-code:font-normal prose-blockquote:text-black/80 prose-blockquote:font-normal w-0 min-w-full font-normal text-black/70'
               dangerouslySetInnerHTML={{ __html: changelog.content }}
             />
 
@@ -105,13 +105,13 @@ export default function ChangelogEmail({ subId, projectSlug, changelog }: Change
             <div className='flex w-full flex-row items-center justify-center gap-5 py-4'>
               <Link
                 href={formatRootUrl(projectSlug, `/changelog/unsubscribe?subId=${subId}`)}
-                className='flex items-center gap-2 text-sm font-light text-black/70 underline'>
+                className='flex items-center gap-2 text-sm text-black/70 underline'>
                 Unsubscribe
               </Link>
               <span className='text-sm font-normal text-black/70'>•</span>
               <Link
                 href={formatRootUrl(projectSlug, `/changelog/${changelog.slug}`)}
-                className='flex items-center gap-2 text-sm font-light text-black/70 underline'>
+                className='flex items-center gap-2 text-sm text-black/70 underline'>
                 View in browser
               </Link>
             </div>

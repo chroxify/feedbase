@@ -105,10 +105,10 @@ export default function Header({
             )}
             key={tab.name.toLowerCase()}>
             <Button
-              variant='secondary'
+              variant='ghost'
               size='sm'
               className={cn(
-                'text-foreground/90 hover:bg-foreground/10 inline-flex items-center rounded-md px-3 py-1 text-base font-light transition-colors duration-150',
+                'text-foreground/90 hover:bg-foreground/10 inline-flex items-center rounded-md px-3 py-1 text-base  transition-colors duration-150',
                 tab.link === currentTab.link && ''
               )}>
               {tab.name}

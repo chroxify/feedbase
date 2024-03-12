@@ -112,7 +112,7 @@ export function CreateTagModal({
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
-      <CommandInput placeholder='Search color...' autoFocus className='font-light' />
+      <CommandInput placeholder='Search color...' autoFocus className='' />
       <CommandList className='my-2' style={{ scrollbarWidth: 'none' }}>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup className='p-0'>
@@ -123,7 +123,7 @@ export function CreateTagModal({
                 onCreateTag(color.hex);
                 setOpen(false);
               }}
-              className='flex h-10 flex-row items-center gap-1 rounded-md font-light hover:cursor-pointer'>
+              className='flex h-10 flex-row items-center gap-1 rounded-md  hover:cursor-pointer'>
               {/* Color */}
               <div className='ml-2 mt-[1px] h-3 w-3 rounded-full' style={{ backgroundColor: color.hex }} />
 

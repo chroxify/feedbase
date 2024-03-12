@@ -253,7 +253,7 @@ export default function FeedbackModal({
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-[160px]'>
             <DropdownMenuItem
-              className='flex flex-row items-center gap-2 font-extralight'
+              className='flex flex-row items-center gap-2 font-light'
               onClick={() => {
                 copyToClipboard('id', feedback.id);
               }}>
@@ -262,7 +262,7 @@ export default function FeedbackModal({
               Copy ID
             </DropdownMenuItem>
             <DropdownMenuItem
-              className='flex flex-row items-center gap-2 font-extralight'
+              className='flex flex-row items-center gap-2 font-light'
               onClick={() => {
                 copyToClipboard('link', formatRootUrl(projectSlug, `/feedback/${feedback.id}`));
               }}>
@@ -272,7 +272,7 @@ export default function FeedbackModal({
 
             {/* Mailto submitter */}
             <DropdownMenuItem
-              className='flex flex-row items-center gap-2 font-extralight'
+              className='flex flex-row items-center gap-2 font-light'
               onClick={() => {
                 router.push(
                   `mailto:${feedback.user.email}?subject=Your Feedback Submission (${feedback.id})&body=Hi ${feedback.user.full_name},%0D%0A%0D%0AWe have received your recent feedback and had some follow up questions about it.%0D%0A%0D%0A${feedback.description}%0D%0A%0D%0AIf you could get back to us as soon as possible, that would be great!%0D%0A%0D%0AThanks!`
@@ -284,7 +284,7 @@ export default function FeedbackModal({
 
             <ResponsiveDialogClose className='w-full' hideCloseButton>
               <DropdownMenuItem
-                className='flex flex-row items-center gap-2 font-extralight'
+                className='flex flex-row items-center gap-2 font-light'
                 onClick={onDeleteFeedback}>
                 <Icons.Trash className='h-4 w-4 fill-white' />
                 Delete
@@ -298,7 +298,7 @@ export default function FeedbackModal({
           {feedback.description ? (
             <ResponsiveDialogDescription>
               <div
-                className={cn('text-foreground/60 text-sm font-light', PROSE_CN)}
+                className={cn('text-foreground/60 text-sm ', PROSE_CN)}
                 dangerouslySetInnerHTML={{ __html: feedback.description }}
               />
             </ResponsiveDialogDescription>
@@ -312,7 +312,6 @@ export default function FeedbackModal({
             content={commentContent}
             setContent={setCommentContent}
             placeholder='Write your comment here...'
-            proseInvert
           />
 
           {/* Bottom Row */}
@@ -320,7 +319,7 @@ export default function FeedbackModal({
             {/* Submit Button */}
             <Button
               variant='outline'
-              className='text-foreground/60 flex h-8 items-center justify-between gap-2 border font-extralight sm:w-fit'
+              className='text-foreground/60 flex h-8 items-center justify-between gap-2 border font-light sm:w-fit'
               size='sm'
               onClick={onPostComment}>
               Post Comment

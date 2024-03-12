@@ -82,7 +82,7 @@ export default function ProjectInviteForm({
       </CardHeader>
       <CardContent className='flex flex-col gap-5'>
         {(!user || user.email !== invite.email) && (
-          <span className='text-foreground/50 text-center text-sm font-light'>
+          <span className='text-foreground/50 text-center text-sm '>
             To accept this invitation, please login as{' '}
             <strong className='text-foreground/70 inline-flex'>{invite.email}</strong>.
           </span>

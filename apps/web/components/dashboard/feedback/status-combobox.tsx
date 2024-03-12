@@ -70,12 +70,12 @@ export function StatusCombobox({
           aria-expanded={open}
           variant='outline'
           className={cn(
-            'text-foreground/60 group flex h-8 w-fit items-center justify-between gap-2 font-extralight',
+            'text-foreground/60 group flex h-8 w-fit items-center justify-between gap-2 font-light',
             triggerClassName
           )}
           size='sm'>
           {currentItem ? (
-            <div className='flex flex-row items-center gap-[6px] font-extralight'>
+            <div className='flex flex-row items-center gap-[6px] font-light'>
               {/* Status icon */}
               <currentItem.icon className='text-foreground/60 group-hover:text-foreground h-4 w-4 transition-colors' />
 
@@ -101,7 +101,7 @@ export function StatusCombobox({
                   setOpen(false);
                   onSelect?.(currentItem?.label.toLowerCase() === currentValue ? '' : currentValue);
                 }}
-                className='flex flex-row items-center gap-[6px] font-extralight'>
+                className='flex flex-row items-center gap-[6px] font-light'>
                 {/* Icon */}
                 <item.icon className='text-foreground/80 mt-[1px] h-4 w-4' />
 

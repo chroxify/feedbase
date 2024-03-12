@@ -245,7 +245,7 @@ export default function FeedbackList({
             <div className='flex items-center border-r'>
               {/* Upvotes */}
               <Button
-                variant='secondary'
+                variant='ghost'
                 size='sm'
                 className='group/upvote flex h-full flex-col items-center rounded-sm px-4 transition-all duration-150 hover:bg-transparent active:scale-[85%]'
                 onClick={() => {
@@ -256,7 +256,7 @@ export default function FeedbackList({
                 {/* Arrow */}
                 <ChevronUp
                   className={cn(
-                    'h-4 text-sm font-light transition-colors ',
+                    'h-4 text-sm  transition-colors ',
                     feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
                   )}
                 />
@@ -264,7 +264,7 @@ export default function FeedbackList({
                 {/* Upvotes */}
                 <div
                   className={cn(
-                    'text-sm font-light transition-colors',
+                    'text-sm  transition-colors',
                     feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
                   )}>
                   {feedback.upvotes}
@@ -291,16 +291,16 @@ export default function FeedbackList({
             </div>
 
             {/* Author */}
-            <div className='text-foreground/60 flex select-none flex-row items-center justify-start gap-2 font-light'>
+            <div className='text-foreground/60 flex select-none flex-row items-center justify-start gap-2 '>
               {/* User */}
               <Avatar className='h-6 w-6 gap-2 border'>
                 <AvatarImage src={feedback.user.avatar_url || ''} alt={feedback.user.full_name} />
-                <AvatarFallback className='text-xs font-light'>{feedback.user.full_name[0]}</AvatarFallback>
+                <AvatarFallback className='text-xs '>{feedback.user.full_name[0]}</AvatarFallback>
               </Avatar>
               {/* Name */}
-              <span className='text-foreground/70 text-sm font-extralight'>{feedback.user.full_name}</span>·
+              <span className='text-foreground/70 text-sm font-light'>{feedback.user.full_name}</span>·
               {/* Time ago */}
-              <span className='text-foreground/50 text-xs font-extralight'>{feedback.timeAgo}</span>
+              <span className='text-foreground/50 text-xs font-light'>{feedback.timeAgo}</span>
             </div>
             {/* </div> */}
           </Link>
@@ -308,7 +308,7 @@ export default function FeedbackList({
           {/* Comments Count */}
           <div className='text-foreground/50 hidden flex-row items-center justify-center gap-1.5 pl-2 pr-5 sm:flex'>
             <MessagesSquare className='text-foreground/50 h-4 w-4' />
-            <span className='text-foreground/50 text-sm font-extralight'>{feedback.comment_count}</span>
+            <span className='text-foreground/50 text-sm font-light'>{feedback.comment_count}</span>
           </div>
         </div>
       ))}
@@ -316,8 +316,8 @@ export default function FeedbackList({
       {/* Empty State */}
       {sortedFeedback?.length === 0 && (
         <div className='flex h-full w-full flex-col items-center justify-center gap-3 pt-10'>
-          <h1 className='text-foreground/90 text-2xl font-light'>No feedback yet</h1>
-          <p className='text-foreground/60 text-center text-base font-light'>
+          <h1 className='text-foreground/90 text-2xl '>No feedback yet</h1>
+          <p className='text-foreground/60 text-center text-base '>
             This is where you can share your feedback and feature requests.
           </p>
         </div>

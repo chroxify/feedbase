@@ -54,14 +54,14 @@ function renderNotifications({
       {isLoading ? (
         <div className='flex min-h-[450px] w-full flex-col items-center justify-center gap-2'>
           <Icons.Spinner className='text-foreground/60 h-7 w-7 animate-spin ' />
-          <p className='text-foreground/60 text-center text-sm font-light'>Loading notifications</p>
+          <p className='text-foreground/60 text-center text-sm '>Loading notifications</p>
         </div>
       ) : null}
 
       {notifications?.length === 0 && (
         <div className='flex min-h-[450px] w-full flex-col items-center justify-center gap-2'>
           <Bell className='text-foreground/60 h-7 w-7' />
-          <p className='text-foreground/60 text-center text-sm font-light'>No notifications</p>
+          <p className='text-foreground/60 text-center text-sm '>No notifications</p>
         </div>
       )}
 
@@ -90,26 +90,26 @@ function renderNotifications({
             {/* Title */}
             <div className='flex flex-row items-center justify-between'>
               {notification.type === 'post' ? (
-                <p className='text-foreground/90 text-sm font-light'>
+                <p className='text-foreground/90 text-sm '>
                   New Feedback submitted by{' '}
                   <span className='text-foreground font-medium'>{notification.initiator.full_name}</span>
                 </p>
               ) : (
-                <p className='text-foreground/90 text-sm font-light'>
+                <p className='text-foreground/90 text-sm '>
                   <span className='text-foreground font-medium'>{notification.initiator.full_name}</span>{' '}
                   posted a new comment
                 </p>
               )}
             </div>
 
-            <p className='text-foreground/60 text-sm font-extralight'>
+            <p className='text-foreground/60 text-sm font-light'>
               {formatTimeAgo(new Date(notification.created_at))}
             </p>
           </div>
 
           {archiveButton ? (
             <Button
-              variant='secondary'
+              variant='ghost'
               size='icon'
               className='text-foreground/70 hover:text-foreground h-fit w-fit rounded-full border p-2'
               onClick={(e) => {
@@ -189,12 +189,12 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
             <TabsList className='h-fit w-full justify-start gap-3 rounded-none border-b bg-transparent p-0 px-3'>
               <TabsTrigger
                 value='inbox'
-                className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3 font-light data-[state=active]:border-b data-[state=active]:bg-transparent'>
+                className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3  data-[state=active]:border-b data-[state=active]:bg-transparent'>
                 Inbox
               </TabsTrigger>
               <TabsTrigger
                 value='archive'
-                className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3 font-light data-[state=active]:border-b data-[state=active]:bg-transparent'>
+                className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3  data-[state=active]:border-b data-[state=active]:bg-transparent'>
                 Archive
               </TabsTrigger>
             </TabsList>
@@ -238,12 +238,12 @@ export default function InboxPopover({ user }: { user: ProfileProps['Row'] }) {
           <TabsList className='h-fit w-full justify-start gap-3 rounded-none border-b bg-transparent p-0 px-3'>
             <TabsTrigger
               value='inbox'
-              className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3 font-light data-[state=active]:border-b data-[state=active]:bg-transparent'>
+              className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3  data-[state=active]:border-b data-[state=active]:bg-transparent'>
               Inbox
             </TabsTrigger>
             <TabsTrigger
               value='archive'
-              className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3 font-light data-[state=active]:border-b data-[state=active]:bg-transparent'>
+              className='data-[state=active]:text-foreground data-[state=active]:border-foreground rounded-none px-2 py-3  data-[state=active]:border-b data-[state=active]:bg-transparent'>
               Archive
             </TabsTrigger>
           </TabsList>

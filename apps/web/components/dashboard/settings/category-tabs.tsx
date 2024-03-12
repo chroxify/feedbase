@@ -34,7 +34,7 @@ export default function CategoryTabs({
       {tabs.map((tab, index) => (
         <Link href={`/${projectSlug}/settings/${tab.slug}`} key={tab.slug}>
           <Button
-            variant='secondary'
+            variant='ghost'
             className={cn(
               'text-foreground/70 inline-flex h-fit items-center rounded-lg px-2 py-1 text-sm font-normal',
               activeTab === index && 'bg-secondary text-foreground hover:bg-secondary'

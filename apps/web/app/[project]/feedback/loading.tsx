@@ -8,7 +8,7 @@ export default function FeedbackLoading() {
       <div className='flex w-full px-5 sm:px-10 md:px-10 lg:px-20'>
         <div className='flex w-full flex-col items-start gap-4'>
           <h1 className='text-3xl font-medium sm:text-4xl'>Feedback</h1>
-          <p className='text-foreground/70 text-base font-extralight sm:text-lg'>
+          <p className='text-foreground/70 text-base font-light sm:text-lg'>
             Have a suggestion or found a bug? Let us know!
           </p>
         </div>

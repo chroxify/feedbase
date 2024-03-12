@@ -123,14 +123,14 @@ export function TeamTable({
                 <div className='flex flex-col'>
                   <span className='text-foreground/70 text-sm'>{member.full_name}</span>
 
-                  <span className='text-foreground/50 text-xs font-light'>{member.email}</span>
+                  <span className='text-foreground/50 text-xs '>{member.email}</span>
                 </div>
               </div>
 
               <div className='flex flex-row items-center space-x-2'>
                 {/* Join Date */}
                 {/* TODO: Add Role Badge */}
-                <span className='text-foreground/50 hidden text-xs font-light md:block'>
+                <span className='text-foreground/50 hidden text-xs  md:block'>
                   {`Joined ${formatDate(member.joined_at)}`}
                 </span>
 
@@ -138,7 +138,7 @@ export function TeamTable({
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
-                      variant='secondary'
+                      variant='ghost'
                       size='icon'
                       className='text-foreground/50 hover:text-foreground h-8 w-5'>
                       <MoreVertical className='h-5 w-5' />
@@ -165,7 +165,7 @@ export function TeamTable({
               <div className='flex flex-row items-center space-x-2'>
                 {/* Avatar */}
                 <Avatar>
-                  <AvatarFallback className='text-foreground/80 text-sm font-light'>
+                  <AvatarFallback className='text-foreground/80 text-sm '>
                     {invite.email[0].toUpperCase() + invite.email[1].toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
@@ -174,9 +174,7 @@ export function TeamTable({
                 <div className='flex flex-col'>
                   <span className='text-foreground/70 text-sm'>{invite.email}</span>
 
-                  <span className='text-foreground/50 text-xs font-light'>
-                    Invited by {invite.creator.full_name}
-                  </span>
+                  <span className='text-foreground/50 text-xs '>Invited by {invite.creator.full_name}</span>
                 </div>
               </div>
 
@@ -188,7 +186,7 @@ export function TeamTable({
                       ? 'Invitation has expired.'
                       : `Invitation expires in ${calculateExpirationTime(invite.created_at)} days.`
                   }>
-                  <span className='text-foreground/50 bg-background hidden rounded border px-2 py-1 text-xs font-light md:block'>
+                  <span className='text-foreground/50 bg-background hidden rounded border px-2 py-1 text-xs  md:block'>
                     {invite.accepted
                       ? 'Accepted'
                       : calculateExpirationTime(invite.created_at) < 0
@@ -201,7 +199,7 @@ export function TeamTable({
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
-                      variant='secondary'
+                      variant='ghost'
                       size='icon'
                       className='text-foreground/50 hover:text-foreground h-8 w-5'>
                       <MoreVertical className='h-5 w-5' />
@@ -225,7 +223,7 @@ export function TeamTable({
           {invites.length === 0 && (
             <div className='flex h-full w-full flex-col items-center justify-center'>
               <div className='flex flex-col items-center justify-center p-5'>
-                <span className='text-foreground/50 text-sm font-light'>No invites yet.</span>
+                <span className='text-foreground/50 text-sm '>No invites yet.</span>
               </div>
             </div>
           )}

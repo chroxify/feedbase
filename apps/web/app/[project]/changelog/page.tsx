@@ -74,7 +74,7 @@ export default async function Changelogs({ params }: Props) {
       <div className='flex items-center px-5 sm:px-10 md:px-10 lg:px-20'>
         <div className='flex w-full flex-col items-start gap-4'>
           <h1 className='text-3xl font-medium sm:text-4xl'>Changelog</h1>
-          <p className='text-foreground/70 text-base font-extralight sm:text-lg'>
+          <p className='text-foreground/70 text-base font-light sm:text-lg'>
             All the latest updates, improvements, and fixes to {project.name}.
           </p>
 
@@ -134,7 +134,7 @@ export default async function Changelogs({ params }: Props) {
                 {/* Date */}
                 <div className='relative flex'>
                   <div className='flex w-full pb-4 md:w-[200px] md:pb-0'>
-                    <p className='text-foreground/60 w-full text-sm font-extralight'>
+                    <p className='text-foreground/60 w-full text-sm font-light'>
                       <time className='sticky top-10' dateTime={changelog.publish_date!}>
                         {new Date(changelog.publish_date!).toLocaleDateString('en-US', {
                           year: 'numeric',
@@ -175,14 +175,14 @@ export default async function Changelogs({ params }: Props) {
 
                   {/* Summary */}
                   {projectConfig.changelog_preview_style === 'summary' && (
-                    <p className='text-foreground/70 cursor-default pb-4 text-base font-extralight'>
+                    <p className='text-foreground/70 cursor-default pb-4 text-base font-light'>
                       {changelog.summary}
                     </p>
                   )}
 
                   {projectConfig.changelog_preview_style === 'content' && (
                     <div
-                      className={`${fontMono.variable} prose prose-invert prose-p:font-extralight prose-zinc text-foreground/70 prose-headings:font-medium prose-headings:text-foreground/80 prose-strong:text-foreground/80 prose-strong:font-normal prose-code:text-foreground/70 prose-code:font-light prose-code:bg-foreground/10 prose-code:rounded-md prose-code:px-1 prose-code:py-0.5 prose-code:font-monospace prose-blockquote:text-foreground/80 prose-blockquote:font-normal font-light`}
+                      className={`${fontMono.variable} prose prose-invert prose-p:font-light prose-zinc text-foreground/70 prose-headings:font-medium prose-headings:text-foreground/80 prose-strong:text-foreground/80 prose-strong:font-normal prose-code:text-foreground/70 prose-code: prose-code:bg-foreground/10 prose-code:rounded-md prose-code:px-1 prose-code:py-0.5 prose-code:font-monospace prose-blockquote:text-foreground/80 prose-blockquote:font-normal `}
                       dangerouslySetInnerHTML={{ __html: changelog.content! }}
                     />
                   )}
@@ -198,8 +198,8 @@ export default async function Changelogs({ params }: Props) {
         {/* Empty State */}
         {changelogs.length === 0 && (
           <div className='flex h-full w-full flex-col items-center justify-center gap-3 pt-10'>
-            <h1 className='text-foreground/90 text-2xl font-light'>No changelogs yet</h1>
-            <p className='text-foreground/60 text-center text-base font-light'>
+            <h1 className='text-foreground/90 text-2xl '>No changelogs yet</h1>
+            <p className='text-foreground/60 text-center text-base '>
               The latest updates, improvements, and fixes will be posted here. Stay tuned!
             </p>
           </div>

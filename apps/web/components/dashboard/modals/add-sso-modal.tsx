@@ -99,7 +99,7 @@ export default function AddSSOAuthModal({
             <br />
             Visit the{' '}
             <Link
-              className='text-foreground/80 hover:text-foreground font-light hover:underline'
+              className='text-foreground/80 hover:text-foreground  hover:underline'
               href='https://docs.feedbase.app/integrations/sso'>
               documentation
             </Link>{' '}
@@ -123,7 +123,7 @@ export default function AddSSOAuthModal({
               className='col-span-3'
             />
 
-            <Label className='text-foreground/50 text-xs font-extralight'>
+            <Label className='text-foreground/50 text-xs font-light'>
               The url to redirect users to when they click the login button.
             </Label>
           </div>
@@ -136,7 +136,7 @@ export default function AddSSOAuthModal({
 
             <div className='flex flex-row items-center gap-2'>
               <div className='bg-background flex h-9 w-full flex-row items-center justify-between rounded-md border px-3'>
-                <span className='text-foreground/50 flex items-center justify-center text-sm font-extralight'>
+                <span className='text-foreground/50 flex items-center justify-center text-sm font-light'>
                   {jwtSecret}
                 </span>
 
@@ -164,7 +164,7 @@ export default function AddSSOAuthModal({
               </div>
             </div>
 
-            <Label className='text-foreground/50 text-xs font-extralight'>
+            <Label className='text-foreground/50 text-xs font-light'>
               The secret used to sign the JWT token on your server.
             </Label>
           </div>
@@ -172,7 +172,7 @@ export default function AddSSOAuthModal({
         <ResponsiveDialogFooter>
           <ResponsiveDialogClose>
             <Button
-              variant='secondary'
+              variant='outline'
               onClick={() => {
                 setLoginUrl('');
               }}>

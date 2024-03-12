@@ -39,7 +39,7 @@ export default function AuthModal({
           onValueChange={(value) => {
             setAuthType(value as 'sign-in' | 'sign-up');
           }}>
-          <TabsList className='bg-secondary/30 grid w-full grid-cols-2 font-light'>
+          <TabsList className='bg-secondary/30 grid w-full grid-cols-2 '>
             <TabsTrigger value='sign-in'>Sign In</TabsTrigger>
             <TabsTrigger value='sign-up'>Sign Up</TabsTrigger>
           </TabsList>

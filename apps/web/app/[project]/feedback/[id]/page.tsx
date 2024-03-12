@@ -103,7 +103,7 @@ export default async function FeedbackDetails({ params }: Props) {
           <div className='relative flex'>
             <div className='flex w-full pb-4 lg:w-[200px] lg:pb-0'>
               <Link href='/feedback' className='h-fit w-fit select-none'>
-                <p className='text-foreground/60 hover:text-foreground w-full text-sm font-light transition-colors'>
+                <p className='text-foreground/60 hover:text-foreground w-full text-sm  transition-colors'>
                   ← Back to Posts
                 </p>
               </Link>
@@ -117,7 +117,7 @@ export default async function FeedbackDetails({ params }: Props) {
               <h1 className='text-foreground/100 text-2xl font-bold'>{feedback.title}</h1>
 
               <div
-                className={cn('text-foreground/60 text-sm font-light', PROSE_CN)}
+                className={cn('text-foreground/60 text-sm ', PROSE_CN)}
                 dangerouslySetInnerHTML={{ __html: feedback.description }}
               />
             </div>
@@ -128,15 +128,15 @@ export default async function FeedbackDetails({ params }: Props) {
               <div className='flex h-full w-full flex-col gap-5 border-t p-5'>
                 {/* Upvotes */}
                 <div className='flex w-full flex-row items-center justify-between'>
-                  <p className='text-foreground/70 text-sm font-light'>Upvotes</p>
+                  <p className='text-foreground/70 text-sm '>Upvotes</p>
 
                   {/* Upvotes */}
-                  <span className='text-foreground/90 text-sm font-light '>{feedback.upvotes}</span>
+                  <span className='text-foreground/90 text-sm  '>{feedback.upvotes}</span>
                 </div>
 
                 {/* Status */}
                 <div className='flex w-full flex-row items-center justify-between'>
-                  <p className='text-foreground/70 text-sm font-light'>Status</p>
+                  <p className='text-foreground/70 text-sm '>Status</p>
                   {(() => {
                     if (feedback.status) {
                       const currentStatus =
@@ -145,21 +145,19 @@ export default async function FeedbackDetails({ params }: Props) {
                         ) || statusOptions[0];
 
                       return (
-                        <div className='text-foreground/60 flex flex-row items-center gap-2 font-light'>
+                        <div className='text-foreground/60 flex flex-row items-center gap-2 '>
                           <currentStatus.icon className='text-foreground/90 h-4 w-4' />
-                          <span className='text-foreground/90 text-sm font-light '>
-                            {currentStatus.label}
-                          </span>
+                          <span className='text-foreground/90 text-sm  '>{currentStatus.label}</span>
                         </div>
                       );
                     }
-                    return <span className='text-foreground/90 text-sm font-light '>No status</span>;
+                    return <span className='text-foreground/90 text-sm  '>No status</span>;
                   })()}
                 </div>
 
                 {/* Tags */}
                 <div className='flex w-full flex-row items-center justify-between'>
-                  <p className='text-foreground/70 text-sm font-light'>Tags</p>
+                  <p className='text-foreground/70 text-sm '>Tags</p>
 
                   {/* Grid with all tags */}
                   <div className='flex w-full flex-row flex-wrap justify-end gap-2 pl-12'>
@@ -171,7 +169,7 @@ export default async function FeedbackDetails({ params }: Props) {
                             {/* Tag color */}
                             <div className='h-2 w-2 rounded-full' style={{ backgroundColor: tag.color }} />
                             {/* Tag name */}
-                            <div className='text-foreground/80 group-hover/tag:text-foreground/95 text-xs font-light transition-colors'>
+                            <div className='text-foreground/80 group-hover/tag:text-foreground/95 text-xs  transition-colors'>
                               {tag.name}
                             </div>
                           </div>
@@ -181,7 +179,7 @@ export default async function FeedbackDetails({ params }: Props) {
 
                   {/* Empty State */}
                   {(!feedback.tags || feedback.tags.length === 0) && (
-                    <span className='text-foreground/90 w-full text-end text-sm font-light'>No tags</span>
+                    <span className='text-foreground/90 w-full text-end text-sm '>No tags</span>
                   )}
                 </div>
               </div>
@@ -193,9 +191,9 @@ export default async function FeedbackDetails({ params }: Props) {
               <div className='flex h-full w-full flex-col gap-5 px-5 pt-5'>
                 {/* Created */}
                 <div className='flex w-full flex-row items-center justify-between'>
-                  <p className='text-foreground/70 text-sm font-light'>Created</p>
+                  <p className='text-foreground/70 text-sm '>Created</p>
 
-                  <p className='text-foreground/90 ml-2 text-sm font-light'>
+                  <p className='text-foreground/90 ml-2 text-sm '>
                     {new Date(feedback.created_at).toLocaleDateString('en-US', {
                       month: 'long',
                       day: 'numeric',
@@ -206,17 +204,15 @@ export default async function FeedbackDetails({ params }: Props) {
 
                 {/* Author */}
                 <div className='flex w-full flex-row items-center justify-between'>
-                  <p className='text-foreground/70 text-sm font-light'>Author</p>
+                  <p className='text-foreground/70 text-sm '>Author</p>
 
                   {/* Author */}
-                  <div className='text-foreground/60 flex flex-row items-center justify-start gap-2 font-light'>
+                  <div className='text-foreground/60 flex flex-row items-center justify-start gap-2 '>
                     {/* User */}
                     <Avatar className='h-6 w-6 select-none gap-2 overflow-visible border'>
                       <div className='h-full w-full overflow-hidden rounded-full'>
                         <AvatarImage src={feedback.user.avatar_url || ''} alt={feedback.user.full_name} />
-                        <AvatarFallback className='text-xs font-light'>
-                          {feedback.user.full_name[0]}
-                        </AvatarFallback>
+                        <AvatarFallback className='text-xs '>{feedback.user.full_name[0]}</AvatarFallback>
                         {/* If team member, add small verified badge to top of profile picture */}
                         {feedback.user.isTeamMember ? (
                           <div className='bg-root absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full'>
@@ -226,7 +222,7 @@ export default async function FeedbackDetails({ params }: Props) {
                       </div>
                     </Avatar>
                     {/* Name */}
-                    <span className='text-foreground/90 text-sm font-light'>{feedback.user.full_name}</span>
+                    <span className='text-foreground/90 text-sm '>{feedback.user.full_name}</span>
                   </div>
                 </div>
               </div>
@@ -248,15 +244,15 @@ export default async function FeedbackDetails({ params }: Props) {
           <div className='flex h-full w-full flex-col gap-5 pl-5'>
             {/* Upvotes */}
             <div className='flex w-full flex-row items-center justify-between'>
-              <p className='text-foreground/70 text-sm font-light'>Upvotes</p>
+              <p className='text-foreground/70 text-sm '>Upvotes</p>
 
               {/* Upvotes */}
-              <span className='text-foreground/90 text-sm font-light '>{feedback.upvotes}</span>
+              <span className='text-foreground/90 text-sm  '>{feedback.upvotes}</span>
             </div>
 
             {/* Status */}
             <div className='flex w-full flex-row items-center justify-between'>
-              <p className='text-foreground/70 text-sm font-light'>Status</p>
+              <p className='text-foreground/70 text-sm '>Status</p>
               {(() => {
                 if (feedback.status) {
                   const currentStatus =
@@ -265,19 +261,19 @@ export default async function FeedbackDetails({ params }: Props) {
                     ) || statusOptions[0];
 
                   return (
-                    <div className='text-foreground/60 flex flex-row items-center gap-2 font-light'>
+                    <div className='text-foreground/60 flex flex-row items-center gap-2 '>
                       <currentStatus.icon className='text-foreground/90 h-4 w-4' />
-                      <span className='text-foreground/90 text-sm font-light '>{currentStatus.label}</span>
+                      <span className='text-foreground/90 text-sm  '>{currentStatus.label}</span>
                     </div>
                   );
                 }
-                return <span className='text-foreground/90 text-sm font-light '>No status</span>;
+                return <span className='text-foreground/90 text-sm  '>No status</span>;
               })()}
             </div>
 
             {/* Tags */}
             <div className='flex w-full flex-row items-center justify-between'>
-              <p className='text-foreground/70 text-sm font-light'>Tags</p>
+              <p className='text-foreground/70 text-sm '>Tags</p>
 
               {/* Grid with all tags */}
               <div className='flex w-full flex-row flex-wrap justify-end gap-2 pl-12'>
@@ -289,7 +285,7 @@ export default async function FeedbackDetails({ params }: Props) {
                         {/* Tag color */}
                         <div className='h-2 w-2 rounded-full' style={{ backgroundColor: tag.color }} />
                         {/* Tag name */}
-                        <div className='text-foreground/80 group-hover/tag:text-foreground/95 text-xs font-light transition-colors'>
+                        <div className='text-foreground/80 group-hover/tag:text-foreground/95 text-xs  transition-colors'>
                           {tag.name}
                         </div>
                       </div>
@@ -299,7 +295,7 @@ export default async function FeedbackDetails({ params }: Props) {
 
               {/* Empty State */}
               {(!feedback.tags || feedback.tags.length === 0) && (
-                <span className='text-foreground/90 w-full text-end text-sm font-light'>No tags</span>
+                <span className='text-foreground/90 w-full text-end text-sm '>No tags</span>
               )}
             </div>
           </div>
@@ -311,9 +307,9 @@ export default async function FeedbackDetails({ params }: Props) {
           <div className='flex h-full w-full flex-col gap-5 pl-5'>
             {/* Created */}
             <div className='flex w-full flex-row items-center justify-between'>
-              <p className='text-foreground/70 text-sm font-light'>Created</p>
+              <p className='text-foreground/70 text-sm '>Created</p>
 
-              <p className='text-foreground/90 ml-2 text-sm font-light'>
+              <p className='text-foreground/90 ml-2 text-sm '>
                 {new Date(feedback.created_at).toLocaleDateString('en-US', {
                   month: 'long',
                   day: 'numeric',
@@ -324,17 +320,15 @@ export default async function FeedbackDetails({ params }: Props) {
 
             {/* Author */}
             <div className='flex w-full flex-row items-center justify-between'>
-              <p className='text-foreground/70 text-sm font-light'>Author</p>
+              <p className='text-foreground/70 text-sm '>Author</p>
 
               {/* Author */}
-              <div className='text-foreground/60 flex flex-row items-center justify-start gap-2 font-light'>
+              <div className='text-foreground/60 flex flex-row items-center justify-start gap-2 '>
                 {/* User */}
                 <Avatar className='h-6 w-6 select-none gap-2 overflow-visible border'>
                   <div className='h-full w-full overflow-hidden rounded-full'>
                     <AvatarImage src={feedback.user.avatar_url || ''} alt={feedback.user.full_name} />
-                    <AvatarFallback className='text-xs font-light'>
-                      {feedback.user.full_name[0]}
-                    </AvatarFallback>
+                    <AvatarFallback className='text-xs '>{feedback.user.full_name[0]}</AvatarFallback>
                     {/* If team member, add small verified badge to top of profile picture */}
                     {feedback.user.isTeamMember ? (
                       <div className='bg-root absolute -right-1 -top-1 flex h-3.5 w-3.5 items-center justify-center rounded-full'>
@@ -345,7 +339,7 @@ export default async function FeedbackDetails({ params }: Props) {
                 </Avatar>
 
                 {/* Name */}
-                <span className='text-foreground/90 text-sm font-light'>{feedback.user.full_name}</span>
+                <span className='text-foreground/90 text-sm '>{feedback.user.full_name}</span>
               </div>
             </div>
           </div>

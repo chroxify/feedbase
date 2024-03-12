@@ -90,7 +90,7 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               className='col-span-3'
             />
 
-            <Label className='text-foreground/50 text-xs font-extralight'>The name of your project.</Label>
+            <Label className='text-foreground/50 text-xs font-light'>The name of your project.</Label>
           </div>
 
           {/* Project Slug */}
@@ -99,7 +99,7 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               <Label htmlFor='slug'>Project Slug</Label>
             </div>
 
-            <div className='bg-background focus-within:ring-ring ring-offset-root flex h-9 w-full rounded-md border text-sm font-extralight transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
+            <div className='bg-background focus-within:ring-ring ring-offset-root flex h-8 w-full rounded-md border text-sm font-light transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
               <Input
                 className='h-full w-full border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0'
                 placeholder='feedbase'
@@ -111,15 +111,13 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               </div>
             </div>
 
-            <Label className='text-foreground/50 text-xs font-extralight'>
-              The subdomain of your project.
-            </Label>
+            <Label className='text-foreground/50 text-xs font-light'>The subdomain of your project.</Label>
           </div>
         </div>
         <ResponsiveDialogFooter>
           <ResponsiveDialogClose asChild>
             <Button
-              variant='secondary'
+              variant='outline'
               onClick={() => {
                 setName('');
                 setSlug('');

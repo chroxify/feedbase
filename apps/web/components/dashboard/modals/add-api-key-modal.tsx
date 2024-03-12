@@ -123,7 +123,7 @@ export default function AddApiKeyDialog({
                   className='col-span-3'
                 />
 
-                <Label className='text-foreground/50 text-xs font-extralight'>
+                <Label className='text-foreground/50 text-xs font-light'>
                   The name of your API key. (used for identification)
                 </Label>
               </div>
@@ -136,7 +136,7 @@ export default function AddApiKeyDialog({
 
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                    <Button variant='outline' className='w-full justify-between font-extralight'>
+                    <Button variant='outline' className='w-full justify-between font-light'>
                       {permission === 'public_access' ? 'Public Access' : 'Full Access'}
                       <ChevronDownIcon className='text-muted-foreground ml-2 h-4 w-4' />
                     </Button>
@@ -150,7 +150,7 @@ export default function AddApiKeyDialog({
                       }}>
                       <div className='flex flex-col items-start'>
                         <p>Public Access</p>
-                        <p className='text-foreground/70 text-sm font-extralight'>
+                        <p className='text-foreground/70 text-sm font-light'>
                           View and create public available resources.
                         </p>
                       </div>
@@ -170,7 +170,7 @@ export default function AddApiKeyDialog({
                       }}>
                       <div className='flex flex-col items-start'>
                         <p>Full Access</p>
-                        <p className='text-foreground/70 text-sm font-extralight'>
+                        <p className='text-foreground/70 text-sm font-light'>
                           Admin-level access to all project resources.
                         </p>
                       </div>
@@ -185,7 +185,7 @@ export default function AddApiKeyDialog({
                   </DropdownMenuContent>
                 </DropdownMenu>
 
-                <Label className='text-foreground/50 text-xs font-extralight'>
+                <Label className='text-foreground/50 text-xs font-light'>
                   The permission scopes of your API key.
                 </Label>
               </div>
@@ -193,7 +193,7 @@ export default function AddApiKeyDialog({
             <ResponsiveDialogFooter>
               <ResponsiveDialogClose asChild>
                 <Button
-                  variant='secondary'
+                  variant='outline'
                   type='button'
                   onClick={() => {
                     setName('');
@@ -223,7 +223,7 @@ export default function AddApiKeyDialog({
             </div>
 
             <button
-              className='text-foreground/50 hover:text-foreground/80 bg-background group flex h-9 w-full cursor-pointer items-center justify-between rounded-md border px-3 py-2 text-sm font-extralight transition-all duration-200 ease-in-out'
+              className='text-foreground/50 hover:text-foreground/80 bg-background group flex h-9 w-full cursor-pointer items-center justify-between rounded-md border px-3 py-2 text-sm font-light transition-all duration-200 ease-in-out'
               onClick={() => {
                 navigator.clipboard.writeText(token);
                 setHasCopied(true);
@@ -242,14 +242,14 @@ export default function AddApiKeyDialog({
               )}
             </button>
 
-            <Label className='text-foreground/50 text-xs font-extralight'>
+            <Label className='text-foreground/50 text-xs font-light'>
               Keep this key safe. You will not be able to view it again!
             </Label>
           </div>
           <ResponsiveDialogFooter>
             <ResponsiveDialogClose asChild>
               <Button
-                variant='secondary'
+                variant='default'
                 onClick={() => {
                   setToken('');
                 }}>

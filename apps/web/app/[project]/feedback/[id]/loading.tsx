@@ -26,17 +26,17 @@ export default function FeedbackPageLoading() {
             <div className='flex h-full w-full flex-col md:hidden'>
               <div className='flex h-full w-full flex-col gap-5 border-t p-5'>
                 <div className='flex w-full flex-row items-center justify-between'>
-                  <p className='text-foreground/70 text-sm font-light'>Upvotes</p>
+                  <p className='text-foreground/70 text-sm '>Upvotes</p>
                   <Skeleton className='h-5 w-10' />
                 </div>
 
                 <div className='flex w-full flex-row items-center justify-between'>
-                  <p className='text-foreground/70 text-sm font-light'>Status</p>
+                  <p className='text-foreground/70 text-sm '>Status</p>
                   <Skeleton className='h-5 w-[80px]' />
                 </div>
 
                 <div className='flex w-full flex-row items-center justify-between'>
-                  <p className='text-foreground/70 text-sm font-light'>Tags</p>
+                  <p className='text-foreground/70 text-sm '>Tags</p>
                   <div className='flex w-[100px] gap-2'>
                     <Skeleton className='h-5 w-20' />
                     <Skeleton className='h-5 w-20' />
@@ -48,13 +48,13 @@ export default function FeedbackPageLoading() {
 
               <div className='flex h-full w-full flex-col gap-5 px-5 pt-5'>
                 <div className='flex w-full flex-row items-center justify-between'>
-                  <p className='text-foreground/70 text-sm font-light'>Created</p>
+                  <p className='text-foreground/70 text-sm '>Created</p>
                   <Skeleton className='h-5 w-24' />
                 </div>
 
                 <div className='flex w-full flex-row items-center justify-between'>
-                  <p className='text-foreground/70 text-sm font-light'>Author</p>
-                  <div className='flex flex-row items-center gap-2 font-light'>
+                  <p className='text-foreground/70 text-sm '>Author</p>
+                  <div className='flex flex-row items-center gap-2 '>
                     <Skeleton className='h-7 w-7 rounded-full' />
                     <Skeleton className='h-5 w-32' />
                   </div>
@@ -82,7 +82,7 @@ export default function FeedbackPageLoading() {
                 <div className='flex h-full w-full flex-col' key={index}>
                   <div className='flex flex-row items-center justify-between'>
                     <div className='flex flex-row items-center'>
-                      <div className='text-foreground/60 flex select-none flex-row items-center justify-start gap-2 font-light'>
+                      <div className='text-foreground/60 flex select-none flex-row items-center justify-start gap-2 '>
                         <Skeleton className='h-8 w-8 gap-2 rounded-full' />
                         <Skeleton className='h-5 w-20 rounded-sm' />
                         ·
@@ -119,17 +119,17 @@ export default function FeedbackPageLoading() {
       <div className='hidden h-full w-1/3 min-w-[250px] flex-col gap-5 md:flex'>
         <div className='flex h-full w-full flex-col gap-5 pl-5'>
           <div className='flex w-full flex-row items-center justify-between'>
-            <p className='text-foreground/70 text-sm font-light'>Upvotes</p>
+            <p className='text-foreground/70 text-sm '>Upvotes</p>
             <Skeleton className='h-5 w-10' />
           </div>
 
           <div className='flex w-full flex-row items-center justify-between'>
-            <p className='text-foreground/70 text-sm font-light'>Status</p>
+            <p className='text-foreground/70 text-sm '>Status</p>
             <Skeleton className='h-5 w-[80px]' />
           </div>
 
           <div className='flex w-full flex-row items-center justify-between'>
-            <p className='text-foreground/70 text-sm font-light'>Tags</p>
+            <p className='text-foreground/70 text-sm '>Tags</p>
             <div className='flex w-[100px] gap-2'>
               <Skeleton className='h-5 w-20' />
               <Skeleton className='h-5 w-20' />
@@ -141,13 +141,13 @@ export default function FeedbackPageLoading() {
 
         <div className='flex h-full w-full flex-col gap-5 pl-5'>
           <div className='flex w-full flex-row items-center justify-between'>
-            <p className='text-foreground/70 text-sm font-light'>Created</p>
+            <p className='text-foreground/70 text-sm '>Created</p>
             <Skeleton className='h-5 w-24' />
           </div>
 
           <div className='flex w-full flex-row items-center justify-between'>
-            <p className='text-foreground/70 text-sm font-light'>Author</p>
-            <div className='flex flex-row items-center gap-2 font-light'>
+            <p className='text-foreground/70 text-sm '>Author</p>
+            <div className='flex flex-row items-center gap-2 '>
               <Skeleton className='h-7 w-7 rounded-full' />
               <Skeleton className='h-5 w-32' />
             </div>

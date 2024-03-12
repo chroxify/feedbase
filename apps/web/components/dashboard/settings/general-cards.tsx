@@ -391,17 +391,15 @@ export default function GeneralConfigCards({
           {/* Name & Slug Config */}
           <div className='flex h-full w-full flex-col space-y-3'>
             <div className='space-y-1'>
-              <Label className='text-foreground/70 text-sm font-light'>Name</Label>
+              <Label className='text-foreground/70 text-sm '>Name</Label>
               <Input className='w-full max-w-xs' value={project.name} onChange={handleNameChange} />
-              <Label className='text-foreground/50 text-xs font-extralight'>
-                This is the name of your project.
-              </Label>
+              <Label className='text-muted-foreground text-xs'>This is the name of your project.</Label>
             </div>
 
             <div className='space-y-1'>
-              <Label className='text-foreground/70 text-sm font-light'>Slug</Label>
+              <Label className='text-foreground/70 text-sm '>Slug</Label>
 
-              <div className='bg-background focus-within:ring-ring ring-offset-root flex h-9 w-full max-w-xs rounded-md border text-sm font-extralight transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
+              <div className='bg-background focus-within:ring-ring ring-offset-root flex h-8 w-full max-w-xs rounded-md border text-sm font-light transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
                 <Input
                   className='h-full w-full border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0'
                   placeholder='slug'
@@ -413,9 +411,7 @@ export default function GeneralConfigCards({
                 </div>
               </div>
 
-              <Label className='text-foreground/50 text-xs font-extralight'>
-                This is the subdomain of your project.
-              </Label>
+              <Label className='text-muted-foreground text-xs'>This is the subdomain of your project.</Label>
             </div>
           </div>
         </CardContent>
@@ -441,7 +437,7 @@ export default function GeneralConfigCards({
         </CardHeader>
         <CardContent>
           <div className='space-y-1'>
-            <Label className='text-foreground/70 text-sm font-light'>Domain</Label>
+            <Label className='text-foreground/70 text-sm '>Domain</Label>
             <Input
               className='w-full max-w-xs'
               placeholder='hub.domain.com'
@@ -451,7 +447,7 @@ export default function GeneralConfigCards({
               }}
               disabled={domainStatus !== null}
             />
-            <Label className='text-foreground/50 text-xs font-extralight'>
+            <Label className='text-muted-foreground text-xs'>
               The domain you want to link your public hub to.
             </Label>
           </div>
@@ -461,7 +457,7 @@ export default function GeneralConfigCards({
             <Accordion type='single' collapsible className='pt-1'>
               <AccordionItem value='item-1' className='-mb-3 max-w-[550px] border-none'>
                 <AccordionTrigger>
-                  <div className='flex flex-row items-center gap-2 text-base font-light'>
+                  <div className='flex flex-row items-center gap-2 text-sm'>
                     <ExclamationCircleIcon className='h-5 w-5 text-yellow-400' />
                     Verification Required
                     {/* Refresh Status */}
@@ -475,7 +471,7 @@ export default function GeneralConfigCards({
                   {!domainData && (
                     <div className='flex w-full flex-col items-center justify-center gap-2'>
                       <Icons.Spinner className='text-foreground/70 h-5 w-5 animate-spin' />
-                      <Label className='text-foreground/70 text-sm font-light'>Fetching domain data...</Label>
+                      <Label className='text-foreground/70 text-sm '>Fetching domain data...</Label>
                     </div>
                   )}
 
@@ -495,7 +491,7 @@ export default function GeneralConfigCards({
                         </TabsTrigger>
                       </TabsList>
                       <TabsContent value='a' className='flex w-full flex-col'>
-                        <Label className='text-foreground/80 cursor-text select-text pt-1 text-sm font-light'>
+                        <Label className='text-foreground/80 cursor-text select-text pt-1 text-sm '>
                           To verify your domain, add the following A Records to your DNS settings.
                         </Label>
 
@@ -504,14 +500,14 @@ export default function GeneralConfigCards({
                           {/* Type */}
                           <div className='flex flex-row gap-3'>
                             <div className='flex w-full flex-col justify-start gap-2'>
-                              <Label className='text-foreground/90 text-sm font-light'>Type</Label>
+                              <Label className='text-foreground/90 text-sm '>Type</Label>
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
                                 A
                               </span>
                             </div>
                             <div className='flex w-full flex-col justify-start gap-2'>
-                              <Label className='text-foreground/90 text-sm font-light'>Name</Label>
+                              <Label className='text-foreground/90 text-sm '>Name</Label>
                               <button
                                 className='group flex cursor-pointer flex-row items-center justify-between space-x-2'
                                 onClick={() => {
@@ -519,7 +515,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
                                   @
                                 </span>
 
@@ -531,7 +527,7 @@ export default function GeneralConfigCards({
                               </button>
                             </div>
                             <div className='flex w-full flex-col justify-start gap-2'>
-                              <Label className='text-foreground/90 text-sm font-light'>Value</Label>
+                              <Label className='text-foreground/90 text-sm '>Value</Label>
 
                               <button
                                 className='group flex cursor-pointer flex-row items-center justify-between space-x-2'
@@ -540,7 +536,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
                                   76.76.21.21
                                 </span>
 
@@ -552,7 +548,7 @@ export default function GeneralConfigCards({
                               </button>
                             </div>
                             <div className='flex w-full flex-col justify-start gap-2'>
-                              <Label className='text-foreground/90 text-sm font-light'>TTL</Label>
+                              <Label className='text-foreground/90 text-sm'>TTL</Label>
                               <button
                                 className='group flex cursor-pointer flex-row items-center justify-between space-x-2'
                                 onClick={() => {
@@ -560,7 +556,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
                                   86400
                                 </span>
 
@@ -575,7 +571,7 @@ export default function GeneralConfigCards({
                         </div>
 
                         {/* Note */}
-                        <Label className='text-foreground/80 cursor-text select-text text-sm font-light'>
+                        <Label className='text-foreground/80 cursor-text select-text text-sm'>
                           Note: If{' '}
                           <span
                             className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}>
@@ -585,7 +581,7 @@ export default function GeneralConfigCards({
                         </Label>
                       </TabsContent>
                       <TabsContent value='cname' className='flex w-full flex-col'>
-                        <Label className='text-foreground/80 -mt-1 cursor-text select-text text-sm font-light'>
+                        <Label className='text-foreground/80 -mt-1 cursor-text select-text text-sm '>
                           To verify your domain, add the following CNAME Records to your DNS settings.
                         </Label>
 
@@ -594,14 +590,14 @@ export default function GeneralConfigCards({
                           {/* Type */}
                           <div className='flex flex-row gap-3'>
                             <div className='flex w-full flex-col justify-start gap-2'>
-                              <Label className='text-foreground/90 text-sm font-light'>Type</Label>
+                              <Label className='text-foreground/90 text-sm '>Type</Label>
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
                                 CNAME
                               </span>
                             </div>
                             <div className='flex w-full flex-col justify-start gap-2'>
-                              <Label className='text-foreground/90 text-sm font-light'>Name</Label>
+                              <Label className='text-foreground/90 text-sm '>Name</Label>
                               <button
                                 className='group flex cursor-pointer flex-row items-center justify-between space-x-2'
                                 onClick={() => {
@@ -609,7 +605,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
                                   www
                                 </span>
 
@@ -621,7 +617,7 @@ export default function GeneralConfigCards({
                               </button>
                             </div>
                             <div className='flex w-full flex-col justify-start gap-2'>
-                              <Label className='text-foreground/90 text-sm font-light'>Value</Label>
+                              <Label className='text-foreground/90 text-sm '>Value</Label>
 
                               <button
                                 className='group flex cursor-pointer flex-row items-center justify-between space-x-2'
@@ -630,7 +626,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
                                   cname.vercel-dns.com
                                 </span>
 
@@ -642,7 +638,7 @@ export default function GeneralConfigCards({
                               </button>
                             </div>
                             <div className='flex w-full flex-col justify-start gap-2'>
-                              <Label className='text-foreground/90 text-sm font-light'>TTL</Label>
+                              <Label className='text-foreground/90 text-sm '>TTL</Label>
                               <button
                                 className='group flex cursor-pointer flex-row items-center justify-between space-x-2'
                                 onClick={() => {
@@ -650,7 +646,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
                                   86400
                                 </span>
 
@@ -665,7 +661,7 @@ export default function GeneralConfigCards({
                         </div>
 
                         {/* Note */}
-                        <Label className='text-foreground/80 cursor-text select-text pb-2 text-sm font-light'>
+                        <Label className='text-foreground/80 cursor-text select-text pb-2 text-sm '>
                           Note: If{' '}
                           <span
                             className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}>
@@ -680,7 +676,7 @@ export default function GeneralConfigCards({
                   {/* Verification Instructions for already vercel assigned domains */}
                   {domainData?.verification !== undefined ? (
                     <div className='flex max-w-[600px] flex-col space-y-2'>
-                      <Label className='text-foreground/80 cursor-text select-text pt-1 text-sm font-light'>
+                      <Label className='text-foreground/80 cursor-text select-text pt-1 text-sm '>
                         To prove ownership of{' '}
                         <span
                           className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}>
@@ -694,14 +690,14 @@ export default function GeneralConfigCards({
                         {/* Type */}
                         <div className='flex flex-row gap-3'>
                           <div className='flex w-full flex-col justify-start gap-2'>
-                            <Label className='text-foreground/90 text-sm font-light'>Type</Label>
+                            <Label className='text-foreground/90 text-sm '>Type</Label>
                             <span
-                              className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                              className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
                               TXT
                             </span>
                           </div>
                           <div className='flex w-full flex-col justify-start gap-2'>
-                            <Label className='text-foreground/90 text-sm font-light'>Name</Label>
+                            <Label className='text-foreground/90 text-sm '>Name</Label>
                             <button
                               className='group flex cursor-pointer flex-row items-center justify-between space-x-2'
                               onClick={() => {
@@ -709,7 +705,7 @@ export default function GeneralConfigCards({
                               }}
                               type='button'>
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
                                 {domainData.verification[0].domain}
                               </span>
 
@@ -721,7 +717,7 @@ export default function GeneralConfigCards({
                             </button>
                           </div>
                           <div className='flex w-full flex-col justify-start gap-2'>
-                            <Label className='text-foreground/90 text-sm font-light'>Value</Label>
+                            <Label className='text-foreground/90 text-sm '>Value</Label>
 
                             <button
                               className='group flex cursor-pointer flex-row items-center justify-between space-x-2'
@@ -730,7 +726,7 @@ export default function GeneralConfigCards({
                               }}
                               type='button'>
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-extralight`}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
                                 {domainData.verification[0].value}
                               </span>
 
@@ -745,7 +741,7 @@ export default function GeneralConfigCards({
                       </div>
 
                       {/* Note */}
-                      <Label className='text-foreground/80 cursor-text select-text text-sm font-light'>
+                      <Label className='text-foreground/80 cursor-text select-text text-sm '>
                         Warning: If{' '}
                         <span
                           className={`${fontMono.variable} bg-background font-monospace rounded px-1 py-0.5`}>
@@ -815,18 +811,16 @@ export default function GeneralConfigCards({
               <div
                 className='flex max-w-xs flex-row items-center justify-between rounded-md px-3.5 py-1.5'
                 key={apiKey.id}>
-                <span className='text-foreground/90 w-full max-w-[100px] text-sm font-light'>
-                  {apiKey.name}
-                </span>
+                <span className='text-foreground/90 w-full max-w-[100px] text-sm '>{apiKey.name}</span>
 
                 <div className='flex w-full max-w-[120px]'>
-                  <span className='text-foreground/70 bg-background line-clamp-1 w-[80px] rounded py-0.5 pl-1.5 pr-1 text-xs font-light'>
+                  <span className='text-foreground/70 bg-background line-clamp-1 w-[80px] rounded py-0.5 pl-1.5 pr-1 text-xs '>
                     {/* Replace last 2 characters with new line so it line clamps  */}
                     {`${apiKey.short_token.slice(0, -1)}\n${apiKey.short_token.slice(-1)}`}
                   </span>
                 </div>
                 {/* Permissions */}
-                <span className='text-foreground/90 w-full max-w-[80px] text-sm font-light'>
+                <span className='text-foreground/90 w-full max-w-[80px] text-sm '>
                   {apiKey.permission === 'full_access' ? 'Full Access' : 'Public Only'}
                 </span>
 
@@ -835,7 +829,7 @@ export default function GeneralConfigCards({
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button
-                        variant='secondary'
+                        variant='ghost'
                         size='icon'
                         className='text-foreground/50 hover:text-foreground h-7 w-4'>
                         <MoreVertical className='h-4 w-4' />
@@ -909,10 +903,7 @@ export default function GeneralConfigCards({
           <CardDescription>Export all your project&apos;s data in a CSV file.</CardDescription>
         </CardHeader>
         <CardContent className='flex flex-row space-x-4'>
-          <Button
-            variant='outline'
-            onClick={handleExportFeedback}
-            className='text-foreground/70 w-fit font-light'>
+          <Button variant='outline' onClick={handleExportFeedback} className='text-foreground/70 w-fit '>
             <Download className='mr-2 h-4 w-4' />
             Export data
           </Button>

@@ -37,7 +37,7 @@ export default function HomeContent() {
         {/* Title */}
         <div className='max-w-3xl sm:shrink-0'>
           {/* Badge */}
-          <Badge className='w-fit select-none bg-rose-400/10 font-light text-rose-400 hover:cursor-default hover:bg-rose-400/20'>
+          <Badge className='w-fit select-none bg-rose-400/10  text-rose-400 hover:cursor-default hover:bg-rose-400/20'>
             Currently in private beta
           </Badge>
 
@@ -47,7 +47,7 @@ export default function HomeContent() {
           </h1>
 
           {/* Description */}
-          <p className='mb-8 mt-4 text-base font-extralight text-white/60 sm:text-lg'>
+          <p className='mb-8 mt-4 text-base font-light text-white/60 sm:text-lg'>
             Create changelogs, roadmaps, and collect feedback with ease. Feedbase provides the best user and
             team experience, allowing you to focus on building your product.
           </p>

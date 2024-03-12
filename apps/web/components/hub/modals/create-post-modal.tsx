@@ -97,7 +97,7 @@ export default function CreatePostModal({
               onChange={(event) => {
                 setTitle(event.target.value);
               }}
-              className='bg-secondary/30 font-light'
+              className='bg-secondary/30 '
             />
           </div>
           {/* Project Slug */}
@@ -111,7 +111,7 @@ export default function CreatePostModal({
               <PostEditor content={content} setContent={setContent} className='min-h-[50px]' />
             </div>
 
-            <Label className='text-foreground/50 text-xs font-extralight'>
+            <Label className='text-foreground/50 text-xs font-light'>
               You can use Markdown to format your post.
             </Label>
           </div>

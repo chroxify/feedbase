@@ -35,7 +35,7 @@ export default function AnalyticsCards({
           <CardHeader className='flex flex-row items-center justify-between space-y-0 p-3'>
             <CardTitle>Unique Visitors</CardTitle>
 
-            <span className='text-foreground/60 text-sm font-light'>
+            <span className='text-foreground/60 text-sm '>
               {updatedAnalyticsData.reduce((a, b) => a + b.visitors, 0)}
             </span>
           </CardHeader>
@@ -51,7 +51,7 @@ export default function AnalyticsCards({
           <CardHeader className='flex flex-row items-center justify-between space-y-0 p-3'>
             <CardTitle>Page Views</CardTitle>
 
-            <span className='text-foreground/60 text-sm font-light'>
+            <span className='text-foreground/60 text-sm '>
               {updatedAnalyticsData.reduce((a, b) => a + b.clicks, 0)}
             </span>
           </CardHeader>
@@ -71,7 +71,7 @@ export default function AnalyticsCards({
             <CardTitle>Top Changelogs</CardTitle>
 
             <button
-              className='text-foreground/60 text-sm font-light hover:cursor-pointer'
+              className='text-foreground/60 text-sm  hover:cursor-pointer'
               onClick={() => {
                 setChangelogsView(changelogsView === 'clicks' ? 'visitors' : 'clicks');
               }}
@@ -85,7 +85,7 @@ export default function AnalyticsCards({
               !topChangelogData.length && 'flex items-center justify-center'
             )}>
             {!topChangelogData.length ? (
-              <p className='text-foreground/60 h-full text-sm font-light'>Not enough data</p>
+              <p className='text-foreground/60 h-full text-sm '>Not enough data</p>
             ) : (
               <BarList
                 data={topChangelogData}
@@ -103,7 +103,7 @@ export default function AnalyticsCards({
             <CardTitle>Top Feedback</CardTitle>
 
             <button
-              className='text-foreground/60 text-sm font-light hover:cursor-pointer'
+              className='text-foreground/60 text-sm  hover:cursor-pointer'
               onClick={() => {
                 setFeedbackView(feedbackView === 'clicks' ? 'visitors' : 'clicks');
               }}
@@ -117,7 +117,7 @@ export default function AnalyticsCards({
               !topFeedbackData.length && 'flex items-center justify-center'
             )}>
             {!topFeedbackData.length ? (
-              <p className='text-foreground/60 h-full text-sm font-light'>Not enough data</p>
+              <p className='text-foreground/60 h-full text-sm '>Not enough data</p>
             ) : (
               <BarList
                 data={topFeedbackData}
