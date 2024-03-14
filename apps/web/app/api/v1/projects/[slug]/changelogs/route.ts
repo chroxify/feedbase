@@ -24,7 +24,8 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
     image,
     publish_date: publishDate,
     published,
-  } = (await req.json()) as ChangelogProps['Insert'];
+    notify_subscribers: notifySubscribers,
+  } = (await req.json()) as ChangelogProps['Insert'] & { notify_subscribers: boolean };
 
   // Validate Request Body
   if (published) {
@@ -49,6 +50,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
       slug: 'dummy-slug',
       author_id: 'dummy-author',
     },
+    notifySubscribers,
     'route'
   );
 

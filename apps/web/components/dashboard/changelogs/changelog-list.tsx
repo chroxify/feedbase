@@ -1,9 +1,13 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { PhotoIcon } from '@heroicons/react/24/outline';
-import { MoreVertical } from 'lucide-react';
+import { Skeleton } from '@ui/components/ui/skeleton';
+import { cn } from '@ui/lib/utils';
+import { Copy, Edit, MoreVertical, Trash } from 'lucide-react';
 import { toast } from 'sonner';
+import useSWR from 'swr';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -24,15 +28,19 @@ import {
   DropdownMenuTrigger,
 } from 'ui/components/ui/dropdown-menu';
 import { ChangelogProps } from '@/lib/types';
+import { fetcher } from '@/lib/utils';
 import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';
 
-export default function ChangelogList({
-  changelogs,
-  projectSlug,
-}: {
-  changelogs: ChangelogProps['Row'][];
-  projectSlug: string;
-}) {
+export default function ChangelogList({ projectSlug }: { projectSlug: string }) {
+  const [tab, setTab] = useState<'draft' | 'scheduled' | 'published'>('draft');
+  const [changelogs, setChangelogs] = useState<ChangelogProps['Row'][]>();
+
+  const {
+    data: changelogsData,
+    isLoading,
+    mutate,
+  } = useSWR<ChangelogProps['Row'][]>(`/api/v1/projects/${projectSlug}/changelogs`, fetcher);
+
   async function onDeleteChangelog(changelog: ChangelogProps['Row']) {
     const promise = new Promise((resolve, reject) => {
       fetch(`/api/v1/projects/${projectSlug}/changelogs/${changelog.id}`, {
@@ -56,62 +64,192 @@ export default function ChangelogList({
 
     toast.promise(promise, {
       loading: 'Deleting changelog...',
-      success: `${changelog.title !== '' ? changelog.title : 'Draft'} was deleted successfully!`,
+      success: `Changelog deleted successfully!`,
       error: (err) => {
         return err;
       },
     });
 
     promise.then(() => {
-      window.location.reload();
+      mutate();
     });
   }
 
+  async function onDuplicateChangelog(changelog: ChangelogProps['Row']) {
+    const promise = new Promise((resolve, reject) => {
+      fetch(`/api/v1/projects/${projectSlug}/changelogs`, {
+        method: 'POST',
+        body: JSON.stringify({
+          title: changelog.title,
+          summary: changelog.summary,
+          content: changelog.content,
+          image: changelog.image,
+          publish_date: new Date().toISOString(),
+          published: false,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.error) {
+            reject(data.error);
+          } else {
+            resolve(data);
+          }
+        })
+        .catch((err) => {
+          reject(err.message);
+        });
+    });
+
+    toast.promise(promise, {
+      loading: 'Duplicating changelog...',
+      success: `Changelog duplicated successfully!`,
+      error: (err) => {
+        return err;
+      },
+    });
+
+    promise.then(() => {
+      mutate();
+    });
+  }
+
+  useEffect(() => {
+    if (changelogsData) {
+      if (tab) {
+        const filteredChangelogs = changelogsData.filter((changelog) => {
+          if (tab === 'draft') {
+            return !changelog.published;
+          } else if (tab === 'scheduled') {
+            return (
+              changelog.published &&
+              changelog.publish_date &&
+              changelog.publish_date > new Date().toISOString()
+            );
+          } else if (tab === 'published') {
+            return (
+              changelog.published &&
+              changelog.publish_date &&
+              changelog.publish_date <= new Date().toISOString()
+            );
+          }
+          return false;
+        });
+
+        // Sort by publish date (newest first)
+        filteredChangelogs.sort((a, b) => {
+          return new Date(b.publish_date!).getTime() - new Date(a.publish_date!).getTime();
+        });
+
+        setChangelogs(filteredChangelogs);
+      } else {
+        setChangelogs(changelogsData);
+      }
+    }
+  }, [changelogsData, tab]);
+
   return (
-    <div className='flex flex-col gap-4'>
-      {changelogs.map((changelog) => (
-        <div
-          className='bg-card text-card-foreground flex h-40 gap-5 rounded-lg border p-3 shadow-sm sm:h-44 md:h-48'
-          key={changelog.id}>
-          {/* Image */}
-          <div className='flex h-full w-full max-w-xs flex-col items-center justify-center'>
-            {changelog.image ? (
-              <div className='border-input bg-background hover:bg-accent group relative mt-1 flex h-full w-full flex-col items-center justify-center rounded-md border shadow-sm transition-all'>
-                <div className='absolute h-full w-full rounded-md'>
-                  <Image
-                    src={changelog.image}
-                    alt='Preview Image'
-                    fill
-                    sizes='100%'
-                    className='rounded-md object-cover'
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className='border-input bg-background hover:bg-accent group relative mt-1 flex h-full w-full flex-col items-center justify-center rounded-md border shadow-sm transition-all'>
-                <div className='bg-background absolute flex h-full w-full items-center justify-center rounded-md'>
-                  <div className='flex flex-col items-center justify-center'>
-                    <PhotoIcon className='text-foreground/50 h-8 w-8' />
-                    <p className='text-foreground/50 text-sm'>No image</p>
+    <>
+      {/* Header tabs */}
+      <div className='flex w-full flex-row items-center justify-start gap-3 border-b px-5 pt-3'>
+        <Button
+          variant='ghost'
+          className={cn(
+            'text-muted-foreground hover:border-muted-foreground h-fit rounded-none border-b border-transparent px-2 py-3 transition-colors hover:bg-transparent',
+            tab === 'draft' && 'border-foreground text-foreground hover:border-foreground'
+          )}
+          onClick={() => {
+            setTab('draft');
+          }}>
+          Drafts
+        </Button>
+        <Button
+          variant='ghost'
+          className={cn(
+            'text-muted-foreground hover:border-muted-foreground h-fit rounded-none border-b border-transparent px-2 py-3 transition-colors hover:bg-transparent',
+            tab === 'scheduled' && 'border-foreground text-foreground hover:border-foreground'
+          )}
+          onClick={() => {
+            setTab('scheduled');
+          }}>
+          Scheduled
+        </Button>
+        <Button
+          variant='ghost'
+          className={cn(
+            'text-muted-foreground hover:border-muted-foreground h-fit rounded-none border-b border-transparent px-2 py-3 transition-colors hover:bg-transparent',
+            tab === 'published' && 'border-foreground text-foreground hover:border-foreground'
+          )}
+          onClick={() => {
+            setTab('published');
+          }}>
+          Published
+        </Button>
+      </div>
+
+      <div className='flex h-full w-full flex-col items-center justify-start gap-4 overflow-y-auto p-5'>
+        {/* Skeleton Loading */}
+        {isLoading ? [...Array(5)].map((_, index) => <Skeleton key={index} className='h-32 w-full' />) : null}
+
+        {/* Empty State */}
+        {changelogs && changelogs.length === 0 ? (
+          <div className='flex flex-col items-center justify-center gap-4 pt-20'>
+            <div className='flex flex-col items-center justify-center gap-1'>
+              <h3 className='text-foreground text-center text-2xl font-medium'>No changelogs found.</h3>
+              <p className='text-foreground/60 text-center'>Create a new changelog to get started.</p>
+            </div>
+            <AddChangelogModal projectSlug={projectSlug}>
+              <Button size='sm'>Create Changelog</Button>
+            </AddChangelogModal>
+          </div>
+        ) : null}
+
+        {/* Changelogs */}
+        {changelogs?.map((changelog) => (
+          <div
+            className='bg-card text-card-foreground flex min-h-[8rem] w-full gap-5 rounded-lg border p-2.5 shadow-sm'
+            key={changelog.id}>
+            {/* Image */}
+            <div className='flex h-full min-w-[190px] flex-col items-center justify-center'>
+              {changelog.image ? (
+                <div className='border-input bg-background hover:bg-accent group relative h-full w-full flex-col items-center justify-center rounded-md border shadow-sm transition-all'>
+                  <div className='absolute h-full w-full rounded-md'>
+                    <Image
+                      src={changelog.image}
+                      alt='Preview Image'
+                      fill
+                      sizes='100%'
+                      className='rounded-md object-cover'
+                    />
                   </div>
                 </div>
-              </div>
-            )}
-          </div>
+              ) : (
+                <div className='border-input bg-background hover:bg-accent group relative flex h-full w-full flex-col items-center justify-center rounded-md border shadow-sm transition-all'>
+                  <div className='bg-background absolute flex h-full w-full items-center justify-center rounded-md'>
+                    <div className='flex flex-col items-center justify-center'>
+                      <PhotoIcon className='text-foreground/50 h-8 w-8' />
+                      <p className='text-foreground/50 text-sm'>No image</p>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
 
-          {/* Content */}
-          <div className='flex h-full w-full flex-row gap-5 py-1'>
-            {/* Tags */}
-            <div className='flex h-full w-[100%] flex-col gap-1'>
+            {/* Content */}
+            <div className='flex h-full w-full flex-col gap-2'>
+              {/* Tags */}
               <div className='flex flex-row gap-2'>
                 {/* If published is true, show published badge, else show draft badge */}
-                <Badge size='default' variant='secondary' className='self-start'>
+                <Badge variant='secondary' className='self-start border'>
                   {changelog.published ? 'Published' : 'Draft'}
                 </Badge>
 
                 {/* If date is not undefined, show date */}
                 {changelog.publish_date ? (
-                  <Badge size='default' variant='secondary' className='shrink-0 self-start'>
+                  <Badge variant='secondary' className='shrink-0 self-start'>
                     {new Date(changelog.publish_date).toLocaleDateString('en-US', {
                       month: 'short',
                       day: 'numeric',
@@ -121,74 +259,79 @@ export default function ChangelogList({
               </div>
 
               {/* Title and Summary */}
-              <div className='text-1xl font-medium'>{changelog.title ? changelog.title : 'Untitled'}</div>
-              <div className='text-foreground/60 line-clamp-3 text-sm font-light'>
-                {changelog.summary ? changelog.summary : 'No changelog summary provided.'}
+              <div className='flex flex-col'>
+                <span className='text-1xl font-medium'>{changelog.title ? changelog.title : 'Untitled'}</span>
+                <div className='text-foreground/60 line-clamp-2 text-sm'>
+                  {changelog.summary ? changelog.summary : 'No changelog summary provided.'}
+                </div>
               </div>
             </div>
 
             {/* Actions */}
-            {/* Top right corner at very top of card */}
-            <div className='flex flex-col justify-between'>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button
-                    variant='secondary'
-                    size='icon'
-                    className='text-foreground/50 hover:text-foreground -mt-1.5 h-8 w-5'>
-                    <MoreVertical className='h-5 w-5' />
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className=' justify-between' align='end'>
-                  <AddChangelogModal
-                    projectSlug={projectSlug}
-                    trigger={
-                      <DropdownMenuItem
-                        onSelect={(event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                        }}>
-                        Edit
-                      </DropdownMenuItem>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant='ghost'
+                  size='icon'
+                  className='text-foreground/50 hover:text-foreground h-7 w-4'>
+                  <MoreVertical className='h-4 w-4' />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className=' justify-between' align='end'>
+                <AddChangelogModal projectSlug={projectSlug} changelogData={changelog} isEdit>
+                  <DropdownMenuItem
+                    onSelect={(event) => {
+                      event.preventDefault();
+                      event.stopPropagation();
+                    }}>
+                    <Edit className='mr-2 h-4 w-4' />
+                    Edit
+                  </DropdownMenuItem>
+                </AddChangelogModal>
+                <DropdownMenuItem
+                  onSelect={() => {
+                    onDuplicateChangelog(changelog);
+                    if (changelog.published) {
+                      setTab('draft');
                     }
-                    changelogData={changelog}
-                    isEdit
-                  />
-
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <DropdownMenuItem
-                        onSelect={(event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                        }}
-                        className='text-destructive focus:text-destructive/90'>
-                        Delete
-                      </DropdownMenuItem>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Delete Changlog</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          Are you sure you want to delete this changelog? This action cannot be undone.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          className='bg-destructive hover:bg-destructive/90 text-foreground'
-                          onClick={() => onDeleteChangelog(changelog)}>
-                          Yes, delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+                  }}>
+                  <Copy className='mr-2 h-4 w-4' />
+                  {changelog.published ? 'Duplicate in Drafts' : 'Duplicate'}
+                </DropdownMenuItem>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <DropdownMenuItem
+                      onSelect={(event) => {
+                        event.preventDefault();
+                        event.stopPropagation();
+                      }}
+                      className='text-destructive focus:text-destructive/90 focus:bg-destructive/20'>
+                      <Trash className='mr-2 h-4 w-4' />
+                      Delete
+                    </DropdownMenuItem>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete Changelog</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to delete this changelog? This action cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        className='bg-destructive text-destructive-foreground hover:bg-destructive/90'
+                        onClick={() => onDeleteChangelog(changelog)}>
+                        Yes, delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   );
 }

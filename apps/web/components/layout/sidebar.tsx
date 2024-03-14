@@ -12,7 +12,7 @@ export default async function Sidebar({
   currentProject: ProjectProps['Row'];
 }) {
   return (
-    <div className='fixed z-50 hidden h-full min-w-[240px] flex-col items-center justify-between border-r p-5 pb-20 md:flex'>
+    <div className='bg-root fixed left-0 top-16 z-50 hidden h-full min-w-[240px] flex-col items-center justify-between border-r p-5 pb-20 md:flex'>
       <div className='flex w-full flex-col gap-y-10'>
         {/* Main Tabs */}
         <NavTabs tabs={tabs} initialTab={initialTab} projectSlug={currentProject.slug} />
@@ -22,7 +22,7 @@ export default async function Sidebar({
         <Link href='https://github.com/chroxify/feedbase/issues/new' rel='noopener noreferrer' target='_blank'>
           <Button
             variant='secondary'
-            className='w-full items-center justify-start  gap-1 border border-transparent p-1 text-secondary-foreground/50 hover:text-secondary-foreground hover:bg-transparent font-light group'>
+            className='w-full items-center justify-start  gap-1 border border-transparent p-1 text-secondary-foreground/50 hover:text-secondary-foreground hover:bg-transparent  group'>
             <div className='flex flex-row items-center justify-center p-[6px]'>
               <LottiePlayer 
               lottieSrc={ChatIcon}

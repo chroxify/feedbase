@@ -38,7 +38,7 @@ export default function NavTabs({
     <div className='flex flex-col gap-5'>
       {Object.keys(tabs).map((key) => (
         <div key={key} className='flex flex-col gap-1'>
-          <Label className='text-xs font-medium'>{key}</Label>
+          <Label className='pb-1 text-xs font-medium'>{key}</Label>
           {tabs[key].map((tab) => (
             <Link
               href={tab.slug === 'roadmap' ? '#' : `/${projectSlug}/${tab.slug}`}

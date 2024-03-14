@@ -1,19 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { DialogClose } from '@radix-ui/react-dialog';
+import { Checkbox } from '@ui/components/ui/checkbox';
+import { Label } from '@ui/components/ui/label';
 import {
   ResponsiveDialog,
   ResponsiveDialogClose,
   ResponsiveDialogContent,
-  ResponsiveDialogDescription,
   ResponsiveDialogFooter,
-  ResponsiveDialogHeader,
-  ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
 } from '@ui/components/ui/responsive-dialog';
-import { X } from 'lucide-react';
+import { Skeleton } from '@ui/components/ui/skeleton';
+import { format } from 'date-fns';
+import { Bell, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
+import useSWR, { useSWRConfig } from 'swr';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -29,33 +30,42 @@ import { Button } from 'ui/components/ui/button';
 import { Input } from 'ui/components/ui/input';
 import { Textarea } from 'ui/components/ui/textarea';
 import { ChangelogProps } from '@/lib/types';
-import Editor from '@/components/dashboard/changelogs/content-editor';
-import { PublishDatePicker } from '@/components/dashboard/changelogs/date-picker';
-import FileDrop from '@/components/dashboard/changelogs/image-upload';
-import TooltipLabel from '@/components/shared/tooltip-label';
+import { fetcher } from '@/lib/utils';
+import { DatePicker } from '@/components/shared/date-picker';
+import FileDrop from '@/components/shared/file-drop';
+import { Icons } from '@/components/shared/icons/icons-static';
+import RichTextEditor from '@/components/shared/tiptap-editor';
+import DefaultTooltip from '@/components/shared/tooltip';
 
 export function AddChangelogModal({
-  trigger,
+  children,
   projectSlug,
   changelogData,
   isEdit,
 }: {
-  trigger: React.ReactNode;
+  children: React.ReactNode;
   projectSlug: string;
   changelogData?: ChangelogProps['Row'];
   isEdit?: boolean;
 }) {
-  const defaultEditorContent =
-    '<p>Write <em>styled</em> <mark>markdown</mark> in <strong>here</strong>.</p><p>Examples:</p><ul><li><p><code>#</code>, <code>##</code>, <code>###</code>, <code>####</code>, <code>#####</code>, <code>######</code> for different headings</p></li></ul><ul><li><p><code>==highlight==</code> for <mark>highlighted text</mark></p></li><li><p> <code>**bold**, *italic* and ~~strike~~</code> for <strong>bold</strong>,  <em>italic and <s>strike</s></em></p></li><li><p>and much more like  <code>(c)</code>, <code>-&gt;</code>, <code>&gt;&gt;</code>, <code>1/2</code>, <code>!=</code>, or <code>--</code></p></li></ul>';
+  const { mutate } = useSWRConfig();
+  const [open, setOpen] = useState<boolean>(false);
+  const [alertOpen, setAlertOpen] = useState<boolean>(false);
+  const [notifySubscribers, setNotifySubscribers] = useState<boolean>(true);
+  const { data: subscribersCount } = useSWR<{ count: number }>(
+    `/api/v1/projects/${projectSlug}/changelogs/subscribers/count`,
+    fetcher,
+    { revalidateOnFocus: false }
+  );
 
   const [data, setData] = useState<ChangelogProps['Row']>({
     id: changelogData?.id || '',
     project_id: changelogData?.project_id || '',
     title: changelogData?.title || '',
-    content: changelogData?.content || defaultEditorContent,
+    content: changelogData?.content || '',
     summary: changelogData?.summary || '',
     image: changelogData?.image || null,
-    publish_date: changelogData?.publish_date || null,
+    publish_date: changelogData?.publish_date || new Date().toISOString(),
     published: changelogData?.published || false,
     slug: 'dummy-slug',
     author_id: 'dummy-author',
@@ -83,6 +93,7 @@ export function AddChangelogModal({
           image: data.image || null,
           publish_date: data.publish_date || null,
           published: createType === 'publish',
+          notify_subscribers: notifySubscribers,
         }),
       })
         .then((res) => res.json())
@@ -99,15 +110,26 @@ export function AddChangelogModal({
     });
 
     toast.promise(promise, {
-      loading: 'Creating changelog...',
-      success: `${data.title !== '' ? data.title : 'Draft'} was created successfully!`,
+      loading: `${createType === 'publish' ? 'Publishing' : 'Creating'} changelog...`,
+      success: () => {
+        mutate(`/api/v1/projects/${projectSlug}/changelogs`);
+        setData({
+          ...data,
+          title: '',
+          content: '',
+          summary: '',
+          image: null,
+          publish_date: new Date().toISOString(),
+        });
+        if (createType === 'publish') {
+          return `Changelog was published successfully!`;
+        }
+
+        return `New draft was created successfully!`;
+      },
       error: (err) => {
         return err;
       },
-    });
-
-    promise.then(() => {
-      window.location.href = `/${projectSlug}/changelog`;
     });
   }
 
@@ -149,179 +171,273 @@ export function AddChangelogModal({
     });
 
     toast.promise(promise, {
-      loading: 'Updating changelog...',
-      success: `${data.title !== '' ? data.title : 'Draft'} was updated successfully!`,
+      loading: `${updateType === 'publish' ? 'Publishing' : 'Updating'} changelog...`,
+      success: () => {
+        mutate(`/api/v1/projects/${projectSlug}/changelogs`);
+        setData({
+          ...data,
+          title: '',
+          content: '',
+          summary: '',
+          image: null,
+          publish_date: new Date().toISOString(),
+        });
+        return `${data.title !== '' ? data.title : 'Draft'} was updated successfully!`;
+      },
       error: (err) => {
         return err;
       },
     });
+  }
 
-    promise.then(() => {
-      window.location.href = `/${projectSlug}/changelog`;
-    });
+  function resizeTextArea() {
+    const textArea = document.querySelector('textarea');
+    if (textArea) {
+      textArea.style.height = 'auto';
+      textArea.style.height = `${Math.min(textArea.scrollHeight, 180)}px`;
+    }
+  }
+
+  function findMissingFields() {
+    const missingFields = [];
+    if (!data.title) {
+      missingFields.push('Title');
+    }
+    if (!data.content) {
+      missingFields.push('Content');
+    }
+    if (!data.summary) {
+      missingFields.push('Summary');
+    }
+    if (!data.publish_date) {
+      missingFields.push('Publish Date');
+    }
+    if (!data.image) {
+      missingFields.push('Image');
+    }
+    return missingFields;
   }
 
   return (
-    <ResponsiveDialog>
-      <ResponsiveDialogTrigger asChild>{trigger}</ResponsiveDialogTrigger>
-      <ResponsiveDialogContent className='max-h-[96%] max-w-full px-0 sm:max-w-2xl sm:p-8 lg:max-w-4xl'>
-        <div className='flex w-full flex-col overflow-auto px-4 sm:gap-4 sm:px-1'>
-          <ResponsiveDialogHeader>
-            <ResponsiveDialogTitle>Create new changelog</ResponsiveDialogTitle>
-            <ResponsiveDialogDescription>
-              Provide your users with the latest updates via changelogs.
-            </ResponsiveDialogDescription>
-          </ResponsiveDialogHeader>
+    <ResponsiveDialog open={open} onOpenChange={setOpen}>
+      <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
+      <ResponsiveDialogContent className='sm:max-w-screen-[300px] flex h-[96%] w-full flex-col justify-between px-0 sm:h-min sm:max-h-[70%] sm:min-h-[60%] sm:p-0 md:max-w-screen-md lg:max-w-screen-lg'>
+        <div className='flex h-full w-full flex-row justify-between gap-8 sm:px-7 sm:pt-7'>
+          <div className='flex h-full min-h-full w-full flex-col  gap-4'>
+            {/* Title */}
+            <Input
+              placeholder='Title'
+              value={data.title}
+              onChange={(e) => {
+                setData({ ...data, title: e.target.value });
+              }}
+              className='sticky rounded-none border-transparent bg-transparent p-0 text-2xl font-medium focus-visible:ring-transparent sm:top-7'
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  const editor = document.querySelector('.tiptap');
+                  if (editor instanceof HTMLElement) {
+                    editor.focus();
+                  }
+                }
+              }}
+              style={{ direction: 'ltr' }}
+            />
 
-          {/* 2 Rows with full width, first row has 2 columns, second is full widht */}
-          <div className='flex h-full flex-col gap-4'>
-            {/* First Row */}
-            <div className='flex flex-col justify-between gap-4 sm:flex-row'>
-              <div className='flex h-full w-full flex-col gap-4 sm:w-1/2'>
-                <div className='flex flex-row gap-2'>
-                  {/* Title */}
-                  <div className='flex w-1/2 flex-col gap-2'>
-                    <TooltipLabel label='Title' tooltip='The title of your changelog.' />
-                    <Input
-                      placeholder='Changelog Title'
-                      className='bg-root w-full'
-                      onChange={(e) => {
-                        setData((prev) => ({ ...prev, title: e.target.value }));
-                      }}
-                      value={data.title}
-                    />
-                  </div>
+            {/* Content Editor */}
+            <RichTextEditor
+              content={data.content || ''}
+              setContent={(content: string) => {
+                setData({ ...data, content });
+              }}
+              parentClassName='overflow-auto min-h-full no-scrollba h-full'
+              className='prose-sm min-h-full min-w-full text-[15px]'
+              placeholder='Write your changelog here...'
+            />
+          </div>
 
-                  {/* Date */}
-                  <div className='flex w-1/2 flex-col gap-2'>
-                    <TooltipLabel label='Date' tooltip='The publish date of the changelog.' />
-                    <PublishDatePicker className='w-full' data={data} setData={setData} />
-                  </div>
-                </div>
+          <div className='mr-[1px] flex min-h-full w-full flex-col gap-4 sm:max-w-[270px] lg:max-w-[325px]'>
+            {/* Image Upload */}
+            <FileDrop
+              image={data.image}
+              setImage={(image: string | null) => {
+                setData({ ...data, image });
+              }}
+              className='sm:h-44 lg:h-48'
+              labelComponent={<Label htmlFor='image'>Cover Image</Label>}
+            />
 
-                {/* Summary */}
-                <div className='flex h-full flex-col gap-2'>
-                  <TooltipLabel label='Summary' tooltip='A short summary of the changelog.' />
-                  <Textarea
-                    placeholder='Changelog Summary'
-                    className='bg-root h-20 w-full resize-none items-start justify-start text-start'
-                    onChange={(e) => {
-                      setData((prev) => ({ ...prev, summary: e.target.value }));
-                    }}
-                    // BUG: This should not need another || '' but it does for some reason
-                    value={data.summary || ''}
-                  />
-                </div>
+            {/* Summary */}
+            <div className='space-y-1'>
+              <div className='flex flex-row items-center justify-between'>
+                <Label htmlFor='summary'>Changelog Summary</Label>
+                <DefaultTooltip content='Generate with AI. (Coming soon)'>
+                  <Button
+                    size='icon'
+                    variant='ghost'
+                    className='text-muted-foreground hover:text-foreground h-7 w-7'>
+                    <Icons.Sparkles className='h-3.5 w-3.5' />
+                  </Button>
+                </DefaultTooltip>
               </div>
-
-              {/* Image */}
-              <div className='flex h-full w-full flex-col gap-2 sm:w-1/2'>
-                <FileDrop data={data} setData={setData} />
-              </div>
+              <Textarea
+                placeholder='Write a short summary of your changelog...'
+                value={data.summary || ''}
+                onInput={resizeTextArea}
+                onChange={(e) => {
+                  setData({ ...data, summary: e.target.value });
+                }}
+                className='h-fit min-h-[100px] resize-none border bg-transparent focus-visible:ring-transparent'
+              />
             </div>
 
-            {/* Markdown Editor */}
-            <Editor data={data} setData={setData} />
-          </div>
-          {/* isEdit or no data changed yet from default */}
-          {isEdit ||
-          (!data.title &&
-            !data.summary &&
-            !data.image &&
-            !data.publish_date &&
-            data.content === defaultEditorContent) ? (
-            <ResponsiveDialogClose className='right-4 top-4 hidden rounded-sm opacity-70 hover:opacity-100 sm:absolute' />
-          ) : (
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <button
-                  className='right-4 top-4 rounded-sm opacity-70 hover:opacity-100 sm:absolute'
-                  type='button'>
-                  <X className='h-4 w-4' />
-                  <span className='sr-only'>Close</span>
-                </button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Would you like to save your changes?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Your changes will be lost if you don&apos;t save them and can not be undone.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <DialogClose>
-                    <AlertDialogCancel
-                      onClick={() => {
-                        setData({
-                          id: changelogData?.id || '',
-                          project_id: changelogData?.project_id || '',
-                          title: changelogData?.title || '',
-                          content: changelogData?.content || defaultEditorContent,
-                          summary: changelogData?.summary || '',
-                          image: changelogData?.image || null,
-                          publish_date: changelogData?.publish_date || null,
-                          published: changelogData?.published || false,
-                          slug: 'dummy-slug',
-                          author_id: 'dummy-author',
-                        });
-                      }}>
-                      Discard
-                    </AlertDialogCancel>
-                  </DialogClose>
-                  <AlertDialogAction
-                    onClick={() => {
-                      onCreateChangelog('draft');
-                    }}>
-                    Save
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          )}
-
-          <ResponsiveDialogFooter>
-            {/* Show Update button if isEdit is true, else show Schedule button */}
-            {!isEdit ? (
-              <Button variant='outline' type='submit' disabled>
-                Schedule
-              </Button>
-            ) : (
-              <Button
-                variant={!data.published ? 'outline' : 'default'}
-                type='submit'
-                onClick={() => {
-                  onEditChangelog(!data.published ? 'draft' : 'publish');
+            <div className='flex flex-row items-center justify-between'>
+              <Label htmlFor='publish_date'>Publish Date</Label>
+              <DatePicker
+                date={new Date(data.publish_date ?? '')}
+                setDate={(date: Date | undefined) => {
+                  setData({ ...data, publish_date: date?.toISOString() ?? null });
                 }}>
-                Update
-              </Button>
-            )}
-
-            {/* Show Publish button if isEdit is true, else show Create button */}
-            {/* Only applies to already published changelogs */}
-            {!data.published && (
-              <Button
-                type='submit'
-                onClick={() => {
-                  // If isEdit is true, then we are editing a changelog, so we want to update it
-                  if (isEdit) {
-                    onEditChangelog('publish');
-                  } else {
-                    onCreateChangelog('publish');
-                  }
-                }}
-                disabled={
-                  data.title === '' ||
-                  data.summary === '' ||
-                  data.content === '' ||
-                  data.content === defaultEditorContent ||
-                  data.image === null ||
-                  data.publish_date === null
-                }>
-                {isEdit ? 'Update & Publish' : 'Publish'}
-              </Button>
-            )}
-          </ResponsiveDialogFooter>
+                <Button variant='ghost' className='w-fit justify-end font-normal'>
+                  {data.publish_date ? (
+                    <>
+                      <Calendar className='text-foreground mr-2 h-4 w-4' />
+                      <span>{format(new Date(data.publish_date), 'P')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Calendar className='text-muted-foreground mr-2 h-4 w-4' />
+                      <span className='text-muted-foreground'>Pick a date</span>
+                    </>
+                  )}
+                </Button>
+              </DatePicker>
+            </div>
+          </div>
         </div>
+
+        <ResponsiveDialogFooter className='sm:px-7 sm:pb-7'>
+          <ResponsiveDialogClose asChild>
+            <Button
+              variant='outline'
+              onClick={() => {
+                setData({
+                  ...data,
+                  title: '',
+                  content: '',
+                  summary: '',
+                  image: null,
+                  publish_date: new Date().toISOString(),
+                });
+              }}
+              className='shrink-0'>
+              Cancel
+            </Button>
+          </ResponsiveDialogClose>
+          <Button
+            variant='outline'
+            type='submit'
+            onClick={() => {
+              if (isEdit) {
+                onEditChangelog('draft');
+              } else {
+                onCreateChangelog('draft');
+              }
+
+              // Close modal
+              setOpen(false);
+            }}
+            disabled={
+              data.title === '' ||
+              data.content === '' ||
+              (data.title === changelogData?.title &&
+                data.content === changelogData?.content &&
+                data.summary === changelogData?.summary &&
+                data.publish_date === changelogData?.publish_date)
+            }>
+            {isEdit ? 'Update' : 'Save as Draft'}
+          </Button>
+          <AlertDialog
+            open={alertOpen}
+            onOpenChange={(open) => {
+              // If not all required fields are filled out, prevent the user from publishing
+              if (findMissingFields().length > 0) {
+                setAlertOpen(false);
+                return;
+              }
+
+              setAlertOpen(open);
+            }}>
+            <AlertDialogTrigger>
+              <DefaultTooltip
+                content={
+                  findMissingFields().length > 0
+                    ? `Please fill out the following fields: ${findMissingFields().join(', ')}`
+                    : ''
+                }
+                disabled={findMissingFields().length === 0}
+                className='cursor-not-allowed'>
+                <Button
+                  disabled={
+                    findMissingFields().length > 0 ||
+                    (data.title === changelogData?.title &&
+                      data.content === changelogData?.content &&
+                      data.summary === changelogData?.summary &&
+                      data.publish_date === changelogData?.publish_date)
+                  }>
+                  Publish
+                </Button>
+              </DefaultTooltip>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Publish Changelog</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Are you sure you want to publish this changelog? This changelog will be public for everyone
+                  to see.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+
+              <div className='flex flex-row items-center gap-2'>
+                <Checkbox
+                  className='text-muted-foreground hover:text-foreground'
+                  id='notify_subscribers'
+                  checked={notifySubscribers}
+                  onCheckedChange={(checked) => {
+                    checked ? setNotifySubscribers(true) : setNotifySubscribers(false);
+                  }}>
+                  <Bell className='h-3.5 w-3.5' />
+                </Checkbox>
+                <Label htmlFor='notify_subscribers' className='flex flex-row items-center'>
+                  Notify{' '}
+                  {!subscribersCount ? (
+                    <Skeleton className='mx-1 inline-block h-5 w-5' />
+                  ) : (
+                    subscribersCount?.count || 0
+                  )}{' '}
+                  subscribers
+                </Label>
+              </div>
+
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={() => {
+                    if (isEdit) {
+                      onEditChangelog('publish');
+                    } else {
+                      onCreateChangelog('publish');
+                    }
+
+                    // Close modal
+                    setOpen(false);
+                  }}>
+                  Publish
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
+        </ResponsiveDialogFooter>
       </ResponsiveDialogContent>
     </ResponsiveDialog>
   );

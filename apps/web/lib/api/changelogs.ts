@@ -7,7 +7,12 @@ import { ChangelogProps, ChangelogWithAuthorProps, ProfileProps, ProjectProps } 
 import { formatRootUrl, isSlugValid } from '../utils';
 
 // Create Changelog
-export const createChangelog = (slug: string, data: ChangelogProps['Insert'], cType: 'server' | 'route') =>
+export const createChangelog = (
+  slug: string,
+  data: ChangelogProps['Insert'],
+  notifySubscribers: boolean,
+  cType: 'server' | 'route'
+) =>
   withProjectAuth<ChangelogProps['Row']>(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
@@ -15,7 +20,7 @@ export const createChangelog = (slug: string, data: ChangelogProps['Insert'], cT
     }
 
     // If theres an image, upload it
-    if (data.image) {
+    if (data.image && data.image.startsWith('data:image/')) {
       // Create unique image path
       const imagePath = `${project!.slug}/${Math.random().toString(36).substring(7)}`;
 
@@ -74,7 +79,7 @@ export const createChangelog = (slug: string, data: ChangelogProps['Insert'], cT
     }
 
     // Send email to subscribers
-    if (data.published) {
+    if (data.published && notifySubscribers) {
       waitUntil(async () => {
         // Get subscribers
         const { data: subscribers, error: subscribersError } = await supabase

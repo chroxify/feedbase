@@ -6,7 +6,6 @@ import { SidebarTabsProps } from '@/lib/types';
 import DashboardHeader from '@/components/layout/header';
 import NavbarMobile from '@/components/layout/nav-bar-mobile';
 import Sidebar from '@/components/layout/sidebar';
-import TitleProvider from '@/components/layout/title-provider';
 import {
   AnalyticsIcon,
   CalendarIcon,
@@ -84,31 +83,22 @@ export default async function DashboardLayout({ children }: { children: React.Re
     .find((tab) => pathname?.includes(tab.slug));
 
   return (
-    <main className='bg-root flex min-h-screen w-full min-w-full justify-center overflow-hidden'>
-      <div className='flex h-full w-full flex-col items-center'>
-        {/* Header with logo and hub button */}
-        {/* BUG: Find a way to solve issue of scroll bar getting removed on avatar dialog open */}
-        {/* https://github.com/radix-ui/primitives/discussions/1100 */}
-        <DashboardHeader user={user} projects={projects} currentProject={currentProject} />
+    <main className='bg-root flex h-full min-h-screen w-full min-w-full flex-col items-center'>
+      {/* Header with logo and hub button */}
+      {/* BUG: Find a way to solve issue of scroll bar getting removed on avatar dialog open */}
+      {/* https://github.com/radix-ui/primitives/discussions/1100 */}
+      <DashboardHeader user={user} projects={projects} currentProject={currentProject} />
 
-        <div className='flex h-full w-full flex-row justify-start pt-[64px]'>
-          {/* Sidebar */}
-          <Sidebar tabs={tabs} initialTab={activeTab || tabs.Modules[0]} currentProject={currentProject} />
+      {/* Sidebar */}
+      <Sidebar tabs={tabs} initialTab={activeTab || tabs.Modules[0]} currentProject={currentProject} />
 
-          {/* Main content */}
-          <div className='flex w-full flex-col items-start justify-start overflow-hidden pb-20 md:pb-0 md:pl-[240px]'>
-            <TitleProvider
-              tabs={tabs}
-              initialTitle={activeTab?.name || tabs.Modules[0].name}
-              className='hidden text-3xl font-semibold md:block'
-            />
-            {children}
-          </div>
-        </div>
-
-        {/* Navbar (mobile) */}
-        <NavbarMobile tabs={tabs} initialTab={activeTab || tabs.Modules[0]} currentProject={currentProject} />
+      {/* Main content */}
+      <div className='absolute right-0 top-16 flex h-[calc(100%-4rem)] w-[calc(100%-240px)] flex-col items-start justify-start overflow-auto pb-20 md:pb-0'>
+        {children}
       </div>
+
+      {/* Navbar (mobile) */}
+      <NavbarMobile tabs={tabs} initialTab={activeTab || tabs.Modules[0]} currentProject={currentProject} />
     </main>
   );
 }

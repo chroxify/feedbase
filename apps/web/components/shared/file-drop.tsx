@@ -8,6 +8,7 @@
 import { Dispatch, useCallback, useState } from 'react';
 import Image from 'next/image';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
+import { cn } from '@ui/lib/utils';
 
 export default function FileDrop({
   image,
@@ -15,12 +16,14 @@ export default function FileDrop({
   allowedTypes = ['image/png', 'image/jpeg'],
   maxFileSize = 5,
   labelComponent,
+  className,
 }: {
   image: string | null;
-  setImage: Dispatch<React.SetStateAction<string | null>>;
+  setImage: Dispatch<React.SetStateAction<string | null>> | ((image: string | null) => void);
   allowedTypes?: string[];
   maxFileSize?: number;
   labelComponent?: React.ReactNode;
+  className?: string;
 }) {
   const [fileError, setFileError] = useState<string | null>(null);
   const [dragActive, setDragActive] = useState(false);
@@ -61,13 +64,16 @@ export default function FileDrop({
       <div className='flex items-center justify-between'>
         {labelComponent}
 
-        {fileError ? <p className='text-destructive text-sm font-extralight'>{fileError}</p> : null}
+        {fileError ? <p className='text-destructive text-sm'>{fileError}</p> : null}
       </div>
       {/* BUG: Fix this so that its not a fixed height but rather just takes over full height properly */}
       {/* As currently it is not on the same level as the other inputs */}
       <label
         htmlFor='image'
-        className='border-input bg-root hover:bg-accent group relative mt-1 flex h-44 cursor-pointer flex-col items-center justify-center rounded-md border shadow-sm transition-all'>
+        className={cn(
+          'border-input bg-root hover:bg-accent group relative mt-1 flex h-44 cursor-pointer flex-col items-center justify-center rounded-md border shadow-sm transition-all',
+          className
+        )}>
         <div
           className='absolute z-[5] h-full w-full rounded-md'
           onDragOver={(e) => {
@@ -105,14 +111,10 @@ export default function FileDrop({
           <CloudArrowUpIcon
             className={`${
               dragActive ? 'scale-110' : 'scale-100'
-            } text-foreground/50 h-7 w-7 font-extralight transition-all duration-75 group-hover:scale-110 group-active:scale-95`}
+            } text-foreground/50 h-7 w-7  transition-all duration-75 group-hover:scale-110 group-active:scale-95`}
           />
-          <p className='text-foreground/50 mt-2 text-center text-sm font-extralight'>
-            Drag and drop or click to upload.
-          </p>
-          <p className='text-foreground/50 mt-2 text-center text-sm font-extralight'>
-            Recommended: 1200 x 630 pixels
-          </p>
+          <p className='text-foreground/50 mt-2 text-center text-sm '>Drag and drop or click to upload.</p>
+          <p className='text-foreground/50 mt-2 text-center text-sm '>Recommended: 1200 x 630 pixels</p>
           <span className='sr-only'>OG image upload</span>
         </div>
         {image ? (

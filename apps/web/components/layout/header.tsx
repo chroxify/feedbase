@@ -14,7 +14,7 @@ export default function DashboardHeader({
   currentProject: ProjectProps['Row'];
 }) {
   return (
-    <div className='bg-root fixed top-0 z-50 flex h-16 w-full flex-row items-center justify-between overflow-y-auto border-b px-5'>
+    <div className='bg-root fixed top-0 z-50 flex h-16 w-full flex-row items-center justify-between border-b px-5'>
       <div className='flex items-center gap-5'>
         {/* Logo */}
         <Icons.Logo className='fill-foreground -mr-2 h-12 w-fit' />
