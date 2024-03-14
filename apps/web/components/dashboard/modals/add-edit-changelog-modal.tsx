@@ -361,7 +361,10 @@ export function AddChangelogModal({
             open={alertOpen}
             onOpenChange={(open) => {
               // If not all required fields are filled out, prevent the user from publishing
-              if (findMissingFields().length > 0) {
+              if (
+                findMissingFields().length > 0 ||
+                (data.publish_date !== null && new Date(data.publish_date) > new Date())
+              ) {
                 setAlertOpen(false);
                 return;
               }
@@ -373,9 +376,14 @@ export function AddChangelogModal({
                 content={
                   findMissingFields().length > 0
                     ? `Please fill out the following fields: ${findMissingFields().join(', ')}`
+                    : data.publish_date !== null && new Date(data.publish_date) > new Date()
+                    ? 'Changelog scheduling is coming soon!'
                     : ''
                 }
-                disabled={findMissingFields().length === 0}
+                disabled={
+                  findMissingFields().length === 0 &&
+                  !(data.publish_date !== null && new Date(data.publish_date) > new Date())
+                }
                 className='cursor-not-allowed'>
                 <Button
                   disabled={
@@ -383,9 +391,11 @@ export function AddChangelogModal({
                     (data.title === changelogData?.title &&
                       data.content === changelogData?.content &&
                       data.summary === changelogData?.summary &&
-                      data.publish_date === changelogData?.publish_date)
+                      data.publish_date === changelogData?.publish_date) ||
+                    (data.publish_date !== null && new Date(data.publish_date) > new Date())
                   }>
-                  Publish
+                  {/* If publish date is in the future, show "Schedule" else "Publish" */}
+                  {data.publish_date && new Date(data.publish_date) > new Date() ? 'Schedule' : 'Publish'}
                 </Button>
               </DefaultTooltip>
             </AlertDialogTrigger>
