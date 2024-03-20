@@ -1,7 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
- 
+
 body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -50,49 +50,49 @@ body {
 
     --radius: 0.5rem;
   }
- 
+
   .dark {
     /* App root background */
-    --root-background: 235 7% 5%; /* #000000     240 7% 11% */
+    --root-background: 235 7% 5%;
 
     /* Utility background (Buttons, inputs, etc) */
-    --background: 230 7% 16%; /* #0A0C10 | #060606*/ 
-    --foreground: 220 9% 94%; /* #D6D6D6 */
-    
+    --background: 230 7% 16%;
+    --foreground: 220 9% 94%;
+
     /* Muted background (Skeletons, Avatar, tabs, etc) */
-    --muted: 230 11% 8%; /* #20242c */
+    --muted: 230 11% 8%;
     --muted-foreground: 219 6% 55%;
- 
-    --popover: 230 35% 3%; /* #0A0C10 */
+
+    --popover: 235 7% 5%;
     --popover-foreground: 220 9% 94%;
 
-    --card: 235 7% 5%; /* #0A0C10 */
+    --card: 235 7% 5%;
     --card-foreground: 220 9% 94%;
- 
-    --border: 223 7% 19%; /* #20242c */
-    --input: 223 7% 19%; /* #20242c */
- 
+
+    --border: 223 7% 19%;
+    --input: 223 7% 19%;
+
     --primary: 220 9% 94%;
-    --primary-foreground: 230 35% 3%;
-    
+    --primary-foreground: 240 4% 10%;
+
     /* Hover & active backgrounds (Nav buttons, etc) */
-    --secondary: 230 7% 16%; /* #20242c */
+    --secondary: 230 7% 16%;
     --secondary-foreground: 218 7% 80%;
-    
+
     /* Button background hovers */
-    --accent: 230 7% 16%; /* #20242c */
+    --accent: 230 7% 16%;
     --accent-foreground: 220 9% 94%;
- 
+
     --destructive: 351 95% 65%;
     --destructive-foreground: 220 9% 94%;
-    
+
     /* Selection & accent color */
     --highlight: 231 100% 78%;
- 
-    --ring: 230 9% 13%; /* #20242c */
+
+    --ring: 230 9% 13%;
   }
 }
- 
+
 @layer base {
   * {
     @apply border-border;
