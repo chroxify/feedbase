@@ -35,6 +35,35 @@ export default function LottiePlayer({
     }
   }, [animate]);
 
+  // Change initial color of svg on change
+  useEffect(() => {
+    if (lottieRef.current) {
+      // Get svg element
+      const lottiePlayerSvg = lottieRef.current?.getContainer()?.querySelector('svg');
+
+      //? This is needed because chrome adds a blur filter to the svg
+      // Edit transform style but keep other styles
+      const transformStyle = lottiePlayerSvg
+        ?.getAttribute('style')
+        ?.replace('transform: translate3d(0px, 0px, 0px);', '');
+
+      // Apply transform style
+      lottiePlayerSvg?.setAttribute('style', transformStyle!);
+
+      // Change color of svg
+      if (initialColor) {
+        lottiePlayerSvg?.querySelectorAll('path').forEach((path: SVGPathElement) => {
+          path.style.fill = initialColor;
+
+          // Incase stroke is used in initial svg
+          if (path.getAttributeNames().includes('stroke') && path.getAttribute('stroke-opacity') !== '0') {
+            path.style.stroke = initialColor;
+          }
+        });
+      }
+    }
+  }, [lottieRef, initialColor]);
+
   return (
     <DotLottiePlayer
       style={{ transform: '' }}

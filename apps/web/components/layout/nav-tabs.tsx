@@ -62,7 +62,9 @@ export default function NavTabs({
                     lottieSrc={tab.icon}
                     animate={isHover === tab.slug}
                     className='h-5 w-5'
-                    initialColor='hsl(var(--foreground) / 0.7)'
+                    initialColor={
+                      activeTab === tab.slug ? 'hsl(var(--foreground))' : 'hsl(var(--foreground) / 0.7)'
+                    }
                     animationColor='hsl(var(--foreground))'
                   />
                 </div>
