@@ -5,7 +5,7 @@ import { cn } from '@ui/lib/utils';
 import {
   Check,
   CheckCircle2,
-  ChevronDown,
+  ChevronsUpDownIcon,
   CircleDashed,
   CircleDot,
   CircleDotDashed,
@@ -17,7 +17,7 @@ import { Popover, PopoverContent, PopoverTrigger } from 'ui/components/ui/popove
 
 export const statusOptions = [
   {
-    label: 'Backlog',
+    label: 'In Review',
     icon: CircleDashed,
   },
   {
@@ -39,43 +39,30 @@ export const statusOptions = [
 ];
 
 interface ComboboxProps {
-  initialValue?: string | null;
-  onSelect?: (value: string) => void;
-  triggerClassName?: string;
-  showDropdownIcon?: boolean;
-  align?: 'start' | 'end';
+  initialStatus: string | null;
+  onStatusChange: (status: string) => void;
 }
 
-export function StatusCombobox({
-  initialValue,
-  onSelect,
-  triggerClassName,
-  showDropdownIcon = true,
-  align = 'end',
-}: ComboboxProps) {
+export function StatusCombobox({ initialStatus, onStatusChange }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [status, setStatus] = React.useState(initialValue || '');
+  const [selectedStatus, setSelectedStatus] = React.useState(initialStatus || '');
+  const currentItem = statusOptions.find((item) => item.label.toLowerCase() === selectedStatus.toLowerCase());
 
-  const currentItem = statusOptions.find((item) => item.label.toLowerCase() === status.toLowerCase());
-
-  // Use effect on initial value change
+  // Update the selected status when the initial status changes
   React.useEffect(() => {
-    setStatus(initialValue || '');
-  }, [initialValue]);
+    setSelectedStatus(initialStatus || '');
+  }, [initialStatus]);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           aria-expanded={open}
-          variant='outline'
-          className={cn(
-            'text-foreground/60 group flex h-8 w-fit items-center justify-between gap-2 font-light',
-            triggerClassName
-          )}
-          size='sm'>
+          variant='ghost'
+          size='sm'
+          className='text-secondary-foreground w-1/2 justify-between'>
           {currentItem ? (
-            <div className='flex flex-row items-center gap-[6px] font-light'>
+            <div className='flex flex-row items-center gap-1.5'>
               {/* Status icon */}
               <currentItem.icon className='text-foreground/60 group-hover:text-foreground h-4 w-4 transition-colors' />
 
@@ -86,20 +73,19 @@ export function StatusCombobox({
             'Status'
           )}
 
-          {/* Icon */}
-          {showDropdownIcon ? <ChevronDown className='text-foreground/60 h-4 w-4' /> : null}
+          <ChevronsUpDownIcon className='text-muted-foreground h-4 w-4 shrink-0' />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className='w-[200px] p-0' align={align}>
+      <PopoverContent className='w-[200px] p-0' align='end'>
         <Command>
           <CommandGroup>
             {statusOptions.map((item) => (
               <CommandItem
                 key={item.label.toLowerCase()}
                 onSelect={(currentValue) => {
-                  setStatus(currentValue === status ? '' : currentValue);
+                  setSelectedStatus(currentValue);
                   setOpen(false);
-                  onSelect?.(currentItem?.label.toLowerCase() === currentValue ? '' : currentValue);
+                  onStatusChange?.(currentValue);
                 }}
                 className='flex flex-row items-center gap-[6px] font-light'>
                 {/* Icon */}
@@ -112,7 +98,7 @@ export function StatusCombobox({
                 <Check
                   className={cn(
                     'ml-auto h-4 w-4',
-                    status.toLowerCase() === item.label.toLowerCase() ? 'opacity-100' : 'opacity-0'
+                    selectedStatus.toLowerCase() === item.label.toLowerCase() ? 'opacity-100' : 'opacity-0'
                   )}
                 />
               </CommandItem>

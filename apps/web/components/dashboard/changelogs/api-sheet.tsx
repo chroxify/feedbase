@@ -66,7 +66,7 @@ print(response.json())`,
           onMouseLeave={() => {
             setIsHover(false);
           }}
-          className='flex items-center gap-2 '>
+          className='flex items-center gap-2'>
           <LottiePlayer lottieSrc={CodeIcon} animate={isHover} className='-ml-[2px] h-5 w-5' />
           API
         </Button>
@@ -119,7 +119,7 @@ print(response.json())`,
               <TabsList className='w-full justify-between border-b px-2 py-2'>
                 <div className='flex w-full items-center gap-2'>
                   {tabs.map((tab) => (
-                    <TabsTrigger value={tab.id} key={tab.id}>
+                    <TabsTrigger value={tab.id} key={tab.id} asChild>
                       <Button
                         variant='ghost'
                         size='sm'

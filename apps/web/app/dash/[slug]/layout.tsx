@@ -93,7 +93,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <Sidebar tabs={tabs} initialTab={activeTab || tabs.Modules[0]} currentProject={currentProject} />
 
       {/* Main content */}
-      <div className='absolute right-0 top-16 flex h-[calc(100%-4rem)] w-[calc(100%-240px)] flex-col items-start justify-start overflow-auto pb-20 md:pb-0'>
+      <div className='absolute right-0 top-14 flex h-[calc(100%-4rem)] w-[calc(100%-240px)] flex-col items-start justify-start overflow-auto pb-20 md:pb-0'>
         {children}
       </div>
 

@@ -87,6 +87,18 @@ export async function fetcher<JSON = any>(input: RequestInfo, init?: RequestInit
   return res.json();
 }
 
+// Action fetcher function for SWR
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export async function actionFetcher<JSON = any>(
+  input: RequestInfo,
+  { arg }: { arg: Record<string, unknown>; method?: 'POST' | 'PUT' | 'PATCH' | 'DELETE' }
+): Promise<JSON> {
+  return fetch(input, {
+    method: (arg.method as string) || 'POST',
+    body: JSON.stringify(arg),
+  }).then((res) => res.json());
+}
+
 // Is valid email
 export function isValidEmail(email: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);

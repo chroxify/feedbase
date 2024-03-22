@@ -1,69 +1,53 @@
 'use client';
 
 import * as React from 'react';
+import { Checkbox } from '@ui/components/ui/checkbox';
 import { cn } from '@ui/lib/utils';
-import { Check, ChevronDown } from 'lucide-react';
+import { ChevronsUpDownIcon, Tags } from 'lucide-react';
 import { Button } from 'ui/components/ui/button';
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from 'ui/components/ui/command';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from 'ui/components/ui/dropdown-menu';
+import { Popover, PopoverContent, PopoverTrigger } from 'ui/components/ui/popover';
+import useTags from '@/lib/swr/use-tags';
 import { CreateTagModal } from '../modals/add-tag-modal';
 
 interface TagComboboxProps {
-  projectTags: {
-    value: string;
-    label: string;
-    color?: string;
-  }[];
-  initialValue?: string[] | null;
-  onSelect?: (value: string[]) => void;
-  triggerClassName?: string;
-  showDropdownIcon?: boolean;
-  align?: 'start' | 'end';
-  demo?: boolean;
+  initialTags: { name: string; color: string }[];
+  onTagsChange: (tags: string[]) => void;
 }
 
-export function TagCombobox({
-  projectTags,
-  initialValue,
-  onSelect,
-  triggerClassName,
-  showDropdownIcon = true,
-  align = 'end',
-  demo,
-}: TagComboboxProps) {
+export function TagCombobox({ initialTags, onTagsChange }: TagComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  const [tags, setTags] = React.useState(initialValue || []);
+  console.log('UBUT TAGS', initialTags);
+  const [selectedTags, setSelectedTags] = React.useState<{ name: string; color: string }[]>(
+    initialTags !== null ? initialTags : []
+  );
   const [openColorDialog, setOpenColorDialog] = React.useState(false);
   const [search, setSearch] = React.useState('');
+  const { tags: projectTags, loading: tagsLoading } = useTags();
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const EmptyItem = () => {
+    console.log('EMPTY ITEM', search);
     if (!search) return null;
 
     return (
       <>
-        <CreateTagModal open={openColorDialog} setOpen={setOpenColorDialog} tagName={search} demo={demo} />
+        <CreateTagModal open={openColorDialog} setOpen={setOpenColorDialog} tagName={search} />
         <CommandItem
-          className='flex flex-row items-center gap-2 font-light'
+          className='flex flex-row items-center gap-1'
           key={search}
           value={search}
           onSelect={() => {
             // Close the dropdown
             setOpenColorDialog(true);
           }}>
-          Create tag:&nbsp;<span className='text-foreground/60 font-light'>&quot;{search}&quot;</span>
+          Create tag: <span className='text-secondary-foreground'>&quot;{search}&quot;</span>
         </CommandItem>
       </>
     );
   };
-
-  const currentTags = projectTags.filter((item) => tags.includes(item.value.toLowerCase()));
-
-  // Use effect on initial value change
+  // Use effect to clear search when the dialog is closed
   React.useEffect(() => {
-    // Set tags to initial value
-    setTags(initialValue || []);
-
     if (!openColorDialog) {
       // Clear search
       setSearch('');
@@ -71,129 +55,126 @@ export function TagCombobox({
       // Force focus again
       inputRef.current?.focus();
     }
-  }, [initialValue, openColorDialog]);
+  }, [openColorDialog]);
+
+  // Update selected tags when initial tags change
+  React.useEffect(() => {
+    setSelectedTags(initialTags);
+  }, [initialTags]);
 
   return (
-    <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger asChild>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
         <Button
           aria-expanded={open}
-          variant='outline'
-          className={cn(
-            'text-foreground/60 flex h-8 w-1/4 items-center justify-between gap-2 font-light sm:w-fit',
-            triggerClassName
-          )}
-          size='sm'>
-          {/* TODO: Do not nest ternary expressions */}
-          {tags && tags.length > 0 ? (
-            tags.length === 1 ? (
-              <div className='mt-[1px] flex flex-row items-center gap-2 font-light '>
-                {/* Tag color */}
-                <div
-                  className='h-2 w-2 rounded-full'
-                  style={{
-                    backgroundColor: projectTags.find(
-                      (item) => item.value.toLowerCase() === tags[0].toLowerCase()
-                    )?.color,
-                  }}
-                />
-                {/* Tag name */}
-                {projectTags.find((item) => item.value.toLowerCase() === tags[0].toLowerCase())?.label}
+          variant='ghost'
+          size='sm'
+          className='text-secondary-foreground w-1/2 justify-between'>
+          {/* Tags */}
+          {selectedTags.length > 0 ? (
+            <div className='flex flex-row items-center justify-center gap-1.5'>
+              {/* Overlapping colors */}
+              <div className='flex flex-row gap-1 pl-2'>
+                {selectedTags.map((tag, index) => (
+                  <div
+                    key={tag.name}
+                    className='border-root -ml-2 h-2.5 w-2.5 rounded-full border-[1px]'
+                    style={{
+                      backgroundColor: tag.color,
+                      zIndex: selectedTags.length - index,
+                    }}
+                  />
+                ))}
               </div>
-            ) : (
-              <div className='flex flex-row items-center gap-2 font-light'>
-                {/* Tag colors */}
-                <div className='mt-[1px] flex flex-row items-center space-x-[-1.5px]'>
-                  {currentTags.map((tag) => (
-                    <div
-                      className='h-2 w-2 rounded-full'
-                      key={tag.value}
-                      style={{
-                        backgroundColor: tag.color,
-                      }}
-                    />
-                  ))}
-                </div>
-                {/* Tag name */}
-                <span className='text-foreground/60 font-light'>{currentTags.length} Tags</span>
-              </div>
-            )
+
+              {/* Tag name / count */}
+              {selectedTags.length > 1 ? (
+                <span>{selectedTags.length} Tags</span>
+              ) : (
+                <span>{selectedTags[0].name}</span>
+              )}
+            </div>
           ) : (
-            'Tags'
+            <div className='flex flex-row items-center gap-1.5 '>
+              <Tags className='text-foreground/60 h-4 w-4' />
+              Tags
+            </div>
           )}
 
-          {/* Icon */}
-          {showDropdownIcon ? <ChevronDown className='text-foreground/60 h-4 w-4' /> : null}
+          {/* Chevrons */}
+          <ChevronsUpDownIcon className='text-muted-foreground h-4 w-4 shrink-0' />
         </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className='w-[200px] p-0' align={align}>
-        <Command
-          filter={(value, search) => {
-            // If whitespace in search, split and search for each word
-            if (search.includes(' ')) {
-              const searchTerms = search.split(' ');
-              for (const term of searchTerms) {
-                if (!value.includes(term.toLowerCase())) return 0;
-              }
-              return 1;
-            }
-
-            if (value.includes(search.toLowerCase())) return 1;
-
-            return 0;
-          }}>
+      </PopoverTrigger>
+      <PopoverContent className='w-fit min-w-[200px] rounded-lg p-0' align='end'>
+        <Command>
           <CommandInput
-            placeholder='Search tags...'
-            className='h-9 font-light'
+            placeholder='Add tags...'
+            hideIcon
             value={search}
             onValueChange={setSearch}
             autoFocus
             ref={inputRef}
           />
+          <CommandEmpty className='text-muted-foreground w-full p-2 text-center text-xs'>
+            {tagsLoading ? 'Loading tags...' : 'No tags found, start typing to create a new tag'}
+          </CommandEmpty>
           <CommandGroup>
-            {projectTags.map((item) => (
+            {projectTags?.map((tag) => (
               <CommandItem
-                key={item.value}
+                key={tag.id}
+                value={tag.name}
+                className='group space-x-2 rounded-md'
                 onSelect={(currentValue) => {
-                  setTags((prev) => {
-                    if (prev.includes(currentValue)) return prev.filter((tag) => tag !== currentValue);
-                    return [...prev, currentValue];
+                  // Set tags
+                  const newTags = selectedTags.find((t) => t.name.toLowerCase() === currentValue)
+                    ? selectedTags.filter((t) => t.name.toLowerCase() !== currentValue)
+                    : ([
+                        ...selectedTags,
+                        projectTags.find((t) => t.name.toLowerCase() === currentValue),
+                      ].filter(Boolean) as {
+                        name: string;
+                        color: string;
+                      }[]);
+
+                  // Set tags
+                  setSelectedTags(newTags);
+                  setOpen(false);
+
+                  // Call onTagsChange
+                  let newTagsIds = [] as string[];
+                  newTags.map((t) => {
+                    projectTags.map((pt) => {
+                      if (pt.name === t.name) {
+                        newTagsIds.push(pt.id);
+                      }
+                    });
                   });
-                  if (onSelect) {
-                    const lowerCaseTags = currentTags?.map((tag) => tag.value.toLowerCase());
-                    const includesCurrentValue = lowerCaseTags?.includes(currentValue);
 
-                    if (lowerCaseTags && includesCurrentValue) {
-                      const filteredTags = lowerCaseTags.filter((tag) => tag !== currentValue);
-                      onSelect(filteredTags);
-                    } else if (lowerCaseTags) {
-                      onSelect([...lowerCaseTags, currentValue]);
-                    } else {
-                      onSelect([currentValue]);
-                    }
-                  }
-                }}
-                className='flex flex-row items-center gap-2 font-light'>
-                {/* Tag color */}
-                <div className='mt-[1px] h-2 w-2 rounded-full' style={{ backgroundColor: item.color }} />
-                {item.label}
-
-                {/* Checkmark */}
-                <Check
+                  onTagsChange(newTagsIds);
+                }}>
+                {/* Checkbox, show on hover except if it's already selected */}
+                <Checkbox
                   className={cn(
-                    'ml-auto h-4 w-4',
-                    tags.includes(item.value.toLowerCase()) ? 'opacity-100' : 'opacity-0'
+                    'border-foreground/50 h-3.5 w-3.5 opacity-0 shadow-none group-aria-selected:opacity-100',
+                    selectedTags.find((t) => t.name === tag.name) && 'opacity-100'
                   )}
+                  iconCn='h-3.5 w-3.5'
+                  checked={selectedTags.find((t) => t.name === tag.name) ? true : false}
                 />
+
+                <div className='flex flex-row items-center gap-2'>
+                  {/* Tag Color */}
+                  <div className='h-2 w-2 rounded-full' style={{ backgroundColor: tag.color }} />
+
+                  {/* Tag Name */}
+                  {tag.name}
+                </div>
               </CommandItem>
             ))}
             <EmptyItem />
-            <CommandEmpty className='text-muted-foreground w-full p-2 text-center text-xs font-light'>
-              No tags found, start typing to create a new tag
-            </CommandEmpty>
           </CommandGroup>
         </Command>
-      </DropdownMenuContent>
-    </DropdownMenu>
+      </PopoverContent>
+    </Popover>
   );
 }

@@ -1,13 +1,16 @@
 'use client';
 
 import './placeholder.css';
-import React from 'react';
+import React, { useRef } from 'react';
+import BulletList from '@tiptap/extension-bullet-list';
 import { CharacterCount } from '@tiptap/extension-character-count';
+import { CodeBlock } from '@tiptap/extension-code-block';
 import { Highlight } from '@tiptap/extension-highlight';
 import { Link } from '@tiptap/extension-link';
+import OrderedList from '@tiptap/extension-ordered-list';
 import { Placeholder } from '@tiptap/extension-placeholder';
 import { Typography } from '@tiptap/extension-typography';
-import { AnyExtension, EditorContent, useEditor } from '@tiptap/react';
+import { AnyExtension, Editor, EditorContent, useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
 import { cn } from '@ui/lib/utils';
 
@@ -18,6 +21,7 @@ export default function RichTextEditor({
   className,
   parentClassName,
   characterLimit,
+  editorRef,
 }: {
   content: string;
   setContent: React.Dispatch<React.SetStateAction<string>> | ((content: string) => void);
@@ -25,12 +29,22 @@ export default function RichTextEditor({
   className?: string;
   parentClassName?: string;
   characterLimit?: number;
+  editorRef?: React.MutableRefObject<any>;
 }) {
+  const localEditorRef = useRef<Editor | null>(null);
+
   const editor = useEditor({
     extensions: [
-      StarterKit as AnyExtension,
+      StarterKit.configure({
+        bulletList: false,
+        orderedList: false,
+        codeBlock: false,
+      }) as AnyExtension,
       Highlight,
       Typography,
+      BulletList,
+      OrderedList,
+      CodeBlock,
       Link.configure({
         HTMLAttributes: {
           class: 'cursor-pointer',
@@ -53,6 +67,13 @@ export default function RichTextEditor({
       setContent(editor.getHTML());
     },
   });
+
+  // Set the editor instance to the ref
+  if (editorRef) {
+    editorRef.current = editor;
+  } else {
+    localEditorRef.current = editor;
+  }
 
   return (
     <EditorContent

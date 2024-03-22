@@ -117,7 +117,7 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
         <ResponsiveDialogFooter>
           <ResponsiveDialogClose asChild>
             <Button
-              variant='outline'
+              variant='secondary'
               onClick={() => {
                 setName('');
                 setSlug('');

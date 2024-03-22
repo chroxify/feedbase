@@ -7,6 +7,7 @@ import { FeedbackCommentProps } from '@/lib/types';
     POST /api/v1/projects/[slug]/feedback/[id]/comments
     {
         content: string
+        reply_to_id?: string
     }
 */
 export async function POST(req: Request, context: { params: { slug: string; feedbackId: string } }) {

@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Label } from '@ui/components/ui/label';
 import { Separator } from '@ui/components/ui/separator';
+import { Skeleton } from '@ui/components/ui/skeleton';
 import { cn } from '@ui/lib/utils';
 import {
   AlertCircle,
@@ -18,20 +19,17 @@ import {
 import useSWR from 'swr';
 import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
 import { Button } from 'ui/components/ui/button';
-import { Card, CardDescription, CardHeader } from 'ui/components/ui/card';
 import useCreateQueryString from '@/lib/hooks/use-create-query';
 import { FeedbackWithUserProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
 import { FeedbackSheet } from './feedback-sheet';
 import { statusOptions } from './status-combobox';
 
-interface DateSortedFeedbackProps {
-  [key: string]: FeedbackWithUserProps[];
-}
+type DateSortedFeedbackProps = Record<string, FeedbackWithUserProps[]>;
 
 export default function FeedbackList({}: {}) {
   const searchParams = useSearchParams();
-  const createQueryString = useCreateQueryString(searchParams);
+  const createQueryString: (name: string, value: string) => string = useCreateQueryString(searchParams);
   const pathname = usePathname();
   const projectSlug = pathname.split('/')[1];
   const router = useRouter();
@@ -70,34 +68,29 @@ export default function FeedbackList({}: {}) {
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) || [];
 
   // This should first sort all the feedback by date newest first and then split them up into 'XX Month' format for the feedback in last 7 days, from last 7 days to last 30 it should be 'Last 7 days' and 'Last 30 days' and then 'Older'
-  const dateSortedFeedback: DateSortedFeedbackProps = filteredFeedback.reduce((acc, feedback) => {
-    const feedbackDate = new Date(feedback.created_at);
-    const diffInDays = Math.floor((new Date().getTime() - feedbackDate.getTime()) / (1000 * 3600 * 24));
+  const dateSortedFeedback: DateSortedFeedbackProps = filteredFeedback.reduce<DateSortedFeedbackProps>(
+    (acc, feedback) => {
+      const feedbackDate = new Date(feedback.created_at);
+      const diffInDays = Math.floor((new Date().getTime() - feedbackDate.getTime()) / (1000 * 3600 * 24));
 
-    let dateKey;
-    if (diffInDays <= 7) {
-      dateKey = formatDate(feedbackDate); // Format as XX Mon
-    } else if (diffInDays <= 14) {
-      dateKey = 'Last 14 days';
-    } else if (diffInDays <= 30) {
-      dateKey = 'Last 30 days';
-    } else {
-      dateKey = 'Older';
-    }
+      let dateKey;
+      if (diffInDays <= 7) {
+        dateKey = formatDate(feedbackDate); // Format as XX Mon
+      } else if (diffInDays <= 14) {
+        dateKey = 'Last 14 days';
+      } else if (diffInDays <= 30) {
+        dateKey = 'Last 30 days';
+      } else {
+        dateKey = 'Older';
+      }
 
-    return {
-      ...acc,
-      [dateKey]: [...(acc[dateKey] || []), feedback],
-    };
-  }, {} as DateSortedFeedbackProps);
-
-  // Print each feedback group
-  Object.entries(dateSortedFeedback).forEach(([key, value]) => {
-    console.log(`Feedback group: ${key}`);
-    value.forEach((feedback) => {
-      console.log(feedback);
-    });
-  });
+      return {
+        ...acc,
+        [dateKey]: [...(acc[dateKey] || []), feedback],
+      };
+    },
+    {}
+  );
 
   // Calc date in format: 15 Aug
   function formatDate(date: Date) {
@@ -189,26 +182,25 @@ export default function FeedbackList({}: {}) {
       <div className='flex h-full w-full flex-col items-center justify-start gap-4 overflow-y-auto p-5'>
         {/* Loading Skeleton */}
         {isLoading && (
-          <div className='flex flex-col gap-4'>
-            {[...Array(5)].map((_, index) => (
-              <Card key={index} className='flex flex-col gap-2 p-4'>
-                <CardHeader>
-                  <div className='flex flex-row items-center gap-2'>
-                    <div className='bg-background h-6 w-6 rounded-full' />
-                    <div className='flex w-full flex-col gap-1'>
-                      <div className='bg-background h-4 rounded-md' />
-                      <div className='bg-background h-3 rounded-md' />
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardDescription>
-                  <div className='flex flex-col gap-2'>
-                    <div className='bg-background h-4 rounded-md' />
-                    <div className='bg-background h-4 rounded-md' />
-                    <div className='bg-background h-4 rounded-md' />
-                  </div>
-                </CardDescription>
-              </Card>
+          <div className='flex w-full flex-col'>
+            {Array.from({ length: Math.floor(Math.random() * 5) + 5 }).map((_, index) => (
+              <div
+                className='flex h-12 w-full flex-row items-center justify-between border border-b-0 p-1 px-2 [&:first-child]:rounded-t-md [&:last-child]:rounded-b-md [&:last-child]:border-b'
+                key={`item-${index}`}>
+                <div className='flex w-full items-center gap-2 pr-10'>
+                  <Skeleton className='h-6 w-6' />
+                  <Skeleton className='h-6 w-full' />
+                </div>
+
+                <div className='flex items-center gap-2'>
+                  {Array.from({ length: Math.floor(Math.random() * 3) + 1 }).map((_, innerIndex) => (
+                    <Skeleton key={`inner-item-${innerIndex}`} className='h-6 w-12 rounded-full' />
+                  ))}
+                  <Skeleton className='h-6 w-6 rounded-full' />
+                  <Skeleton className='h-4 w-10' />
+                  <Skeleton className='h-6 w-6 rounded-full' />
+                </div>
+              </div>
             ))}
           </div>
         )}
@@ -221,7 +213,7 @@ export default function FeedbackList({}: {}) {
               <div className='text-secondary-foreground text-center'>
                 Failed to load feedback. Please try again.
               </div>
-              {/* Show error message - only hsow if error.message is of type json */}
+              {/* Detailed error message */}
               {(() => {
                 try {
                   return (
@@ -232,12 +224,7 @@ export default function FeedbackList({}: {}) {
                 }
               })()}
             </div>
-            <Button
-              size='sm'
-              variant='secondary'
-              onClick={() => {
-                mutate();
-              }}>
+            <Button size='sm' variant='secondary' onClick={() => mutate()}>
               Try Again
             </Button>
           </div>

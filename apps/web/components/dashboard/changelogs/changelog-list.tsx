@@ -3,9 +3,10 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { PhotoIcon } from '@heroicons/react/24/outline';
+import { Separator } from '@ui/components/ui/separator';
 import { Skeleton } from '@ui/components/ui/skeleton';
 import { cn } from '@ui/lib/utils';
-import { Copy, Edit, MoreVertical, Trash } from 'lucide-react';
+import { AlertCircle, Copy, Edit, MoreVertical, Trash } from 'lucide-react';
 import { toast } from 'sonner';
 import useSWR from 'swr';
 import {
@@ -37,6 +38,7 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
 
   const {
     data: changelogsData,
+    error,
     isLoading,
     mutate,
   } = useSWR<ChangelogProps['Row'][]>(`/api/v1/projects/${projectSlug}/changelogs`, fetcher);
@@ -154,7 +156,7 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
   return (
     <>
       {/* Header tabs */}
-      <div className='flex w-full flex-row items-center justify-start gap-3 border-b px-5 pt-3'>
+      <div className='z-10 -mb-[1px] flex w-full flex-row items-center justify-start gap-3 px-5 pt-3'>
         <Button
           variant='ghost'
           className={cn(
@@ -190,16 +192,48 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
         </Button>
       </div>
 
+      <Separator />
+
       <div className='flex h-full w-full flex-col items-center justify-start gap-4 overflow-y-auto p-5'>
         {/* Skeleton Loading */}
         {isLoading ? [...Array(5)].map((_, index) => <Skeleton key={index} className='h-32 w-full' />) : null}
 
+        {/* Error State */}
+        {error && !isLoading && (
+          <div className='flex flex-col items-center gap-4 p-10'>
+            <AlertCircle className='text-secondary-foreground h-7 w-7 stroke-[1.5px]' />
+            <div className='space-y-1.5 text-center'>
+              <div className='text-secondary-foreground text-center'>
+                Failed to load changelogs. Please try again.
+              </div>
+              {/* Show error message - only hsow if error.message is of type json */}
+              {(() => {
+                try {
+                  return (
+                    <p className='text-muted-foreground text-center'>{JSON.parse(error.message)?.error}</p>
+                  );
+                } catch (parseError) {
+                  return null;
+                }
+              })()}
+            </div>
+            <Button
+              size='sm'
+              variant='secondary'
+              onClick={() => {
+                mutate();
+              }}>
+              Try Again
+            </Button>
+          </div>
+        )}
+
         {/* Empty State */}
-        {changelogs && changelogs.length === 0 ? (
+        {changelogs && changelogs.length === 0 && !error ? (
           <div className='flex flex-col items-center justify-center gap-4 pt-20'>
             <div className='flex flex-col items-center justify-center gap-1'>
               <h3 className='text-foreground text-center text-2xl font-medium'>No changelogs found.</h3>
-              <p className='text-foreground/60 text-center'>Create a new changelog to get started.</p>
+              <p className='text-muted-foreground text-center'>Create a new changelog to get started.</p>
             </div>
             <AddChangelogModal projectSlug={projectSlug}>
               <Button size='sm'>Create Changelog</Button>
