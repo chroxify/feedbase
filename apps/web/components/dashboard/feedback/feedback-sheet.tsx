@@ -523,7 +523,7 @@ export function FeedbackSheet({
             <div className='flex items-center justify-between'>
               <Label>Tags</Label>
               <TagCombobox
-                initialTags={currentFeedback.tags}
+                initialTags={currentFeedback.tags || []}
                 onTagsChange={(tags) => {
                   updateFeedback({ tags, method: 'PATCH' });
                 }}
