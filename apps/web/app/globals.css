@@ -61,7 +61,7 @@ body {
 
     /* Muted background (Skeletons, Avatar, tabs, etc) */
     --muted: 230 11% 8%;
-    --muted-foreground: 219 6% 55%;
+    --muted-foreground: 219 6% 65%;
 
     --popover: 235 7% 5%;
     --popover-foreground: 220 9% 94%;

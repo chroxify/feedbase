@@ -1,42 +1,79 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@ui/components/ui/button';
 import { Separator } from '@ui/components/ui/separator';
 import { cn } from '@ui/lib/utils';
-import { Filter, Plus, X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 import { Input } from 'ui/components/ui/input';
+import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import { SearchIcon } from '@/components/shared/icons/icons-animated';
 import LottiePlayer from '@/components/shared/lottie-player';
+import { FilterCombobox } from './filter-combobox';
 
 export default function FeedbackHeader() {
   const [searchActive, setSearchActive] = useState(false);
   const [animate, setAnimate] = useState(false);
+  const [searchValue, setSearchValue] = useState('');
+  const [timeoutId, setTimeoutId] = useState<NodeJS.Timeout | null>(null);
+  const searchParams = useSearchParams();
+  const createQueryParams = useQueryParamRouter(useRouter(), usePathname(), searchParams);
+
+  function handleSearchDebounce(value: string) {
+    // Clear previous timeout
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+
+    // Debounce search
+    const newTimeoutId = setTimeout(() => {
+      // Search logic
+      createQueryParams('search', value);
+    }, 500);
+
+    // Update timeoutId state
+    setTimeoutId(newTimeoutId);
+  }
+
+  useEffect(() => {
+    // Preset / update search value
+    setSearchValue(searchParams.get('search') || '');
+  }, [searchParams]);
 
   return (
     <div className='flex h-[52px] w-full flex-row items-center justify-between px-5 pt-5'>
       <h2 className='text-2xl font-medium'>Feedback</h2>
 
       <div className='flex items-center gap-3'>
-        {/* Search */}
+        {/* Search & Filter */}
         <div className='flex items-center gap-2'>
-          <Button
-            variant='outline'
+          {/* Search Input */}
+          <div
             className={cn(
-              'text-secondary-foreground hover:text-foreground relative flex w-8 items-center gap-1 overflow-hidden transition-all',
+              'bg-background relative flex h-8 w-8 items-center gap-1 overflow-hidden rounded-md border transition-all',
               searchActive && 'w-60'
             )}>
             <Input
               placeholder='Search feedback'
               onClick={(e) => e.stopPropagation()}
+              value={searchValue}
+              onChange={(e) => {
+                setSearchValue(e.target.value);
+                handleSearchDebounce(e.target.value);
+              }}
               className={cn(
-                'absolute left-0 w-52 rounded-none border-transparent pr-0.5',
-                !searchActive && 'w-0 cursor-pointer !opacity-0'
+                'absolute left-0 block w-52 rounded-none border-transparent bg-transparent pr-0.5 font-normal outline-none ring-offset-transparent focus-visible:ring-transparent',
+                !searchActive && 'hidden cursor-pointer'
               )}
             />
             <button
-              className='bg-background absolute right-0 z-10 flex h-8 w-8 items-center justify-center'
-              onClick={() => setSearchActive(!searchActive)}
+              className='hover:bg-accent absolute right-0 z-10 flex h-8 w-8 items-center justify-center bg-transparent transition-all'
+              onClick={() => {
+                setSearchActive(!searchActive);
+                setSearchValue('');
+                handleSearchDebounce('');
+              }}
               onMouseEnter={() => setAnimate(true)}
               onMouseLeave={() => setAnimate(false)}>
               {/* Icon */}
@@ -45,18 +82,14 @@ export default function FeedbackHeader() {
                 animate={animate}
                 initialColor='hsl(var(--secondary-foreground))'
                 animationColor='hsl(var(--foreground))'
-                className={cn('h-4 w-4', searchActive && 'hidden')}
+                className={cn('-mr-0.5 h-4 w-4 dark:mr-0', searchActive && 'hidden')}
               />
               <X className={cn('h-4 w-4', !searchActive && 'hidden')} />
             </button>
-          </Button>
+          </div>
 
-          <Button
-            variant={'outline'}
-            className='text-secondary-foreground hover:text-foreground flex items-center gap-1'>
-            <Filter className='h-4 w-4' />
-            Filter
-          </Button>
+          {/* Filter Combobox */}
+          <FilterCombobox />
         </div>
 
         {/* Seperator Line */}
