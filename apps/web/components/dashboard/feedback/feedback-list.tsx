@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Label } from '@ui/components/ui/label';
 import { Separator } from '@ui/components/ui/separator';
 import { Skeleton } from '@ui/components/ui/skeleton';
@@ -19,30 +19,34 @@ import {
 import useSWR from 'swr';
 import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
 import { Button } from 'ui/components/ui/button';
-import useCreateQueryString from '@/lib/hooks/use-create-query';
+import { STATUS_OPTIONS } from '@/lib/constants';
+import useQueryParamRouter from '@/lib/hooks/use-query-router';
+import useTags from '@/lib/swr/use-tags';
 import { FeedbackWithUserProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
+import FeedbackFilterHeader, { FeedbackFilterProps } from './feedback-filters';
 import { FeedbackSheet } from './feedback-sheet';
-import { statusOptions } from './status-combobox';
 
 type DateSortedFeedbackProps = Record<string, FeedbackWithUserProps[]>;
 
 export default function FeedbackList({}: {}) {
+  const { slug: projectSlug } = useParams<{ slug: string }>();
   const searchParams = useSearchParams();
-  const createQueryString: (name: string, value: string) => string = useCreateQueryString(searchParams);
   const pathname = usePathname();
-  const projectSlug = pathname.split('/')[1];
   const router = useRouter();
+  const createQueryParams = useQueryParamRouter(router, pathname, searchParams);
   const [tab, setTab] = useState('all');
+  const [feedbackFilters, setFeedbackFilters] = useState<FeedbackFilterProps>();
   const {
     data: feedbackList,
     error,
     isLoading,
     mutate,
   } = useSWR<FeedbackWithUserProps[]>(`/api/v1/projects/${projectSlug}/feedback`, fetcher);
+  const { tags: projectTags } = useTags();
 
   // Query params
-  const tag = searchParams.get('tags') || '';
+  const tags = searchParams.get('tags') || '';
   const status = searchParams.get('status') || '';
   const search = searchParams.get('search') || '';
 
@@ -54,30 +58,79 @@ export default function FeedbackList({}: {}) {
         if (tab !== 'all' && feedback.status?.toLowerCase() !== tab) return false;
 
         // Filter by search
-        if (search && !feedback.title.toLowerCase().includes(search.toLowerCase())) return false;
+        if (search) {
+          // Include feedback if it doesn't have '!' in front of the search
+          if (!search.startsWith('!')) {
+            if (!feedback.title.toLowerCase().includes(search.toLowerCase())) {
+              return false;
+            }
+          } else {
+            if (feedback.title.toLowerCase().includes(search.slice(1).toLowerCase())) {
+              return false;
+            }
+          }
+        }
 
         // Filter by tag/tags, if tags are multiple then they are separated by comma
-        if (tag && !tag.split(',').every((t) => feedback.tags?.some((ft) => ft.name.toLowerCase() === t)))
-          return false;
+        if (tags) {
+          const includeTags = tags.split(',').filter((tag) => !tag.startsWith('!'));
+          const excludeTags = tags
+            .split(',')
+            .filter((tag) => tag.startsWith('!'))
+            .map((tag) => tag.slice(1));
+
+          if (
+            includeTags.length > 0 &&
+            !includeTags.some((tag) => feedback.tags?.some((t) => t.name.toLowerCase() === tag))
+          ) {
+            return false;
+          }
+
+          if (
+            excludeTags.length > 0 &&
+            excludeTags.some((tag) => feedback.tags?.some((t) => t.name.toLowerCase() === tag))
+          ) {
+            return false;
+          }
+        }
 
         // Filter by status
-        if (status && !feedback.status?.toLowerCase().includes(status.toLowerCase())) return false;
+        if (status) {
+          // Include feedback if it doesn't have '!' in front of the status
+          if (
+            status.split(',').some((s) => !s.startsWith('!')) &&
+            !status.split(',').some((s) => feedback.status?.toLowerCase() === s)
+          ) {
+            return false;
+          }
+
+          // Exclude feedback if it has '!' in front of the status
+          if (
+            status.split(',').some((s) => s.startsWith('!')) &&
+            status.split(',').some((s) => feedback.status?.toLowerCase() === s.slice(1))
+          ) {
+            return false;
+          }
+        }
 
         return true;
       })
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) || [];
 
-  // This should first sort all the feedback by date newest first and then split them up into 'XX Month' format for the feedback in last 7 days, from last 7 days to last 30 it should be 'Last 7 days' and 'Last 30 days' and then 'Older'
+  // Categorize feedback by date - Today, Yesterday, Last 7 days, Last 30 days, Older
   const dateSortedFeedback: DateSortedFeedbackProps = filteredFeedback.reduce<DateSortedFeedbackProps>(
     (acc, feedback) => {
       const feedbackDate = new Date(feedback.created_at);
-      const diffInDays = Math.floor((new Date().getTime() - feedbackDate.getTime()) / (1000 * 3600 * 24));
+      const currentDate = new Date();
+      const diffInDays = Math.floor((currentDate.getTime() - feedbackDate.getTime()) / (1000 * 3600 * 24));
 
       let dateKey;
-      if (diffInDays <= 7) {
-        dateKey = formatDate(feedbackDate); // Format as XX Mon
-      } else if (diffInDays <= 14) {
-        dateKey = 'Last 14 days';
+      if (diffInDays === 0) {
+        dateKey = 'Today';
+      } else if (diffInDays === 1) {
+        dateKey = 'Yesterday';
+      } else if (diffInDays <= 7) {
+        dateKey = 'Last 7 days';
       } else if (diffInDays <= 30) {
         dateKey = 'Last 30 days';
       } else {
@@ -92,12 +145,59 @@ export default function FeedbackList({}: {}) {
     {}
   );
 
-  // Calc date in format: 15 Aug
+  // Calculate date in format: XX Mon
   function formatDate(date: Date) {
     const day = date.getDate().toString();
     const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
     return `${day} ${month}`;
   }
+
+  // Handle filter changes
+  useEffect(() => {
+    // Mutate data with complete revalidation
+    mutate(undefined, { revalidate: true });
+
+    // Set feedback filters
+    setFeedbackFilters({
+      tags: {
+        i:
+          projectTags?.filter((tag) => {
+            return tags.split(',').includes(tag.name.toLowerCase());
+          }) ?? [],
+        e:
+          projectTags?.filter((tag) => {
+            return tags.split(',').includes(`!${tag.name.toLowerCase()}`);
+          }) ?? [],
+      },
+      status: {
+        i:
+          status
+            .split(',')
+            .map((s) => {
+              if (!s.startsWith('!')) {
+                return STATUS_OPTIONS.find(
+                  (option) =>
+                    option.label.toLowerCase() === s.replace('!', '').replace('+', ' ').toLowerCase()
+                );
+              }
+            })
+            .filter(Boolean) ?? [],
+        e:
+          status
+            .split(',')
+            .map((s) => {
+              if (s.startsWith('!')) {
+                return STATUS_OPTIONS.find(
+                  (option) =>
+                    option.label.toLowerCase() === s.replace('!', '').replace('+', ' ').toLowerCase()
+                );
+              }
+            })
+            .filter(Boolean) ?? [],
+      },
+      search,
+    } as FeedbackFilterProps);
+  }, [search, tags, status, projectTags]);
 
   return (
     <>
@@ -179,6 +279,9 @@ export default function FeedbackList({}: {}) {
 
       <Separator />
 
+      {/* Filters */}
+      {feedbackFilters && <FeedbackFilterHeader filters={feedbackFilters} />}
+
       <div className='flex h-full w-full flex-col items-center justify-start gap-4 overflow-y-auto p-5'>
         {/* Loading Skeleton */}
         {isLoading && (
@@ -256,130 +359,132 @@ export default function FeedbackList({}: {}) {
         )}
 
         {/* If filteredFeedback is not empty */}
-        {Object.entries(dateSortedFeedback).map(([key, value]) => {
-          return (
-            <div key={key} className='flex w-full flex-col gap-2'>
-              <Label>{key}</Label>
-              <div>
-                {value.map((feedback) => (
-                  <FeedbackSheet key={feedback.id} feedback={filteredFeedback} initialFeedback={feedback}>
-                    <div
-                      className='jusify-between hover:bg-muted/50 group flex h-12 cursor-pointer flex-row items-center border border-b-0 p-1 transition-all [&:first-child]:rounded-t-md [&:last-child]:rounded-b-md [&:last-child]:border-b'
-                      key={feedback.id}>
-                      {/* Upvotes & Title */}
-                      <div className='flex h-full w-full min-w-0 flex-row items-center'>
-                        {/* Upvotes */}
-                        <div className='flex h-11 flex-col items-center justify-center rounded-sm px-2 py-1 '>
-                          {/* Arrow */}
-                          <ChevronUp
-                            className={cn(
-                              ' h-4 w-4 shrink-0 text-sm transition-colors',
-                              feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
-                            )}
-                          />
-
+        {!error &&
+          Object.entries(dateSortedFeedback).map(([key, value]) => {
+            return (
+              <div key={key} className='flex w-full flex-col gap-2'>
+                <Label>{key}</Label>
+                <div>
+                  {value.map((feedback) => (
+                    <FeedbackSheet key={feedback.id} feedback={filteredFeedback} initialFeedback={feedback}>
+                      <div
+                        className='jusify-between hover:bg-muted/50 group flex h-11 cursor-pointer flex-row items-center border border-b-0 p-1 transition-all [&:first-child]:rounded-t-md [&:last-child]:rounded-b-md [&:last-child]:border-b'
+                        key={feedback.id}>
+                        {/* Upvotes & Title */}
+                        <div className='flex h-full w-full min-w-0 flex-row items-center'>
                           {/* Upvotes */}
-                          <div
-                            className={cn(
-                              ' -mt-[5px]  text-sm transition-colors',
-                              feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
-                            )}>
-                            {feedback.upvotes}
+                          <div className='flex h-10 flex-col items-center justify-center rounded-sm px-2'>
+                            {/* Arrow */}
+                            <ChevronUp
+                              className={cn(
+                                ' h-4 w-4 shrink-0 text-sm transition-colors',
+                                feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
+                              )}
+                            />
+
+                            {/* Upvotes */}
+                            <div
+                              className={cn(
+                                '-mt-1 text-xs transition-colors',
+                                feedback.has_upvoted ? 'text-foreground' : 'text-foreground/60'
+                              )}>
+                              {feedback.upvotes}
+                            </div>
                           </div>
+
+                          <span className='text-foreground line-clamp-1 pr-1 text-[15px] transition-all'>
+                            {feedback.title}
+                          </span>
                         </div>
 
-                        <span className='text-foreground line-clamp-1 pr-1 text-[15px] transition-all'>
-                          {feedback.title}
-                        </span>
-                      </div>
-
-                      {/* Tags & User */}
-                      <div className='mr-2 flex flex-shrink-0 items-center gap-2'>
-                        {/* Tags */}
-                        {feedback.tags && feedback.tags.length > 0
-                          ? feedback.tags.map((tag) => (
-                              <button
-                                className=' group/tag hover:border-foreground/20 hover:bg-accent/50 hidden flex-shrink-0 flex-wrap items-center gap-2 rounded-full border px-3 py-1 transition-colors hover:cursor-pointer md:flex'
-                                key={tag.name.toLowerCase()}
-                                type='button'
-                                onClick={(e) => {
-                                  // Prevent sheet from opening
-                                  e.stopPropagation();
-
-                                  // If already selected, remove the tag
-                                  if (tag.name.toLowerCase() === searchParams.get('tags')) {
-                                    router.push(`${pathname}?${createQueryString('tags', '')}`);
-                                    return;
-                                  }
-
-                                  router.push(`${pathname}?${createQueryString('tags', tag.name)}`);
-                                }}>
-                                {/* Tag color */}
-                                <div
-                                  className='h-2 w-2 rounded-full'
-                                  style={{ backgroundColor: tag.color }}
-                                />
-                                {/* Tag name */}
-                                <div className='text-foreground/60 group-hover/tag:text-foreground/80 text-xs  transition-colors'>
-                                  {tag.name}
-                                </div>
-                              </button>
-                            ))
-                          : null}
-
-                        <div className='flex flex-shrink-0 items-center gap-2'>
-                          {/* Status Icon */}
-                          {(() => {
-                            if (feedback.status) {
-                              const currentStatus =
-                                statusOptions.find(
-                                  (option) => option.label.toLowerCase() === feedback.status?.toLowerCase()
-                                ) || statusOptions[0];
-
-                              return (
+                        {/* Tags & User */}
+                        <div className='mr-2 flex flex-shrink-0 items-center gap-2'>
+                          {/* Tags */}
+                          {feedback.tags && feedback.tags.length > 0
+                            ? feedback.tags.map((tag) => (
                                 <button
-                                  className='group/tag hover:border-foreground/20 hover:bg-accent/50 hidden flex-shrink-0 flex-wrap items-center gap-2 rounded-full border p-1 transition-colors hover:cursor-pointer md:flex'
+                                  className=' group/tag hover:border-foreground/20 hover:bg-accent/50 hidden flex-shrink-0 flex-wrap items-center gap-2 rounded-full border px-3 py-1 transition-colors hover:cursor-pointer md:flex'
+                                  key={tag.name.toLowerCase()}
                                   type='button'
                                   onClick={(e) => {
                                     // Prevent sheet from opening
                                     e.stopPropagation();
 
-                                    // If already selected, remove the status
-                                    if (currentStatus.label.toLowerCase() === searchParams.get('status')) {
-                                      router.push(`${pathname}?${createQueryString('status', '')}`);
+                                    // If already selected, remove the tag
+                                    if (tag.name.toLowerCase() === searchParams.get('tags')) {
+                                      createQueryParams('tags', '');
                                       return;
                                     }
 
-                                    router.push(
-                                      `${pathname}?${createQueryString('status', currentStatus.label)}`
-                                    );
+                                    createQueryParams('tags', tag.name);
                                   }}>
-                                  <currentStatus.icon className='text-foreground/60 h-4 w-4' />
+                                  {/* Tag color */}
+                                  <div
+                                    className='h-2 w-2 rounded-full'
+                                    style={{ backgroundColor: tag.color }}
+                                  />
+                                  {/* Tag name */}
+                                  <div className='text-foreground/60 group-hover/tag:text-foreground/80 text-xs  transition-colors'>
+                                    {tag.name}
+                                  </div>
                                 </button>
-                              );
-                            }
-                            return null;
-                          })()}
+                              ))
+                            : null}
 
-                          {/* Date */}
-                          <div className='text-foreground/50 cursor-default select-none text-center text-xs font-light'>
-                            {formatDate(new Date(feedback.created_at))}
+                          <div className='flex flex-shrink-0 items-center gap-2'>
+                            {/* Status Icon */}
+                            {(() => {
+                              if (feedback.status) {
+                                const currentStatus =
+                                  STATUS_OPTIONS.find(
+                                    (option) => option.label.toLowerCase() === feedback.status?.toLowerCase()
+                                  ) || STATUS_OPTIONS[0];
+
+                                return (
+                                  <button
+                                    className='group/tag hover:border-foreground/20 hover:bg-accent/50 hidden flex-shrink-0 flex-wrap items-center gap-2 rounded-full border p-1 transition-colors hover:cursor-pointer md:flex'
+                                    type='button'
+                                    onClick={(e) => {
+                                      // Prevent sheet from opening
+                                      e.stopPropagation();
+
+                                      // If already selected, remove the status
+                                      if (currentStatus.label.toLowerCase() === searchParams.get('status')) {
+                                        createQueryParams('status', '');
+                                        return;
+                                      }
+
+                                      createQueryParams('status', currentStatus.label);
+                                    }}>
+                                    <currentStatus.icon className='text-foreground/60 h-4 w-4' />
+                                  </button>
+                                );
+                              }
+                              return null;
+                            })()}
+
+                            {/* Date */}
+                            <div className='text-foreground/50 cursor-default select-none text-center text-xs font-light'>
+                              {formatDate(new Date(feedback.created_at))}
+                            </div>
+
+                            {/* User */}
+                            <Avatar className='h-6 w-6 gap-2 border'>
+                              <AvatarImage
+                                src={feedback.user.avatar_url || ''}
+                                alt={feedback.user.full_name}
+                              />
+                              <AvatarFallback>{feedback.user.full_name.charAt(0)}</AvatarFallback>
+                            </Avatar>
                           </div>
-
-                          {/* User */}
-                          <Avatar className='h-6 w-6 gap-2 border'>
-                            <AvatarImage src={feedback.user.avatar_url || ''} alt={feedback.user.full_name} />
-                            <AvatarFallback>{feedback.user.full_name.charAt(0)}</AvatarFallback>
-                          </Avatar>
                         </div>
                       </div>
-                    </div>
-                  </FeedbackSheet>
-                ))}
+                    </FeedbackSheet>
+                  ))}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
     </>
   );

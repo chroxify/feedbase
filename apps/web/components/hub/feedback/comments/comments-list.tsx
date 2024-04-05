@@ -6,7 +6,7 @@ import { Button } from '@ui/components/ui/button';
 import { Label } from '@ui/components/ui/label';
 import { Skeleton } from '@ui/components/ui/skeleton';
 import { toast } from 'sonner';
-import useCreateQueryString from '@/lib/hooks/use-create-query';
+import useCreateQueryString from '@/lib/hooks/use-query-router';
 import { FeedbackCommentWithUserProps, ProfileProps } from '@/lib/types';
 import { Icons } from '@/components/shared/icons/icons-static';
 import RichTextEditor from '@/components/shared/tiptap-editor';

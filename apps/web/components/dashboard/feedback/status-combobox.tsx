@@ -14,29 +14,7 @@ import {
 import { Button } from 'ui/components/ui/button';
 import { Command, CommandGroup, CommandItem } from 'ui/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from 'ui/components/ui/popover';
-
-export const statusOptions = [
-  {
-    label: 'In Review',
-    icon: CircleDashed,
-  },
-  {
-    label: 'Planned',
-    icon: CircleDotDashed,
-  },
-  {
-    label: 'In Progress',
-    icon: CircleDot,
-  },
-  {
-    label: 'Completed',
-    icon: CheckCircle2,
-  },
-  {
-    label: 'Rejected',
-    icon: XCircle,
-  },
-];
+import { STATUS_OPTIONS } from '@/lib/constants';
 
 interface ComboboxProps {
   initialStatus: string | null;
@@ -46,7 +24,9 @@ interface ComboboxProps {
 export function StatusCombobox({ initialStatus, onStatusChange }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
   const [selectedStatus, setSelectedStatus] = React.useState(initialStatus || '');
-  const currentItem = statusOptions.find((item) => item.label.toLowerCase() === selectedStatus.toLowerCase());
+  const currentItem = STATUS_OPTIONS.find(
+    (item) => item.label.toLowerCase() === selectedStatus.toLowerCase()
+  );
 
   // Update the selected status when the initial status changes
   React.useEffect(() => {
@@ -79,7 +59,7 @@ export function StatusCombobox({ initialStatus, onStatusChange }: ComboboxProps)
       <PopoverContent className='w-[200px] p-0' align='end'>
         <Command>
           <CommandGroup>
-            {statusOptions.map((item) => (
+            {STATUS_OPTIONS.map((item) => (
               <CommandItem
                 key={item.label.toLowerCase()}
                 onSelect={(currentValue) => {
