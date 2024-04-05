@@ -32,6 +32,7 @@ export function FilterCombobox() {
   const [open, setOpen] = React.useState(false);
   const [pages, setPages] = React.useState<string[]>([]);
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
+  const [selectedStatuses, setSelectedStatuses] = React.useState<string[]>([]);
   const searchParams = useSearchParams();
   const createQueryParams = useQueryParamRouter(useRouter(), usePathname(), searchParams);
   const { tags } = useTags();
@@ -40,6 +41,9 @@ export function FilterCombobox() {
   React.useEffect(() => {
     // Preset tags
     setSelectedTags(searchParams.get('tags')?.split(',') || []);
+
+    // Preset statuses
+    setSelectedStatuses(searchParams.get('status')?.split(',') || []);
   }, [searchParams]);
 
   return (
@@ -113,12 +117,35 @@ export function FilterCombobox() {
                 {STATUS_OPTIONS.map((item) => (
                   <CommandItem
                     key={item.label.toLowerCase()}
-                    onSelect={(currentValue) => {
-                      // setSelectedStatus(currentValue);
-                      // setOpen(false);
-                      // onStatusChange?.(currentValue);
-                    }}
-                    className='flex items-center gap-2'>
+                    className='group flex items-center gap-2'
+                    onSelect={() => {
+                      // Append or remove status from selectedStatuses
+                      const newStatuses = selectedStatuses.find(
+                        (t) => t.toLowerCase() === item.label.toLowerCase()
+                      )
+                        ? selectedStatuses.filter((t) => t.toLowerCase() !== item.label.toLowerCase())
+                        : [...selectedStatuses, item.label];
+
+                      // Set statuses
+                      setSelectedStatuses(newStatuses);
+
+                      // Apply statuses
+                      createQueryParams('status', newStatuses.join(','));
+                    }}>
+                    <Checkbox
+                      className={cn(
+                        'border-foreground/50 h-3.5 w-3.5 opacity-0 shadow-none group-aria-selected:opacity-100',
+                        selectedStatuses.find((t) => t.toLowerCase() === item.label.toLowerCase()) &&
+                          'opacity-100'
+                      )}
+                      iconCn='h-3.5 w-3.5'
+                      checked={
+                        selectedStatuses.find((t) => t.toLowerCase() === item.label.toLowerCase())
+                          ? true
+                          : false
+                      }
+                    />
+
                     {/* Icon */}
                     <item.icon className='h-4 w-4' />
 
