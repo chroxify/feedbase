@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { Editor } from '@tiptap/react';
 import { Input } from '@ui/components/ui/input';
 import { Popover, PopoverContent, PopoverTrigger } from '@ui/components/ui/popover';
@@ -16,7 +16,9 @@ import {
   ChevronsUpDownIcon,
   ChevronUp,
   Code2Icon,
+  EditIcon,
   EyeOffIcon,
+  Hash,
   Image,
   Info,
   LayoutGrid,
@@ -25,6 +27,8 @@ import {
   ListOrderedIcon,
   LucideBold,
   LucideItalic,
+  MailIcon,
+  MessageCircleOff,
   MoreHorizontal,
   PinIcon,
   Trash2Icon,
@@ -36,12 +40,18 @@ import useSWRMutation from 'swr/mutation';
 import { Alert, AlertDescription, AlertTitle } from 'ui/components/ui/alert';
 import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
 import { Button } from 'ui/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from 'ui/components/ui/dropdown-menu';
 import { Label } from 'ui/components/ui/label';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from 'ui/components/ui/sheet';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/ui/tabs';
 import { PROSE_CN } from '@/lib/constants';
 import { FeedbackCommentWithUserProps, FeedbackWithUserProps } from '@/lib/types';
-import { actionFetcher, fetcher } from '@/lib/utils';
+import { actionFetcher, fetcher, formatRootUrl } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
 import RichTextEditor from '@/components/shared/tiptap-editor';
 import DefaultTooltip from '@/components/shared/tooltip';
@@ -61,6 +71,7 @@ export function FeedbackSheet({
   const { mutate } = useSWRConfig();
   const { slug } = useParams<{ slug: string }>();
   const commentEditor = useRef<Editor | null>(null);
+  const router = useRouter();
   const [commentContent, setCommentContent] = useState('');
   const [currentFeedback, setCurrentFeedback] = useState(initialFeedback);
   const [open, setOpen] = useState(false);
@@ -95,6 +106,12 @@ export function FeedbackSheet({
     },
     [feedback, currentFeedback]
   );
+
+  // Copy to clipboard
+  const copyToClipboard = (key: string, value: string) => {
+    navigator.clipboard.writeText(value);
+    toast.success(`${key} copied to clipboard`);
+  };
 
   // Random re-render state to keep the editor & toolbar buttons in sync
   commentEditor.current?.on('transaction', () => {
@@ -182,12 +199,68 @@ export function FeedbackSheet({
           <div className='flex h-12 w-full shrink-0 flex-row items-center justify-between gap-2 border-b px-6'>
             <div className='flex items-center gap-2'>
               <Label>Feedback</Label>
-              <Button
-                size='icon'
-                variant='ghost'
-                className='text-muted-foreground hover:text-foreground h-6 w-6'>
-                <MoreHorizontal className='h-4 w-4' />
-              </Button>
+              <DropdownMenu modal={false}>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    size='icon'
+                    variant='ghost'
+                    className='text-muted-foreground hover:text-foreground h-6 w-6'>
+                    <MoreHorizontal className='h-4 w-4' />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align='start'>
+                  <DropdownMenuItem
+                    className='text-secondary-foreground hover:text-foreground flex flex-row items-center gap-2'
+                    onClick={() => {
+                      copyToClipboard('ID', currentFeedback.id);
+                    }}>
+                    <Hash className='h-4 w-4' />
+                    Copy ID
+                  </DropdownMenuItem>
+
+                  {/* Edit feedback */}
+                  <DropdownMenuItem
+                    className='text-secondary-foreground hover:text-foreground flex flex-row items-center gap-2'
+                    onClick={() => {
+                      // TODO: Edit feedback
+                    }}>
+                    <EditIcon className='h-4 w-4' />
+                    Edit Title / Content
+                  </DropdownMenuItem>
+
+                  {/* Mailto submitter */}
+                  <DropdownMenuItem
+                    className='flex flex-row items-center gap-2'
+                    onClick={() => {
+                      router.push(
+                        `mailto:${currentFeedback.user.email}?subject=Your Feedback Submission (${currentFeedback.id})&body=Hi ${currentFeedback.user.full_name},%0D%0A%0D%0AWe have received your recent feedback and had some follow up questions about it.%0D%0A%0D%0A%0D%0A%0D%0AIf you could get back to us as soon as possible, that would be great!%0D%0A%0D%0AThanks!`
+                      );
+                    }}>
+                    <MailIcon className='h-4 w-4' />
+                    Email submitter
+                  </DropdownMenuItem>
+
+                  {/* Disable Commenting */}
+                  <DropdownMenuItem
+                    className='flex flex-row items-center gap-2'
+                    onClick={() => {
+                      // TODO: Disable commenting
+                    }}>
+                    <MessageCircleOff className='h-4 w-4' />
+                    Disable Commenting
+                  </DropdownMenuItem>
+
+                  {/* Delete feedback */}
+                  <DropdownMenuItem
+                    className='text-destructive focus:text-destructive/90 focus:bg-destructive/20 flex flex-row items-center gap-2'
+                    onClick={() => {
+                      // TODO: Delete feedback
+                    }}>
+                    <Trash2Icon className='h-4 w-4' />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
             <div className='flex items-center gap-2'>
               <span className='text-muted-foreground select-none text-sm'>
@@ -458,7 +531,10 @@ export function FeedbackSheet({
                 <Button
                   size='icon'
                   variant='ghost'
-                  className='text-muted-foreground hover:text-foreground h-7 w-7'>
+                  className='text-muted-foreground hover:text-foreground h-7 w-7'
+                  onClick={() => {
+                    copyToClipboard('Link', formatRootUrl(slug, `/feedback/${currentFeedback.id}`));
+                  }}>
                   <LinkIcon className='h-4 w-4' />
                 </Button>
               </DefaultTooltip>
@@ -480,6 +556,7 @@ export function FeedbackSheet({
               </DefaultTooltip>
             </div>
 
+            {/* Placeholder due to the close button of the sheet */}
             <div />
           </div>
 
@@ -565,14 +642,7 @@ export function FeedbackSheet({
 
           <div className='flex w-full flex-col items-end gap-2 p-6'>
             <div className='flex w-full items-center justify-between'>
-              <Label>Created At</Label>
-              <span className='text-secondary-foreground text-sm'>
-                {formatDate(currentFeedback.created_at)}
-              </span>
-            </div>
-
-            <div className='flex w-full items-center justify-between'>
-              <Label>Created By</Label>
+              <Label>Author</Label>
               <div className='text-secondary-foreground flex items-center gap-2 text-sm'>
                 <Avatar className='-ml-1 h-6 w-6 select-none overflow-visible border '>
                   <div className='h-full w-full overflow-hidden rounded-full'>
@@ -590,6 +660,13 @@ export function FeedbackSheet({
                 </Avatar>
                 {currentFeedback.user.full_name}
               </div>
+            </div>
+
+            <div className='flex w-full items-center justify-between'>
+              <Label>Created At</Label>
+              <span className='text-secondary-foreground text-sm'>
+                {formatDate(currentFeedback.created_at)}
+              </span>
             </div>
 
             {/* <Button
