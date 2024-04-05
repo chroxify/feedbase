@@ -68,11 +68,21 @@ export default function FeedbackHeader() {
               )}
             />
             <button
-              className='hover:bg-accent absolute right-0 z-10 flex h-8 w-8 items-center justify-center bg-transparent transition-all'
+              className='hover:bg-accent text-secondary-foreground hover:text-foreground absolute right-0 z-10 flex h-8 w-8 items-center justify-center bg-transparent transition-all'
               onClick={() => {
+                // Toggle search
                 setSearchActive(!searchActive);
-                setSearchValue('');
-                handleSearchDebounce('');
+
+                // If closing search, clear search value and query param
+                if (searchActive) {
+                  setSearchValue('');
+                  handleSearchDebounce('');
+                } else {
+                  // Focus input
+                  window.setTimeout(() => {
+                    document.querySelector('input')?.focus();
+                  }, 0);
+                }
               }}
               onMouseEnter={() => setAnimate(true)}
               onMouseLeave={() => setAnimate(false)}>
