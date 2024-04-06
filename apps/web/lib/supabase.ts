@@ -86,36 +86,36 @@ export interface Database {
       feedback: {
         Row: {
           comment_count: number;
+          content: string;
           created_at: string;
-          description: string;
           id: string;
           project_id: string;
           raw_tags: Json[] | null;
-          status: string | null;
+          status: Database['public']['Enums']['status_options'];
           title: string;
           upvotes: number;
           user_id: string;
         };
         Insert: {
           comment_count?: number;
+          content: string;
           created_at?: string;
-          description: string;
           id?: string;
           project_id: string;
           raw_tags?: Json[] | null;
-          status?: string | null;
+          status?: Database['public']['Enums']['status_options'];
           title: string;
           upvotes?: number;
           user_id: string;
         };
         Update: {
           comment_count?: number;
+          content?: string;
           created_at?: string;
-          description?: string;
           id?: string;
           project_id?: string;
           raw_tags?: Json[] | null;
-          status?: string | null;
+          status?: Database['public']['Enums']['status_options'];
           title?: string;
           upvotes?: number;
           user_id?: string;
@@ -572,45 +572,6 @@ export interface Database {
         };
         Relationships: [];
       };
-      spaces: {
-        Row: {
-          created_at: string;
-          id: string;
-          name: string;
-        };
-        Insert: {
-          created_at?: string;
-          id?: string;
-          name: string;
-        };
-        Update: {
-          created_at?: string;
-          id?: string;
-          name?: string;
-        };
-        Relationships: [];
-      };
-      waitlist: {
-        Row: {
-          created_at: string;
-          email: string;
-          id: string;
-          name: string;
-        };
-        Insert: {
-          created_at?: string;
-          email: string;
-          id?: string;
-          name: string;
-        };
-        Update: {
-          created_at?: string;
-          email?: string;
-          id?: string;
-          name?: string;
-        };
-        Relationships: [];
-      };
     };
     Views: {
       [_ in never]: never;
@@ -626,6 +587,7 @@ export interface Database {
     };
     Enums: {
       notification_types: 'comment' | 'post';
+      status_options: 'in review' | 'planned' | 'in progress' | 'completed' | 'rejected';
       theme_type: 'default' | 'light' | 'custom';
       token_type: 'full_access' | 'public_access';
     };

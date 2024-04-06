@@ -9,13 +9,13 @@ export const runtime = 'edge';
     POST /api/v1/projects/[slug]/feedback
     {
         title: string;
-        description: string;
+        content: string;
         status: string;
         tags: [id, id, id]
     }
 */
 export async function POST(req: Request, context: { params: { slug: string } }) {
-  const { title, description, status, tags, user } = (await req.json()) as FeedbackWithUserInputProps;
+  const { title, content, status, tags, user } = (await req.json()) as FeedbackWithUserInputProps;
 
   // Validate Request Body
   if (!title) {
@@ -26,8 +26,8 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
     context.params.slug,
     {
       title: title || '',
-      description: description || '',
-      status: status || '',
+      content: content || '',
+      status: status?.toLowerCase() as FeedbackWithUserInputProps['status'],
       project_id: 'dummy-id',
       user_id: 'dummy-id',
       tags: tags || [],

@@ -54,7 +54,7 @@ export class Feedbase {
    * Submit feedback for the project.
    *
    * @param title - The title of the feedback.
-   * @param description - The feedback description.
+   * @param content - The feedback content.
    * @param email - The email of the user submitting the feedback.
    * @param fullName - The full name of the user submitting the feedback.
    * @param avatarUrl - The avatar URL of the user submitting the feedback.
@@ -62,7 +62,7 @@ export class Feedbase {
    */
   public async submitFeedback(
     title: string,
-    description: string,
+    content: string,
     email: string,
     fullName?: string,
     avatarUrl?: string
@@ -74,7 +74,7 @@ export class Feedbase {
         this.token,
         {
           title,
-          description,
+          content,
           user: {
             email,
             full_name: fullName,

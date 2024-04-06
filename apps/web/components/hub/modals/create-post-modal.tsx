@@ -43,7 +43,7 @@ export default function CreatePostModal({
         },
         body: JSON.stringify({
           title,
-          description: content,
+          content,
         }),
       })
         .then((res) => res.json())

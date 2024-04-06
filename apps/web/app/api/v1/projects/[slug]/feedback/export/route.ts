@@ -19,7 +19,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
       return `${feedback.id},${formatRootUrl(
         context.params.slug,
         `/feedback/${feedback.id}`
-      )},"${feedback.title.replace(/"/g, '""')}","${feedback.description.replace(/"/g, '""')}",${
+      )},"${feedback.title.replace(/"/g, '""')}","${feedback.content.replace(/"/g, '""')}",${
         feedback.status
       },${feedback.upvotes},${feedback.comment_count},${feedback.user_id},"${feedback.user.full_name.replace(
         /"/g,

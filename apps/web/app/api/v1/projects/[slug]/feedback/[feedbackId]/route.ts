@@ -27,21 +27,21 @@ export async function GET(req: Request, context: { params: { slug: string; feedb
     PATCH /api/v1/projects/[slug]/feedback/[id]
     {
         title: string;
-        description: string;
+        content: string;
         status: string;
         tags: string[];
     }
 */
 export async function PATCH(req: Request, context: { params: { slug: string; feedbackId: string } }) {
-  const { title, description, status, tags } = (await req.json()) as FeedbackWithUserInputProps;
+  const { title, content, status, tags } = (await req.json()) as FeedbackWithUserInputProps;
 
   const { data: feedback, error } = await updateFeedbackByID(
     context.params.feedbackId,
     context.params.slug,
     {
       title: title || '',
-      description: description || '',
-      status,
+      content: content || '',
+      status: status?.toLowerCase() as FeedbackWithUserInputProps['status'],
       project_id: 'dummy-id',
       user_id: 'dummy-id',
       tags: tags || undefined,

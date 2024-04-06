@@ -26,7 +26,7 @@ feedbase.submitFeedback(
   // Title
   title: 'This is a title',
   // Description
-  description: 'This is a description',
+  content: 'This is the feedback content',
   // Email
   email: 'user@email.com',
   // Full Name (optional)

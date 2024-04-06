@@ -41,7 +41,7 @@ export default function FeedbackModal({
         },
         body: JSON.stringify({
           title,
-          description,
+          content: description,
         }),
       })
         .then((res) => res.json())

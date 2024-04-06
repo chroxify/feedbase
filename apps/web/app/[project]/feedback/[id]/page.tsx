@@ -36,7 +36,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   return {
     title: feedback.title,
-    description: feedback.description,
+    description: feedback.content,
   };
 }
 
@@ -118,7 +118,7 @@ export default async function FeedbackDetails({ params }: Props) {
 
               <div
                 className={cn('text-foreground/60 text-sm ', PROSE_CN)}
-                dangerouslySetInnerHTML={{ __html: feedback.description }}
+                dangerouslySetInnerHTML={{ __html: feedback.content }}
               />
             </div>
 

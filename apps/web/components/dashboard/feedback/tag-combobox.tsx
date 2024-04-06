@@ -17,7 +17,6 @@ interface TagComboboxProps {
 
 export function TagCombobox({ initialTags, onTagsChange }: TagComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  console.log('UBUT TAGS', initialTags);
   const [selectedTags, setSelectedTags] = React.useState<{ name: string; color: string }[]>(
     initialTags !== null ? initialTags : []
   );

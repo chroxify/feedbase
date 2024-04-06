@@ -286,7 +286,7 @@ export default function FeedbackList({
               {/* Description */}
               <div
                 className={cn('line-clamp-2 max-w-full text-sm', PROSE_CN)}
-                dangerouslySetInnerHTML={{ __html: feedback.description }}
+                dangerouslySetInnerHTML={{ __html: feedback.content }}
               />
             </div>
 

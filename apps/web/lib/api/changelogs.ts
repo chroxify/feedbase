@@ -22,11 +22,11 @@ export const createChangelog = (
     // If theres an image, upload it
     if (data.image && data.image.startsWith('data:image/')) {
       // Create unique image path
-      const imagePath = `${project!.slug}/${Math.random().toString(36).substring(7)}`;
+      const imagePath = `${project!.slug}/changelog/${Math.random().toString(36).substring(7)}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('changelog-images')
-        // project.slug/randomstring
+        .from('projects')
+        // project.slug/changelog/random-string
         .upload(imagePath, decode(data.image.replace(/^data:image\/\w+;base64,/, '')), {
           contentType: 'image/png',
         });
@@ -37,7 +37,7 @@ export const createChangelog = (
       }
 
       // Get public URL
-      const { data: publicUrlData } = supabase.storage.from('changelog-images').getPublicUrl(imagePath);
+      const { data: publicUrlData } = supabase.storage.from('projects').getPublicUrl(imagePath);
 
       // Check for errors
       if (!publicUrlData) {
@@ -207,10 +207,10 @@ export const updateChangelog = (
     // If theres an image, which is a base64 string, upload it
     if (data.image && data.image.startsWith('data:image/')) {
       // Create unique image path
-      const imagePath = `${project!.slug}/${Math.random().toString(36).substring(7)}`;
+      const imagePath = `${project!.slug}/changelog/${Math.random().toString(36).substring(7)}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('changelog-images')
+        .from('projects')
         .upload(imagePath, decode(data.image.replace(/^data:image\/\w+;base64,/, '')), {
           contentType: 'image/png',
         });
@@ -221,7 +221,7 @@ export const updateChangelog = (
       }
 
       // Get public URL
-      const { data: publicUrlData } = supabase.storage.from('changelog-images').getPublicUrl(imagePath);
+      const { data: publicUrlData } = supabase.storage.from('projects').getPublicUrl(imagePath);
 
       // Check for errors
       if (!publicUrlData) {

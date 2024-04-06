@@ -203,8 +203,8 @@ export const createFeedback = (
     }
 
     // Make sure content is not empty or just html tags
-    if (data.description.replace(/<[^>]*>?/gm, '').length === 0) {
-      return { data: null, error: { message: 'feedback description cannot be empty.', status: 400 } };
+    if (data.content.replace(/<[^>]*>?/gm, '').length === 0) {
+      return { data: null, error: { message: 'feedback content cannot be empty.', status: 400 } };
     }
 
     // Insert feedback
@@ -212,7 +212,7 @@ export const createFeedback = (
       .from('feedback')
       .insert({
         title: data.title,
-        description: data.description,
+        content: data.content,
         status: data.status,
         raw_tags: data.raw_tags,
         project_id: project!.id,
@@ -348,7 +348,7 @@ export const updateFeedbackByID = (
       .from('feedback')
       .update({
         title: data.title ? data.title : feedback!.title,
-        description: data.description ? data.description : feedback!.description,
+        content: data.content ? data.content : feedback!.content,
         status: data.status !== undefined ? data.status : feedback!.status,
         raw_tags: data.raw_tags ? data.raw_tags : feedback!.raw_tags,
       })

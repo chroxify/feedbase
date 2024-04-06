@@ -277,7 +277,7 @@ export function FeedbackSheet({
               <SheetTitle>{currentFeedback.title}</SheetTitle>
               <div
                 className={cn('text-secondary-foreground text-sm ', PROSE_CN)}
-                dangerouslySetInnerHTML={{ __html: currentFeedback.description }}
+                dangerouslySetInnerHTML={{ __html: currentFeedback.content }}
               />
             </SheetHeader>
 

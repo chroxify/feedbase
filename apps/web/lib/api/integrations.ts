@@ -8,7 +8,7 @@ export const sendDiscordNotification = async (
   projectConfig: ProjectConfigWithoutSecretProps
 ) => {
   // Convert html syntax to markdown
-  const markdownString = formatHtmlToMd(feedback.description);
+  const markdownString = formatHtmlToMd(feedback.content);
 
   // Use an HTTP library or a Discord library to send the notification
   const response = await fetch(projectConfig.integration_discord_webhook!, {
@@ -95,7 +95,7 @@ export const sendSlackNotification = async (
   projectConfig: ProjectConfigWithoutSecretProps
 ) => {
   // Convert html syntax to markdown
-  const markdownString = formatHtmlToMd(feedback.description);
+  const markdownString = formatHtmlToMd(feedback.content);
 
   // Use an HTTP library or a Slack library to send the notification
   const response = await fetch(projectConfig.integration_slack_webhook!, {
