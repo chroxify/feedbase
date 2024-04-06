@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Separator } from '@ui/components/ui/separator';
+import { Separator } from '@ui/components/separator';
 import { cn } from '@ui/lib/utils';
 import {
   BadgeCheck,
@@ -26,18 +26,18 @@ import {
 import { toast } from 'sonner';
 import useSWR, { useSWRConfig } from 'swr';
 import useSWRMutation from 'swr/mutation';
-import { Alert, AlertDescription, AlertTitle } from 'ui/components/ui/alert';
-import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
-import { Button } from 'ui/components/ui/button';
+import { Alert, AlertDescription, AlertTitle } from 'ui/components/alert';
+import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/avatar';
+import { Button } from 'ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/ui/dropdown-menu';
-import { Label } from 'ui/components/ui/label';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from 'ui/components/ui/sheet';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/ui/tabs';
+} from 'ui/components/dropdown-menu';
+import { Label } from 'ui/components/label';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from 'ui/components/sheet';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/tabs';
 import { PROSE_CN } from '@/lib/constants';
 import { FeedbackCommentWithUserProps, FeedbackWithUserProps } from '@/lib/types';
 import { actionFetcher, fetcher, formatRootUrl } from '@/lib/utils';

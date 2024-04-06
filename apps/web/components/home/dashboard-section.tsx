@@ -1,20 +1,20 @@
 'use client';
 
 import { useCallback, useState } from 'react';
-import { Button } from '@ui/components/ui/button';
-import { Input } from '@ui/components/ui/input';
-import { Label } from '@ui/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@ui/components/ui/radio-group';
+import { Button } from '@ui/components/button';
+import { Input } from '@ui/components/input';
+import { Label } from '@ui/components/label';
+import { RadioGroup, RadioGroupItem } from '@ui/components/radio-group';
 import { cn } from '@ui/lib/utils';
 import { MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
-import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/ui/dropdown-menu';
+} from 'ui/components/dropdown-menu';
 import BentoCardWrapper from '@/components/home/spotlight-card';
 import { Icons } from '../shared/icons/icons-static';
 

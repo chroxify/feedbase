@@ -3,7 +3,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { fontMono } from '@ui/styles/fonts';
-import { Separator } from 'ui/components/ui/separator';
+import { Separator } from 'ui/components/separator';
 import { getProjectBySlug, getProjectConfigBySlug } from '@/lib/api/projects';
 import { getPublicProjectChangelogs } from '@/lib/api/public';
 import AnalyticsWrapper from '@/components/hub/analytics-wrapper';

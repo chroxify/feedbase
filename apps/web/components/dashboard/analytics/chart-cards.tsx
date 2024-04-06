@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@ui/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@ui/components/card';
 import { cn } from '@ui/lib/utils';
 import { AnalyticsProps } from '@/lib/types';
 import BarList from '@/components/dashboard/analytics/bar-list';

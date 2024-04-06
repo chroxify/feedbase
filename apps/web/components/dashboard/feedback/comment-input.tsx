@@ -2,9 +2,9 @@
 
 import { useRef, useState } from 'react';
 import { Editor } from '@tiptap/react';
-import { Input } from '@ui/components/ui/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@ui/components/ui/popover';
-import { Toggle } from '@ui/components/ui/toggle';
+import { Input } from '@ui/components/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@ui/components/popover';
+import { Toggle } from '@ui/components/toggle';
 import {
   Check,
   Code2Icon,
@@ -18,7 +18,7 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import useSWRMutation from 'swr/mutation';
-import { Button } from 'ui/components/ui/button';
+import { Button } from 'ui/components/button';
 import { actionFetcher } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
 import RichTextEditor from '@/components/shared/tiptap-editor';

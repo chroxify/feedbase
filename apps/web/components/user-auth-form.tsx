@@ -3,9 +3,9 @@
 import { useState } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
 import { toast } from 'sonner';
-import { Button } from 'ui/components/ui/button';
-import { Input } from 'ui/components/ui/input';
-import { Label } from 'ui/components/ui/label';
+import { Button } from 'ui/components/button';
+import { Input } from 'ui/components/input';
+import { Label } from 'ui/components/label';
 import { Icons } from '@/components/shared/icons/icons-static';
 
 export function UserAuthForm({

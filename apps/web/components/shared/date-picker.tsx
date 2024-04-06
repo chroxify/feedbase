@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { Calendar } from 'ui/components/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from 'ui/components/ui/popover';
+import { Calendar } from 'ui/components/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from 'ui/components/popover';
 
 export function DatePicker({
   children,

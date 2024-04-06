@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Button } from '@ui/components/ui/button';
-import { Separator } from '@ui/components/ui/separator';
+import { Button } from '@ui/components/button';
+import { Separator } from '@ui/components/separator';
 import { cn } from '@ui/lib/utils';
 import { Plus, X } from 'lucide-react';
-import { Input } from 'ui/components/ui/input';
+import { Input } from 'ui/components/input';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import { SearchIcon } from '@/components/shared/icons/icons-animated';
 import LottiePlayer from '@/components/shared/lottie-player';

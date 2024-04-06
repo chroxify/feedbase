@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import { Button } from '@ui/components/ui/button';
+import { Button } from '@ui/components/button';
 import { ArrowRight, ChevronRight } from 'lucide-react';
-import { Background } from 'ui/components/ui/background/background';
+import { Background } from 'ui/components/background/background';
 import { formatRootUrl } from '@/lib/utils';
 import ChangelogSection from '@/components/home/changelog-section';
 import DashboardSection from '@/components/home/dashboard-section';

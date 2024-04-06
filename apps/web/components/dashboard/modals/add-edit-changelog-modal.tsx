@@ -1,16 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { Checkbox } from '@ui/components/ui/checkbox';
-import { Label } from '@ui/components/ui/label';
+import { Checkbox } from '@ui/components/checkbox';
+import { Label } from '@ui/components/label';
 import {
   ResponsiveDialog,
   ResponsiveDialogClose,
   ResponsiveDialogContent,
   ResponsiveDialogFooter,
   ResponsiveDialogTrigger,
-} from '@ui/components/ui/responsive-dialog';
-import { Skeleton } from '@ui/components/ui/skeleton';
+} from '@ui/components/responsive-dialog';
+import { Skeleton } from '@ui/components/skeleton';
 import { format } from 'date-fns';
 import { Bell, Calendar } from 'lucide-react';
 import { toast } from 'sonner';
@@ -25,10 +25,10 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from 'ui/components/ui/alert-dialog';
-import { Button } from 'ui/components/ui/button';
-import { Input } from 'ui/components/ui/input';
-import { Textarea } from 'ui/components/ui/textarea';
+} from 'ui/components/alert-dialog';
+import { Button } from 'ui/components/button';
+import { Input } from 'ui/components/input';
+import { Textarea } from 'ui/components/textarea';
 import { ChangelogProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
 import { DatePicker } from '@/components/shared/date-picker';

@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Avatar, AvatarFallback, AvatarImage } from '@ui/components/ui/avatar';
-import { Button } from '@ui/components/ui/button';
-import { Separator } from '@ui/components/ui/separator';
-import { Skeleton } from '@ui/components/ui/skeleton';
+import { Avatar, AvatarFallback, AvatarImage } from '@ui/components/avatar';
+import { Button } from '@ui/components/button';
+import { Separator } from '@ui/components/separator';
+import { Skeleton } from '@ui/components/skeleton';
 import { cn } from '@ui/lib/utils';
 import { BadgeCheck, MoreVertical, Trash2Icon } from 'lucide-react';
 import { toast } from 'sonner';
@@ -14,7 +14,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/ui/dropdown-menu';
+} from 'ui/components/dropdown-menu';
 import { PROSE_CN } from '@/lib/constants';
 import { FeedbackCommentWithUserProps } from '@/lib/types';
 import { formatRootUrl } from '@/lib/utils';

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
-import { Button } from 'ui/components/ui/button';
+import { Button } from 'ui/components/button';
 import {
   Dialog,
   DialogClose,
@@ -12,9 +12,9 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from 'ui/components/ui/dialog';
-import { Input } from 'ui/components/ui/input';
-import { Label } from 'ui/components/ui/label';
+} from 'ui/components/dialog';
+import { Input } from 'ui/components/input';
+import { Label } from 'ui/components/label';
 
 export function WaitlistModal({
   children,

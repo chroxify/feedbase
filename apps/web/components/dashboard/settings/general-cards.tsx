@@ -6,7 +6,7 @@ import { fontMono } from '@ui/styles/fonts';
 import { CheckIcon, ClipboardList, Download, MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
 import useSWR from 'swr';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from 'ui/components/ui/accordion';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from 'ui/components/accordion';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,18 +17,18 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from 'ui/components/ui/alert-dialog';
-import { Button } from 'ui/components/ui/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/ui/card';
+} from 'ui/components/alert-dialog';
+import { Button } from 'ui/components/button';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/ui/dropdown-menu';
-import { Input } from 'ui/components/ui/input';
-import { Label } from 'ui/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/ui/tabs';
+} from 'ui/components/dropdown-menu';
+import { Input } from 'ui/components/input';
+import { Label } from 'ui/components/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/tabs';
 import { ProjectApiKeyWithoutTokenProps, ProjectConfigWithoutSecretProps, ProjectProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';

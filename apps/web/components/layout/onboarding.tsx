@@ -1,18 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@ui/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@ui/components/card';
 import { toast } from 'sonner';
-import { Button } from 'ui/components/ui/button';
-import { Input } from 'ui/components/ui/input';
-import { Label } from 'ui/components/ui/label';
+import { Button } from 'ui/components/button';
+import { Input } from 'ui/components/input';
+import { Label } from 'ui/components/label';
 
 export default function Onboarding() {
   const [name, setName] = useState<string>('');

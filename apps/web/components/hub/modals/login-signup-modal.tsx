@@ -8,9 +8,9 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
-} from '@ui/components/ui/responsive-dialog';
-import { Separator } from '@ui/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/ui/tabs';
+} from '@ui/components/responsive-dialog';
+import { Separator } from '@ui/components/separator';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/tabs';
 import { UserAuthForm } from '@/components/user-auth-form';
 
 export default function AuthModal({

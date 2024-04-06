@@ -6,9 +6,9 @@ import { Check, Copy, Info } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { LightAsync as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { docco, nightOwl } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import { Alert, AlertDescription, AlertTitle } from 'ui/components/ui/alert';
-import { Button } from 'ui/components/ui/button';
-import { Label } from 'ui/components/ui/label';
+import { Alert, AlertDescription, AlertTitle } from 'ui/components/alert';
+import { Button } from 'ui/components/button';
+import { Label } from 'ui/components/label';
 import {
   Sheet,
   SheetContent,
@@ -17,8 +17,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from 'ui/components/ui/sheet';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/ui/tabs';
+} from 'ui/components/sheet';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/tabs';
 import { formatRootUrl } from '@/lib/utils';
 import { CodeIcon } from '@/components/shared/icons/icons-animated';
 import LottiePlayer from '@/components/shared/lottie-player';

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Button } from '@ui/components/ui/button';
-import { Input } from '@ui/components/ui/input';
+import { Button } from '@ui/components/button';
+import { Input } from '@ui/components/input';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -11,8 +11,8 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
-} from '@ui/components/ui/responsive-dialog';
-import { Textarea } from '@ui/components/ui/textarea';
+} from '@ui/components/responsive-dialog';
+import { Textarea } from '@ui/components/textarea';
 import { toast } from 'sonner';
 import { Icons } from '@/components/shared/icons/icons-static';
 

@@ -3,15 +3,15 @@
 import { useState } from 'react';
 import { MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
-import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
-import { Button } from 'ui/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'ui/components/ui/card';
+import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/avatar';
+import { Button } from 'ui/components/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'ui/components/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/ui/dropdown-menu';
+} from 'ui/components/dropdown-menu';
 import { ProjectConfigWithoutSecretProps } from '@/lib/types';
 import DiscordIntegrationModal from '@/components/dashboard/modals/connect-discord-modal';
 import DefaultTooltip from '@/components/shared/tooltip';

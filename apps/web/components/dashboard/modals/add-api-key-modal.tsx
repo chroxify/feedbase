@@ -10,19 +10,19 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
-} from '@ui/components/ui/responsive-dialog';
+} from '@ui/components/responsive-dialog';
 import { cn } from '@ui/lib/utils';
 import { Check, CheckIcon, ChevronDownIcon, ClipboardList } from 'lucide-react';
 import { toast } from 'sonner';
-import { Button } from 'ui/components/ui/button';
+import { Button } from 'ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/ui/dropdown-menu';
-import { Input } from 'ui/components/ui/input';
-import { Label } from 'ui/components/ui/label';
+} from 'ui/components/dropdown-menu';
+import { Input } from 'ui/components/input';
+import { Label } from 'ui/components/label';
 import { ProjectApiKeyProps } from '@/lib/types';
 import { Icons } from '@/components/shared/icons/icons-static';
 

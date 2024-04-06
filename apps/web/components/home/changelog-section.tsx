@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Label } from '@ui/components/ui/label';
+import { Label } from '@ui/components/label';
 import { cn } from '@ui/lib/utils';
 import { MailIcon, RssIcon } from 'lucide-react';
 import { PROSE_CN } from '@/lib/constants';

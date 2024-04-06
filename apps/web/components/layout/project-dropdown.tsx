@@ -5,14 +5,14 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { cn } from '@ui/lib/utils';
 import { ChevronsUpDownIcon, GlobeIcon, Plus } from 'lucide-react';
-import { Button } from 'ui/components/ui/button';
+import { Button } from 'ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/ui/dropdown-menu';
-import { Skeleton } from 'ui/components/ui/skeleton';
+} from 'ui/components/dropdown-menu';
+import { Skeleton } from 'ui/components/skeleton';
 import { ProjectProps } from '@/lib/types';
 import AddProjectDialog from '@/components/dashboard/modals/add-project-modal';
 

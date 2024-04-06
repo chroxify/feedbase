@@ -11,7 +11,7 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from 'ui/components/ui/command';
+} from 'ui/components/command';
 import { actionFetcher } from '@/lib/utils';
 
 const colors = [

@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Label } from '@ui/components/ui/label';
+import { Label } from '@ui/components/label';
 import { cn } from '@ui/lib/utils';
-import { Button } from 'ui/components/ui/button';
+import { Button } from 'ui/components/button';
 import { SidebarTabProps, SidebarTabsProps } from '@/lib/types';
 import LottiePlayer from '@/components/shared/lottie-player';
 

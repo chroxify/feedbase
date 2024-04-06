@@ -3,7 +3,7 @@ import { cookies } from 'next/headers';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 import { createServerClient } from '@supabase/ssr';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/card';
 import { UserAuthForm } from '@/components/user-auth-form';
 
 export const metadata: Metadata = {

@@ -3,13 +3,13 @@
 import React from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { CircleDashed, CircleX, LucideIcon, Plus, Tag, Tags, TextCursorInputIcon, X } from 'lucide-react';
-import { Button } from 'ui/components/ui/button';
+import { Button } from 'ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/ui/dropdown-menu';
+} from 'ui/components/dropdown-menu';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import { FeedbackTagProps } from '@/lib/types';
 

@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Button } from '@ui/components/ui/button';
-import { Input } from '@ui/components/ui/input';
-import { Label } from '@ui/components/ui/label';
+import { Button } from '@ui/components/button';
+import { Input } from '@ui/components/input';
+import { Label } from '@ui/components/label';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -11,7 +11,7 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
-} from '@ui/components/ui/responsive-dialog';
+} from '@ui/components/responsive-dialog';
 import { toast } from 'sonner';
 import { Icons } from '@/components/shared/icons/icons-static';
 import PostEditor from '@/components/shared/tiptap-editor';

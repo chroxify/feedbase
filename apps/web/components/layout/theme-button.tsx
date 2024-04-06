@@ -2,7 +2,7 @@
 
 import { MoonIcon, SunIcon } from '@heroicons/react/24/solid';
 import { useTheme } from 'next-themes';
-import { Button } from 'ui/components/ui/button';
+import { Button } from 'ui/components/button';
 
 export default function ToggleThemeButton() {
   const { theme, setTheme } = useTheme();

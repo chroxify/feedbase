@@ -1,5 +1,5 @@
 import { cn } from '@ui/lib/utils';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'ui/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'ui/components/tooltip';
 
 export default function DefaultTooltip({
   children,

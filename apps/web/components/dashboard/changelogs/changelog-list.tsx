@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { PhotoIcon } from '@heroicons/react/24/outline';
-import { Separator } from '@ui/components/ui/separator';
-import { Skeleton } from '@ui/components/ui/skeleton';
+import { Separator } from '@ui/components/separator';
+import { Skeleton } from '@ui/components/skeleton';
 import { cn } from '@ui/lib/utils';
 import { AlertCircle, Copy, Edit, MoreVertical, Trash } from 'lucide-react';
 import { toast } from 'sonner';
@@ -19,15 +19,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from 'ui/components/ui/alert-dialog';
-import { Badge } from 'ui/components/ui/badge';
-import { Button } from 'ui/components/ui/button';
+} from 'ui/components/alert-dialog';
+import { Badge } from 'ui/components/badge';
+import { Button } from 'ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/ui/dropdown-menu';
+} from 'ui/components/dropdown-menu';
 import { ChangelogProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
 import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';

@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Avatar, AvatarFallback, AvatarImage } from '@ui/components/ui/avatar';
-import { Separator } from '@ui/components/ui/separator';
+import { Avatar, AvatarFallback, AvatarImage } from '@ui/components/avatar';
+import { Separator } from '@ui/components/separator';
 import { cn } from '@ui/lib/utils';
 import { BadgeCheck, CheckCircle2, CircleDashed, CircleDot, CircleDotDashed, XCircle } from 'lucide-react';
 import { getCommentsForFeedbackById } from '@/lib/api/comments';

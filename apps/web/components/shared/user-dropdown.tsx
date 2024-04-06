@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { createBrowserClient } from '@supabase/ssr';
-import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
+import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/avatar';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/ui/dropdown-menu';
+} from 'ui/components/dropdown-menu';
 import { ProfileProps } from '@/lib/types';
 import UpdateProfileModal from '../dashboard/modals/edit-profile-modal';
 import FeedbackModal from '../dashboard/modals/send-feedback-modal';

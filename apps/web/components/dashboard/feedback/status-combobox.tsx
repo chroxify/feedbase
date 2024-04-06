@@ -3,9 +3,9 @@
 import * as React from 'react';
 import { cn } from '@ui/lib/utils';
 import { Check, ChevronsUpDownIcon } from 'lucide-react';
-import { Button } from 'ui/components/ui/button';
-import { Command, CommandGroup, CommandItem } from 'ui/components/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from 'ui/components/ui/popover';
+import { Button } from 'ui/components/button';
+import { Command, CommandGroup, CommandItem } from 'ui/components/command';
+import { Popover, PopoverContent, PopoverTrigger } from 'ui/components/popover';
 import { STATUS_OPTIONS } from '@/lib/constants';
 
 interface ComboboxProps {

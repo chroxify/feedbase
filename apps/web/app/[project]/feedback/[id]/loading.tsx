@@ -1,5 +1,5 @@
-import { Separator } from '@ui/components/ui/separator';
-import { Skeleton } from '@ui/components/ui/skeleton';
+import { Separator } from '@ui/components/separator';
+import { Skeleton } from '@ui/components/skeleton';
 
 export default function FeedbackPageLoading() {
   return (

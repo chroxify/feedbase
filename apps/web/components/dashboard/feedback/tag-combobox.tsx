@@ -1,12 +1,12 @@
 'use client';
 
 import * as React from 'react';
-import { Checkbox } from '@ui/components/ui/checkbox';
+import { Checkbox } from '@ui/components/checkbox';
 import { cn } from '@ui/lib/utils';
 import { ChevronsUpDownIcon, Tags } from 'lucide-react';
-import { Button } from 'ui/components/ui/button';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from 'ui/components/ui/command';
-import { Popover, PopoverContent, PopoverTrigger } from 'ui/components/ui/popover';
+import { Button } from 'ui/components/button';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from 'ui/components/command';
+import { Popover, PopoverContent, PopoverTrigger } from 'ui/components/popover';
 import useTags from '@/lib/swr/use-tags';
 import { CreateTagModal } from '../modals/add-tag-modal';
 

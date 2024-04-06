@@ -3,15 +3,15 @@
 import { useRouter } from 'next/navigation';
 import { MoreVertical, Plus } from 'lucide-react';
 import { toast } from 'sonner';
-import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/ui/avatar';
-import { Button } from 'ui/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/avatar';
+import { Button } from 'ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/ui/dropdown-menu';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/ui/tabs';
+} from 'ui/components/dropdown-menu';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/tabs';
 import { ExtendedInviteProps, TeamMemberProps } from '@/lib/types';
 import DefaultTooltip from '@/components/shared/tooltip';
 import InviteMemberDialog from '../modals/add-member-modal';

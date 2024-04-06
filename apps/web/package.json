@@ -76,14 +76,16 @@
     "ui": "workspace:*"
   },
   "devDependencies": {
+    "@feedbase/eslint-config": "workspace:*",
     "@feedbase/tailwind-config": "workspace:*",
+    "@feedbase/tsconfig": "workspace:*",
     "@types/node": "20.3.1",
     "@types/react": "18.2.25",
     "@types/react-dom": "18.2.8",
     "encoding": "^0.1.13",
-    "eslint-config-custom": "workspace:*",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
     "react-email": "^2.0.0",
-    "tsconfig": "workspace:*",
     "typescript": "5.1.3"
   }
 }
