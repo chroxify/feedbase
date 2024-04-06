@@ -14,7 +14,7 @@ const withPWA = require('next-pwa')({
 
 const nextConfig = {
   reactStrictMode: true,
-  transpilePackages: ['ui'],
+  transpilePackages: ['@feedbase/ui'],
   output: 'standalone',
   images: {
     remotePatterns: [

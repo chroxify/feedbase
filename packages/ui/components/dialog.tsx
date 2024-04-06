@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
+import { cn } from '@feedbase/ui/lib/utils';
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { cn } from '@ui/lib/utils';
 import { X } from 'lucide-react';
 
 const Dialog = DialogPrimitive.Root;

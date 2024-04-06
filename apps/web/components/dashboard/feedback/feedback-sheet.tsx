@@ -2,8 +2,20 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Separator } from '@ui/components/separator';
-import { cn } from '@ui/lib/utils';
+import { Alert, AlertDescription, AlertTitle } from '@feedbase/ui/components/alert';
+import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
+import { Button } from '@feedbase/ui/components/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@feedbase/ui/components/dropdown-menu';
+import { Label } from '@feedbase/ui/components/label';
+import { Separator } from '@feedbase/ui/components/separator';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@feedbase/ui/components/sheet';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@feedbase/ui/components/tabs';
+import { cn } from '@feedbase/ui/lib/utils';
 import {
   BadgeCheck,
   CalendarClockIcon,
@@ -26,18 +38,6 @@ import {
 import { toast } from 'sonner';
 import useSWR, { useSWRConfig } from 'swr';
 import useSWRMutation from 'swr/mutation';
-import { Alert, AlertDescription, AlertTitle } from 'ui/components/alert';
-import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/avatar';
-import { Button } from 'ui/components/button';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from 'ui/components/dropdown-menu';
-import { Label } from 'ui/components/label';
-import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from 'ui/components/sheet';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/tabs';
 import { PROSE_CN } from '@/lib/constants';
 import { FeedbackCommentWithUserProps, FeedbackWithUserProps } from '@/lib/types';
 import { actionFetcher, fetcher, formatRootUrl } from '@/lib/utils';

@@ -1,11 +1,11 @@
 'use client';
 
 import { useState } from 'react';
+import { Button } from '@feedbase/ui/components/button';
+import { Input } from '@feedbase/ui/components/input';
+import { Label } from '@feedbase/ui/components/label';
 import { createBrowserClient } from '@supabase/ssr';
 import { toast } from 'sonner';
-import { Button } from 'ui/components/button';
-import { Input } from 'ui/components/input';
-import { Label } from 'ui/components/label';
 import { Icons } from '@/components/shared/icons/icons-static';
 
 export function UserAuthForm({

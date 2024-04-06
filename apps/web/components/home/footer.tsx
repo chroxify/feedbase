@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { cn } from '@ui/lib/utils';
+import { cn } from '@feedbase/ui/lib/utils';
 import { formatRootUrl } from '@/lib/utils';
 import { Icons } from '../shared/icons/icons-static';
 import { navTabs } from './header';

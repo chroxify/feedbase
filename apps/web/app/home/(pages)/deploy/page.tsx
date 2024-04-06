@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Button } from '@ui/components/button';
+import { Button } from '@feedbase/ui/components/button';
 import HomeFooter from '@/components/home/footer';
 
 export default function Deploy() {

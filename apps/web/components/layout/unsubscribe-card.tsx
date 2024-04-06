@@ -1,9 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { Button } from '@ui/components/button';
+import { Button } from '@feedbase/ui/components/button';
+import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@feedbase/ui/components/card';
 import { toast } from 'sonner';
-import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/card';
 import { ProjectProps } from '@/lib/types';
 
 export default function UnsubscribeChangelogCard({

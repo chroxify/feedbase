@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@ui/components/dialog';
+} from '@feedbase/ui/components/dialog';
 import {
   Drawer,
   DrawerClose,
@@ -18,8 +18,8 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from '@ui/components/drawer';
-import useMediaQuery from '@ui/lib/hooks/use-media-query';
+} from '@feedbase/ui/components/drawer';
+import useMediaQuery from '@feedbase/ui/lib/hooks/use-media-query';
 
 const ResponsiveDialog: React.FC<
   React.ComponentProps<typeof Dialog> | React.ComponentProps<typeof Drawer>

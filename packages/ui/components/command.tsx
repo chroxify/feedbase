@@ -1,9 +1,9 @@
 'use client';
 
 import * as React from 'react';
+import { Dialog, DialogContent } from '@feedbase/ui/components/dialog';
+import { cn } from '@feedbase/ui/lib/utils';
 import { DialogProps } from '@radix-ui/react-dialog';
-import { Dialog, DialogContent } from '@ui/components/dialog';
-import { cn } from '@ui/lib/utils';
 import { Command as CommandPrimitive, useCommandState } from 'cmdk';
 import { Search } from 'lucide-react';
 

@@ -1,7 +1,7 @@
 import { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
-import { Separator } from 'ui/components/separator';
+import { Separator } from '@feedbase/ui/components/separator';
 import { getProjectBySlug, getProjectConfigBySlug } from '@/lib/api/projects';
 import { getCurrentUser } from '@/lib/api/user';
 import Header from '@/components/hub/nav-bar';

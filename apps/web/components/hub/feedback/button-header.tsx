@@ -2,9 +2,9 @@
 
 import { useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Button } from '@ui/components/button';
-import { Input } from '@ui/components/input';
-import { cn } from '@ui/lib/utils';
+import { Button } from '@feedbase/ui/components/button';
+import { Input } from '@feedbase/ui/components/input';
+import { cn } from '@feedbase/ui/lib/utils';
 import { Clock3, Flame, Search, Star } from 'lucide-react';
 import useCreateQueryString from '@/lib/hooks/use-query-router';
 import CreatePostModal from '../modals/create-post-modal';

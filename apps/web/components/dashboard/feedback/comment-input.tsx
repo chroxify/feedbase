@@ -1,10 +1,11 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { Button } from '@feedbase/ui/components/button';
+import { Input } from '@feedbase/ui/components/input';
+import { Popover, PopoverContent, PopoverTrigger } from '@feedbase/ui/components/popover';
+import { Toggle } from '@feedbase/ui/components/toggle';
 import { Editor } from '@tiptap/react';
-import { Input } from '@ui/components/input';
-import { Popover, PopoverContent, PopoverTrigger } from '@ui/components/popover';
-import { Toggle } from '@ui/components/toggle';
 import {
   Check,
   Code2Icon,
@@ -18,7 +19,6 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import useSWRMutation from 'swr/mutation';
-import { Button } from 'ui/components/button';
 import { actionFetcher } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
 import RichTextEditor from '@/components/shared/tiptap-editor';

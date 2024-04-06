@@ -2,14 +2,14 @@
 
 import React from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { CircleDashed, CircleX, LucideIcon, Plus, Tag, Tags, TextCursorInputIcon, X } from 'lucide-react';
-import { Button } from 'ui/components/button';
+import { Button } from '@feedbase/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/dropdown-menu';
+} from '@feedbase/ui/components/dropdown-menu';
+import { CircleDashed, CircleX, LucideIcon, Plus, Tag, Tags, TextCursorInputIcon, X } from 'lucide-react';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import { FeedbackTagProps } from '@/lib/types';
 

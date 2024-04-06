@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { cn } from '@ui/lib/utils';
+import { cn } from '@feedbase/ui/lib/utils';
 import { Drawer as DrawerPrimitive } from 'vaul';
 
 const Drawer = ({

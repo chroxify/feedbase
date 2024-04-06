@@ -1,5 +1,5 @@
-import { cn } from '@ui/lib/utils';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from 'ui/components/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@feedbase/ui/components/tooltip';
+import { cn } from '@feedbase/ui/lib/utils';
 
 export default function DefaultTooltip({
   children,

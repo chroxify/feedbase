@@ -1,20 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Checkbox } from '@ui/components/checkbox';
-import { Label } from '@ui/components/label';
-import {
-  ResponsiveDialog,
-  ResponsiveDialogClose,
-  ResponsiveDialogContent,
-  ResponsiveDialogFooter,
-  ResponsiveDialogTrigger,
-} from '@ui/components/responsive-dialog';
-import { Skeleton } from '@ui/components/skeleton';
-import { format } from 'date-fns';
-import { Bell, Calendar } from 'lucide-react';
-import { toast } from 'sonner';
-import useSWR, { useSWRConfig } from 'swr';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,10 +11,24 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from 'ui/components/alert-dialog';
-import { Button } from 'ui/components/button';
-import { Input } from 'ui/components/input';
-import { Textarea } from 'ui/components/textarea';
+} from '@feedbase/ui/components/alert-dialog';
+import { Button } from '@feedbase/ui/components/button';
+import { Checkbox } from '@feedbase/ui/components/checkbox';
+import { Input } from '@feedbase/ui/components/input';
+import { Label } from '@feedbase/ui/components/label';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogClose,
+  ResponsiveDialogContent,
+  ResponsiveDialogFooter,
+  ResponsiveDialogTrigger,
+} from '@feedbase/ui/components/responsive-dialog';
+import { Skeleton } from '@feedbase/ui/components/skeleton';
+import { Textarea } from '@feedbase/ui/components/textarea';
+import { format } from 'date-fns';
+import { Bell, Calendar } from 'lucide-react';
+import { toast } from 'sonner';
+import useSWR, { useSWRConfig } from 'swr';
 import { ChangelogProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
 import { DatePicker } from '@/components/shared/date-picker';

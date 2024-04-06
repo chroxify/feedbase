@@ -1,6 +1,6 @@
+import { Button } from '@feedbase/ui/components/button';
+import { Separator } from '@feedbase/ui/components/separator';
 import { Plus } from 'lucide-react';
-import { Button } from 'ui/components/button';
-import { Separator } from 'ui/components/separator';
 import { ApiSheet } from '@/components/dashboard/changelogs/api-sheet';
 import ChangelogList from '@/components/dashboard/changelogs/changelog-list';
 import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';

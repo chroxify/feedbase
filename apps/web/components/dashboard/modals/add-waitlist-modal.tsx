@@ -1,8 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import { Button } from 'ui/components/button';
+import { Button } from '@feedbase/ui/components/button';
 import {
   Dialog,
   DialogClose,
@@ -12,9 +11,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from 'ui/components/dialog';
-import { Input } from 'ui/components/input';
-import { Label } from 'ui/components/label';
+} from '@feedbase/ui/components/dialog';
+import { Input } from '@feedbase/ui/components/input';
+import { Label } from '@feedbase/ui/components/label';
+import { toast } from 'sonner';
 
 export function WaitlistModal({
   children,

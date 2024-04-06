@@ -1,17 +1,17 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { MoreVertical, Plus } from 'lucide-react';
-import { toast } from 'sonner';
-import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/avatar';
-import { Button } from 'ui/components/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
+import { Button } from '@feedbase/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/dropdown-menu';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/tabs';
+} from '@feedbase/ui/components/dropdown-menu';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@feedbase/ui/components/tabs';
+import { MoreVertical, Plus } from 'lucide-react';
+import { toast } from 'sonner';
 import { ExtendedInviteProps, TeamMemberProps } from '@/lib/types';
 import DefaultTooltip from '@/components/shared/tooltip';
 import InviteMemberDialog from '../modals/add-member-modal';

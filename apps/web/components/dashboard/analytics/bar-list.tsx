@@ -1,4 +1,4 @@
-import { Button } from '@ui/components/button';
+import { Button } from '@feedbase/ui/components/button';
 import {
   ResponsiveDialog,
   ResponsiveDialogClose,
@@ -7,7 +7,7 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
-} from '@ui/components/responsive-dialog';
+} from '@feedbase/ui/components/responsive-dialog';
 import { AnalyticsProps } from '@/lib/types';
 
 type BarListProps = {

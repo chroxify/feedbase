@@ -2,13 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { PhotoIcon } from '@heroicons/react/24/outline';
-import { Separator } from '@ui/components/separator';
-import { Skeleton } from '@ui/components/skeleton';
-import { cn } from '@ui/lib/utils';
-import { AlertCircle, Copy, Edit, MoreVertical, Trash } from 'lucide-react';
-import { toast } from 'sonner';
-import useSWR from 'swr';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -19,15 +12,22 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from 'ui/components/alert-dialog';
-import { Badge } from 'ui/components/badge';
-import { Button } from 'ui/components/button';
+} from '@feedbase/ui/components/alert-dialog';
+import { Badge } from '@feedbase/ui/components/badge';
+import { Button } from '@feedbase/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/dropdown-menu';
+} from '@feedbase/ui/components/dropdown-menu';
+import { Separator } from '@feedbase/ui/components/separator';
+import { Skeleton } from '@feedbase/ui/components/skeleton';
+import { cn } from '@feedbase/ui/lib/utils';
+import { PhotoIcon } from '@heroicons/react/24/outline';
+import { AlertCircle, Copy, Edit, MoreVertical, Trash } from 'lucide-react';
+import { toast } from 'sonner';
+import useSWR from 'swr';
 import { ChangelogProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
 import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';

@@ -1,11 +1,11 @@
 'use client';
 
 import * as React from 'react';
-import { cn } from '@ui/lib/utils';
+import { Button } from '@feedbase/ui/components/button';
+import { Command, CommandGroup, CommandItem } from '@feedbase/ui/components/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@feedbase/ui/components/popover';
+import { cn } from '@feedbase/ui/lib/utils';
 import { Check, ChevronDown } from 'lucide-react';
-import { Button } from 'ui/components/button';
-import { Command, CommandGroup, CommandItem } from 'ui/components/command';
-import { Popover, PopoverContent, PopoverTrigger } from 'ui/components/popover';
 
 export const sortOptions = ['Newest', 'Oldest', 'Best', 'Worst'];
 

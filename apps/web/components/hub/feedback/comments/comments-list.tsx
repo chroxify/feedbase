@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Button } from '@ui/components/button';
-import { Label } from '@ui/components/label';
-import { Skeleton } from '@ui/components/skeleton';
+import { Button } from '@feedbase/ui/components/button';
+import { Label } from '@feedbase/ui/components/label';
+import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { toast } from 'sonner';
 import useCreateQueryString from '@/lib/hooks/use-query-router';
 import { FeedbackCommentWithUserProps, ProfileProps } from '@/lib/types';

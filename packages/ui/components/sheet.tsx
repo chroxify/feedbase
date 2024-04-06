@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
+import { cn } from '@feedbase/ui/lib/utils';
 import * as SheetPrimitive from '@radix-ui/react-dialog';
-import { cn } from '@ui/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { X } from 'lucide-react';
 

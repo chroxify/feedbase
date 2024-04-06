@@ -2,6 +2,7 @@
 
 import './placeholder.css';
 import React, { useRef } from 'react';
+import { cn } from '@feedbase/ui/lib/utils';
 import { BulletList } from '@tiptap/extension-bullet-list';
 import { CharacterCount } from '@tiptap/extension-character-count';
 import { CodeBlock } from '@tiptap/extension-code-block';
@@ -12,7 +13,6 @@ import { Placeholder } from '@tiptap/extension-placeholder';
 import { Typography } from '@tiptap/extension-typography';
 import { AnyExtension, Editor, EditorContent, useEditor } from '@tiptap/react';
 import { StarterKit } from '@tiptap/starter-kit';
-import { cn } from '@ui/lib/utils';
 
 export default function RichTextEditor({
   content,

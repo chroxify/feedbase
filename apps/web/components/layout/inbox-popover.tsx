@@ -1,12 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { Avatar, AvatarImage } from '@ui/components/avatar';
-import { Button } from '@ui/components/button';
-import { Drawer, DrawerContent, DrawerTrigger } from '@ui/components/drawer';
-import { Popover, PopoverContent, PopoverTrigger } from '@ui/components/popover';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@ui/components/tabs';
-import useMediaQuery from '@ui/lib/hooks/use-media-query';
+import { Avatar, AvatarImage } from '@feedbase/ui/components/avatar';
+import { Button } from '@feedbase/ui/components/button';
+import { Drawer, DrawerContent, DrawerTrigger } from '@feedbase/ui/components/drawer';
+import { Popover, PopoverContent, PopoverTrigger } from '@feedbase/ui/components/popover';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@feedbase/ui/components/tabs';
+import useMediaQuery from '@feedbase/ui/lib/hooks/use-media-query';
 import { Archive, Bell } from 'lucide-react';
 import useSWR from 'swr';
 import { NotificationProps, ProfileProps } from '@/lib/types';

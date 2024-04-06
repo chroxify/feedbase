@@ -2,8 +2,8 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Badge } from 'ui/components/badge';
-import { Button } from 'ui/components/button';
+import { Badge } from '@feedbase/ui/components/badge';
+import { Button } from '@feedbase/ui/components/button';
 import { WaitlistModal } from '@/components/dashboard/modals/add-waitlist-modal';
 import { Icons } from '@/components/shared/icons/icons-static';
 

@@ -2,13 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Check, Copy, Info } from 'lucide-react';
-import { useTheme } from 'next-themes';
-import { LightAsync as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { docco, nightOwl } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import { Alert, AlertDescription, AlertTitle } from 'ui/components/alert';
-import { Button } from 'ui/components/button';
-import { Label } from 'ui/components/label';
+import { Alert, AlertDescription, AlertTitle } from '@feedbase/ui/components/alert';
+import { Button } from '@feedbase/ui/components/button';
+import { Label } from '@feedbase/ui/components/label';
 import {
   Sheet,
   SheetContent,
@@ -17,8 +13,12 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from 'ui/components/sheet';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/tabs';
+} from '@feedbase/ui/components/sheet';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@feedbase/ui/components/tabs';
+import { Check, Copy, Info } from 'lucide-react';
+import { useTheme } from 'next-themes';
+import { LightAsync as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { docco, nightOwl } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { formatRootUrl } from '@/lib/utils';
 import { CodeIcon } from '@/components/shared/icons/icons-animated';
 import LottiePlayer from '@/components/shared/lottie-player';

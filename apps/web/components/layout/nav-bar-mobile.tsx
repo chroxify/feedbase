@@ -3,8 +3,8 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { cn } from '@ui/lib/utils';
-import { Button } from 'ui/components/button';
+import { Button } from '@feedbase/ui/components/button';
+import { cn } from '@feedbase/ui/lib/utils';
 import { ProjectProps, SidebarTabProps, SidebarTabsProps } from '@/lib/types';
 import { Icons } from '../shared/icons/icons-static';
 

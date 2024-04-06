@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'ui/components/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@feedbase/ui/components/card';
 import { getProjectInvites } from '@/lib/api/invites';
 import { getProjectMembers } from '@/lib/api/projects';
 import { TeamTable } from '@/components/dashboard/settings/team-table';

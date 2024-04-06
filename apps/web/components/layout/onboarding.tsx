@@ -1,11 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@ui/components/card';
+import { Button } from '@feedbase/ui/components/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@feedbase/ui/components/card';
+import { Input } from '@feedbase/ui/components/input';
+import { Label } from '@feedbase/ui/components/label';
 import { toast } from 'sonner';
-import { Button } from 'ui/components/button';
-import { Input } from 'ui/components/input';
-import { Label } from 'ui/components/label';
 
 export default function Onboarding() {
   const [name, setName] = useState<string>('');

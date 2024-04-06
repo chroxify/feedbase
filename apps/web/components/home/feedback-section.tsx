@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Avatar, AvatarFallback, AvatarImage } from '@ui/components/avatar';
-import { Button } from '@ui/components/button';
-import { cn } from '@ui/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
+import { Button } from '@feedbase/ui/components/button';
+import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronUp } from 'lucide-react';
 import { toast } from 'sonner';
 import { PROSE_CN } from '@/lib/constants';

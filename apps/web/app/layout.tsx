@@ -1,7 +1,7 @@
 import './globals.css';
 import { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import { cn } from '@ui/lib/utils';
+import { cn } from '@feedbase/ui/lib/utils';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { GeistSans } from 'geist/font/sans';
 import { Toaster } from 'sonner';

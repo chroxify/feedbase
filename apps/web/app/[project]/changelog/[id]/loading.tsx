@@ -1,5 +1,5 @@
-import { Separator } from '@ui/components/separator';
-import { Skeleton } from '@ui/components/skeleton';
+import { Separator } from '@feedbase/ui/components/separator';
+import { Skeleton } from '@feedbase/ui/components/skeleton';
 
 export default function ChangelogPageLoading() {
   return (

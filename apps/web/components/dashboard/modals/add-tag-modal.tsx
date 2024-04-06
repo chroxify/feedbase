@@ -2,8 +2,6 @@
 
 import React from 'react';
 import { useParams, usePathname, useRouter } from 'next/navigation';
-import { toast } from 'sonner';
-import useSWRMutation from 'swr/mutation';
 import {
   CommandDialog,
   CommandEmpty,
@@ -11,7 +9,9 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from 'ui/components/command';
+} from '@feedbase/ui/components/command';
+import { toast } from 'sonner';
+import useSWRMutation from 'swr/mutation';
 import { actionFetcher } from '@/lib/utils';
 
 const colors = [

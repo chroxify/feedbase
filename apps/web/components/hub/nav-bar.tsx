@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Button } from '@ui/components/button';
-import { cn } from '@ui/lib/utils';
-import { satoshi } from '@ui/styles/fonts';
+import { Button } from '@feedbase/ui/components/button';
+import { cn } from '@feedbase/ui/lib/utils';
+import { satoshi } from '@feedbase/ui/styles/fonts';
 import { ProfileProps, ProjectConfigWithoutSecretProps, ProjectProps } from '@/lib/types';
 import { hslToHex } from '@/lib/utils';
 import UserDropdown from '../shared/user-dropdown';

@@ -2,15 +2,28 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { Button } from '@feedbase/ui/components/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@feedbase/ui/components/card';
+import { Input } from '@feedbase/ui/components/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@feedbase/ui/components/select';
+import { Switch } from '@feedbase/ui/components/switch';
+import { cn } from '@feedbase/ui/lib/utils';
 import { Label } from '@radix-ui/react-label';
-import { cn } from '@ui/lib/utils';
 import { Check, Download, Pen } from 'lucide-react';
 import { toast } from 'sonner';
-import { Button } from 'ui/components/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/card';
-import { Input } from 'ui/components/input';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from 'ui/components/select';
-import { Switch } from 'ui/components/switch';
 import { ProjectConfigWithoutSecretProps, ProjectProps } from '@/lib/types';
 import FileDrop from '@/components/shared/file-drop';
 import CustomizeThemeModal from '../modals/add-custom-theme-modal';

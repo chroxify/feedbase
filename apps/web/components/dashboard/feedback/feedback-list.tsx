@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Label } from '@ui/components/label';
-import { Separator } from '@ui/components/separator';
-import { Skeleton } from '@ui/components/skeleton';
-import { cn } from '@ui/lib/utils';
+import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
+import { Button } from '@feedbase/ui/components/button';
+import { Label } from '@feedbase/ui/components/label';
+import { Separator } from '@feedbase/ui/components/separator';
+import { Skeleton } from '@feedbase/ui/components/skeleton';
+import { cn } from '@feedbase/ui/lib/utils';
 import {
   AlertCircle,
   CheckCircle2,
@@ -17,8 +19,6 @@ import {
   XCircle,
 } from 'lucide-react';
 import useSWR from 'swr';
-import { Avatar, AvatarFallback, AvatarImage } from 'ui/components/avatar';
-import { Button } from 'ui/components/button';
 import { STATUS_OPTIONS } from '@/lib/constants';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import useTags from '@/lib/swr/use-tags';

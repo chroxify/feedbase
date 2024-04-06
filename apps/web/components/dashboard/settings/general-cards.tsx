@@ -1,12 +1,12 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
-import { fontMono } from '@ui/styles/fonts';
-import { CheckIcon, ClipboardList, Download, MoreVertical } from 'lucide-react';
-import { toast } from 'sonner';
-import useSWR from 'swr';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from 'ui/components/accordion';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@feedbase/ui/components/accordion';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,18 +17,30 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from 'ui/components/alert-dialog';
-import { Button } from 'ui/components/button';
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from 'ui/components/card';
+} from '@feedbase/ui/components/alert-dialog';
+import { Button } from '@feedbase/ui/components/button';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@feedbase/ui/components/card';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/dropdown-menu';
-import { Input } from 'ui/components/input';
-import { Label } from 'ui/components/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from 'ui/components/tabs';
+} from '@feedbase/ui/components/dropdown-menu';
+import { Input } from '@feedbase/ui/components/input';
+import { Label } from '@feedbase/ui/components/label';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@feedbase/ui/components/tabs';
+import { fontMono } from '@feedbase/ui/styles/fonts';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import { CheckIcon, ClipboardList, Download, MoreVertical } from 'lucide-react';
+import { toast } from 'sonner';
+import useSWR from 'swr';
 import { ProjectApiKeyWithoutTokenProps, ProjectConfigWithoutSecretProps, ProjectProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';

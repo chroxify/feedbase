@@ -2,10 +2,10 @@
 
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { Avatar, AvatarFallback, AvatarImage } from '@ui/components/avatar';
-import { Button } from '@ui/components/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
+import { Button } from '@feedbase/ui/components/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@feedbase/ui/components/card';
 import { toast } from 'sonner';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from 'ui/components/card';
 import { ExtendedInviteProps, ProfileProps } from '@/lib/types';
 import { formatRootUrl } from '@/lib/utils';
 

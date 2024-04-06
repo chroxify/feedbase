@@ -1,7 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Badge } from '@ui/components/badge';
+import { Badge } from '@feedbase/ui/components/badge';
+import { Button } from '@feedbase/ui/components/button';
+import { Input } from '@feedbase/ui/components/input';
+import { Label } from '@feedbase/ui/components/label';
 import {
   ResponsiveDialog,
   ResponsiveDialogClose,
@@ -11,12 +14,9 @@ import {
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
   ResponsiveDialogTrigger,
-} from '@ui/components/responsive-dialog';
-import { cn } from '@ui/lib/utils';
+} from '@feedbase/ui/components/responsive-dialog';
+import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronUp } from 'lucide-react';
-import { Button } from 'ui/components/button';
-import { Input } from 'ui/components/input';
-import { Label } from 'ui/components/label';
 import { ProjectConfigWithoutSecretProps } from '@/lib/types';
 import { hexToHSL, hslToHex } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';

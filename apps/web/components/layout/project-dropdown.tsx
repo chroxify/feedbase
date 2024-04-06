@@ -3,16 +3,16 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { cn } from '@ui/lib/utils';
-import { ChevronsUpDownIcon, GlobeIcon, Plus } from 'lucide-react';
-import { Button } from 'ui/components/button';
+import { Button } from '@feedbase/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/dropdown-menu';
-import { Skeleton } from 'ui/components/skeleton';
+} from '@feedbase/ui/components/dropdown-menu';
+import { Skeleton } from '@feedbase/ui/components/skeleton';
+import { cn } from '@feedbase/ui/lib/utils';
+import { ChevronsUpDownIcon, GlobeIcon, Plus } from 'lucide-react';
 import { ProjectProps } from '@/lib/types';
 import AddProjectDialog from '@/components/dashboard/modals/add-project-modal';
 

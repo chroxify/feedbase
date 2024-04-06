@@ -7,8 +7,8 @@
 */
 import { Dispatch, useCallback, useState } from 'react';
 import Image from 'next/image';
+import { cn } from '@feedbase/ui/lib/utils';
 import { CloudArrowUpIcon } from '@heroicons/react/24/outline';
-import { cn } from '@ui/lib/utils';
 
 export default function FileDrop({
   image,

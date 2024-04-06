@@ -1,10 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { cn } from '@ui/lib/utils';
+import { Button } from '@feedbase/ui/components/button';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from '@feedbase/ui/components/sheet';
+import { cn } from '@feedbase/ui/lib/utils';
 import { MenuIcon } from 'lucide-react';
-import { Button } from 'ui/components/button';
-import { Sheet, SheetClose, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from 'ui/components/sheet';
 import useScroll from '@/lib/hooks/use-scroll';
 import { formatRootUrl } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';

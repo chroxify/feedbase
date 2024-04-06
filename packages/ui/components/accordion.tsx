@@ -1,8 +1,8 @@
 'use client';
 
 import * as React from 'react';
+import { cn } from '@feedbase/ui/lib/utils';
 import * as AccordionPrimitive from '@radix-ui/react-accordion';
-import { cn } from '@ui/lib/utils';
 import { ChevronDown } from 'lucide-react';
 
 const Accordion = AccordionPrimitive.Root;

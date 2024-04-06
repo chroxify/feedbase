@@ -2,19 +2,19 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Avatar, AvatarFallback, AvatarImage } from '@ui/components/avatar';
-import { Button } from '@ui/components/button';
-import { Separator } from '@ui/components/separator';
-import { Skeleton } from '@ui/components/skeleton';
-import { cn } from '@ui/lib/utils';
-import { BadgeCheck, MoreVertical, Trash2Icon } from 'lucide-react';
-import { toast } from 'sonner';
+import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
+import { Button } from '@feedbase/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from 'ui/components/dropdown-menu';
+} from '@feedbase/ui/components/dropdown-menu';
+import { Separator } from '@feedbase/ui/components/separator';
+import { Skeleton } from '@feedbase/ui/components/skeleton';
+import { cn } from '@feedbase/ui/lib/utils';
+import { BadgeCheck, MoreVertical, Trash2Icon } from 'lucide-react';
+import { toast } from 'sonner';
 import { PROSE_CN } from '@/lib/constants';
 import { FeedbackCommentWithUserProps } from '@/lib/types';
 import { formatRootUrl } from '@/lib/utils';

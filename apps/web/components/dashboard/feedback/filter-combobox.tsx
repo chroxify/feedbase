@@ -2,7 +2,18 @@
 
 import * as React from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Checkbox } from '@ui/components/checkbox';
+import { Button } from '@feedbase/ui/components/button';
+import { Checkbox } from '@feedbase/ui/components/checkbox';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@feedbase/ui/components/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@feedbase/ui/components/popover';
+import { cn } from '@feedbase/ui/lib/utils';
 import {
   CalendarClock,
   CalendarPlus,
@@ -12,17 +23,6 @@ import {
   NotebookPen,
   Tags,
 } from 'lucide-react';
-import { Button } from 'ui/components/button';
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from 'ui/components/command';
-import { Popover, PopoverContent, PopoverTrigger } from 'ui/components/popover';
-import { cn } from 'ui/lib/utils';
 import { STATUS_OPTIONS } from '@/lib/constants';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import useTags from '@/lib/swr/use-tags';
