@@ -7,7 +7,7 @@ import { Button } from '@ui/components/ui/button';
 import { Separator } from '@ui/components/ui/separator';
 import { Skeleton } from '@ui/components/ui/skeleton';
 import { cn } from '@ui/lib/utils';
-import { BadgeCheck, MoreVertical } from 'lucide-react';
+import { BadgeCheck, MoreVertical, Trash2Icon } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   DropdownMenu,
@@ -15,10 +15,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from 'ui/components/ui/dropdown-menu';
+import { PROSE_CN } from '@/lib/constants';
 import { FeedbackCommentWithUserProps } from '@/lib/types';
 import { formatRootUrl } from '@/lib/utils';
-import { Icons } from '@/components/shared/icons/icons-static';
-import RichTextEditor from '@/components/shared/tiptap-editor';
+import CommentInput from './comment-input';
 
 // Define a type for the props
 interface CommentProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -29,10 +29,8 @@ interface CommentProps extends React.HTMLAttributes<HTMLDivElement> {
 
 export default function Comment({ commentData, projectSlug, children, ...props }: CommentProps) {
   const [comment, setComment] = useState<FeedbackCommentWithUserProps>(commentData);
-  const [replyContent, setReplyContent] = useState<string>('');
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [timeAgo, setTimeAgo] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
 
   // Time ago
@@ -129,53 +127,6 @@ export default function Comment({ commentData, projectSlug, children, ...props }
     });
   }
 
-  // Post comment
-  async function onPostReply() {
-    // Set loading
-    setIsLoading(true);
-
-    // Create promise
-    const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/feedback/${comment.feedback_id}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: replyContent,
-          reply_to_id: comment.id,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-            reject(data.error);
-          } else {
-            resolve(data);
-          }
-        })
-        .catch((err) => {
-          reject(err.message);
-        });
-    });
-
-    promise
-      .then(() => {
-        // Set loading
-        setIsLoading(false);
-
-        // Reset reply state
-        setIsReplying(false);
-        setReplyContent('');
-
-        // Reload comments
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error(err);
-      });
-  }
-
   useEffect(() => {
     setTimeAgo(formatTimeAgo(new Date(comment.created_at)));
   }, [comment.created_at]);
@@ -201,11 +152,11 @@ export default function Comment({ commentData, projectSlug, children, ...props }
               </div>
             </Avatar>
             {/* Name */}
-            <span className='text-foreground/90 text-sm'>{comment.user.full_name}</span>·{/* Time ago */}
+            <span className='text-foreground text-sm'>{comment.user.full_name}</span>·{/* Time ago */}
             {!timeAgo ? (
               <Skeleton className='h-4 w-20 rounded-sm' />
             ) : (
-              <span className='text-foreground/50 text-xs font-light'>{timeAgo}</span>
+              <span className='text-muted-foreground text-xs'>{timeAgo}</span>
             )}
           </div>
         </div>
@@ -222,9 +173,9 @@ export default function Comment({ commentData, projectSlug, children, ...props }
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-[160px]'>
             <DropdownMenuItem
-              className='text-destructive focus:text-destructive flex flex-row items-center gap-2 '
+              className='text-destructive focus:text-destructive/90 focus:bg-destructive/20 flex flex-row items-center gap-2'
               onClick={onDelete}>
-              <Icons.Trash className='fill-destructive h-4 w-4' />
+              <Trash2Icon className='h-4 w-4' />
               Delete
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -244,7 +195,7 @@ export default function Comment({ commentData, projectSlug, children, ...props }
         <div className='flex h-fit w-full flex-col gap-1 pl-5'>
           {/* Comment Content html */}
           <div
-            className='prose dark:prose-invert prose-p:font-light prose-zinc text-foreground/70 prose-headings:font-medium prose-headings:text-foreground/80 prose-strong:text-foreground/80 prose-strong:font-normal prose-code:text-foreground/70 prose-code: prose-code:font-monospace prose-blockquote:text-foreground/80 prose-blockquote:font-normal pl-0.5 text-sm '
+            className={cn('text-secondary-foreground text-sm', PROSE_CN)}
             dangerouslySetInnerHTML={{ __html: comment.content }}
           />
 
@@ -301,31 +252,11 @@ export default function Comment({ commentData, projectSlug, children, ...props }
 
           {/* Reply Input */}
           {isReplying ? (
-            <div className='prose dark:prose-invert flex w-full flex-col items-center justify-end rounded-md border p-4'>
-              {/* Editable Comment div with placeholder */}
-              <RichTextEditor
-                content={replyContent}
-                setContent={setReplyContent}
-                placeholder='Write your reply here...'
-              />
-
-              {/* Bottom Row */}
-              <div className='flex w-full flex-row items-center justify-end'>
-                {/* Submit Button */}
-                <Button
-                  variant='outline'
-                  className='text-foreground/60 flex h-8 items-center justify-between border font-light sm:w-fit'
-                  size='sm'
-                  onClick={onPostReply}
-                  disabled={
-                    // disabled if content is 0 or its only html tags
-                    replyContent.replace(/<[^>]*>?/gm, '').length === 0 || isLoading
-                  }>
-                  {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
-                  Post Reply
-                </Button>
-              </div>
-            </div>
+            <CommentInput
+              projectSlug={projectSlug}
+              feedbackId={comment.feedback_id}
+              parentCommentId={comment.id}
+            />
           ) : null}
 
           {/* Replies */}
