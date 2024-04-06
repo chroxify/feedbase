@@ -58,7 +58,7 @@ export default async function Feedback({ params }: Props) {
 
       {/* content */}
       <div className='flex h-full w-full flex-col items-center justify-center gap-5 px-5 sm:px-10 md:px-10 lg:px-20'>
-        <FeedbackHeader isLoggedIn={!!user} projectSlug={params.project} projectConfig={config} />
+        <FeedbackHeader isLoggedIn={!!user} projectSlug={params.project} />
 
         {/* Main */}
         <div className='flex h-full w-full flex-col justify-between'>

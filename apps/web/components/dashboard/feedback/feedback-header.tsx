@@ -56,7 +56,9 @@ export default function FeedbackHeader() {
             )}>
             <Input
               placeholder='Search feedback'
-              onClick={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+              }}
               value={searchValue}
               onChange={(e) => {
                 setSearchValue(e.target.value);
@@ -68,6 +70,7 @@ export default function FeedbackHeader() {
               )}
             />
             <button
+              type='button'
               className='hover:bg-accent text-secondary-foreground hover:text-foreground absolute right-0 z-10 flex h-8 w-8 items-center justify-center bg-transparent transition-all'
               onClick={() => {
                 // Toggle search
@@ -84,8 +87,12 @@ export default function FeedbackHeader() {
                   }, 0);
                 }
               }}
-              onMouseEnter={() => setAnimate(true)}
-              onMouseLeave={() => setAnimate(false)}>
+              onMouseEnter={() => {
+                setAnimate(true);
+              }}
+              onMouseLeave={() => {
+                setAnimate(false);
+              }}>
               {/* Icon */}
               <LottiePlayer
                 lottieSrc={SearchIcon}

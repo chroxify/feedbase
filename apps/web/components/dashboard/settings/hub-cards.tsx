@@ -24,7 +24,7 @@ export default function HubConfigCards({
 }) {
   const [project, setProject] = useState<ProjectProps['Row']>(projectData);
   const [projectConfig, setProjectConfig] = useState<ProjectConfigWithoutSecretProps>(projectConfigData);
-  const [OGImage, setOGImage] = useState<string | null>(projectData.og_image || null);
+  const [ogImage, setOgImage] = useState<string | null>(projectData.og_image || null);
   const router = useRouter();
 
   async function handleSaveProject(noToast?: boolean) {
@@ -38,7 +38,7 @@ export default function HubConfigCards({
         body: JSON.stringify({
           icon: project.icon !== projectData.icon ? project.icon : undefined,
           icon_radius: project.icon_radius !== projectData.icon_radius ? project.icon_radius : undefined,
-          og_image: OGImage !== projectData.og_image ? OGImage : undefined,
+          og_image: ogImage !== projectData.og_image ? ogImage : undefined,
         }),
       })
         .then((res) => res.json())
@@ -214,7 +214,7 @@ export default function HubConfigCards({
   // Set the project data to the new one (Due to data://urls)
   useEffect(() => {
     setProject((prev) => ({ ...prev, icon: projectData.icon }));
-    setOGImage(projectData.og_image || null);
+    setOgImage(projectData.og_image || null);
   }, [projectData.icon, projectData.og_image]);
 
   return (
@@ -294,8 +294,8 @@ export default function HubConfigCards({
             <div className='max-w-xs space-y-1'>
               <FileDrop
                 labelComponent={<Label className='text-foreground/70 text-sm '>OG Image</Label>}
-                image={OGImage}
-                setImage={setOGImage}
+                image={ogImage}
+                setImage={setOgImage}
               />
 
               <Label className='text-foreground/50 text-xs'>
@@ -375,7 +375,7 @@ export default function HubConfigCards({
             disabled={
               (project.icon === projectData.icon || (!project.icon && !projectData.icon)) &&
               project.icon_radius === projectData.icon_radius &&
-              (OGImage === projectData.og_image || (!OGImage && !projectData.og_image)) &&
+              (ogImage === projectData.og_image || (!ogImage && !projectData.og_image)) &&
               projectConfig.custom_theme === projectConfigData.custom_theme &&
               projectConfig.custom_theme_root === projectConfigData.custom_theme_root &&
               projectConfig.custom_theme_primary_foreground ===
@@ -393,7 +393,7 @@ export default function HubConfigCards({
                 !(
                   (project.icon === projectData.icon || (!project.icon && !projectData.icon)) &&
                   project.icon_radius === projectData.icon_radius &&
-                  (OGImage === projectData.og_image || (!OGImage && !projectData.og_image))
+                  (ogImage === projectData.og_image || (!ogImage && !projectData.og_image))
                 ) &&
                 !(
                   projectConfig.custom_theme === projectConfigData.custom_theme &&
@@ -417,7 +417,7 @@ export default function HubConfigCards({
               if (
                 (project.icon === projectData.icon || (!project.icon && !projectData.icon)) &&
                 project.icon_radius === projectData.icon_radius &&
-                (OGImage === projectData.og_image || (!OGImage && !projectData.og_image))
+                (ogImage === projectData.og_image || (!ogImage && !projectData.og_image))
               ) {
                 handleSaveProjectConfig();
               } else {

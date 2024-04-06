@@ -158,7 +158,9 @@ export default function CommentInput({
                 <Input
                   placeholder='Enter URL'
                   value={linkInput}
-                  onChange={(e) => setLinkInput(e.target.value)}
+                  onChange={(e) => {
+                    setLinkInput(e.target.value);
+                  }}
                   className='h-6 w-full border-transparent bg-transparent px-1 text-xs focus-visible:ring-0 focus-visible:ring-transparent'
                 />
                 <div className='flex items-center justify-center gap-0.5'>

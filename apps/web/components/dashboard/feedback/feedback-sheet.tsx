@@ -69,16 +69,13 @@ export function FeedbackSheet({
   );
 
   // Render comments recursively
-  const renderComments = useCallback(
-    (comments: FeedbackCommentWithUserProps[] | undefined) => {
-      return comments?.map((comment: FeedbackCommentWithUserProps) => (
-        <Comment commentData={comment} projectSlug={'x'} key={comment.id} id={comment.id}>
-          {renderComments(comment.replies)}
-        </Comment>
-      ));
-    },
-    [comments]
-  );
+  const renderComments = useCallback((comments: FeedbackCommentWithUserProps[] | undefined) => {
+    return comments?.map((comment: FeedbackCommentWithUserProps) => (
+      <Comment commentData={comment} projectSlug='x' key={comment.id} id={comment.id}>
+        {renderComments(comment.replies)}
+      </Comment>
+    ));
+  }, []);
 
   // Navigate feedback
   const navigateFeedback = useCallback(
@@ -139,7 +136,7 @@ export function FeedbackSheet({
     if (open) {
       setCurrentFeedback(initialFeedback);
     }
-  }, [open]);
+  }, [open, initialFeedback]);
 
   // Format date in a readable format, e.g. 2 days ago or if too old, show the date
   const formatDate = (date: string) => {
@@ -152,9 +149,8 @@ export function FeedbackSheet({
       return 'Yesterday';
     } else if (days < 7) {
       return `${days} days ago`;
-    } else {
-      return new Date(date).toDateString();
     }
+    return new Date(date).toDateString();
   };
 
   return (
@@ -310,15 +306,15 @@ export function FeedbackSheet({
               </TabsList>
               <TabsContent value='comments' className='flex w-full flex-col items-start justify-start gap-4'>
                 {/* Loading State */}
-                {!comments && commentsLoading && (
+                {!comments && commentsLoading ? (
                   <div className='flex w-full flex-col items-center justify-center gap-1 pt-20'>
                     <Icons.Spinner className='text-muted-foreground h-[18px] w-[18px] animate-spin' />
                     <span className='text-secondary-foreground ml-2 text-sm'>Loading comments...</span>
                   </div>
-                )}
+                ) : null}
 
                 {/* Empty State */}
-                {comments && comments.length === 0 && !commentsLoading && (
+                {comments && comments.length === 0 && !commentsLoading ? (
                   <Alert className='w-full'>
                     <Info className='stroke-secondary-foreground -mt-[2px] h-5 w-5' />
                     <AlertTitle>No comments yet</AlertTitle>
@@ -326,10 +322,10 @@ export function FeedbackSheet({
                       Be the first to comment on this feedback. Your feedback is important to us.
                     </AlertDescription>
                   </Alert>
-                )}
+                ) : null}
 
                 {/* Comments */}
-                {comments && comments.length > 0 && !commentsLoading && renderComments(comments)}
+                {comments && comments.length > 0 && !commentsLoading ? renderComments(comments) : null}
               </TabsContent>
               <TabsContent value='activity'>
                 {/* TODO */}
@@ -409,7 +405,10 @@ export function FeedbackSheet({
               <StatusCombobox
                 initialStatus={currentFeedback.status}
                 onStatusChange={(status) => {
-                  setCurrentFeedback((prev) => ({ ...prev, status }));
+                  setCurrentFeedback((prev) => ({
+                    ...prev,
+                    status: status as FeedbackWithUserProps['status'],
+                  }));
                   updateFeedback({ status, method: 'PATCH' });
                 }}
               />

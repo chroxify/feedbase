@@ -13,7 +13,8 @@ const useQueryParamRouter = (
       if (!value) {
         const params = new URLSearchParams(searchParams);
         params.delete(name.toLowerCase());
-        return router.push(`${pathname}?${params.toString()}`);
+        router.push(`${pathname}?${params.toString()}`);
+        return;
       }
 
       // Set the query param
@@ -21,7 +22,7 @@ const useQueryParamRouter = (
       params.set(name.toLowerCase(), value.toLowerCase());
 
       // Push the new query string to the router
-      return router.push(`${pathname}?${params.toString()}`);
+      router.push(`${pathname}?${params.toString()}`);
     },
     [router, pathname, searchParams]
   );

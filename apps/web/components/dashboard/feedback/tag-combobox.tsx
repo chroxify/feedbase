@@ -26,7 +26,6 @@ export function TagCombobox({ initialTags, onTagsChange }: TagComboboxProps) {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const EmptyItem = () => {
-    console.log('EMPTY ITEM', search);
     if (!search) return null;
 
     return (
@@ -140,13 +139,12 @@ export function TagCombobox({ initialTags, onTagsChange }: TagComboboxProps) {
                   setOpen(false);
 
                   // Call onTagsChange
-                  let newTagsIds = [] as string[];
-                  newTags.map((t) => {
-                    projectTags.map((pt) => {
-                      if (pt.name === t.name) {
-                        newTagsIds.push(pt.id);
-                      }
-                    });
+                  const newTagsIds = [] as string[];
+                  newTags.forEach((t) => {
+                    const matchingTag = projectTags.find((pt) => pt.name === t.name);
+                    if (matchingTag) {
+                      newTagsIds.push(matchingTag.id);
+                    }
                   });
 
                   onTagsChange(newTagsIds);
@@ -158,7 +156,7 @@ export function TagCombobox({ initialTags, onTagsChange }: TagComboboxProps) {
                     selectedTags.find((t) => t.name === tag.name) && 'opacity-100'
                   )}
                   iconCn='h-3.5 w-3.5'
-                  checked={selectedTags.find((t) => t.name === tag.name) ? true : false}
+                  checked={!!selectedTags.find((t) => t.name === tag.name)}
                 />
 
                 <div className='flex flex-row items-center gap-2'>

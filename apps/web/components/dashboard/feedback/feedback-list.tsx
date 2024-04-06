@@ -29,7 +29,7 @@ import { FeedbackSheet } from './feedback-sheet';
 
 type DateSortedFeedbackProps = Record<string, FeedbackWithUserProps[]>;
 
-export default function FeedbackList({}: {}) {
+export default function FeedbackList() {
   const { slug: projectSlug } = useParams<{ slug: string }>();
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -64,10 +64,8 @@ export default function FeedbackList({}: {}) {
             if (!feedback.title.toLowerCase().includes(search.toLowerCase())) {
               return false;
             }
-          } else {
-            if (feedback.title.toLowerCase().includes(search.slice(1).toLowerCase())) {
-              return false;
-            }
+          } else if (feedback.title.toLowerCase().includes(search.slice(1).toLowerCase())) {
+            return false;
           }
         }
 
@@ -180,6 +178,7 @@ export default function FeedbackList({}: {}) {
                     option.label.toLowerCase() === s.replace('!', '').replace('+', ' ').toLowerCase()
                 );
               }
+              return null;
             })
             .filter(Boolean) ?? [],
         e:
@@ -192,12 +191,13 @@ export default function FeedbackList({}: {}) {
                     option.label.toLowerCase() === s.replace('!', '').replace('+', ' ').toLowerCase()
                 );
               }
+              return null;
             })
             .filter(Boolean) ?? [],
       },
       search,
     } as FeedbackFilterProps);
-  }, [search, tags, status, projectTags]);
+  }, [search, tags, status, projectTags, mutate]);
 
   return (
     <>
@@ -280,13 +280,13 @@ export default function FeedbackList({}: {}) {
       <Separator />
 
       {/* Filters */}
-      {feedbackFilters && <FeedbackFilterHeader filters={feedbackFilters} />}
+      {feedbackFilters ? <FeedbackFilterHeader filters={feedbackFilters} /> : null}
 
       <div className='flex h-full w-full flex-col items-center justify-start gap-4 overflow-y-auto p-5'>
-        {/* Loading Skeleton */}
-        {isLoading && (
+        {/* eslint-disable react/no-array-index-key */}
+        {isLoading ? (
           <div className='flex w-full flex-col'>
-            {Array.from({ length: Math.floor(Math.random() * 5) + 5 }).map((_, index) => (
+            {[...Array(10)].map((_, index) => (
               <div
                 className='flex h-12 w-full flex-row items-center justify-between border border-b-0 p-1 px-2 [&:first-child]:rounded-t-md [&:last-child]:rounded-b-md [&:last-child]:border-b'
                 key={`item-${index}`}>
@@ -296,6 +296,7 @@ export default function FeedbackList({}: {}) {
                 </div>
 
                 <div className='flex items-center gap-2'>
+                  {}
                   {Array.from({ length: Math.floor(Math.random() * 3) + 1 }).map((_, innerIndex) => (
                     <Skeleton key={`inner-item-${innerIndex}`} className='h-6 w-12 rounded-full' />
                   ))}
@@ -306,10 +307,11 @@ export default function FeedbackList({}: {}) {
               </div>
             ))}
           </div>
-        )}
+        ) : null}
+        {/* eslint-enable react/no-array-index-key */}
 
         {/* Error State */}
-        {error && !isLoading && (
+        {error && !isLoading ? (
           <div className='flex flex-col items-center gap-2 p-10'>
             <AlertCircle className='text-secondary-foreground h-7 w-7 stroke-[1.5px]' />
             <div className='space-y-1.5 text-center'>
@@ -331,7 +333,7 @@ export default function FeedbackList({}: {}) {
               Try Again
             </Button>
           </div>
-        )}
+        ) : null}
 
         {/* Empty State */}
         {filteredFeedback.length === 0 && !isLoading && !error && (

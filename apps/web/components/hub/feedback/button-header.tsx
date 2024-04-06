@@ -6,24 +6,21 @@ import { Button } from '@ui/components/ui/button';
 import { Input } from '@ui/components/ui/input';
 import { cn } from '@ui/lib/utils';
 import { Clock3, Flame, Search, Star } from 'lucide-react';
-import useCreateQueryString from '@/lib/hooks/use-create-query';
-import { ProjectConfigWithoutSecretProps } from '@/lib/types';
+import useCreateQueryString from '@/lib/hooks/use-query-router';
 import CreatePostModal from '../modals/create-post-modal';
 import AuthModal from '../modals/login-signup-modal';
 
 export default function FeedbackHeader({
   isLoggedIn,
   projectSlug,
-  projectConfig,
 }: {
   isLoggedIn: boolean;
   projectSlug: string;
-  projectConfig: ProjectConfigWithoutSecretProps | null;
 }) {
-  const searchParams = useSearchParams();
-  const createQueryString = useCreateQueryString(searchParams);
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const createQueryString = useCreateQueryString(router, pathname, searchParams);
 
   // Query params
   const sort = searchParams.get('sort') || '';
@@ -45,7 +42,7 @@ export default function FeedbackHeader({
             )}
             onClick={() => {
               setCurrentSort('');
-              router.push(`${pathname}?${createQueryString('sort', '')}`);
+              createQueryString('sort', '');
             }}
             size='sm'>
             <Clock3 className='mr-1.5 h-4 w-4' />
@@ -61,7 +58,7 @@ export default function FeedbackHeader({
             )}
             onClick={() => {
               setCurrentSort('trending');
-              router.push(`${pathname}?${createQueryString('sort', 'trending')}`);
+              createQueryString('sort', 'trending');
             }}
             size='sm'>
             <Flame className='mr-1 h-4 w-4' />
@@ -77,7 +74,7 @@ export default function FeedbackHeader({
             )}
             onClick={() => {
               setCurrentSort('upvotes');
-              router.push(`${pathname}?${createQueryString('sort', 'upvotes')}`);
+              createQueryString('sort', 'upvotes');
             }}
             size='sm'>
             <Star className='mr-1 h-4 w-4' />
@@ -93,7 +90,7 @@ export default function FeedbackHeader({
               placeholder='Search posts'
               className='text-foreground/70 placeholder: h-9 w-full rounded-md border bg-transparent  px-8'
               onChange={(e) => {
-                router.push(`${pathname}?${createQueryString('search', e.target.value)}`);
+                createQueryString('search', e.target.value);
               }}
             />
 

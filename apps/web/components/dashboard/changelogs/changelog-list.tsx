@@ -195,11 +195,15 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
       <Separator />
 
       <div className='flex h-full w-full flex-col items-center justify-start gap-4 overflow-y-auto p-5'>
-        {/* Skeleton Loading */}
-        {isLoading ? [...Array(5)].map((_, index) => <Skeleton key={index} className='h-32 w-full' />) : null}
+        {isLoading
+          ? [...Array(5)].map((_, index) => (
+              // eslint-disable-next-line react/no-array-index-key
+              <Skeleton key={`skeleton-${index}`} className='h-32 w-full' />
+            ))
+          : null}
 
         {/* Error State */}
-        {error && !isLoading && (
+        {error && !isLoading ? (
           <div className='flex flex-col items-center gap-4 p-10'>
             <AlertCircle className='text-secondary-foreground h-7 w-7 stroke-[1.5px]' />
             <div className='space-y-1.5 text-center'>
@@ -226,7 +230,7 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
               Try Again
             </Button>
           </div>
-        )}
+        ) : null}
 
         {/* Empty State */}
         {changelogs && changelogs.length === 0 && !error ? (

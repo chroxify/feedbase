@@ -113,12 +113,12 @@ export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFil
     Object.values(filters).some((subObject) =>
       Object.values(subObject).some(
         (subValue) =>
-          subValue != null && subValue !== undefined && !(Array.isArray(subValue) && subValue.length === 0)
+          subValue !== null && subValue !== undefined && !(Array.isArray(subValue) && subValue.length === 0)
       )
     ) && (
       <div className='flex h-fit w-full flex-wrap items-center justify-start gap-2.5 border-b px-5 py-3 text-xs'>
         {/* Search */}
-        {filters.search && (
+        {filters.search ? (
           <FeedbackFilter
             filter={{ icon: TextCursorInputIcon, label: 'Search' }}
             action={{
@@ -127,24 +127,30 @@ export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFil
                 {
                   icon: Plus,
                   label: 'Include',
-                  onSelect: () => createQueryParams('search', filters.search.replaceAll('!', '')),
+                  onSelect: () => {
+                    createQueryParams('search', filters.search.replaceAll('!', ''));
+                  },
                 },
                 {
                   icon: CircleX,
                   label: 'Do not include',
-                  onSelect: () => createQueryParams('search', `!${filters.search.replaceAll('!', '')}`),
+                  onSelect: () => {
+                    createQueryParams('search', `!${filters.search.replaceAll('!', '')}`);
+                  },
                 },
               ],
             }}
             appliedFilters={
               <span className='text-foreground px-2'>{filters.search.replaceAll('!', '')}</span>
             }
-            onClear={() => createQueryParams('search', '')}
+            onClear={() => {
+              createQueryParams('search', '');
+            }}
           />
-        )}
+        ) : null}
 
         {/* Included Tags */}
-        {filters.tags && filters.tags.i.length > 0 && (
+        {filters.tags && filters.tags.i.length > 0 ? (
           <FeedbackFilter
             filter={{ icon: filters.tags.i.length > 1 ? Tags : Tag, label: 'Tags' }}
             action={{
@@ -202,10 +208,10 @@ export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFil
               createQueryParams('tags', filters.tags.e.map((tag) => `!${tag.name}`).join(','));
             }}
           />
-        )}
+        ) : null}
 
         {/* Excluded Tags */}
-        {filters.tags && filters.tags.e.length > 0 && (
+        {filters.tags && filters.tags.e.length > 0 ? (
           <FeedbackFilter
             filter={{ icon: filters.tags.e.length > 1 ? Tags : Tag, label: 'Tags' }}
             action={{
@@ -260,10 +266,10 @@ export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFil
               createQueryParams('tags', filters.tags.i.map((tag) => tag.name).join(','));
             }}
           />
-        )}
+        ) : null}
 
         {/* Included Statuses */}
-        {filters.status && filters.status.i.length > 0 && (
+        {filters.status && filters.status.i.length > 0 ? (
           <FeedbackFilter
             filter={{ icon: CircleDashed, label: 'Status' }}
             action={{
@@ -315,10 +321,10 @@ export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFil
               createQueryParams('status', filters.status.e.map((status) => `!${status.label}`).join(','));
             }}
           />
-        )}
+        ) : null}
 
         {/* Excluded Statuses */}
-        {filters.status && filters.status.e.length > 0 && (
+        {filters.status && filters.status.e.length > 0 ? (
           <FeedbackFilter
             filter={{ icon: CircleDashed, label: 'Status' }}
             action={{
@@ -370,7 +376,7 @@ export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFil
               createQueryParams('status', filters.status.i.map((status) => status.label).join(','));
             }}
           />
-        )}
+        ) : null}
       </div>
     )
   );

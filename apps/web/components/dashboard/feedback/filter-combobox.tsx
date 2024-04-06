@@ -58,7 +58,7 @@ export function FilterCombobox() {
       }}>
       <PopoverTrigger asChild>
         <Button
-          variant={'outline'}
+          variant='outline'
           className='text-secondary-foreground hover:text-foreground flex items-center gap-1'>
           <Filter className='h-4 w-4' />
           Filter
@@ -81,7 +81,9 @@ export function FilterCombobox() {
               <CommandGroup>
                 <CommandItem
                   className='group flex items-center gap-2'
-                  onSelect={() => setPages([...pages, 'status'])}>
+                  onSelect={() => {
+                    setPages([...pages, 'status']);
+                  }}>
                   <CircleDashed className='text-secondary-foreground group-aria-selected:text-foreground h-4 w-4 transition-colors' />
                   Status
                 </CommandItem>
@@ -91,7 +93,9 @@ export function FilterCombobox() {
                 </CommandItem>
                 <CommandItem
                   className='group flex items-center gap-2'
-                  onSelect={() => setPages([...pages, 'tags'])}>
+                  onSelect={() => {
+                    setPages([...pages, 'tags']);
+                  }}>
                   <Tags className='text-secondary-foreground group-aria-selected:text-foreground h-4 w-4 transition-colors' />
                   Tags
                 </CommandItem>
@@ -101,7 +105,9 @@ export function FilterCombobox() {
                 </CommandItem>
                 <CommandItem
                   className='group flex items-center gap-2'
-                  onSelect={() => setPages([...pages, 'created-date'])}>
+                  onSelect={() => {
+                    setPages([...pages, 'created-date']);
+                  }}>
                   <CalendarPlus className='text-secondary-foreground group-aria-selected:text-foreground h-4 w-4 transition-colors' />
                   Created Date
                 </CommandItem>
@@ -139,11 +145,7 @@ export function FilterCombobox() {
                           'opacity-100'
                       )}
                       iconCn='h-3.5 w-3.5'
-                      checked={
-                        selectedStatuses.find((t) => t.toLowerCase() === item.label.toLowerCase())
-                          ? true
-                          : false
-                      }
+                      checked={!!selectedStatuses.find((t) => t.toLowerCase() === item.label.toLowerCase())}
                     />
 
                     {/* Icon */}
@@ -158,39 +160,35 @@ export function FilterCombobox() {
 
             {page === 'tags' && (
               <CommandGroup>
-                {tags &&
-                  tags.map((tag) => (
-                    <CommandItem
-                      key={tag.id}
-                      className='group flex items-center gap-2'
-                      onSelect={() => {
-                        // Append or remove tag from selectedTags
-                        const newTags = selectedTags.find((t) => t.toLowerCase() === tag.name.toLowerCase())
-                          ? selectedTags.filter((t) => t.toLowerCase() !== tag.name.toLowerCase())
-                          : [...selectedTags, tag.name];
+                {tags?.map((tag) => (
+                  <CommandItem
+                    key={tag.id}
+                    className='group flex items-center gap-2'
+                    onSelect={() => {
+                      // Append or remove tag from selectedTags
+                      const newTags = selectedTags.find((t) => t.toLowerCase() === tag.name.toLowerCase())
+                        ? selectedTags.filter((t) => t.toLowerCase() !== tag.name.toLowerCase())
+                        : [...selectedTags, tag.name];
 
-                        // Set tags
-                        setSelectedTags(newTags);
+                      // Set tags
+                      setSelectedTags(newTags);
 
-                        // Apply tags
-                        createQueryParams('tags', newTags.join(','));
-                      }}>
-                      <Checkbox
-                        className={cn(
-                          'border-foreground/50 h-3.5 w-3.5 opacity-0 shadow-none group-aria-selected:opacity-100',
-                          selectedTags.find((t) => t.toLowerCase() === tag.name.toLowerCase()) &&
-                            'opacity-100'
-                        )}
-                        iconCn='h-3.5 w-3.5'
-                        checked={
-                          selectedTags.find((t) => t.toLowerCase() === tag.name.toLowerCase()) ? true : false
-                        }
-                      />
+                      // Apply tags
+                      createQueryParams('tags', newTags.join(','));
+                    }}>
+                    <Checkbox
+                      className={cn(
+                        'border-foreground/50 h-3.5 w-3.5 opacity-0 shadow-none group-aria-selected:opacity-100',
+                        selectedTags.find((t) => t.toLowerCase() === tag.name.toLowerCase()) && 'opacity-100'
+                      )}
+                      iconCn='h-3.5 w-3.5'
+                      checked={!!selectedTags.find((t) => t.toLowerCase() === tag.name.toLowerCase())}
+                    />
 
-                      <div className='h-2 w-2 rounded-full' style={{ backgroundColor: tag.color }} />
-                      {tag.name}
-                    </CommandItem>
-                  ))}
+                    <div className='h-2 w-2 rounded-full' style={{ backgroundColor: tag.color }} />
+                    {tag.name}
+                  </CommandItem>
+                ))}
               </CommandGroup>
             )}
 

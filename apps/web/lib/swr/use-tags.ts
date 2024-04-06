@@ -13,7 +13,7 @@ export default function useTags() {
 
   return {
     tags,
-    loading: tags ? false : true,
+    loading: !tags,
     isValidating,
   };
 }

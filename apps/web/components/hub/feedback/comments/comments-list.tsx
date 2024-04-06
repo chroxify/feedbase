@@ -25,13 +25,13 @@ export default function CommentsList({
   feedbackId: string;
   user: ProfileProps['Row'] | null;
 }) {
-  const [commentContent, setCommentContent] = useState<string>('');
-  const [totalCommentsAndReplies, setTotalCommentsAndReplies] = useState<number | null>(null);
+  const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const [commentContent, setCommentContent] = useState<string>('');
+  const [totalCommentsAndReplies, setTotalCommentsAndReplies] = useState<number | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const createQueryString = useCreateQueryString(searchParams);
-  const router = useRouter();
+  const createQueryString = useCreateQueryString(router, pathname, searchParams);
 
   // Query params
   const sort = searchParams.get('sort') || '';
@@ -197,7 +197,7 @@ export default function CommentsList({
 
         <CommentSortCombobox
           onSelect={(sort) => {
-            router.push(`${pathname}?${createQueryString('sort', sort === 'newest' ? '' : sort)}`);
+            createQueryString('sort', sort === 'newest' ? '' : sort);
           }}
           initialValue={sort === '' ? 'newest' : sort}
         />

@@ -3,5 +3,6 @@ module.exports = {
   extends: ['custom/next'],
   globals: {
     Messages: 'readonly',
+    NodeJS: true,
   },
 };

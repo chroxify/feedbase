@@ -2,15 +2,7 @@
 
 import * as React from 'react';
 import { cn } from '@ui/lib/utils';
-import {
-  Check,
-  CheckCircle2,
-  ChevronsUpDownIcon,
-  CircleDashed,
-  CircleDot,
-  CircleDotDashed,
-  XCircle,
-} from 'lucide-react';
+import { Check, ChevronsUpDownIcon } from 'lucide-react';
 import { Button } from 'ui/components/ui/button';
 import { Command, CommandGroup, CommandItem } from 'ui/components/ui/command';
 import { Popover, PopoverContent, PopoverTrigger } from 'ui/components/ui/popover';

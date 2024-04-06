@@ -296,7 +296,7 @@ export default function CustomizeThemeModal({
               {[...Array(4)].map((_, i) => (
                 <div
                   className='flex w-full rounded-md border'
-                  key={i}
+                  key={`feedback-${i}`} // eslint-disable-line react/no-array-index-key
                   style={{ borderColor: colorScheme.border }}>
                   <div
                     className='flex h-full w-6 items-center justify-center border-r'

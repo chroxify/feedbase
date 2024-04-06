@@ -2,12 +2,12 @@
 
 import './placeholder.css';
 import React, { useRef } from 'react';
-import BulletList from '@tiptap/extension-bullet-list';
+import { BulletList } from '@tiptap/extension-bullet-list';
 import { CharacterCount } from '@tiptap/extension-character-count';
 import { CodeBlock } from '@tiptap/extension-code-block';
 import { Highlight } from '@tiptap/extension-highlight';
 import { Link } from '@tiptap/extension-link';
-import OrderedList from '@tiptap/extension-ordered-list';
+import { OrderedList } from '@tiptap/extension-ordered-list';
 import { Placeholder } from '@tiptap/extension-placeholder';
 import { Typography } from '@tiptap/extension-typography';
 import { AnyExtension, Editor, EditorContent, useEditor } from '@tiptap/react';
@@ -29,7 +29,7 @@ export default function RichTextEditor({
   className?: string;
   parentClassName?: string;
   characterLimit?: number;
-  editorRef?: React.MutableRefObject<any>;
+  editorRef?: React.MutableRefObject<Editor | null>;
 }) {
   const localEditorRef = useRef<Editor | null>(null);
 

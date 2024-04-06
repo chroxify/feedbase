@@ -8,32 +8,30 @@ import { ChevronUp } from 'lucide-react';
 import { toast } from 'sonner';
 import { PROSE_CN } from '@/lib/constants';
 import BentoCardWrapper from '@/components/home/spotlight-card';
-import { StatusCombobox } from '../dashboard/feedback/status-combobox';
-import { TagCombobox } from '../dashboard/feedback/tag-combobox';
 import RichTextEditor from '../shared/tiptap-editor';
 
-const demoTags = [
-  {
-    value: 'feature',
-    label: 'Feature',
-    color: '#F87171',
-  },
-  {
-    value: 'bug',
-    label: 'Bug',
-    color: '#FBBF24',
-  },
-  {
-    value: 'question',
-    label: 'Question',
-    color: '#60A5FA',
-  },
-  {
-    value: 'other',
-    label: 'Other',
-    color: '#6EE7B7',
-  },
-];
+// const demoTags = [
+//   {
+//     value: 'feature',
+//     label: 'Feature',
+//     color: '#F87171',
+//   },
+//   {
+//     value: 'bug',
+//     label: 'Bug',
+//     color: '#FBBF24',
+//   },
+//   {
+//     value: 'question',
+//     label: 'Question',
+//     color: '#60A5FA',
+//   },
+//   {
+//     value: 'other',
+//     label: 'Other',
+//     color: '#6EE7B7',
+//   },
+// ];
 
 export default function FeedbackSection() {
   const [upvotes, setUpvotes] = useState(63);
@@ -136,14 +134,15 @@ export default function FeedbackSection() {
               </p>
 
               <div className='mt-3 flex h-full flex-col items-start gap-3'>
-                <TagCombobox
+                {/* TODO: RE-ENABLE / REWORK THIS */}
+                {/* <TagCombobox
                   projectTags={demoTags}
                   onSelect={(tags) => demoTags.filter((tag) => tags.includes(tag.value))}
                   triggerClassName='w-full sm:w-full mt-5'
                   demo
                 />
 
-                <StatusCombobox triggerClassName='w-full mt-5' />
+                <StatusCombobox triggerClassName='w-full mt-5' /> */}
               </div>
             </div>
           </BentoCardWrapper>
