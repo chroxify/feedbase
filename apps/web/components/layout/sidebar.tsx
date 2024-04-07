@@ -1,21 +1,19 @@
-import { ProjectProps, SidebarTabProps, SidebarTabsProps } from '@/lib/types';
+import { SidebarTabProps, SidebarTabsProps } from '@/lib/types';
 import NavTabs from '@/components/layout/nav-tabs';
 import ToggleThemeButton from './theme-button';
 
 export default async function Sidebar({
   tabs,
   initialTab,
-  currentProject,
 }: {
   tabs: SidebarTabsProps;
   initialTab: SidebarTabProps;
-  currentProject: ProjectProps['Row'];
 }) {
   return (
     <div className='bg-root fixed left-0 top-14 z-50 hidden h-full min-w-[240px] flex-col items-center justify-between border-r p-5 pb-20 md:flex'>
       <div className='flex w-full flex-col gap-y-10'>
         {/* Main Tabs */}
-        <NavTabs tabs={tabs} initialTab={initialTab} projectSlug={currentProject.slug} />
+        <NavTabs tabs={tabs} initialTab={initialTab} />
       </div>
       {/* Footer Buttons */}
       {/* <div className='flex w-full flex-col'>

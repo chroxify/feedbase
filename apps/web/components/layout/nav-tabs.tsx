@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useParams, usePathname } from 'next/navigation';
 import { Button } from '@feedbase/ui/components/button';
 import { Label } from '@feedbase/ui/components/label';
 import { cn } from '@feedbase/ui/lib/utils';
@@ -12,15 +12,14 @@ import LottiePlayer from '@/components/shared/lottie-player';
 export default function NavTabs({
   tabs,
   initialTab,
-  projectSlug,
 }: {
   tabs: SidebarTabsProps;
   initialTab: SidebarTabProps;
-  projectSlug: string;
 }) {
   const [activeTab, setActiveTab] = useState(initialTab.slug);
   const [isHover, setIsHover] = useState('');
   const pathname = usePathname();
+  const { slug: projectSlug } = useParams<{ slug: string }>();
 
   // Check current active tab based on url
   useEffect(() => {
@@ -41,7 +40,7 @@ export default function NavTabs({
           <Label className='pb-1 text-xs font-medium'>{key}</Label>
           {tabs[key].map((tab) => (
             <Link
-              href={tab.slug === 'roadmap' ? '#' : `/${projectSlug}/${tab.slug}`}
+              href={`/${projectSlug}/${tab.slug}`}
               key={tab.slug}
               className={tab.slug === 'feedback' || tab.slug === 'roadmap' ? 'cursor-default' : ''}>
               <Button
