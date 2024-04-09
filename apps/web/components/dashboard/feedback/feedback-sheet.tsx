@@ -52,10 +52,12 @@ export function FeedbackSheet({
   feedback,
   initialFeedback,
   children,
+  asChild,
 }: {
   feedback: FeedbackWithUserProps[];
   initialFeedback: FeedbackWithUserProps;
   children: React.ReactNode;
+  asChild?: boolean;
 }) {
   const { mutate } = useSWRConfig();
   const { slug } = useParams<{ slug: string }>();
@@ -155,7 +157,7 @@ export function FeedbackSheet({
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
-      <SheetTrigger asChild>{children}</SheetTrigger>
+      <SheetTrigger asChild={asChild}>{children}</SheetTrigger>
       <SheetContent className='flex max-w-full flex-row items-start justify-between gap-0 p-0 sm:w-[calc(100vw-20px)] sm:max-w-full md:max-w-5xl'>
         <div className='flex h-full w-full flex-col'>
           {/* Header */}
@@ -225,46 +227,50 @@ export function FeedbackSheet({
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
-            <div className='flex items-center gap-2'>
-              <span className='text-muted-foreground select-none text-sm'>
-                {feedback.findIndex((f) => f.id === currentFeedback.id) + 1}{' '}
-                <span className='text-muted-foreground/60'>/ {feedback.length}</span>
-              </span>
-              <DefaultTooltip
-                content={
-                  feedback.findIndex((f) => f.id === currentFeedback.id) === 0
-                    ? "You've reached the first post"
-                    : 'Go to previous post'
-                }>
-                <Button
-                  size='icon'
-                  variant='outline'
-                  className='text-muted-foreground hover:text-foreground h-6 w-6'
-                  disabled={feedback.findIndex((f) => f.id === currentFeedback.id) === 0}
-                  onClick={() => {
-                    navigateFeedback('previous');
-                  }}>
-                  <ChevronUp className='h-4 w-4' />
-                </Button>
-              </DefaultTooltip>
-              <DefaultTooltip
-                content={
-                  feedback.findIndex((f) => f.id === currentFeedback.id) === feedback.length - 1
-                    ? "You've reached the last post"
-                    : 'Go to next post'
-                }>
-                <Button
-                  size='icon'
-                  variant='outline'
-                  disabled={feedback.findIndex((f) => f.id === currentFeedback.id) === feedback.length - 1}
-                  className='text-muted-foreground hover:text-foreground h-6 w-6'
-                  onClick={() => {
-                    navigateFeedback('next');
-                  }}>
-                  <ChevronDown className='h-4 w-4' />
-                </Button>
-              </DefaultTooltip>
-            </div>
+
+            {/* Feedback Navigation */}
+            {feedback.length > 0 && (
+              <div className='flex items-center gap-2'>
+                <span className='text-muted-foreground select-none text-sm'>
+                  {feedback.findIndex((f) => f.id === currentFeedback.id) + 1}{' '}
+                  <span className='text-muted-foreground/60'>/ {feedback.length}</span>
+                </span>
+                <DefaultTooltip
+                  content={
+                    feedback.findIndex((f) => f.id === currentFeedback.id) === 0
+                      ? "You've reached the first post"
+                      : 'Go to previous post'
+                  }>
+                  <Button
+                    size='icon'
+                    variant='outline'
+                    className='text-muted-foreground hover:text-foreground h-6 w-6'
+                    disabled={feedback.findIndex((f) => f.id === currentFeedback.id) === 0}
+                    onClick={() => {
+                      navigateFeedback('previous');
+                    }}>
+                    <ChevronUp className='h-4 w-4' />
+                  </Button>
+                </DefaultTooltip>
+                <DefaultTooltip
+                  content={
+                    feedback.findIndex((f) => f.id === currentFeedback.id) === feedback.length - 1
+                      ? "You've reached the last post"
+                      : 'Go to next post'
+                  }>
+                  <Button
+                    size='icon'
+                    variant='outline'
+                    disabled={feedback.findIndex((f) => f.id === currentFeedback.id) === feedback.length - 1}
+                    className='text-muted-foreground hover:text-foreground h-6 w-6'
+                    onClick={() => {
+                      navigateFeedback('next');
+                    }}>
+                    <ChevronDown className='h-4 w-4' />
+                  </Button>
+                </DefaultTooltip>
+              </div>
+            )}
           </div>
 
           {/* Post Content */}

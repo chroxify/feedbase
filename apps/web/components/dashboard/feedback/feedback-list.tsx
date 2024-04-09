@@ -368,7 +368,11 @@ export default function FeedbackList() {
                 <Label>{key}</Label>
                 <div>
                   {value.map((feedback) => (
-                    <FeedbackSheet key={feedback.id} feedback={filteredFeedback} initialFeedback={feedback}>
+                    <FeedbackSheet
+                      key={feedback.id}
+                      feedback={filteredFeedback}
+                      initialFeedback={feedback}
+                      asChild>
                       <div
                         className='jusify-between hover:bg-muted/50 group flex h-11 cursor-pointer flex-row items-center border border-b-0 p-1 transition-all [&:first-child]:rounded-t-md [&:last-child]:rounded-b-md [&:last-child]:border-b'
                         key={feedback.id}>
