@@ -93,7 +93,7 @@ export async function actionFetcher<JSON = any>(
   input: RequestInfo,
   { arg }: { arg: Record<string, unknown>; method?: 'POST' | 'PUT' | 'PATCH' | 'DELETE' }
 ): Promise<JSON> {
-  return fetch(input, {
+  return fetch((arg.inputOverride as RequestInfo | URL) || input, {
     method: (arg.method as string) || 'POST',
     body: JSON.stringify(arg),
   }).then((res) => res.json());

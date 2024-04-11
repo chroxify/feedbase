@@ -106,7 +106,7 @@ print(response.json())`,
                     }
                   }, 1000);
                 }}>
-                <Copy className='text-muted-foreground h-4 w-4 group-data-[copied=true]:hidden' />
+                <Copy className='text-muted-foreground group-hover:text-foreground h-4 w-4 transition-colors group-data-[copied=true]:hidden' />
                 <Check className='h-4 w-4 text-green-500 group-data-[copied=false]:hidden' />
               </Button>
             </div>

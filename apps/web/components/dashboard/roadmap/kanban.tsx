@@ -79,12 +79,13 @@ function FeedbackCard({ feedback }: { feedback: FeedbackWithUserProps }) {
 export default function FeedbackKanban({
   columns,
   data,
+  onDataChange,
 }: {
   columns: { label: string; icon: LucideIcon }[];
   data: Record<string, FeedbackWithUserProps[]>;
+  onDataChange: (data: Record<string, FeedbackWithUserProps[]>) => void;
 }) {
   const [activeItem, setActiveItem] = useState<FeedbackWithUserProps | null>(null);
-  const [dataState, setDataState] = useState(data);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -96,8 +97,8 @@ export default function FeedbackKanban({
 
   // Get item by id
   function getItemById(id: string) {
-    for (const key in dataState) {
-      const item = dataState[key].find((item) => item.id === id);
+    for (const key in data) {
+      const item = data[key].find((item) => item.id === id);
       if (item) return item;
     }
     return null;
@@ -108,10 +109,8 @@ export default function FeedbackKanban({
       <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd} sensors={sensors}>
         <div className='flex h-full w-full gap-3 overflow-x-auto p-5'>
           {columns.map(({ label, icon: Icon }) => (
-            // We updated the Droppable component so it would accept an `id`
-            // prop and pass it to `useDroppable`
             <div
-              className='bg-root flex h-full w-full min-w-[300px] flex-col gap-3 rounded-md p-3 brightness-110'
+              className='bg-root flex h-full w-full min-w-[325px] flex-col gap-3 rounded-md p-3 brightness-110'
               key={label}>
               {/* Header Row */}
               <div className='flex items-center justify-between  brightness-90'>
@@ -119,7 +118,7 @@ export default function FeedbackKanban({
                   <Icon className='text-muted-foreground h-4 w-4' />
                   <span className='text-sm'>{label}</span>
                   <span className='text-muted-foreground text-sm'>
-                    {dataState[label.toLowerCase()]?.length}
+                    {data[label.toLowerCase()]?.length || 0}
                   </span>
                 </div>
                 <Button
@@ -136,16 +135,13 @@ export default function FeedbackKanban({
                 id={label.toLowerCase()}
                 className='no-scrollbar flex h-full w-full flex-col gap-3 overflow-y-auto rounded-md brightness-90'
                 isOverOverlay={
-                  <div className='bg-root absolute left-0 top-0 z-10 flex h-full w-full flex-col items-center justify-center rounded-md border opacity-90'>
+                  <div className='bg-root absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center rounded-md border opacity-90'>
                     <span className='text-lg font-semibold'>Drop here</span>
                     <span className='text-foreground/60 text-sm'>Items are sorted by priority</span>
                   </div>
                 }>
-                {dataState[label.toLowerCase()]?.map((item) => (
-                  <FeedbackSheet
-                    key={item.id}
-                    initialFeedback={item}
-                    feedback={dataState[label.toLowerCase()]}>
+                {data[label.toLowerCase()]?.map((item) => (
+                  <FeedbackSheet key={item.id} initialFeedback={item} feedback={data[label.toLowerCase()]}>
                     <Draggable
                       key={item.id}
                       id={item.id}
@@ -184,7 +180,7 @@ export default function FeedbackKanban({
     const { active, over } = event;
 
     // Find where active item is currently in
-    const currentContainer = Object.entries(dataState).find(([key, items]) =>
+    const currentContainer = Object.entries(data).find(([key, items]) =>
       // For each item, check if the id is equal to the active id
       items.find((item) => item.id === active.id)
     )?.[0];
@@ -192,15 +188,16 @@ export default function FeedbackKanban({
 
     // Update data state object
     const newData: Record<string, FeedbackWithUserProps[]> = {
-      ...dataState,
-      [currentContainer]: dataState[currentContainer].filter((item) => item.id !== active.id),
+      ...data,
+      [currentContainer]: data[currentContainer].filter((item) => item.id !== active.id),
       [over.id]: [
-        ...(dataState[over.id] || []),
-        dataState[currentContainer].find((item) => item.id === active.id),
+        ...(data[over.id] || []),
+        data[currentContainer].find((item) => item.id === active.id),
       ].filter(Boolean) as FeedbackWithUserProps[],
     };
 
-    setDataState(newData);
+    // Call onDataChange callback
+    onDataChange(newData);
     setActiveItem(null);
   }
 }
