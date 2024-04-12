@@ -110,10 +110,10 @@ export default function FeedbackKanban({
         <div className='flex h-full w-full gap-3 overflow-x-auto p-5'>
           {columns.map(({ label, icon: Icon }) => (
             <div
-              className='bg-root flex h-full w-full min-w-[325px] flex-col gap-3 rounded-md p-3 brightness-110'
+              className='bg-secondary/40 dark:bg-root flex h-full w-full min-w-[325px] flex-col gap-3 rounded-md p-3 dark:brightness-110'
               key={label}>
               {/* Header Row */}
-              <div className='flex items-center justify-between  brightness-90'>
+              <div className='flex items-center justify-between dark:brightness-90'>
                 <div className='flex items-center gap-2'>
                   <Icon className='text-muted-foreground h-4 w-4' />
                   <span className='text-sm'>{label}</span>
@@ -133,7 +133,7 @@ export default function FeedbackKanban({
               <Droppable
                 key={label}
                 id={label.toLowerCase()}
-                className='no-scrollbar flex h-full w-full flex-col gap-3 overflow-y-auto rounded-md brightness-90'
+                className='no-scrollbar flex h-full w-full flex-col gap-3 overflow-y-auto rounded-md dark:brightness-90'
                 isOverOverlay={
                   <div className='bg-root absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center rounded-md border opacity-90'>
                     <span className='text-lg font-semibold'>Drop here</span>
