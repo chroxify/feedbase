@@ -39,7 +39,7 @@ function FeedbackCard({ feedback }: { feedback: FeedbackWithUserProps }) {
         </div>
 
         {/* Upvotes */}
-        <div className='flex h-full items-center gap-0.5'>
+        <div className='flex h-full shrink-0 items-center gap-0.5'>
           <ChevronUp className='text-muted-foreground h-3.5 w-3.5' />
           <span className='text-muted-foreground text-xs'>{feedback.upvotes}</span>
         </div>
@@ -51,7 +51,7 @@ function FeedbackCard({ feedback }: { feedback: FeedbackWithUserProps }) {
         <Button
           variant='outline'
           size='icon'
-          className='text-foreground/60 hover:text-foreground/80  hover:border-foreground/20 h-6 w-6'>
+          className='text-foreground/60 hover:text-foreground/80 hover:border-foreground/20 hover:bg-background h-6 w-6'>
           <LayoutGrid className='h-3.5 w-3.5' />
         </Button>
 
@@ -59,7 +59,7 @@ function FeedbackCard({ feedback }: { feedback: FeedbackWithUserProps }) {
         {feedback.tags && feedback.tags.length > 0
           ? feedback.tags.map((tag) => (
               <button
-                className='bg-background group/tag hover:border-foreground/20 hover:bg-accent hidden h-6 flex-shrink-0 flex-wrap items-center gap-2 rounded-lg border px-2 transition-colors hover:cursor-pointer md:flex'
+                className='bg-background group/tag hover:border-foreground/20 hidden h-6 flex-shrink-0 flex-wrap items-center gap-2 rounded-lg border  px-2 transition-colors hover:cursor-pointer md:flex'
                 key={tag.name.toLowerCase()}
                 type='button'>
                 {/* Tag color */}
@@ -80,10 +80,12 @@ export default function FeedbackKanban({
   columns,
   data,
   onDataChange,
+  sortedBy,
 }: {
   columns: { label: string; icon: LucideIcon }[];
   data: Record<string, FeedbackWithUserProps[]>;
   onDataChange: (data: Record<string, FeedbackWithUserProps[]>) => void;
+  sortedBy: string;
 }) {
   const [activeItem, setActiveItem] = useState<FeedbackWithUserProps | null>(null);
 
@@ -110,7 +112,7 @@ export default function FeedbackKanban({
         <div className='flex h-full w-full gap-3 overflow-x-auto p-5'>
           {columns.map(({ label, icon: Icon }) => (
             <div
-              className='bg-secondary/40 dark:bg-root flex h-full w-full min-w-[325px] flex-col gap-3 rounded-md p-3 dark:brightness-110'
+              className='bg-secondary/40 dark:bg-root flex h-full w-full min-w-[350px] flex-col gap-3 rounded-md p-3 dark:brightness-110'
               key={label}>
               {/* Header Row */}
               <div className='flex items-center justify-between dark:brightness-90'>
@@ -136,8 +138,8 @@ export default function FeedbackKanban({
                 className='no-scrollbar flex h-full w-full flex-col gap-3 overflow-y-auto rounded-md dark:brightness-90'
                 isOverOverlay={
                   <div className='bg-root absolute left-0 top-0 flex h-full w-full flex-col items-center justify-center rounded-md border opacity-90'>
-                    <span className='text-lg font-semibold'>Drop here</span>
-                    <span className='text-foreground/60 text-sm'>Items are sorted by priority</span>
+                    <span>Drop here</span>
+                    <span className='text-muted-foreground text-sm'>Items are sorted by {sortedBy}</span>
                   </div>
                 }>
                 {data[label.toLowerCase()]?.map((item) => (

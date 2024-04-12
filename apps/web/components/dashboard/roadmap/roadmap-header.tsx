@@ -1,6 +1,5 @@
-import { Button } from '@feedbase/ui/components/button';
-import { SortAsc } from 'lucide-react';
 import { FilterCombobox } from '../feedback/filter-combobox';
+import SortFeedbackDropdown from './sort-dropdown';
 
 export default function RoadmapHeader() {
   return (
@@ -9,12 +8,7 @@ export default function RoadmapHeader() {
 
       <div className='flex items-center gap-2'>
         {/* Sort Button */}
-        <Button
-          variant='outline'
-          className='text-secondary-foreground hover:text-foreground flex items-center gap-1'>
-          <SortAsc className='h-4 w-4' />
-          Sort
-        </Button>
+        <SortFeedbackDropdown />
 
         {/* Filter Combobox */}
         <FilterCombobox />
