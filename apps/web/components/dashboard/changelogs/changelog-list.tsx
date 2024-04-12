@@ -23,7 +23,6 @@ import {
 } from '@feedbase/ui/components/dropdown-menu';
 import { Separator } from '@feedbase/ui/components/separator';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
-import { cn } from '@feedbase/ui/lib/utils';
 import { PhotoIcon } from '@heroicons/react/24/outline';
 import { AlertCircle, Copy, Edit, MoreVertical, Trash } from 'lucide-react';
 import { toast } from 'sonner';
@@ -31,9 +30,10 @@ import useSWR from 'swr';
 import { ChangelogProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
 import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';
+import AnimatedTabs from '@/components/layout/animated-tabs';
 
 export default function ChangelogList({ projectSlug }: { projectSlug: string }) {
-  const [tab, setTab] = useState<'draft' | 'scheduled' | 'published'>('draft');
+  const [tab, setTab] = useState('Drafts');
   const [changelogs, setChangelogs] = useState<ChangelogProps['Row'][]>();
 
   const {
@@ -123,15 +123,15 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
     if (changelogsData) {
       if (tab) {
         const filteredChangelogs = changelogsData.filter((changelog) => {
-          if (tab === 'draft') {
+          if (tab === 'Drafts') {
             return !changelog.published;
-          } else if (tab === 'scheduled') {
+          } else if (tab === 'Scheduled') {
             return (
               changelog.published &&
               changelog.publish_date &&
               changelog.publish_date > new Date().toISOString()
             );
-          } else if (tab === 'published') {
+          } else if (tab === 'Published') {
             return (
               changelog.published &&
               changelog.publish_date &&
@@ -156,41 +156,21 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
   return (
     <>
       {/* Header tabs */}
-      <div className='z-10 -mb-[1px] flex w-full flex-row items-center justify-start gap-3 px-5 pt-3'>
-        <Button
-          variant='ghost'
-          className={cn(
-            'text-muted-foreground hover:border-muted-foreground h-fit rounded-none border-b border-transparent px-2 py-3 transition-colors hover:bg-transparent',
-            tab === 'draft' && 'border-foreground text-foreground hover:border-foreground'
-          )}
-          onClick={() => {
-            setTab('draft');
-          }}>
-          Drafts
-        </Button>
-        <Button
-          variant='ghost'
-          className={cn(
-            'text-muted-foreground hover:border-muted-foreground h-fit rounded-none border-b border-transparent px-2 py-3 transition-colors hover:bg-transparent',
-            tab === 'scheduled' && 'border-foreground text-foreground hover:border-foreground'
-          )}
-          onClick={() => {
-            setTab('scheduled');
-          }}>
-          Scheduled
-        </Button>
-        <Button
-          variant='ghost'
-          className={cn(
-            'text-muted-foreground hover:border-muted-foreground h-fit rounded-none border-b border-transparent px-2 py-3 transition-colors hover:bg-transparent',
-            tab === 'published' && 'border-foreground text-foreground hover:border-foreground'
-          )}
-          onClick={() => {
-            setTab('published');
-          }}>
-          Published
-        </Button>
-      </div>
+      <AnimatedTabs
+        tabs={[
+          {
+            label: 'Drafts',
+          },
+          {
+            label: 'Scheduled',
+          },
+          {
+            label: 'Published',
+          },
+        ]}
+        selectedTab={tab}
+        setSelectedTab={setTab}
+      />
 
       <Separator />
 
@@ -280,7 +260,7 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
             <div className='flex h-full w-full flex-col gap-2'>
               {/* Tags */}
               <div className='flex flex-row gap-2'>
-                {/* If published is true, show published badge, else show draft badge */}
+                {/* If published is true, show published badge, else show Draft badge */}
                 <Badge variant='secondary' className='self-start border'>
                   {changelog.published ? 'Published' : 'Draft'}
                 </Badge>
@@ -330,7 +310,7 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
                   onSelect={() => {
                     onDuplicateChangelog(changelog);
                     if (changelog.published) {
-                      setTab('draft');
+                      setTab('Drafts');
                     }
                   }}>
                   <Copy className='mr-2 h-4 w-4' />

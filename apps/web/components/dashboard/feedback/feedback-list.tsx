@@ -12,7 +12,6 @@ import {
   AlertCircle,
   CheckCircle2,
   ChevronUp,
-  CircleDashed,
   CircleDot,
   CircleDotDashed,
   Info,
@@ -24,6 +23,7 @@ import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import useTags from '@/lib/swr/use-tags';
 import { FeedbackWithUserProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
+import AnimatedTabs from '@/components/layout/animated-tabs';
 import FeedbackFilterHeader, { FeedbackFilterProps } from './feedback-filters';
 import { FeedbackSheet } from './feedback-sheet';
 
@@ -35,7 +35,7 @@ export default function FeedbackList() {
   const pathname = usePathname();
   const router = useRouter();
   const createQueryParams = useQueryParamRouter(router, pathname, searchParams);
-  const [tab, setTab] = useState('all');
+  const [tab, setTab] = useState('All');
   const [feedbackFilters, setFeedbackFilters] = useState<FeedbackFilterProps>();
   const {
     data: feedbackList,
@@ -55,7 +55,7 @@ export default function FeedbackList() {
     feedbackList
       ?.filter((feedback) => {
         // Filter by tab
-        if (tab !== 'all' && feedback.status?.toLowerCase() !== tab) return false;
+        if (tab !== 'All' && feedback.status?.toLowerCase() !== tab.toLowerCase()) return false;
 
         // Filter by search
         if (search) {
@@ -202,80 +202,35 @@ export default function FeedbackList() {
   return (
     <>
       {/* Header tabs */}
-      <div className='z-10 -mb-[1px] flex w-full flex-row items-center justify-start gap-2.5 px-5 pt-3'>
-        <Button
-          variant='ghost'
-          className={cn(
-            'text-muted-foreground hover:border-muted-foreground h-fit shrink-0 gap-1.5 rounded-none border-b border-transparent px-2 py-3 transition-colors hover:bg-transparent',
-            tab === 'all' && 'border-foreground text-foreground hover:border-foreground'
-          )}
-          onClick={() => {
-            setTab('all');
-          }}>
-          All
-        </Button>
-
-        <Button
-          variant='ghost'
-          className={cn(
-            'text-muted-foreground hover:border-muted-foreground h-fit shrink-0 gap-1.5 rounded-none border-b border-transparent px-2 py-3 transition-colors hover:bg-transparent',
-            tab === 'in-review' && 'border-foreground text-foreground hover:border-foreground'
-          )}
-          onClick={() => {
-            setTab('in-review');
-          }}>
-          <CircleDashed className='h-4 w-4' />
-          In Review
-        </Button>
-        <Button
-          variant='ghost'
-          className={cn(
-            'text-muted-foreground hover:border-muted-foreground h-fit shrink-0 gap-1.5 rounded-none border-b border-transparent px-2 py-3 transition-colors hover:bg-transparent',
-            tab === 'planned' && 'border-foreground text-foreground hover:border-foreground'
-          )}
-          onClick={() => {
-            setTab('planned');
-          }}>
-          <CircleDotDashed className='h-4 w-4' />
-          Planned
-        </Button>
-        <Button
-          variant='ghost'
-          className={cn(
-            'text-muted-foreground hover:border-muted-foreground h-fit shrink-0 gap-1.5 rounded-none border-b border-transparent px-2 py-3 transition-colors hover:bg-transparent',
-            tab === 'in-progress' && 'border-foreground text-foreground hover:border-foreground'
-          )}
-          onClick={() => {
-            setTab('in-progress');
-          }}>
-          <CircleDot className='h-4 w-4' />
-          In Progress
-        </Button>
-        <Button
-          variant='ghost'
-          className={cn(
-            'text-muted-foreground hover:border-muted-foreground h-fit shrink-0 gap-1.5 rounded-none border-b border-transparent px-2 py-3 transition-colors hover:bg-transparent',
-            tab === 'completed' && 'border-foreground text-foreground hover:border-foreground'
-          )}
-          onClick={() => {
-            setTab('completed');
-          }}>
-          <CheckCircle2 className='h-4 w-4' />
-          Completed
-        </Button>
-        <Button
-          variant='ghost'
-          className={cn(
-            'text-muted-foreground hover:border-muted-foreground h-fit shrink-0 gap-1.5 rounded-none border-b border-transparent px-2 py-3 transition-colors hover:bg-transparent',
-            tab === 'rejected' && 'border-foreground text-foreground hover:border-foreground'
-          )}
-          onClick={() => {
-            setTab('rejected');
-          }}>
-          <XCircle className='h-4 w-4' />
-          Rejected
-        </Button>
-      </div>
+      <AnimatedTabs
+        tabs={[
+          {
+            label: 'All',
+          },
+          {
+            label: 'In Review',
+            icon: CircleDotDashed,
+          },
+          {
+            label: 'Planned',
+            icon: CircleDot,
+          },
+          {
+            label: 'In Progress',
+            icon: CheckCircle2,
+          },
+          {
+            label: 'Completed',
+            icon: XCircle,
+          },
+          {
+            label: 'Rejected',
+            icon: XCircle,
+          },
+        ]}
+        selectedTab={tab}
+        setSelectedTab={setTab}
+      />
 
       <Separator />
 
