@@ -1,5 +1,5 @@
 import { Button } from '@feedbase/ui/components/button';
-import { Plus, SortAsc, X } from 'lucide-react';
+import { SortAsc } from 'lucide-react';
 import { FilterCombobox } from '../feedback/filter-combobox';
 
 export default function RoadmapHeader() {
