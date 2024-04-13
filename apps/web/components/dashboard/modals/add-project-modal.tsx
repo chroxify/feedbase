@@ -15,6 +15,7 @@ import {
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
 import { toast } from 'sonner';
+import InputGroup from '@/components/shared/input-group';
 
 export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode }) {
   const [name, setName] = useState<string>('');
@@ -99,17 +100,12 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               <Label htmlFor='slug'>Project Slug</Label>
             </div>
 
-            <div className='bg-background focus-within:ring-ring ring-offset-root flex h-8 w-full rounded-md border text-sm font-light transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
-              <Input
-                className='h-full w-full border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0'
-                placeholder='feedbase'
-                value={slug}
-                onChange={handleSlugChange}
-              />
-              <div className='text-foreground/50 bg-accent flex select-none items-center rounded-r-md border-l px-3 py-2'>
-                .{process.env.NEXT_PUBLIC_ROOT_DOMAIN}
-              </div>
-            </div>
+            <InputGroup
+              value={slug}
+              onChange={handleSlugChange}
+              placeholder='feedbase'
+              suffix={`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`}
+            />
 
             <Label className='text-foreground/50 text-xs font-light'>The subdomain of your project.</Label>
           </div>
