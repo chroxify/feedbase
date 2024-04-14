@@ -43,7 +43,7 @@ const tabs: SidebarTabsProps = {
     {
       name: 'Settings',
       icon: SettingsIcon,
-      slug: 'settings',
+      slug: 'settings/general',
     },
   ],
 };

@@ -56,17 +56,21 @@ export default function NavTabs({
                   activeTab === tab.slug && 'bg-secondary text-foreground hover:bg-secondary'
                 )}>
                 {/* Icon */}
-                <div className='flex transform-none flex-row items-center justify-center p-1'>
-                  <LottiePlayer
-                    lottieSrc={tab.icon}
-                    animate={isHover === tab.slug}
-                    className='h-5 w-5'
-                    initialColor={
-                      activeTab === tab.slug ? 'hsl(var(--foreground))' : 'hsl(var(--foreground) / 0.7)'
-                    }
-                    animationColor='hsl(var(--foreground))'
-                  />
-                </div>
+                {tab.icon ? (
+                  <div className='flex transform-none flex-row items-center justify-center p-1'>
+                    <LottiePlayer
+                      lottieSrc={tab.icon}
+                      animate={isHover === tab.slug}
+                      className='h-5 w-5'
+                      initialColor={
+                        activeTab === tab.slug ? 'hsl(var(--foreground))' : 'hsl(var(--foreground) / 0.7)'
+                      }
+                      animationColor='hsl(var(--foreground))'
+                    />
+                  </div>
+                ) : (
+                  <div className='flex items-center justify-center p-1'>{tab.customIcon}</div>
+                )}
 
                 {/* Title */}
                 {tab.name}

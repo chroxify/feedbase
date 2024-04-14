@@ -83,7 +83,8 @@ export type ApiResponse<T, E extends ErrorProps | null = ErrorProps | null> = Pr
 
 export interface SidebarTabProps {
   name: string;
-  icon: IconObject;
+  icon?: IconObject;
+  customIcon?: React.ReactNode;
   slug: string;
 }
 

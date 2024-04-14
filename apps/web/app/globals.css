@@ -41,7 +41,7 @@ body {
     --muted-foreground: 218 11% 65%;
     --accent: 240 4.8% 95.9%;
     --accent-foreground: 224 71% 4%;
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 79% 63%;
     --destructive-foreground: 0 0% 100%;
     --border: 220 13% 91%;
     --input: 220 13% 91%;
@@ -83,7 +83,7 @@ body {
     --accent: 230 7% 16%;
     --accent-foreground: 220 9% 94%;
 
-    --destructive: 351 95% 65%;
+    --destructive: 0 79% 63%;
     --destructive-foreground: 220 9% 94%;
 
     /* Selection & accent color */
