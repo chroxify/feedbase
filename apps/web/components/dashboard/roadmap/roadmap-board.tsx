@@ -63,7 +63,7 @@ export default function RoadmapBoard() {
   // Keep the kanban data in sync with the feedback data
   useEffect(() => {
     setKanbanData(groupFeedbackByStatus());
-  }, [feedback, groupFeedbackByStatus]);
+  }, [feedback]);
 
   const { trigger: updateFeedback } = useSWRMutation(
     `/api/v1/projects/${slug}/feedback`, // using general feedback endpoint here so that it mutates the feedback cache - proper url is set in the inputOverride
