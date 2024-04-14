@@ -92,87 +92,12 @@ export const updateProjectBySlug = (slug: string, data: ProjectProps['Update'], 
       return { data: null, error: { message: 'slug is invalid.', status: 400 } };
     }
 
-    const uploadImage = async (image: string, type: 'icon' | 'og_image') => {
-      // Create unique image path
-      const imagePath = `${project!.slug}/${type}/${Date.now()}.png`;
-
-      // Get current image path
-      if (project![type]) {
-        const { data: currentImage } = supabase.storage.from('projects').getPublicUrl(project![type]!);
-
-        // Get current image path (get last 3 segments of url)
-        const currentImagePath = currentImage.publicUrl.split('/').slice(-3).join('/');
-
-        // Delete current image
-        const { error: deleteError } = await supabase.storage.from('projects').remove([currentImagePath]);
-
-        // Check for errors
-        if (deleteError) {
-          return { data: null, error: { message: deleteError.message, status: 500 } };
-        }
-      }
-
-      // Upload image to storage
-      const { error: uploadError } = await supabase.storage
-        .from('projects')
-        .upload(imagePath, decode(image.replace(/^data:image\/\w+;base64,/, '')), {
-          contentType: 'image/png',
-        });
-
-      // Check for errors
-      if (uploadError) {
-        return { data: null, error: { message: uploadError.message, status: 500 } };
-      }
-
-      // Get public url for image
-      const { data: publicUrlData } = supabase.storage.from('projects').getPublicUrl(imagePath);
-
-      // Check for errors
-      if (!publicUrlData) {
-        return { data: null, error: { message: 'issue uploading image', status: 500 } };
-      }
-
-      // Return public url
-      return { data: publicUrlData.publicUrl, error: null };
-    };
-
-    // If icon is provided, upload to storage
-    if (data.icon) {
-      // Upload image
-      const { data: publicUrlData, error: uploadError } = await uploadImage(data.icon, 'icon');
-
-      // Check for errors
-      if (uploadError) {
-        return { data: null, error: { message: uploadError.message, status: 500 } };
-      }
-
-      // Set icon to public URL
-      data.icon = publicUrlData;
-    }
-
-    // If og image is provided, upload to storage
-    if (data.og_image) {
-      // Upload image
-      const { data: publicUrlData, error: uploadError } = await uploadImage(data.og_image, 'og_image');
-
-      // Check for errors
-      if (uploadError) {
-        return { data: null, error: { message: uploadError.message, status: 500 } };
-      }
-
-      // Set og image to public URL
-      data.og_image = publicUrlData;
-    }
-
     // Update project
     const { data: updatedProject, error: updateError } = await supabase
       .from('projects')
       .update({
         name: data.name || project!.name,
         slug: data.slug || project!.slug,
-        icon: data.icon || project!.icon,
-        icon_radius: data.icon_radius || project!.icon_radius,
-        og_image: data.og_image || project!.og_image,
       })
       .eq('id', project!.id)
       .select();
@@ -245,30 +170,28 @@ export const getProjectMembers = withProjectAuth<TeamMemberProps[]>(
 );
 
 // Get project config by slug
-export const getProjectConfigBySlug = withProjectAuth<ProjectConfigWithoutSecretProps>(
-  async (user, supabase, project, error) => {
-    // If any errors, return error
-    if (error) {
-      return { data: null, error };
-    }
-
-    // Get project config
-    const { data: config, error: configError } = await supabase
-      .from('project_configs')
-      .select(
-        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting, custom_theme, custom_theme_background, custom_theme_border, custom_theme_primary_foreground, custom_theme_root, custom_theme_secondary_background, custom_theme_accent, integration_slack_status, integration_slack_webhook, logo_redirect_url, changelog_enabled'
-      )
-      .eq('project_id', project!.id);
-
-    // Check for errors
-    if (configError) {
-      return { data: null, error: { message: configError.message, status: 500 } };
-    }
-
-    // Return config
-    return { data: config[0], error: null };
+export const getProjectConfigBySlug = withProjectAuth(async (user, supabase, project, error) => {
+  // If any errors, return error
+  if (error) {
+    return { data: null, error };
   }
-);
+
+  // Get project config
+  const { data: config, error: configError } = await supabase
+    .from('project_configs')
+    .select(
+      'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting, custom_theme, custom_theme_background, custom_theme_border, custom_theme_primary_foreground, custom_theme_root, custom_theme_secondary_background, custom_theme_accent, integration_slack_status, integration_slack_webhook, logo_redirect_url, changelog_enabled, project_icon, project_icon_radius, project_og_image, project:project_id(*)'
+    )
+    .eq('project_id', project!.id);
+
+  // Check for errors
+  if (configError) {
+    return { data: null, error: { message: configError.message, status: 500 } };
+  }
+
+  // Return config
+  return { data: config[0], error: null };
+});
 
 // Update project config by slug
 export const updateProjectConfigBySlug = (
@@ -276,7 +199,7 @@ export const updateProjectConfigBySlug = (
   data: ProjectConfigProps['Update'],
   cType: 'server' | 'route'
 ) =>
-  withProjectAuth<ProjectConfigWithoutSecretProps>(async (user, supabase, project, error) => {
+  withProjectAuth(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -292,6 +215,83 @@ export const updateProjectConfigBySlug = (
     // Check for errors
     if (configError) {
       return { data: null, error: { message: configError.message, status: 500 } };
+    }
+
+    const uploadImage = async (image: string, type: 'icon' | 'og_image') => {
+      // Create unique image path
+      const imagePath = `${project!.slug}/${type}/${Date.now()}.png`;
+
+      // Get current image path
+      if ((project as Record<string, string>)[type]) {
+        const { data: currentImage } = supabase.storage
+          .from('projects')
+          .getPublicUrl((project as Record<string, string>)[type]!);
+
+        // Get current image path (get last 3 segments of url)
+        const currentImagePath = currentImage.publicUrl.split('/').slice(-3).join('/');
+
+        // Delete current image
+        const { error: deleteError } = await supabase.storage.from('projects').remove([currentImagePath]);
+
+        // Check for errors
+        if (deleteError) {
+          return { data: null, error: { message: deleteError.message, status: 500 } };
+        }
+      }
+
+      // Upload image to storage
+      const { error: uploadError } = await supabase.storage
+        .from('projects')
+        .upload(imagePath, decode(image.replace(/^data:image\/\w+;base64,/, '')), {
+          contentType: 'image/png',
+        });
+
+      // Check for errors
+      if (uploadError) {
+        return { data: null, error: { message: uploadError.message, status: 500 } };
+      }
+
+      // Get public url for image
+      const { data: publicUrlData } = supabase.storage.from('projects').getPublicUrl(imagePath);
+
+      // Check for errors
+      if (!publicUrlData) {
+        return { data: null, error: { message: 'issue uploading image', status: 500 } };
+      }
+
+      // Return public url
+      return { data: publicUrlData.publicUrl, error: null };
+    };
+
+    // If icon is provided, upload to storage
+    if (data.project_icon) {
+      // Upload image
+      const { data: publicUrlData, error: uploadError } = await uploadImage(data.project_icon, 'icon');
+
+      // Check for errors
+      if (uploadError) {
+        return { data: null, error: { message: uploadError.message, status: 500 } };
+      }
+
+      // Set icon to public URL
+      data.project_icon = publicUrlData;
+    }
+
+    // If og image is provided, upload to storage
+    if (data.project_og_image) {
+      // Upload image
+      const { data: publicUrlData, error: uploadError } = await uploadImage(
+        data.project_og_image,
+        'og_image'
+      );
+
+      // Check for errors
+      if (uploadError) {
+        return { data: null, error: { message: uploadError.message, status: 500 } };
+      }
+
+      // Set og image to public URL
+      data.project_og_image = publicUrlData;
     }
 
     // Validate changelog_preview_style
@@ -389,10 +389,13 @@ export const updateProjectConfigBySlug = (
           data.logo_redirect_url !== undefined ? data.logo_redirect_url : config.logo_redirect_url,
         changelog_enabled:
           data.changelog_enabled !== undefined ? data.changelog_enabled : config.changelog_enabled,
+        icon: data.project_icon ? data.project_icon : config.project_icon,
+        icon_radius: data.project_icon_radius ? data.project_icon_radius : config.project_icon_radius,
+        og_image: data.project_og_image ? data.project_og_image : config.project_og_image,
       })
       .eq('id', config.id)
       .select(
-        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting, custom_theme, custom_theme_background, custom_theme_border, custom_theme_primary_foreground, custom_theme_root, custom_theme_secondary_background, custom_theme_accent, integration_slack_status, integration_slack_webhook, logo_redirect_url, changelog_enabled'
+        'id, created_at, project_id, changelog_preview_style, changelog_twitter_handle, integration_discord_status, integration_discord_webhook, integration_discord_role_id, custom_domain, custom_domain_verified, integration_sso_status, integration_sso_url, feedback_allow_anon_upvoting, custom_theme, custom_theme_background, custom_theme_border, custom_theme_primary_foreground, custom_theme_root, custom_theme_secondary_background, custom_theme_accent, integration_slack_status, integration_slack_webhook, logo_redirect_url, changelog_enabled, project_icon, project_icon_radius, project_og_image'
       );
 
     // Check for errors

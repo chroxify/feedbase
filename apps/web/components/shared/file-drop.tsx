@@ -71,7 +71,7 @@ export default function FileDrop({
       <label
         htmlFor='image'
         className={cn(
-          'border-input bg-root hover:bg-accent group relative mt-1 flex h-44 cursor-pointer flex-col items-center justify-center rounded-md border shadow-sm transition-all',
+          'border-input bg-background hover:bg-accent group relative mt-1 flex h-44 cursor-pointer flex-col items-center justify-center rounded-md border shadow-sm transition-all',
           className
         )}>
         <div
@@ -104,8 +104,8 @@ export default function FileDrop({
         />
         <div
           className={`${
-            dragActive ? 'border-foreground bg-root cursor-copy border-2 opacity-100' : ''
-          } bg-root absolute z-[3] flex h-full w-full flex-col items-center justify-center rounded-md transition-all ${
+            dragActive ? 'border-foreground bg-background cursor-copy border-2 opacity-100' : ''
+          } bg-background absolute z-[3] flex h-full w-full flex-col items-center justify-center rounded-md transition-all ${
             image ? 'opacity-0 group-hover:opacity-100' : 'group-hover:bg-accent'
           }`}>
           <CloudArrowUpIcon

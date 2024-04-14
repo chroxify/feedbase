@@ -9,7 +9,9 @@ export type ProjectConfigProps = Database['public']['Tables']['project_configs']
 export type ProjectConfigWithoutSecretProps = Omit<
   Database['public']['Tables']['project_configs']['Row'],
   'integration_sso_secret'
->;
+> & {
+  project: ProjectProps['Row'];
+};
 
 export type TeamMemberProps = Database['public']['Tables']['profiles']['Row'] & {
   joined_at: string;

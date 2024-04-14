@@ -403,7 +403,10 @@ export interface Database {
           integration_sso_status: boolean | null;
           integration_sso_url: string | null;
           logo_redirect_url: string | null;
+          project_icon: string | null;
+          project_icon_radius: string;
           project_id: string;
+          project_og_image: string | null;
         };
         Insert: {
           changelog_enabled?: boolean;
@@ -430,7 +433,10 @@ export interface Database {
           integration_sso_status?: boolean | null;
           integration_sso_url?: string | null;
           logo_redirect_url?: string | null;
+          project_icon?: string | null;
+          project_icon_radius?: string;
           project_id: string;
+          project_og_image?: string | null;
         };
         Update: {
           changelog_enabled?: boolean;
@@ -457,7 +463,10 @@ export interface Database {
           integration_sso_status?: boolean | null;
           integration_sso_url?: string | null;
           logo_redirect_url?: string | null;
+          project_icon?: string | null;
+          project_icon_radius?: string;
           project_id?: string;
+          project_og_image?: string | null;
         };
         Relationships: [
           {
@@ -545,29 +554,20 @@ export interface Database {
       projects: {
         Row: {
           created_at: string | null;
-          icon: string | null;
-          icon_radius: string | null;
           id: string;
           name: string;
-          og_image: string | null;
           slug: string;
         };
         Insert: {
           created_at?: string | null;
-          icon?: string | null;
-          icon_radius?: string | null;
           id?: string;
           name: string;
-          og_image?: string | null;
           slug: string;
         };
         Update: {
           created_at?: string | null;
-          icon?: string | null;
-          icon_radius?: string | null;
           id?: string;
           name?: string;
-          og_image?: string | null;
           slug?: string;
         };
         Relationships: [];
@@ -586,9 +586,10 @@ export interface Database {
       };
     };
     Enums: {
+      icon_radius_type: 'rounded-full' | 'rounded-none' | 'rounded-md';
       notification_types: 'comment' | 'post';
       status_options: 'in review' | 'planned' | 'in progress' | 'completed' | 'rejected';
-      theme_type: 'default' | 'light' | 'custom';
+      theme_type: 'dark' | 'light' | 'custom';
       token_type: 'full_access' | 'public_access';
     };
     CompositeTypes: {
