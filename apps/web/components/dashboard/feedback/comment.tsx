@@ -7,7 +7,7 @@ import { Button } from '@feedbase/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuDestructiveItem,
   DropdownMenuTrigger,
 } from '@feedbase/ui/components/dropdown-menu';
 import { Separator } from '@feedbase/ui/components/separator';
@@ -172,12 +172,10 @@ export default function Comment({ commentData, projectSlug, children, ...props }
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-[160px]'>
-            <DropdownMenuItem
-              className='text-destructive focus:text-destructive/90 focus:bg-destructive/20 flex flex-row items-center gap-2'
-              onClick={onDelete}>
+            <DropdownMenuDestructiveItem className='flex flex-row items-center gap-2' onClick={onDelete}>
               <Trash2Icon className='h-4 w-4' />
               Delete
-            </DropdownMenuItem>
+            </DropdownMenuDestructiveItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

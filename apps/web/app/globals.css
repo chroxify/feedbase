@@ -60,7 +60,7 @@ body {
     --foreground: 220 9% 94%;
 
     /* Muted background (Skeletons, Avatar, tabs, etc) */
-    --muted: 230 11% 8%;
+    --muted: 217 6% 10%;
     --muted-foreground: 219 6% 65%;
 
     --popover: 235 7% 5%;

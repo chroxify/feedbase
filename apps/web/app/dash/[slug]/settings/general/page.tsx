@@ -35,7 +35,7 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
     return <FetchError error={error} mutate={mutate} isValidating={isValidating} />;
   }
 
-  if (isValidating || !projectConfig) {
+  if (isValidating && !projectConfig) {
     return (
       <>
         <SettingsCard title='Branding' description='Customize your project branding.'>
@@ -62,15 +62,15 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
             <Input
               className='w-full'
               value={projectConfig?.project.name}
-              onChange={(e) =>
-                { setProjectConfig({
+              onChange={(e) => {
+                setProjectConfig({
                   ...projectConfig,
                   project: {
                     ...projectConfig.project,
                     name: e.target.value,
                   },
-                }); }
-              }
+                });
+              }}
             />
             <Label className='text-muted-foreground text-xs'>This is the name of your project.</Label>
           </div>
@@ -104,7 +104,8 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
             <div className='flex items-center gap-2.5'>
               <Avatar className={cn('h-12 w-12 hover:cursor-pointer', projectConfig?.project_icon_radius)}>
                 <AvatarImage src={projectConfig?.project_icon || ''} alt={projectConfig?.project.name} />
-                <AvatarFallback className={cn('select-none text-sm', projectConfig?.project_icon_radius)}>
+                <AvatarFallback
+                  className={cn('bg-muted select-none text-sm', projectConfig?.project_icon_radius)}>
                   {projectConfig?.project.name[0]}
                 </AvatarFallback>
               </Avatar>
@@ -113,9 +114,11 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                   <Button variant='secondary' size='sm' className='w-fit'>
                     Upload
                   </Button>
-                  {projectConfig?.project_icon ? <Button variant='destructive' size='sm' className='w-fit'>
+                  {projectConfig?.project_icon ? (
+                    <Button variant='destructive' size='sm' className='w-fit'>
                       Remove
-                    </Button> : null}
+                    </Button>
+                  ) : null}
                 </div>
                 <Label className='text-muted-foreground text-xs'>Recommended size is 256x256.</Label>
               </div>
@@ -137,30 +140,30 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
               </DropdownMenuTrigger>
               <DropdownMenuContent align='start'>
                 <DropdownMenuItem
-                  onClick={() =>
-                    { setProjectConfig({
+                  onClick={() => {
+                    setProjectConfig({
                       ...projectConfig,
                       project_icon_radius: 'rounded-md',
-                    }); }
-                  }>
+                    });
+                  }}>
                   Rounded
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() =>
-                    { setProjectConfig({
+                  onClick={() => {
+                    setProjectConfig({
                       ...projectConfig,
                       project_icon_radius: 'rounded-full',
-                    }); }
-                  }>
+                    });
+                  }}>
                   Circle
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                  onClick={() =>
-                    { setProjectConfig({
+                  onClick={() => {
+                    setProjectConfig({
                       ...projectConfig,
                       project_icon_radius: 'rounded-none',
-                    }); }
-                  }>
+                    });
+                  }}>
                   Square
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -207,7 +210,9 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
           {/* Thanks to https://github.com/openstatushq for the inspiration of the theme previews */}
           <button
             className='flex h-full w-full flex-col items-center gap-2'
-            onClick={() => { setProjectConfig({ ...projectConfig, custom_theme: 'light' }); }}
+            onClick={() => {
+              setProjectConfig({ ...projectConfig, custom_theme: 'light' });
+            }}
             type='button'>
             <div
               className={cn(
@@ -235,7 +240,9 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
 
           <button
             className='flex h-full w-full flex-col items-center gap-2'
-            onClick={() => { setProjectConfig({ ...projectConfig, custom_theme: 'dark' }); }}
+            onClick={() => {
+              setProjectConfig({ ...projectConfig, custom_theme: 'dark' });
+            }}
             type='button'>
             <div
               className={cn(
@@ -264,7 +271,9 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
           <button
             type='button'
             className='flex h-full w-full flex-col items-center gap-2'
-            onClick={() => { setProjectConfig({ ...projectConfig, custom_theme: 'custom' }); }}>
+            onClick={() => {
+              setProjectConfig({ ...projectConfig, custom_theme: 'custom' });
+            }}>
             <div className='relative h-full w-full'>
               <div
                 className={cn(
@@ -322,6 +331,4 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
       </>
     );
   }
-
-  return null;
 }

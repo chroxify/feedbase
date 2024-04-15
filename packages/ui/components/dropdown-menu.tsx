@@ -7,7 +7,14 @@ import { Check, ChevronRight, Circle } from 'lucide-react';
 
 const DropdownMenu = DropdownMenuPrimitive.Root;
 
-const DropdownMenuTrigger = DropdownMenuPrimitive.Trigger;
+const DropdownMenuTrigger = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Trigger> & {
+    className?: string;
+  }
+>(({ className = 'font-normal', ...props }, ref) => (
+  <DropdownMenuPrimitive.Trigger ref={ref} className={className} {...props} />
+));
 
 const DropdownMenuGroup = DropdownMenuPrimitive.Group;
 
@@ -80,6 +87,24 @@ const DropdownMenuItem = React.forwardRef<
     ref={ref}
     className={cn(
       'focus:bg-accent text-secondary-foreground focus:text-accent-foreground relative flex h-8 cursor-pointer select-none items-center rounded-md px-2 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
+      inset && 'pl-8',
+      className
+    )}
+    {...props}
+  />
+));
+DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
+
+const DropdownMenuDestructiveItem = React.forwardRef<
+  React.ElementRef<typeof DropdownMenuPrimitive.Item>,
+  React.ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item> & {
+    inset?: boolean;
+  }
+>(({ className, inset, ...props }, ref) => (
+  <DropdownMenuPrimitive.Item
+    ref={ref}
+    className={cn(
+      'text-destructive focus:text-destructive/90 focus:bg-destructive/20 relative flex h-8 cursor-pointer select-none items-center rounded-md px-2 text-sm outline-none transition-colors data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
       inset && 'pl-8',
       className
     )}
@@ -167,6 +192,7 @@ export {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuDestructiveItem,
   DropdownMenuCheckboxItem,
   DropdownMenuRadioItem,
   DropdownMenuLabel,

@@ -18,6 +18,7 @@ import { Button } from '@feedbase/ui/components/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuDestructiveItem,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@feedbase/ui/components/dropdown-menu';
@@ -318,15 +319,14 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
                 </DropdownMenuItem>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
-                    <DropdownMenuItem
+                    <DropdownMenuDestructiveItem
                       onSelect={(event) => {
                         event.preventDefault();
                         event.stopPropagation();
-                      }}
-                      className='text-destructive focus:text-destructive/90 focus:bg-destructive/20'>
+                      }}>
                       <Trash className='mr-2 h-4 w-4' />
                       Delete
-                    </DropdownMenuItem>
+                    </DropdownMenuDestructiveItem>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>

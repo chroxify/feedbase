@@ -1,7 +1,7 @@
 import { sendEmail } from '@/emails';
 import ProjectInviteEmail from '@/emails/project-invite';
 import { withProjectAuth, withUserAuth } from '../auth';
-import { ExtendedInviteProps, ProfileProps, ProjectInviteProps } from '../types';
+import { ExtendedInviteProps, ProfileProps, TeamInviteProps } from '../types';
 import { formatRootUrl } from '../utils';
 
 // Get all project invites
@@ -15,7 +15,7 @@ export const getProjectInvites = withProjectAuth<ExtendedInviteProps[]>(
     // Get all invites for project
     const { data: invites, error: invitesError } = await supabase
       .from('project_invites')
-      .select('*, project:project_id (name, slug, icon), creator:creator_id (full_name)')
+      .select('*, project:project_id (name, slug), creator:creator_id (full_name)')
       .eq('project_id', project!.id);
 
     // If any errors, return error
@@ -60,7 +60,7 @@ export const getProjectInvite = (inviteId: string, cType: 'server' | 'route') =>
 
 // Create new project invite
 export const createProjectInvite = (slug: string, cType: 'server' | 'route', email: string) =>
-  withProjectAuth<ProjectInviteProps['Row']>(async (user, supabase, project, error) => {
+  withProjectAuth<TeamInviteProps['Row']>(async (user, supabase, project, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -128,7 +128,7 @@ export const createProjectInvite = (slug: string, cType: 'server' | 'route', ema
     }
 
     // Convert invite to invite with creator object
-    const inviteData = invite as unknown as ProjectInviteProps['Row'] & { creator: ProfileProps['Row'] };
+    const inviteData = invite as unknown as TeamInviteProps['Row'] & { creator: ProfileProps['Row'] };
 
     // Send email to user
     const { error: emailError } = await sendEmail({
@@ -164,7 +164,7 @@ export const createProjectInvite = (slug: string, cType: 'server' | 'route', ema
 
 // Accept project invite
 export const acceptProjectInvite = (inviteId: string, cType: 'server' | 'route') =>
-  withUserAuth<ProjectInviteProps['Row']>(async (user, supabase, error) => {
+  withUserAuth<TeamInviteProps['Row']>(async (user, supabase, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -235,7 +235,7 @@ export const acceptProjectInvite = (inviteId: string, cType: 'server' | 'route')
 
 // Delete project invite
 export const deleteProjectInvite = (inviteId: string, cType: 'server' | 'route') =>
-  withUserAuth<ProjectInviteProps['Row']>(async (user, supabase, error) => {
+  withUserAuth<TeamInviteProps['Row']>(async (user, supabase, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
