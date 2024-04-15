@@ -102,9 +102,7 @@ function renderNotifications({
               )}
             </div>
 
-            <p className='text-foreground/60 text-sm font-light'>
-              {formatTimeAgo(new Date(notification.created_at))}
-            </p>
+            <p className='text-foreground/60 text-sm '>{formatTimeAgo(new Date(notification.created_at))}</p>
           </div>
 
           {archiveButton ? (

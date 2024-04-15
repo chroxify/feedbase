@@ -124,9 +124,7 @@ export default function UpdateProfileModal({
               </label>
             </div>
 
-            <Label className='text-foreground/50 text-xs font-light'>
-              Your profile picture, displayed publicly.
-            </Label>
+            <Label className='text-foreground/50 text-xs '>Your profile picture, displayed publicly.</Label>
           </div>
 
           {/* Full Name */}
@@ -146,9 +144,7 @@ export default function UpdateProfileModal({
               tabIndex={-1}
             />
 
-            <Label className='text-foreground/50 text-xs font-light'>
-              Your full name, displayed publicly.
-            </Label>
+            <Label className='text-foreground/50 text-xs '>Your full name, displayed publicly.</Label>
           </div>
 
           {/* Project Slug */}
@@ -159,7 +155,7 @@ export default function UpdateProfileModal({
 
             <Input id='email' value={user.email} disabled className='col-span-3' />
 
-            <Label className='text-foreground/50 text-xs font-light'>Your email address used to login.</Label>
+            <Label className='text-foreground/50 text-xs '>Your email address used to login.</Label>
           </div>
         </div>
         <ResponsiveDialogFooter>

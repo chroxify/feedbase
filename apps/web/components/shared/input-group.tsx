@@ -11,12 +11,12 @@ export default function InputGroup({
   suffix?: React.ReactNode;
   placeholder?: string;
   value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
-    <div className='bg-background focus-within:ring-ring ring-offset-root flex h-8 w-full rounded-md border text-sm font-light transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
+    <div className='bg-background focus-within:ring-ring ring-offset-root flex h-8 w-full rounded-md border text-sm transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
       {prefix ? (
-        <div className='text-foreground/50 bg-accent flex select-none items-center justify-center rounded-l-md border-r px-3 py-2'>
+        <div className='text-muted-foreground bg-accent flex select-none items-center justify-center rounded-l-md border-r px-3 py-2'>
           {prefix}
         </div>
       ) : null}

@@ -59,9 +59,9 @@ export function StatusCombobox({ initialStatus, onStatusChange }: ComboboxProps)
                   setOpen(false);
                   onStatusChange?.(currentValue);
                 }}
-                className='flex flex-row items-center gap-[6px] font-light'>
+                className='flex flex-row items-center gap-[6px]'>
                 {/* Icon */}
-                <item.icon className='text-foreground/80 mt-[1px] h-4 w-4' />
+                <item.icon className='h-4 w-4' />
 
                 {/* Status label */}
                 {item.label}
