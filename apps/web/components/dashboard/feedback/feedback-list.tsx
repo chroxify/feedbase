@@ -425,7 +425,7 @@ export default function FeedbackList() {
                             })()}
 
                             {/* Date */}
-                            <div className='text-foreground/50 cursor-default select-none text-center text-xs font-light'>
+                            <div className='text-muted-foreground cursor-default select-none text-center text-xs'>
                               {formatDate(new Date(feedback.created_at))}
                             </div>
 

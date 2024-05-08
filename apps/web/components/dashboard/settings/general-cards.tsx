@@ -411,7 +411,7 @@ export default function GeneralConfigCards({
             <div className='space-y-1'>
               <Label className='text-foreground/70 text-sm '>Slug</Label>
 
-              <div className='bg-background focus-within:ring-ring ring-offset-root flex h-8 w-full max-w-xs rounded-md border text-sm font-light transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
+              <div className='bg-background focus-within:ring-ring ring-offset-root flex h-8 w-full max-w-xs rounded-md border text-sm  transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
                 <Input
                   className='h-full w-full border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0'
                   placeholder='slug'
@@ -514,7 +514,7 @@ export default function GeneralConfigCards({
                             <div className='flex w-full flex-col justify-start gap-2'>
                               <Label className='text-foreground/90 text-sm '>Type</Label>
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
                                 A
                               </span>
                             </div>
@@ -527,7 +527,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
+                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
                                   @
                                 </span>
 
@@ -548,7 +548,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
+                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
                                   76.76.21.21
                                 </span>
 
@@ -568,7 +568,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
+                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
                                   86400
                                 </span>
 
@@ -604,7 +604,7 @@ export default function GeneralConfigCards({
                             <div className='flex w-full flex-col justify-start gap-2'>
                               <Label className='text-foreground/90 text-sm '>Type</Label>
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
                                 CNAME
                               </span>
                             </div>
@@ -617,7 +617,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
+                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
                                   www
                                 </span>
 
@@ -638,7 +638,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
+                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
                                   cname.vercel-dns.com
                                 </span>
 
@@ -658,7 +658,7 @@ export default function GeneralConfigCards({
                                 }}
                                 type='button'>
                                 <span
-                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
+                                  className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
                                   86400
                                 </span>
 
@@ -704,7 +704,7 @@ export default function GeneralConfigCards({
                           <div className='flex w-full flex-col justify-start gap-2'>
                             <Label className='text-foreground/90 text-sm '>Type</Label>
                             <span
-                              className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
+                              className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
                               TXT
                             </span>
                           </div>
@@ -717,7 +717,7 @@ export default function GeneralConfigCards({
                               }}
                               type='button'>
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
                                 {domainData.verification[0].domain}
                               </span>
 
@@ -738,7 +738,7 @@ export default function GeneralConfigCards({
                               }}
                               type='button'>
                               <span
-                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm font-light`}>
+                                className={`${fontMono.variable} font-monospace text-foreground/70 text-sm `}>
                                 {domainData.verification[0].value}
                               </span>
 

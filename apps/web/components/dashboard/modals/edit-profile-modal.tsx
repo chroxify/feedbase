@@ -92,8 +92,7 @@ export default function UpdateProfileModal({
       <ResponsiveDialogTrigger asChild>{children}</ResponsiveDialogTrigger>
       <ResponsiveDialogContent className='w-full max-w-[475px] '>
         <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>Profile</ResponsiveDialogTitle>
-          <ResponsiveDialogDescription>Edit your public profile.</ResponsiveDialogDescription>
+          <ResponsiveDialogTitle>Edit Profile</ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
         <div className='flex flex-col gap-4'>
           {/* Profile Picture */}
@@ -160,7 +159,7 @@ export default function UpdateProfileModal({
         </div>
         <ResponsiveDialogFooter>
           <ResponsiveDialogClose asChild>
-            <Button variant='outline'>Cancel</Button>
+            <Button variant='secondary'>Cancel</Button>
           </ResponsiveDialogClose>
           <Button
             type='submit'

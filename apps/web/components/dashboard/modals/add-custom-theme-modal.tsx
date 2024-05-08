@@ -30,7 +30,7 @@ function ColorInput({
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) {
   return (
-    <div className='bg-background focus-within:ring-ring ring-offset-root flex h-8 w-full rounded-md border text-sm font-light transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
+    <div className='bg-background focus-within:ring-ring ring-offset-root flex h-8 w-full rounded-md border text-sm  transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
       <div
         className={cn(
           'text-foreground/50 bg-accent flex select-none items-center justify-center rounded-l-md border-r',
@@ -104,7 +104,7 @@ export default function CustomizeThemeModal({
               }}
             />
 
-            <Label className='text-foreground/50 text-xs font-light'>Root background of page</Label>
+            <Label className='text-foreground/50 text-xs '>Root background of page</Label>
           </div>
           <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center gap-2'>
@@ -124,7 +124,7 @@ export default function CustomizeThemeModal({
               }}
             />
 
-            <Label className='text-foreground/50 text-xs font-light'>Primary text color</Label>
+            <Label className='text-foreground/50 text-xs '>Primary text color</Label>
           </div>
           <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center gap-2'>
@@ -144,9 +144,7 @@ export default function CustomizeThemeModal({
               }}
             />
 
-            <Label className='text-foreground/50 text-xs font-light'>
-              Primary background (buttons, etc.)
-            </Label>
+            <Label className='text-foreground/50 text-xs '>Primary background (buttons, etc.)</Label>
           </div>
           <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center gap-2'>
@@ -166,9 +164,7 @@ export default function CustomizeThemeModal({
               }}
             />
 
-            <Label className='text-foreground/50 text-xs font-light'>
-              Secondary background (buttons, etc.)
-            </Label>
+            <Label className='text-foreground/50 text-xs '>Secondary background (buttons, etc.)</Label>
           </div>
           <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center gap-2'>
@@ -188,9 +184,7 @@ export default function CustomizeThemeModal({
               }}
             />
 
-            <Label className='text-foreground/50 text-xs font-light'>
-              Accent color (links, selection, etc.)
-            </Label>
+            <Label className='text-foreground/50 text-xs '>Accent color (links, selection, etc.)</Label>
           </div>
           <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center gap-2'>
@@ -210,7 +204,7 @@ export default function CustomizeThemeModal({
               }}
             />
 
-            <Label className='text-foreground/50 text-xs font-light'>Border color for elements</Label>
+            <Label className='text-foreground/50 text-xs '>Border color for elements</Label>
           </div>
         </div>
 
@@ -239,11 +233,11 @@ export default function CustomizeThemeModal({
             {/* Body */}
             <div className='flex flex-col gap-4 px-4'>
               <div className='w-full border-b px-2 pb-4' style={{ borderColor: colorScheme.border }}>
-                <p className='text-sm font-light' style={{ color: colorScheme.foreground }}>
+                <p className='text-sm ' style={{ color: colorScheme.foreground }}>
                   Feedback
                 </p>
                 <p
-                  className='text-foreground text-xs font-light'
+                  className='text-foreground text-xs '
                   style={{ color: colorScheme.foreground, opacity: 0.5 }}>
                   Have a suggestion or found a bug? Let us know!
                 </p>
@@ -308,13 +302,11 @@ export default function CustomizeThemeModal({
                   </div>
 
                   <div className='flex flex-col p-1'>
-                    <p
-                      className='text-foreground/80 text-[11px] font-light'
-                      style={{ color: colorScheme.foreground }}>
+                    <p className='text-foreground/80 text-[11px] ' style={{ color: colorScheme.foreground }}>
                       Demo Feedback Idea
                     </p>
                     <p
-                      className='text-foreground text-[10px] font-light'
+                      className='text-foreground text-[10px] '
                       style={{ color: colorScheme.foreground, opacity: 0.6 }}>
                       This is a demo feedback message to test theming.
                     </p>

@@ -131,7 +131,7 @@ export default function DiscordIntegrationModal({
               className='col-span-3'
             />
 
-            <Label className='text-foreground/50 text-xs font-light'>
+            <Label className='text-foreground/50 text-xs '>
               The Discord webhook url to send notifications to.
             </Label>
           </div>
@@ -152,7 +152,7 @@ export default function DiscordIntegrationModal({
               className='col-span-3'
             />
 
-            <Label className='text-foreground/50 text-xs font-light'>
+            <Label className='text-foreground/50 text-xs '>
               The role to ping when a new notification is sent.
             </Label>
           </div>

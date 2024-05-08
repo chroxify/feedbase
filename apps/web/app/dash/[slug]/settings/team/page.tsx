@@ -75,7 +75,9 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
               <Input
                 className='w-full'
                 placeholder='Search members...'
-                onChange={(e) => { setSearch(e.target.value); }}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
                 value={search}
               />
               <DropdownMenu>
@@ -92,10 +94,30 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='start'>
-                  <DropdownMenuItem onSelect={() => { setFilter('all'); }}>All</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => { setFilter('admins'); }}>Admins</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => { setFilter('members'); }}>Members</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => { setFilter('invites'); }}>Pending Invites</DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      setFilter('all');
+                    }}>
+                    All
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      setFilter('admins');
+                    }}>
+                    Admins
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      setFilter('members');
+                    }}>
+                    Members
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      setFilter('invites');
+                    }}>
+                    Pending Invites
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -140,7 +162,9 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
               <Input
                 className='w-full'
                 placeholder='Search members...'
-                onChange={(e) => { setSearch(e.target.value); }}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                }}
                 value={search}
               />
               <DropdownMenu>
@@ -157,10 +181,30 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align='start'>
-                  <DropdownMenuItem onSelect={() => { setFilter('all'); }}>All</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => { setFilter('admins'); }}>Admins</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => { setFilter('members'); }}>Members</DropdownMenuItem>
-                  <DropdownMenuItem onSelect={() => { setFilter('invites'); }}>Pending Invites</DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      setFilter('all');
+                    }}>
+                    All
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      setFilter('admins');
+                    }}>
+                    Admins
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      setFilter('members');
+                    }}>
+                    Members
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onSelect={() => {
+                      setFilter('invites');
+                    }}>
+                    Pending Invites
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>

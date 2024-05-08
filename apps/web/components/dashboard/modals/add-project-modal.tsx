@@ -72,7 +72,6 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
       <ResponsiveDialogContent className='sm:max-w-[425px]'>
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>Create a new project</ResponsiveDialogTitle>
-          <ResponsiveDialogDescription>Create a new project to get started.</ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
         <div className='flex flex-col gap-4'>
           {/* Project Name */}
@@ -91,7 +90,7 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               className='col-span-3'
             />
 
-            <Label className='text-foreground/50 text-xs font-light'>The name of your project.</Label>
+            <Label className='text-foreground/50 text-xs'>The name of your project.</Label>
           </div>
 
           {/* Project Slug */}
@@ -107,13 +106,14 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               suffix={`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`}
             />
 
-            <Label className='text-foreground/50 text-xs font-light'>The subdomain of your project.</Label>
+            <Label className='text-foreground/50 text-xs '>The subdomain of your project.</Label>
           </div>
         </div>
         <ResponsiveDialogFooter>
           <ResponsiveDialogClose asChild>
             <Button
               variant='secondary'
+              className='w-full'
               onClick={() => {
                 setName('');
                 setSlug('');
@@ -121,7 +121,11 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
               Cancel
             </Button>
           </ResponsiveDialogClose>
-          <Button type='submit' onClick={onCreateProject} disabled={name === '' || slug === ''}>
+          <Button
+            type='submit'
+            className='w-fit'
+            onClick={onCreateProject}
+            disabled={name === '' || slug === ''}>
             Create Project
           </Button>
         </ResponsiveDialogFooter>

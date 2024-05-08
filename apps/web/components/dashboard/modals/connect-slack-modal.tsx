@@ -118,7 +118,7 @@ export default function SlackIntegrationModal({
               className='col-span-3'
             />
 
-            <Label className='text-foreground/50 text-xs font-light'>
+            <Label className='text-foreground/50 text-xs '>
               The Slack webhook url to send notifications to.
             </Label>
           </div>

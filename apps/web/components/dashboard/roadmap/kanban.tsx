@@ -112,7 +112,7 @@ export default function FeedbackKanban({
         <div className='flex h-full w-full gap-3 overflow-x-auto p-5'>
           {columns.map(({ label, icon: Icon }) => (
             <div
-              className='bg-secondary/40 dark:bg-root flex h-full w-full min-w-[350px] flex-col gap-3 rounded-md p-3 dark:brightness-110'
+              className='bg-secondary/50 dark:bg-root flex h-full w-full min-w-[350px] flex-col gap-3 rounded-md p-3 dark:brightness-110'
               key={label}>
               {/* Header Row */}
               <div className='flex items-center justify-between dark:brightness-90'>
