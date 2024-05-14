@@ -17,7 +17,7 @@ import {
 } from '@feedbase/ui/components/responsive-dialog';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronUp } from 'lucide-react';
-import { ProjectConfigWithoutSecretProps } from '@/lib/types';
+import { WorkspaceConfigWithoutSecretProps } from '@/lib/types';
 import { hexToHSL, hslToHex } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
 
@@ -55,20 +55,20 @@ function ColorInput({
 
 export default function CustomizeThemeModal({
   children,
-  projectConfig,
-  setProjectConfig,
+  workspaceConfig,
+  setWorkspaceConfig,
 }: {
   children: React.ReactNode;
-  projectConfig: ProjectConfigWithoutSecretProps;
-  setProjectConfig: React.Dispatch<React.SetStateAction<ProjectConfigWithoutSecretProps>>;
+  workspaceConfig: WorkspaceConfigWithoutSecretProps;
+  setWorkspaceConfig: React.Dispatch<React.SetStateAction<WorkspaceConfigWithoutSecretProps>>;
 }) {
   const [colorScheme, setColorScheme] = useState({
-    root: hslToHex(projectConfig.custom_theme_root) || '',
-    background: hslToHex(projectConfig.custom_theme_background) || '',
-    secondary_background: hslToHex(projectConfig.custom_theme_secondary_background) || '',
-    foreground: hslToHex(projectConfig.custom_theme_primary_foreground) || '',
-    accent: hslToHex(projectConfig.custom_theme_accent) || '',
-    border: hslToHex(projectConfig.custom_theme_border) || '',
+    root: hslToHex(workspaceConfig.custom_theme_root) || '',
+    background: hslToHex(workspaceConfig.custom_theme_background) || '',
+    secondary_background: hslToHex(workspaceConfig.custom_theme_secondary_background) || '',
+    foreground: hslToHex(workspaceConfig.custom_theme_primary_foreground) || '',
+    accent: hslToHex(workspaceConfig.custom_theme_accent) || '',
+    border: hslToHex(workspaceConfig.custom_theme_border) || '',
   });
 
   return (
@@ -325,10 +325,10 @@ export default function CustomizeThemeModal({
               type='submit'
               disabled={Object.values(colorScheme).some((prop) => prop.length < 4)}
               onClick={() => {
-                // Update project config
-                setProjectConfig((prev) => ({
+                // Update workspace config
+                setWorkspaceConfig((prev) => ({
                   ...prev,
-                  custom_theme: 'custom',
+                  workspace_theme: 'custom',
                   custom_theme_root: hexToHSL(colorScheme.root) || '',
                   custom_theme_background: hexToHSL(colorScheme.background) || '',
                   custom_theme_secondary_background: hexToHSL(colorScheme.secondary_background) || '',

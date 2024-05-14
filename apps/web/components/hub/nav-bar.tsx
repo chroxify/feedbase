@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Button } from '@feedbase/ui/components/button';
 import { cn } from '@feedbase/ui/lib/utils';
 import { satoshi } from '@feedbase/ui/styles/fonts';
-import { ProfileProps, ProjectConfigWithoutSecretProps, ProjectProps } from '@/lib/types';
+import { ProfileProps, WorkspaceConfigWithoutSecretProps, WorkspaceProps } from '@/lib/types';
 import { hslToHex } from '@/lib/utils';
 import UserDropdown from '../shared/user-dropdown';
 import AuthModal from './modals/login-signup-modal';
@@ -19,14 +19,14 @@ interface TabProps {
 export default function Header({
   tabs,
   intialTab,
-  project,
+  workspace,
   config,
   user,
 }: {
   tabs: TabProps[];
   intialTab: TabProps;
-  project: ProjectProps['Row'];
-  config: ProjectConfigWithoutSecretProps;
+  workspace: WorkspaceProps['Row'];
+  config: WorkspaceConfigWithoutSecretProps;
   user: ProfileProps['Row'] | null;
 }) {
   const [currentTab, setCurrentTab] = useState(intialTab);
@@ -49,13 +49,13 @@ export default function Header({
           className='flex cursor-pointer select-none flex-row items-center gap-3'
           href={config.logo_redirect_url || '/'}>
           {/* Logo Image */}
-          {project?.icon ? (
+          {workspace?.icon ? (
             <img
-              src={project?.icon || ''}
+              src={workspace?.icon || ''}
               alt='Logo'
               width={35}
               height={35}
-              className={project?.icon_radius || ''}
+              className={workspace?.icon_radius || ''}
             />
           ) : null}
 
@@ -65,7 +65,7 @@ export default function Header({
               satoshi.variable,
               'text-foreground/90 font-satoshi text-center text-xl font-medium'
             )}>
-            {project?.name}
+            {workspace?.name}
           </div>
         </Link>
 
@@ -74,14 +74,16 @@ export default function Header({
           <UserDropdown
             user={user}
             iconColor={
-              config.custom_theme === 'custom' ? hslToHex(config.custom_theme_primary_foreground) : undefined
+              config.workspace_theme === 'custom'
+                ? hslToHex(config.custom_theme_primary_foreground)
+                : undefined
             }
           />
         ) : null}
 
         {/* Login */}
         {!config.integration_sso_status && !user && (
-          <AuthModal projectSlug={project?.slug || ''}>
+          <AuthModal projectSlug={workspace?.slug || ''}>
             <Button variant='default'>Login</Button>
           </AuthModal>
         )}
@@ -89,7 +91,7 @@ export default function Header({
         {/* SSO */}
         {config.integration_sso_status && !user ? (
           <Link href={config.integration_sso_url || ''}>
-            <Button variant='default'>Login with {project?.name}</Button>
+            <Button variant='default'>Login with {workspace?.name}</Button>
           </Link>
         ) : null}
       </div>

@@ -38,7 +38,7 @@ export default async function SignIn() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  // If there is a session, redirect to projects
+  // If there is a session, redirect to workspaces
   if (user) {
     redirect('/');
   }

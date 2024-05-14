@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import { getPublicProjectChangelogs } from '@/lib/api/public';
 
 /*
-    Get project changelogs
-    GET /api/v1/projects/[slug]/changelogs
+    Get workspace changelogs
+    GET /api/v1/workspaces/[slug]/changelogs
 */
 export async function GET(req: Request, context: { params: { slug: string } }) {
   const { data: changelogs, error } = await getPublicProjectChangelogs(

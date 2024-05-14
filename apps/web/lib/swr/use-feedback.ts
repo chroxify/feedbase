@@ -7,7 +7,7 @@ export default function useFeedback() {
   const { slug } = useParams<{ slug: string }>();
 
   const { data: feedback, isValidating } = useSWR<FeedbackWithUserProps[]>(
-    `/api/v1/projects/${slug}/feedback`,
+    `/api/v1/workspaces/${slug}/feedback`,
     fetcher
   );
 

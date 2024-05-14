@@ -9,7 +9,7 @@ import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronUp, MessagesSquare } from 'lucide-react';
 import { toast } from 'sonner';
 import { PROSE_CN } from '@/lib/constants';
-import { FeedbackWithUserProps, ProjectConfigWithoutSecretProps } from '@/lib/types';
+import { FeedbackWithUserProps, WorkspaceConfigWithoutSecretProps } from '@/lib/types';
 import AuthModal from '../modals/login-signup-modal';
 
 interface FeedbackWithTimeAgo extends FeedbackWithUserProps {
@@ -19,12 +19,12 @@ interface FeedbackWithTimeAgo extends FeedbackWithUserProps {
 export default function FeedbackList({
   feedback,
   projectSlug,
-  projectConfig,
+  workspaceConfig,
   isLoggedIn,
 }: {
   feedback: FeedbackWithUserProps[];
   projectSlug: string;
-  projectConfig: ProjectConfigWithoutSecretProps | null;
+  workspaceConfig: WorkspaceConfigWithoutSecretProps | null;
   isLoggedIn: boolean;
 }) {
   // Update the feedback list with the timeAgo field
@@ -120,7 +120,7 @@ export default function FeedbackList({
 
     // Update feedback has_upvoted
     const hasUpvoted =
-      projectConfig?.feedback_allow_anon_upvoting && !isLoggedIn
+      workspaceConfig?.feedback_allow_anon_upvoting && !isLoggedIn
         ? !JSON.parse(window?.localStorage?.getItem('upvotes') || '{}')[feedback.id]
         : !feedback.has_upvoted;
 
@@ -137,7 +137,7 @@ export default function FeedbackList({
     setFeedbackList(newFeedbackList);
 
     // If anon upvoting is allowed, store new upvote state in local storage
-    if (projectConfig?.feedback_allow_anon_upvoting && !isLoggedIn) {
+    if (workspaceConfig?.feedback_allow_anon_upvoting && !isLoggedIn) {
       const upvotes = JSON.parse(window?.localStorage?.getItem('upvotes') || '{}');
       upvotes[feedback.id] = hasUpvoted;
       window?.localStorage?.setItem('upvotes', JSON.stringify(upvotes));
@@ -145,8 +145,8 @@ export default function FeedbackList({
 
     const promise = new Promise((resolve, reject) => {
       fetch(
-        `/api/v1/projects/${projectSlug}/feedback/${feedback.id}/upvotes${
-          projectConfig?.feedback_allow_anon_upvoting && !isLoggedIn
+        `/api/v1/workspaces/${projectSlug}/feedback/${feedback.id}/upvotes${
+          workspaceConfig?.feedback_allow_anon_upvoting && !isLoggedIn
             ? `?has_upvoted=${!feedback.has_upvoted}`
             : ''
         }`,
@@ -183,7 +183,7 @@ export default function FeedbackList({
       setFeedbackList(newFeedbackList);
 
       // If anon upvoting is allowed, store upvote state in localstorage
-      if (projectConfig?.feedback_allow_anon_upvoting) {
+      if (workspaceConfig?.feedback_allow_anon_upvoting) {
         const upvotes = JSON.parse(window?.localStorage?.getItem('upvotes') || '{}');
         upvotes[feedback.id] = newFeedbackList[index].has_upvoted;
         window?.localStorage?.setItem('upvotes', JSON.stringify(upvotes));
@@ -213,7 +213,7 @@ export default function FeedbackList({
 
   // Set upvotes from localstorage
   useEffect(() => {
-    if (projectConfig?.feedback_allow_anon_upvoting && !isLoggedIn) {
+    if (workspaceConfig?.feedback_allow_anon_upvoting && !isLoggedIn) {
       const upvotes = JSON.parse(window?.localStorage?.getItem('upvotes') || '{}');
       const newFeedbackList = [...feedbackList];
 
@@ -230,7 +230,7 @@ export default function FeedbackList({
         return prevFeedbackList; // No change, return the previous state
       });
     }
-  }, [feedbackList, isLoggedIn, projectConfig]);
+  }, [feedbackList, isLoggedIn, workspaceConfig]);
 
   return (
     <>
@@ -241,7 +241,7 @@ export default function FeedbackList({
           {/* Upvotes */}
           <AuthModal
             projectSlug={projectSlug}
-            disabled={isLoggedIn || projectConfig?.feedback_allow_anon_upvoting ? true : undefined}>
+            disabled={isLoggedIn || workspaceConfig?.feedback_allow_anon_upvoting ? true : undefined}>
             <div className='flex items-center border-r'>
               {/* Upvotes */}
               <Button
@@ -249,7 +249,7 @@ export default function FeedbackList({
                 size='sm'
                 className='group/upvote flex h-full flex-col items-center rounded-sm px-4 transition-all duration-150 hover:bg-transparent active:scale-[85%]'
                 onClick={() => {
-                  if (!isLoggedIn && !projectConfig?.feedback_allow_anon_upvoting) return;
+                  if (!isLoggedIn && !workspaceConfig?.feedback_allow_anon_upvoting) return;
 
                   onUpvote(feedback);
                 }}>

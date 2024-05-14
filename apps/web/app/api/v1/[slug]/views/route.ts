@@ -3,7 +3,7 @@ import { recordClick } from '@/lib/tinybird';
 
 /*
   Record page view
-  POST /api/v1/[project]/views
+  POST /api/v1/[workspace]/views
   {
     "feedbackId": "string",
     "changelogId": "string",

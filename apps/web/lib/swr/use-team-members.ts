@@ -11,7 +11,7 @@ export default function useTeamMembers() {
     isValidating,
     error,
     mutate,
-  } = useSWR<TeamMemberProps[]>(`/api/v1/projects/${slug}/members`, fetcher);
+  } = useSWR<TeamMemberProps[]>(`/api/v1/workspaces/${slug}/members`, fetcher);
 
   return {
     teamMembers,

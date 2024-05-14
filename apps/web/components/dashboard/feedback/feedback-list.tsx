@@ -42,7 +42,7 @@ export default function FeedbackList() {
     error,
     isLoading,
     mutate,
-  } = useSWR<FeedbackWithUserProps[]>(`/api/v1/projects/${projectSlug}/feedback`, fetcher);
+  } = useSWR<FeedbackWithUserProps[]>(`/api/v1/workspaces/${projectSlug}/feedback`, fetcher);
   const { tags: projectTags } = useTags();
 
   // Query params

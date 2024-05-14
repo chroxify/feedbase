@@ -50,7 +50,7 @@ export default function CommentInput({
   });
 
   const { trigger: postComment, isMutating: isPostingComment } = useSWRMutation(
-    `/api/v1/projects/${projectSlug}/feedback/${feedbackId}/comments`,
+    `/api/v1/workspaces/${projectSlug}/feedback/${feedbackId}/comments`,
     actionFetcher,
     {
       onSuccess: () => {

@@ -36,7 +36,7 @@ export async function recordClick({
     },
     body: JSON.stringify({
       timestamp: new Date(Date.now()).toISOString(),
-      project: projectId,
+      workspace: projectId,
       sessionId: sessionId?.value || 'Unknown',
       changelogId: changelogId || '_root',
       feedbackId: feedbackId || '_root',

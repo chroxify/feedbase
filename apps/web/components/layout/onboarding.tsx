@@ -28,7 +28,7 @@ export default function Onboarding() {
   async function onCreateProject(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects`, {
+      fetch(`/api/v1/workspaces`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export default function Onboarding() {
     });
 
     toast.promise(promise, {
-      loading: 'Creating project...',
+      loading: 'Creating workspace...',
       success: `${name} was created successfully!`,
       error: (err) => {
         return err;
@@ -68,15 +68,15 @@ export default function Onboarding() {
     <form onSubmit={onCreateProject}>
       <Card className='px-3 py-4'>
         <CardHeader>
-          <CardTitle>Create your first project</CardTitle>
-          <CardDescription>Create a new project to get rolling.</CardDescription>
+          <CardTitle>Create your first workspace</CardTitle>
+          <CardDescription>Create a new workspace to get rolling.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className='flex flex-col gap-4'>
-            {/* Project Name */}
+            {/* Workspace Name */}
             <div className='flex flex-col gap-2'>
               <div className='flex flex-row items-center gap-2'>
-                <Label htmlFor='name'>Project Name</Label>
+                <Label htmlFor='name'>Workspace Name</Label>
               </div>
 
               <Input
@@ -89,13 +89,13 @@ export default function Onboarding() {
                 className='col-span-3'
               />
 
-              <Label className='text-foreground/50 text-xs '>The name of your project.</Label>
+              <Label className='text-foreground/50 text-xs '>The name of your workspace.</Label>
             </div>
 
-            {/* Project Slug */}
+            {/* Workspace Slug */}
             <div className='flex flex-col gap-2'>
               <div className='flex flex-row items-center gap-2'>
-                <Label htmlFor='slug'>Project Slug</Label>
+                <Label htmlFor='slug'>Workspace Slug</Label>
               </div>
 
               <div className='bg-background focus-within:ring-ring ring-offset-root flex h-9 w-full rounded-md border text-sm  transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
@@ -110,14 +110,14 @@ export default function Onboarding() {
                 </div>
               </div>
 
-              <Label className='text-foreground/50 text-xs '>The subdomain of your project.</Label>
+              <Label className='text-foreground/50 text-xs '>The subdomain of your workspace.</Label>
             </div>
           </div>
         </CardContent>
 
         <CardFooter className='flex flex-row items-center justify-end gap-2'>
           <Button type='submit' disabled={name === '' || slug === ''}>
-            Create First Project
+            Create First Workspace
           </Button>
         </CardFooter>
       </Card>

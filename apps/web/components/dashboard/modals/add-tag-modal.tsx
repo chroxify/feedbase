@@ -66,7 +66,7 @@ export function CreateTagModal({
   const router = useRouter();
   const { slug } = useParams<{ slug: string }>();
 
-  const { trigger } = useSWRMutation(`/api/v1/projects/${slug}/feedback/tags`, actionFetcher, {
+  const { trigger } = useSWRMutation(`/api/v1/workspaces/${slug}/feedback/tags`, actionFetcher, {
     onSuccess: () => {
       toast.success('Tag created successfully');
       router.push(pathname);

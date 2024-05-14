@@ -36,7 +36,7 @@ export default function CreatePostModal({
 
     // Create promise
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/feedback`, {
+      fetch(`/api/v1/workspaces/${projectSlug}/feedback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,7 +84,7 @@ export default function CreatePostModal({
           <ResponsiveDialogDescription>Have an idea or found a bug? Let us know!</ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
         <div className='flex flex-col gap-4'>
-          {/* Project Name */}
+          {/* Workspace Name */}
           <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center gap-2'>
               <Label htmlFor='title'>Title</Label>
@@ -100,7 +100,7 @@ export default function CreatePostModal({
               className='bg-secondary/30 '
             />
           </div>
-          {/* Project Slug */}
+          {/* Workspace Slug */}
           <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center gap-2'>
               <Label htmlFor='content'>Description</Label>

@@ -146,7 +146,7 @@ export default function UpdateProfileModal({
             <Label className='text-foreground/50 text-xs '>Your full name, displayed publicly.</Label>
           </div>
 
-          {/* Project Slug */}
+          {/* Workspace Slug */}
           <div className='flex flex-col gap-2'>
             <div className='flex flex-row items-center gap-2'>
               <Label htmlFor='email'>Email</Label>

@@ -67,7 +67,7 @@ export function FeedbackSheet({
   const [open, setOpen] = useState(false);
 
   const { data: comments, isLoading: commentsLoading } = useSWR<FeedbackCommentWithUserProps[]>(
-    currentFeedback.id && open ? `/api/v1/projects/${slug}/feedback/${currentFeedback.id}/comments` : null,
+    currentFeedback.id && open ? `/api/v1/workspaces/${slug}/feedback/${currentFeedback.id}/comments` : null,
     fetcher
   );
 
@@ -100,11 +100,11 @@ export function FeedbackSheet({
   };
 
   const { trigger: upvoteFeedback } = useSWRMutation(
-    `/api/v1/projects/${slug}/feedback/${currentFeedback.id}/upvotes`,
+    `/api/v1/workspaces/${slug}/feedback/${currentFeedback.id}/upvotes`,
     actionFetcher,
     {
       onSuccess: () => {
-        mutate(`/api/v1/projects/${slug}/feedback`);
+        mutate(`/api/v1/workspaces/${slug}/feedback`);
       },
       onError: () => {
         toast.error(`Failed to ${currentFeedback.has_upvoted ? 'remove upvote' : 'upvote feedback'}`);
@@ -121,11 +121,11 @@ export function FeedbackSheet({
   );
 
   const { trigger: updateFeedback } = useSWRMutation(
-    `/api/v1/projects/${slug}/feedback/${currentFeedback.id}`,
+    `/api/v1/workspaces/${slug}/feedback/${currentFeedback.id}`,
     actionFetcher,
     {
       onSuccess: () => {
-        mutate(`/api/v1/projects/${slug}/feedback`);
+        mutate(`/api/v1/workspaces/${slug}/feedback`);
       },
       onError: () => {
         toast.error('Failed to update feedback');

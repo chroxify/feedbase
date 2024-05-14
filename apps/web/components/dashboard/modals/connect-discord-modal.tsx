@@ -15,7 +15,7 @@ import {
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
 import { toast } from 'sonner';
-import { sendDiscordConfirmation } from '@/lib/api/integrations';
+import { sendDiscordConfirmation } from '@/lib/api/integration';
 import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function DiscordIntegrationModal({
@@ -61,7 +61,7 @@ export default function DiscordIntegrationModal({
     setOpen(false);
 
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/config/integrations/discord`, {
+      fetch(`/api/v1/workspaces/${projectSlug}/config/integrations/discord`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

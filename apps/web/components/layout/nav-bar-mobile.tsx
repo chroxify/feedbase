@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@feedbase/ui/components/button';
 import { cn } from '@feedbase/ui/lib/utils';
-import { ProjectProps, SidebarTabProps, SidebarTabsProps } from '@/lib/types';
+import { SidebarTabProps, SidebarTabsProps, WorkspaceProps } from '@/lib/types';
 import { Icons } from '../shared/icons/icons-static';
 
 const navTabs = [
@@ -43,7 +43,7 @@ export default function NavbarMobile({
 }: {
   tabs: SidebarTabsProps;
   initialTab: SidebarTabProps;
-  currentProject: ProjectProps['Row'];
+  currentProject: WorkspaceProps['Row'];
 }) {
   const [activeTab, setActiveTab] = useState(initialTab.slug);
   const [isPWA, setIsPWA] = useState(false);

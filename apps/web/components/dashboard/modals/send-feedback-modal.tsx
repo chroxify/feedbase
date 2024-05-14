@@ -34,7 +34,7 @@ export default function FeedbackModal({
 
     // Create promise
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/feedback`, {
+      fetch(`/api/v1/workspaces/${projectSlug}/feedback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -41,7 +41,11 @@ import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { CheckIcon, ClipboardList, Download, MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
 import useSWR from 'swr';
-import { ProjectApiKeyWithoutTokenProps, ProjectConfigWithoutSecretProps, ProjectProps } from '@/lib/types';
+import {
+  WorkspaceApiKeyWithoutTokenProps,
+  WorkspaceConfigWithoutSecretProps,
+  WorkspaceProps,
+} from '@/lib/types';
 import { fetcher } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
 import DefaultTooltip from '@/components/shared/tooltip';
@@ -60,20 +64,20 @@ interface domainData {
 }
 
 export default function GeneralConfigCards({
-  projectData,
-  projectConfig,
+  workspaceData,
+  workspaceConfig,
 }: {
-  projectData: ProjectProps['Row'];
-  projectConfig: ProjectConfigWithoutSecretProps;
+  workspaceData: WorkspaceProps['Row'];
+  workspaceConfig: WorkspaceConfigWithoutSecretProps;
 }) {
-  const [project, setProject] = useState<ProjectProps['Row']>(projectData);
-  const [domain, setDomain] = useState<string>(projectConfig?.custom_domain || '');
+  const [workspace, setProject] = useState<WorkspaceProps['Row']>(workspaceData);
+  const [domain, setDomain] = useState<string>(workspaceConfig?.custom_domain || '');
   const [domainStatus, setDomainStatus] = useState<
     'verified' | 'unverified' | 'refreshing' | 'requesting' | null
   >(
-    projectConfig?.custom_domain_verified === true
+    workspaceConfig?.custom_domain_verified === true
       ? 'verified'
-      : projectConfig?.custom_domain_verified === false
+      : workspaceConfig?.custom_domain_verified === false
       ? 'unverified'
       : null
   );
@@ -83,7 +87,10 @@ export default function GeneralConfigCards({
     data: apiKeys,
     isLoading,
     mutate,
-  } = useSWR<ProjectApiKeyWithoutTokenProps[]>(`/api/v1/projects/${projectData.slug}/api-keys`, fetcher);
+  } = useSWR<WorkspaceApiKeyWithoutTokenProps[]>(
+    `/api/v1/workspaces/${workspaceData.slug}/api-keys`,
+    fetcher
+  );
 
   function handleSlugChange(event: React.ChangeEvent<HTMLInputElement>) {
     // Replace spaces with dashes
@@ -117,7 +124,7 @@ export default function GeneralConfigCards({
 
   async function handleDeleteProject() {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${project.slug}`, {
+      fetch(`/api/v1/workspaces/${workspace.slug}`, {
         method: 'DELETE',
       })
         .then((res) => res.json())
@@ -134,8 +141,8 @@ export default function GeneralConfigCards({
     });
 
     toast.promise(promise, {
-      loading: 'Deleting project...',
-      success: 'Project deleted successfully.',
+      loading: 'Deleting workspace...',
+      success: 'Workspace deleted successfully.',
       error: (err) => {
         return err;
       },
@@ -148,15 +155,15 @@ export default function GeneralConfigCards({
 
   async function handleSaveProject() {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectData.slug}`, {
+      fetch(`/api/v1/workspaces/${workspaceData.slug}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
         },
         // Pass only the changed values
         body: JSON.stringify({
-          name: project.name !== projectData.name ? project.name : undefined,
-          slug: project.slug !== projectData.slug ? project.slug : undefined,
+          name: workspace.name !== workspaceData.name ? workspace.name : undefined,
+          slug: workspace.slug !== workspaceData.slug ? workspace.slug : undefined,
         }),
       })
         .then((res) => res.json())
@@ -173,8 +180,8 @@ export default function GeneralConfigCards({
     });
 
     toast.promise(promise, {
-      loading: 'Updating project...',
-      success: 'Project updated successfully.',
+      loading: 'Updating workspace...',
+      success: 'Workspace updated successfully.',
       error: (err) => {
         return err;
       },
@@ -182,8 +189,8 @@ export default function GeneralConfigCards({
 
     promise.then(() => {
       // If the slug has changed, redirect to the new slug
-      if (project.slug !== projectData.slug) {
-        window.location.href = `/${project.slug}/settings/general`;
+      if (workspace.slug !== workspaceData.slug) {
+        window.location.href = `/${workspace.slug}/settings/general`;
       } else {
         window.location.reload();
       }
@@ -193,7 +200,7 @@ export default function GeneralConfigCards({
   // submit domain
   async function handleSubmitDomain() {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectData.slug}/config/domain`, {
+      fetch(`/api/v1/workspaces/${workspaceData.slug}/config/domain`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -235,7 +242,7 @@ export default function GeneralConfigCards({
   // remove domain
   async function handleRemoveDomain() {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectData.slug}/config/domain`, {
+      fetch(`/api/v1/workspaces/${workspaceData.slug}/config/domain`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -271,9 +278,9 @@ export default function GeneralConfigCards({
   }
 
   // On revoke api key
-  function handleRevokeApiKey(apiKey: ProjectApiKeyWithoutTokenProps) {
+  function handleRevokeApiKey(apiKey: WorkspaceApiKeyWithoutTokenProps) {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectData.slug}/api-keys/${apiKey.id}`, {
+      fetch(`/api/v1/workspaces/${workspaceData.slug}/api-keys/${apiKey.id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -322,7 +329,7 @@ export default function GeneralConfigCards({
         setDomainStatus('refreshing');
       }
 
-      fetch(`/api/v1/projects/${projectData.slug}/config/domain`)
+      fetch(`/api/v1/workspaces/${workspaceData.slug}/config/domain`)
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
@@ -338,19 +345,19 @@ export default function GeneralConfigCards({
           toast.error(err.message);
         });
     },
-    [projectData]
+    [workspaceData]
   );
 
   // handle export feedback
   function handleExportFeedback() {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectData.slug}/feedback/export`)
+      fetch(`/api/v1/workspaces/${workspaceData.slug}/feedback/export`)
         .then((res) => res.blob())
         .then((blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `${projectData.name}-${Date.now()}.csv`;
+          a.download = `${workspaceData.name}-${Date.now()}.csv`;
           document.body.appendChild(a);
           a.click();
           a.remove();
@@ -397,15 +404,15 @@ export default function GeneralConfigCards({
       <Card className='flex w-full flex-col '>
         <CardHeader>
           <CardTitle>General</CardTitle>
-          <CardDescription>Configure your project&apos;s general settings.</CardDescription>
+          <CardDescription>Configure your workspace&apos;s general settings.</CardDescription>
         </CardHeader>
         <CardContent>
           {/* Name & Slug Config */}
           <div className='flex h-full w-full flex-col space-y-3'>
             <div className='space-y-1'>
               <Label className='text-foreground/70 text-sm '>Name</Label>
-              <Input className='w-full max-w-xs' value={project.name} onChange={handleNameChange} />
-              <Label className='text-muted-foreground text-xs'>This is the name of your project.</Label>
+              <Input className='w-full max-w-xs' value={workspace.name} onChange={handleNameChange} />
+              <Label className='text-muted-foreground text-xs'>This is the name of your workspace.</Label>
             </div>
 
             <div className='space-y-1'>
@@ -415,7 +422,7 @@ export default function GeneralConfigCards({
                 <Input
                   className='h-full w-full border-0 bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0'
                   placeholder='slug'
-                  value={project.slug}
+                  value={workspace.slug}
                   onChange={handleSlugChange}
                 />
                 <div className='text-foreground/50 bg-accent select-none rounded-r-md border-l px-3 py-2'>
@@ -423,7 +430,9 @@ export default function GeneralConfigCards({
                 </div>
               </div>
 
-              <Label className='text-muted-foreground text-xs'>This is the subdomain of your project.</Label>
+              <Label className='text-muted-foreground text-xs'>
+                This is the subdomain of your workspace.
+              </Label>
             </div>
           </div>
         </CardContent>
@@ -431,9 +440,9 @@ export default function GeneralConfigCards({
           <Button
             className='w-32'
             disabled={
-              (project.name === projectData.name && project.slug === projectData.slug) ||
-              !project.name ||
-              !project.slug
+              (workspace.name === workspaceData.name && workspace.slug === workspaceData.slug) ||
+              !workspace.name ||
+              !workspace.slug
             }
             onClick={handleSaveProject}>
             Save changes
@@ -445,7 +454,7 @@ export default function GeneralConfigCards({
       <Card className='flex w-full flex-col'>
         <CardHeader>
           <CardTitle>Custom Domain</CardTitle>
-          <CardDescription>Configure your project&apos;s custom domain.</CardDescription>
+          <CardDescription>Configure your workspace&apos;s custom domain.</CardDescription>
         </CardHeader>
         <CardContent>
           <div className='space-y-1'>
@@ -487,7 +496,7 @@ export default function GeneralConfigCards({
                     </div>
                   )}
 
-                  {/* Tabs, if domain is not assigned to a vercel project yet */}
+                  {/* Tabs, if domain is not assigned to a vercel workspace yet */}
                   {domainData && domainData.verification === undefined ? (
                     <Tabs defaultValue='a' className='w-[550px]'>
                       <TabsList className='space-x-5 border-b-0 bg-transparent p-0'>
@@ -770,13 +779,13 @@ export default function GeneralConfigCards({
           ) : null}
         </CardContent>
         <CardFooter className='flex flex-row gap-2'>
-          {!domainData?.name && domain !== projectConfig.custom_domain ? (
+          {!domainData?.name && domain !== workspaceConfig.custom_domain ? (
             <Button
               variant='default'
               className='w-32'
               onClick={handleSubmitDomain}
               disabled={
-                domain === projectConfig.custom_domain ||
+                domain === workspaceConfig.custom_domain ||
                 !domain ||
                 domain === domainData?.name ||
                 !/(?:https?:\/\/)?(?:[a-zA-Z0-9_-]+\.)+[a-zA-Z]{2,}(?::\d{1,5})?(?:\/\S*)?/i.test(domain) ||
@@ -804,7 +813,7 @@ export default function GeneralConfigCards({
       <Card className='flex w-full flex-col'>
         <CardHeader>
           <CardTitle>API Access</CardTitle>
-          <CardDescription>Configure your project&apos;s API access.</CardDescription>
+          <CardDescription>Configure your workspace&apos;s API access.</CardDescription>
         </CardHeader>
         {apiKeys?.length !== 0 && !isLoading && (
           <CardContent>
@@ -887,11 +896,11 @@ export default function GeneralConfigCards({
         )}
         <CardFooter>
           <AddApiKeyDialog
-            projectSlug={project.slug}
+            projectSlug={workspace.slug}
             disabled={isLoading || (apiKeys && apiKeys.length >= 3)}
             mutateKeys={mutate}>
             <DefaultTooltip
-              content='Due to security reasons, you can only have up to 3 API keys per project.'
+              content='Due to security reasons, you can only have up to 3 API keys per workspace.'
               disabled={!(apiKeys && apiKeys.length >= 3)}>
               <div className='flex flex-row items-center space-x-2'>
                 <Button
@@ -912,7 +921,7 @@ export default function GeneralConfigCards({
       <Card className='flex w-full flex-col '>
         <CardHeader>
           <CardTitle>Export</CardTitle>
-          <CardDescription>Export all your project&apos;s data in a CSV file.</CardDescription>
+          <CardDescription>Export all your workspace&apos;s data in a CSV file.</CardDescription>
         </CardHeader>
         <CardContent className='flex flex-row space-x-4'>
           <Button variant='outline' onClick={handleExportFeedback} className='text-foreground/70 w-fit '>
@@ -922,29 +931,29 @@ export default function GeneralConfigCards({
         </CardContent>
       </Card>
 
-      {/* Delete Project Card */}
+      {/* Delete Workspace Card */}
       <Card className='hover:border-destructive flex w-full flex-col transition-colors duration-300'>
         <CardHeader>
           <CardTitle>Danger Zone</CardTitle>
-          <CardDescription>Delete your project and all of its data.</CardDescription>
+          <CardDescription>Delete your workspace and all of its data.</CardDescription>
         </CardHeader>
         <CardContent>
-          {/* Delete Project */}
+          {/* Delete Workspace */}
           <div className='flex h-full w-full flex-col space-y-4'>
             <div className='space-y-1'>
               <div className='flex h-10 w-full flex-row space-x-2'>
                 <AlertDialog>
                   <AlertDialogTrigger asChild>
                     <Button variant='destructive' className='w-32'>
-                      Delete project
+                      Delete workspace
                     </Button>
                   </AlertDialogTrigger>
                   <AlertDialogContent>
                     <AlertDialogHeader>
                       <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                       <AlertDialogDescription>
-                        This action cannot be undone. This will permanently delete your project and remove all
-                        your data from our servers.
+                        This action cannot be undone. This will permanently delete your workspace and remove
+                        all your data from our servers.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
                     <AlertDialogFooter>

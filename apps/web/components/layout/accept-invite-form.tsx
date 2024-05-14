@@ -21,7 +21,7 @@ export default function ProjectInviteForm({
   // Accept invitation
   function acceptInvitation() {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${invite.project.slug}/invites/${invite.id}`, {
+      fetch(`/api/v1/workspaces/${invite.workspace.slug}/invites/${invite.id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ export default function ProjectInviteForm({
     toast.promise(promise, {
       loading: 'Accepting invitation...',
       success: () => {
-        router.push(`/${invite.project.slug}`);
+        router.push(`/${invite.workspace.slug}`);
         return `Invitation accepted! Redirecting...`;
       },
       error: (err) => {
@@ -62,22 +62,22 @@ export default function ProjectInviteForm({
         <Avatar className='border-border/80 h-14 w-14 rounded-md border'>
           <AvatarImage
             src={
-              invite.project.icon !== '' || invite.project.icon !== null
-                ? invite.project.icon
+              invite.workspace.icon !== '' || invite.workspace.icon !== null
+                ? invite.workspace.icon
                 : `${formatRootUrl()}/icon-512x512.png`
             }
-            alt='Project Icon'
+            alt='Workspace Icon'
           />
           <AvatarFallback className='rounded-md'>
-            {invite.project.name[0].toUpperCase() + invite.project.name[1].toUpperCase()}
+            {invite.workspace.name[0].toUpperCase() + invite.workspace.name[1].toUpperCase()}
           </AvatarFallback>
         </Avatar>
         <CardTitle className='pt-5 text-center text-lg'>
-          You&apos;ve been invited to join {invite.project.name}
+          You&apos;ve been invited to join {invite.workspace.name}
         </CardTitle>
         <CardDescription className='text-center'>
-          {invite.creator.full_name} has invited you to join and collaborate on the project{' '}
-          <strong className='text-foreground/70'>{invite.project.name}</strong> on Feedbase.
+          {invite.creator.full_name} has invited you to join and collaborate on the workspace{' '}
+          <strong className='text-foreground/70'>{invite.workspace.name}</strong> on Feedbase.
         </CardDescription>
       </CardHeader>
       <CardContent className='flex flex-col gap-5'>

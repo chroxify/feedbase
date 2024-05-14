@@ -53,14 +53,14 @@ export function AddChangelogModal({
   const [alertOpen, setAlertOpen] = useState<boolean>(false);
   const [notifySubscribers, setNotifySubscribers] = useState<boolean>(true);
   const { data: subscribersCount } = useSWR<{ count: number }>(
-    `/api/v1/projects/${projectSlug}/changelogs/subscribers/count`,
+    `/api/v1/workspaces/${projectSlug}/changelogs/subscribers/count`,
     fetcher,
     { revalidateOnFocus: false }
   );
 
   const [data, setData] = useState<ChangelogProps['Row']>({
     id: changelogData?.id || '',
-    project_id: changelogData?.project_id || '',
+    workspace_id: changelogData?.workspace_id || '',
     title: changelogData?.title || '',
     content: changelogData?.content || '',
     summary: changelogData?.summary || '',
@@ -81,7 +81,7 @@ export function AddChangelogModal({
     }
 
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/changelogs`, {
+      fetch(`/api/v1/workspaces/${projectSlug}/changelogs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ export function AddChangelogModal({
     toast.promise(promise, {
       loading: `${createType === 'publish' ? 'Publishing' : 'Creating'} changelog...`,
       success: () => {
-        mutate(`/api/v1/projects/${projectSlug}/changelogs`);
+        mutate(`/api/v1/workspaces/${projectSlug}/changelogs`);
         setData({
           ...data,
           title: '',
@@ -143,7 +143,7 @@ export function AddChangelogModal({
     }
 
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/changelogs/${data.id}`, {
+      fetch(`/api/v1/workspaces/${projectSlug}/changelogs/${data.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -173,7 +173,7 @@ export function AddChangelogModal({
     toast.promise(promise, {
       loading: `${updateType === 'publish' ? 'Publishing' : 'Updating'} changelog...`,
       success: () => {
-        mutate(`/api/v1/projects/${projectSlug}/changelogs`);
+        mutate(`/api/v1/workspaces/${projectSlug}/changelogs`);
         setData({
           ...data,
           title: '',

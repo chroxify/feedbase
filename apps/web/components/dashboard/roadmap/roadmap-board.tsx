@@ -66,7 +66,7 @@ export default function RoadmapBoard() {
   }, [feedback]);
 
   const { trigger: updateFeedback } = useSWRMutation(
-    `/api/v1/projects/${slug}/feedback`, // using general feedback endpoint here so that it mutates the feedback cache - proper url is set in the inputOverride
+    `/api/v1/workspaces/${slug}/feedback`, // using general feedback endpoint here so that it mutates the feedback cache - proper url is set in the inputOverride
     actionFetcher,
     {
       onError: () => {
@@ -122,7 +122,7 @@ export default function RoadmapBoard() {
               updateFeedback({
                 status: newStatus,
                 method: 'PATCH',
-                inputOverride: `/api/v1/projects/${slug}/feedback/${feedback.id}`,
+                inputOverride: `/api/v1/workspaces/${slug}/feedback/${feedback.id}`,
               });
             });
 

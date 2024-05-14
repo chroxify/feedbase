@@ -2,34 +2,34 @@ import { Database } from '@/lib/supabase';
 import { IconObject } from '@/components/shared/icons/icons-animated';
 
 // DB Types
-export type ProjectProps = Database['public']['Tables']['projects'];
+export type WorkspaceProps = Database['public']['Tables']['workspace'];
 
-export type ProjectConfigProps = Database['public']['Tables']['project_configs'];
+export type WorkspaceConfigProps = Database['public']['Tables']['workspace_config'];
 
-export type ProjectConfigWithoutSecretProps = Omit<
-  Database['public']['Tables']['project_configs']['Row'],
+export type WorkspaceConfigWithoutSecretProps = Omit<
+  Database['public']['Tables']['workspace_config']['Row'],
   'integration_sso_secret'
 > & {
-  project: ProjectProps['Row'];
+  workspace: WorkspaceProps['Row'];
 };
 
-export type TeamMemberProps = Database['public']['Tables']['profiles']['Row'] & {
+export type TeamMemberProps = Database['public']['Tables']['profile']['Row'] & {
   joined_at: string;
 };
 
-export type NotificationProps = Database['public']['Tables']['notifications']['Row'] & {
-  project: { name: string; slug: string; icon: string };
+export type NotificationProps = Database['public']['Tables']['notification']['Row'] & {
+  workspace: { name: string; slug: string; icon: string };
   initiator: { full_name: string };
 };
 
-export type TeamInviteProps = Database['public']['Tables']['project_invites'];
+export type TeamInviteProps = Database['public']['Tables']['workspace_invite'];
 
-export type ProjectApiKeyProps = Database['public']['Tables']['project_api_keys'];
+export type WorkspaceApiKeyProps = Database['public']['Tables']['workspace_api_key'];
 
-export type ProjectApiKeyWithoutTokenProps = Omit<ProjectApiKeyProps['Row'], 'token'>;
+export type WorkspaceApiKeyWithoutTokenProps = Omit<WorkspaceApiKeyProps['Row'], 'token'>;
 
 export type ExtendedInviteProps = TeamInviteProps['Row'] & {
-  project: { name: string; slug: string; icon: string };
+  workspace: { name: string; slug: string; icon: string };
   creator: { full_name: string };
 };
 
@@ -39,17 +39,20 @@ export type AnalyticsProps = {
   visitors: number;
 }[];
 
-export type ChangelogProps = Database['public']['Tables']['changelogs'];
+export type ChangelogProps = Database['public']['Tables']['changelog'];
 
-export type ChangelogWithAuthorProps = Database['public']['Tables']['changelogs']['Row'] & {
-  author: ProfileProps['Row'];
+export type ChangelogWithAuthorProps = Database['public']['Tables']['changelog']['Row'] & {
+  author: {
+    full_name: string;
+    avatar_url: string;
+  };
 };
 
-export type ChangelogSubscriberProps = Database['public']['Tables']['changelog_subscribers'];
+export type ChangelogSubscriberProps = Database['public']['Tables']['changelog_subscriber'];
 
 export type FeedbackProps = Database['public']['Tables']['feedback'];
 
-export type FeedbackTagProps = Database['public']['Tables']['feedback_tags'];
+export type FeedbackTagProps = Database['public']['Tables']['feedback_tag'];
 
 export type FeedbackWithUserProps = Database['public']['Tables']['feedback']['Row'] & {
   user: ProfileProps['Row'] & { isTeamMember: boolean };
@@ -62,15 +65,15 @@ export type FeedbackWithUserInputProps = Database['public']['Tables']['feedback'
   user?: ProfileProps['Update'];
 };
 
-export type FeedbackCommentProps = Database['public']['Tables']['feedback_comments'];
+export type FeedbackCommentProps = Database['public']['Tables']['feedback_comment'];
 
-export type FeedbackCommentWithUserProps = Database['public']['Tables']['feedback_comments']['Row'] & {
+export type FeedbackCommentWithUserProps = Database['public']['Tables']['feedback_comment']['Row'] & {
   user: ProfileProps['Row'] & { isTeamMember: boolean };
   has_upvoted: boolean;
   replies: FeedbackCommentWithUserProps[];
 };
 
-export type ProfileProps = Database['public']['Tables']['profiles'];
+export type ProfileProps = Database['public']['Tables']['profile'];
 
 // Helper Types
 export interface ErrorProps {

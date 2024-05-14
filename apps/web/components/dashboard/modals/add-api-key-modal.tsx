@@ -23,7 +23,7 @@ import {
 import { cn } from '@feedbase/ui/lib/utils';
 import { Check, CheckIcon, ChevronDownIcon, ClipboardList } from 'lucide-react';
 import { toast } from 'sonner';
-import { ProjectApiKeyProps } from '@/lib/types';
+import { WorkspaceApiKeyProps } from '@/lib/types';
 import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function AddApiKeyDialog({
@@ -47,8 +47,8 @@ export default function AddApiKeyDialog({
 
   // Create API Key
   async function createApiKey() {
-    const promise = new Promise<ProjectApiKeyProps['Row']>((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/api-keys`, {
+    const promise = new Promise<WorkspaceApiKeyProps['Row']>((resolve, reject) => {
+      fetch(`/api/v1/workspaces/${projectSlug}/api-keys`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -103,11 +103,11 @@ export default function AddApiKeyDialog({
             <ResponsiveDialogHeader>
               <ResponsiveDialogTitle>Create a new API Key</ResponsiveDialogTitle>
               <ResponsiveDialogDescription>
-                Create a new API key for your project.
+                Create a new API key for your workspace.
               </ResponsiveDialogDescription>
             </ResponsiveDialogHeader>
             <div className='flex flex-col gap-4'>
-              {/* Project Name */}
+              {/* Workspace Name */}
               <div className='flex flex-col gap-2'>
                 <div className='flex flex-row items-center gap-2'>
                   <Label htmlFor='name'>Name</Label>
@@ -128,7 +128,7 @@ export default function AddApiKeyDialog({
                 </Label>
               </div>
 
-              {/* Project Slug */}
+              {/* Workspace Slug */}
               <div className='flex flex-col gap-2'>
                 <div className='flex flex-row items-center gap-2'>
                   <Label>Permissions</Label>
@@ -171,7 +171,7 @@ export default function AddApiKeyDialog({
                       <div className='flex flex-col items-start'>
                         <p>Full Access</p>
                         <p className='text-foreground/70 text-sm '>
-                          Admin-level access to all project resources.
+                          Admin-level access to all workspace resources.
                         </p>
                       </div>
 

@@ -1,84 +1,87 @@
 export type Json = string | number | boolean | null | { [key: string]: Json | undefined } | Json[];
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
-      changelog_subscribers: {
-        Row: {
-          created_at: string;
-          email: string;
-          id: string;
-          project_id: string;
-        };
-        Insert: {
-          created_at?: string;
-          email: string;
-          id?: string;
-          project_id: string;
-        };
-        Update: {
-          created_at?: string;
-          email?: string;
-          id?: string;
-          project_id?: string;
-        };
-        Relationships: [
-          {
-            foreignKeyName: 'changelog_subscribers_project_id_fkey';
-            columns: ['project_id'];
-            referencedRelation: 'projects';
-            referencedColumns: ['id'];
-          },
-        ];
-      };
-      changelogs: {
+      changelog: {
         Row: {
           author_id: string;
           content: string | null;
+          created_at: string;
           id: string;
-          image: string | null;
-          project_id: string;
-          publish_date: string | null;
           published: boolean;
           slug: string;
           summary: string | null;
+          thumbnail: string | null;
           title: string;
+          workspace_id: string;
         };
         Insert: {
           author_id: string;
           content?: string | null;
+          created_at?: string;
           id?: string;
-          image?: string | null;
-          project_id: string;
-          publish_date?: string | null;
           published: boolean;
           slug?: string;
           summary?: string | null;
+          thumbnail?: string | null;
           title?: string;
+          workspace_id: string;
         };
         Update: {
           author_id?: string;
           content?: string | null;
+          created_at?: string;
           id?: string;
-          image?: string | null;
-          project_id?: string;
-          publish_date?: string | null;
           published?: boolean;
           slug?: string;
           summary?: string | null;
+          thumbnail?: string | null;
           title?: string;
+          workspace_id?: string;
         };
         Relationships: [
           {
             foreignKeyName: 'changelogs_author_id_fkey';
             columns: ['author_id'];
-            referencedRelation: 'profiles';
+            isOneToOne: false;
+            referencedRelation: 'profile';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'changelogs_project_id_fkey';
-            columns: ['project_id'];
-            referencedRelation: 'projects';
+            columns: ['workspace_id'];
+            isOneToOne: false;
+            referencedRelation: 'workspace';
+            referencedColumns: ['id'];
+          },
+        ];
+      };
+      changelog_subscriber: {
+        Row: {
+          created_at: string;
+          email: string;
+          id: string;
+          workspace_id: string;
+        };
+        Insert: {
+          created_at?: string;
+          email: string;
+          id?: string;
+          workspace_id: string;
+        };
+        Update: {
+          created_at?: string;
+          email?: string;
+          id?: string;
+          workspace_id?: string;
+        };
+        Relationships: [
+          {
+            foreignKeyName: 'changelog_subscribers_project_id_fkey';
+            columns: ['workspace_id'];
+            isOneToOne: false;
+            referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
         ];
@@ -89,60 +92,64 @@ export interface Database {
           content: string;
           created_at: string;
           id: string;
-          project_id: string;
           raw_tags: Json[] | null;
-          status: Database['public']['Enums']['status_options'];
+          status: Database['public']['Enums']['status_type'];
           title: string;
+          upvoters: string[] | null;
           upvotes: number;
           user_id: string;
+          workspace_id: string;
         };
         Insert: {
           comment_count?: number;
           content: string;
           created_at?: string;
           id?: string;
-          project_id: string;
           raw_tags?: Json[] | null;
-          status?: Database['public']['Enums']['status_options'];
+          status?: Database['public']['Enums']['status_type'];
           title: string;
+          upvoters?: string[] | null;
           upvotes?: number;
           user_id: string;
+          workspace_id: string;
         };
         Update: {
           comment_count?: number;
           content?: string;
           created_at?: string;
           id?: string;
-          project_id?: string;
           raw_tags?: Json[] | null;
-          status?: Database['public']['Enums']['status_options'];
+          status?: Database['public']['Enums']['status_type'];
           title?: string;
+          upvoters?: string[] | null;
           upvotes?: number;
           user_id?: string;
+          workspace_id?: string;
         };
         Relationships: [
           {
             foreignKeyName: 'feedback_project_id_fkey';
-            columns: ['project_id'];
-            referencedRelation: 'projects';
+            columns: ['workspace_id'];
+            isOneToOne: false;
+            referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'feedback_user_id_fkey';
             columns: ['user_id'];
-            referencedRelation: 'profiles';
+            isOneToOne: false;
+            referencedRelation: 'profile';
             referencedColumns: ['id'];
           },
         ];
       };
-      feedback_comments: {
+      feedback_comment: {
         Row: {
           content: string;
           created_at: string;
           feedback_id: string;
           id: string;
           reply_to_id: string | null;
-          upvoters: string[] | null;
           upvotes: number;
           user_id: string;
         };
@@ -152,7 +159,6 @@ export interface Database {
           feedback_id: string;
           id?: string;
           reply_to_id?: string | null;
-          upvoters?: string[] | null;
           upvotes?: number;
           user_id: string;
         };
@@ -162,7 +168,6 @@ export interface Database {
           feedback_id?: string;
           id?: string;
           reply_to_id?: string | null;
-          upvoters?: string[] | null;
           upvotes?: number;
           user_id?: string;
         };
@@ -170,55 +175,59 @@ export interface Database {
           {
             foreignKeyName: 'feedback_comments_feedback_id_fkey';
             columns: ['feedback_id'];
+            isOneToOne: false;
             referencedRelation: 'feedback';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'feedback_comments_reply_to_id_fkey';
             columns: ['reply_to_id'];
-            referencedRelation: 'feedback_comments';
+            isOneToOne: false;
+            referencedRelation: 'feedback_comment';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'feedback_comments_user_id_fkey';
             columns: ['user_id'];
-            referencedRelation: 'profiles';
+            isOneToOne: false;
+            referencedRelation: 'profile';
             referencedColumns: ['id'];
           },
         ];
       };
-      feedback_tags: {
+      feedback_tag: {
         Row: {
           color: string;
           created_at: string;
           id: string;
           name: string;
-          project_id: string;
+          workspace_id: string;
         };
         Insert: {
           color: string;
           created_at?: string;
           id?: string;
           name: string;
-          project_id: string;
+          workspace_id: string;
         };
         Update: {
           color?: string;
           created_at?: string;
           id?: string;
           name?: string;
-          project_id?: string;
+          workspace_id?: string;
         };
         Relationships: [
           {
             foreignKeyName: 'feedback_tags_project_id_fkey';
-            columns: ['project_id'];
-            referencedRelation: 'projects';
+            columns: ['workspace_id'];
+            isOneToOne: false;
+            referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
         ];
       };
-      feedback_upvoters: {
+      feedback_upvoter: {
         Row: {
           created_at: string;
           feedback_id: string;
@@ -241,18 +250,20 @@ export interface Database {
           {
             foreignKeyName: 'feedback_upvoters_feedback_id_fkey';
             columns: ['feedback_id'];
+            isOneToOne: false;
             referencedRelation: 'feedback';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'feedback_upvoters_profile_id_fkey';
             columns: ['profile_id'];
-            referencedRelation: 'profiles';
+            isOneToOne: false;
+            referencedRelation: 'profile';
             referencedColumns: ['id'];
           },
         ];
       };
-      notifications: {
+      notification: {
         Row: {
           comment_id: string | null;
           created_at: string;
@@ -260,8 +271,8 @@ export interface Database {
           has_archived: string[] | null;
           id: string;
           initiator_id: string;
-          project_id: string;
-          type: Database['public']['Enums']['notification_types'];
+          type: Database['public']['Enums']['notification_type'];
+          workspace_id: string;
         };
         Insert: {
           comment_id?: string | null;
@@ -270,8 +281,8 @@ export interface Database {
           has_archived?: string[] | null;
           id?: string;
           initiator_id: string;
-          project_id: string;
-          type: Database['public']['Enums']['notification_types'];
+          type: Database['public']['Enums']['notification_type'];
+          workspace_id: string;
         };
         Update: {
           comment_id?: string | null;
@@ -280,37 +291,41 @@ export interface Database {
           has_archived?: string[] | null;
           id?: string;
           initiator_id?: string;
-          project_id?: string;
-          type?: Database['public']['Enums']['notification_types'];
+          type?: Database['public']['Enums']['notification_type'];
+          workspace_id?: string;
         };
         Relationships: [
           {
             foreignKeyName: 'notifications_comment_id_fkey';
             columns: ['comment_id'];
-            referencedRelation: 'feedback_comments';
+            isOneToOne: false;
+            referencedRelation: 'feedback_comment';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'notifications_feedback_id_fkey';
             columns: ['feedback_id'];
+            isOneToOne: false;
             referencedRelation: 'feedback';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'notifications_initiator_id_fkey';
             columns: ['initiator_id'];
-            referencedRelation: 'profiles';
+            isOneToOne: false;
+            referencedRelation: 'profile';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'notifications_project_id_fkey';
-            columns: ['project_id'];
-            referencedRelation: 'projects';
+            columns: ['workspace_id'];
+            isOneToOne: false;
+            referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
         ];
       };
-      profiles: {
+      profile: {
         Row: {
           avatar_url: string | null;
           email: string;
@@ -331,53 +346,76 @@ export interface Database {
         };
         Relationships: [];
       };
-      project_api_keys: {
+      workspace: {
+        Row: {
+          created_at: string;
+          id: string;
+          name: string;
+          slug: string;
+        };
+        Insert: {
+          created_at?: string;
+          id?: string;
+          name: string;
+          slug: string;
+        };
+        Update: {
+          created_at?: string;
+          id?: string;
+          name?: string;
+          slug?: string;
+        };
+        Relationships: [];
+      };
+      workspace_api_key: {
         Row: {
           created_at: string;
           creator_id: string;
           id: string;
           name: string;
-          permission: Database['public']['Enums']['token_type'];
-          project_id: string;
+          permission: Database['public']['Enums']['api_token_type'];
           short_token: string;
           token: string;
+          workspace_id: string;
         };
         Insert: {
           created_at?: string;
           creator_id: string;
           id?: string;
           name: string;
-          permission: Database['public']['Enums']['token_type'];
-          project_id: string;
+          permission: Database['public']['Enums']['api_token_type'];
           short_token: string;
           token: string;
+          workspace_id: string;
         };
         Update: {
           created_at?: string;
           creator_id?: string;
           id?: string;
           name?: string;
-          permission?: Database['public']['Enums']['token_type'];
-          project_id?: string;
+          permission?: Database['public']['Enums']['api_token_type'];
           short_token?: string;
           token?: string;
+          workspace_id?: string;
         };
         Relationships: [
           {
             foreignKeyName: 'project_api_keys_creator_id_fkey';
             columns: ['creator_id'];
-            referencedRelation: 'profiles';
+            isOneToOne: false;
+            referencedRelation: 'profile';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'project_api_keys_project_id_fkey';
-            columns: ['project_id'];
-            referencedRelation: 'projects';
+            columns: ['workspace_id'];
+            isOneToOne: false;
+            referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
         ];
       };
-      project_configs: {
+      workspace_config: {
         Row: {
           changelog_enabled: boolean;
           changelog_preview_style: string;
@@ -385,7 +423,6 @@ export interface Database {
           created_at: string;
           custom_domain: string | null;
           custom_domain_verified: boolean | null;
-          custom_theme: Database['public']['Enums']['theme_type'];
           custom_theme_accent: string | null;
           custom_theme_background: string | null;
           custom_theme_border: string | null;
@@ -403,10 +440,11 @@ export interface Database {
           integration_sso_status: boolean | null;
           integration_sso_url: string | null;
           logo_redirect_url: string | null;
-          project_icon: string | null;
-          project_icon_radius: string;
-          project_id: string;
-          project_og_image: string | null;
+          workspace_icon: string | null;
+          workspace_icon_radius: string;
+          workspace_id: string;
+          workspace_og_image: string | null;
+          workspace_theme: Database['public']['Enums']['theme_type'];
         };
         Insert: {
           changelog_enabled?: boolean;
@@ -415,7 +453,6 @@ export interface Database {
           created_at?: string;
           custom_domain?: string | null;
           custom_domain_verified?: boolean | null;
-          custom_theme?: Database['public']['Enums']['theme_type'];
           custom_theme_accent?: string | null;
           custom_theme_background?: string | null;
           custom_theme_border?: string | null;
@@ -433,10 +470,11 @@ export interface Database {
           integration_sso_status?: boolean | null;
           integration_sso_url?: string | null;
           logo_redirect_url?: string | null;
-          project_icon?: string | null;
-          project_icon_radius?: string;
-          project_id: string;
-          project_og_image?: string | null;
+          workspace_icon?: string | null;
+          workspace_icon_radius?: string;
+          workspace_id: string;
+          workspace_og_image?: string | null;
+          workspace_theme?: Database['public']['Enums']['theme_type'];
         };
         Update: {
           changelog_enabled?: boolean;
@@ -445,7 +483,6 @@ export interface Database {
           created_at?: string;
           custom_domain?: string | null;
           custom_domain_verified?: boolean | null;
-          custom_theme?: Database['public']['Enums']['theme_type'];
           custom_theme_accent?: string | null;
           custom_theme_background?: string | null;
           custom_theme_border?: string | null;
@@ -463,28 +500,30 @@ export interface Database {
           integration_sso_status?: boolean | null;
           integration_sso_url?: string | null;
           logo_redirect_url?: string | null;
-          project_icon?: string | null;
-          project_icon_radius?: string;
-          project_id?: string;
-          project_og_image?: string | null;
+          workspace_icon?: string | null;
+          workspace_icon_radius?: string;
+          workspace_id?: string;
+          workspace_og_image?: string | null;
+          workspace_theme?: Database['public']['Enums']['theme_type'];
         };
         Relationships: [
           {
             foreignKeyName: 'project_configs_project_id_fkey';
-            columns: ['project_id'];
-            referencedRelation: 'projects';
+            columns: ['workspace_id'];
+            isOneToOne: false;
+            referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
         ];
       };
-      project_invites: {
+      workspace_invite: {
         Row: {
           accepted: boolean;
           created_at: string;
           creator_id: string;
           email: string;
           id: string;
-          project_id: string;
+          workspace_id: string;
         };
         Insert: {
           accepted?: boolean;
@@ -492,7 +531,7 @@ export interface Database {
           creator_id: string;
           email: string;
           id?: string;
-          project_id: string;
+          workspace_id: string;
         };
         Update: {
           accepted?: boolean;
@@ -500,77 +539,60 @@ export interface Database {
           creator_id?: string;
           email?: string;
           id?: string;
-          project_id?: string;
+          workspace_id?: string;
         };
         Relationships: [
           {
             foreignKeyName: 'project_invites_creator_id_fkey';
             columns: ['creator_id'];
-            referencedRelation: 'profiles';
+            isOneToOne: false;
+            referencedRelation: 'profile';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'project_invites_project_id_fkey';
-            columns: ['project_id'];
-            referencedRelation: 'projects';
+            columns: ['workspace_id'];
+            isOneToOne: false;
+            referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
         ];
       };
-      project_members: {
+      workspace_member: {
         Row: {
           created_at: string | null;
           id: string;
           member_id: string;
-          project_id: string;
+          workspace_id: string;
         };
         Insert: {
           created_at?: string | null;
           id?: string;
           member_id: string;
-          project_id: string;
+          workspace_id: string;
         };
         Update: {
           created_at?: string | null;
           id?: string;
           member_id?: string;
-          project_id?: string;
+          workspace_id?: string;
         };
         Relationships: [
           {
             foreignKeyName: 'project_members_member_id_fkey';
             columns: ['member_id'];
-            referencedRelation: 'profiles';
+            isOneToOne: false;
+            referencedRelation: 'profile';
             referencedColumns: ['id'];
           },
           {
             foreignKeyName: 'project_members_project_id_fkey';
-            columns: ['project_id'];
-            referencedRelation: 'projects';
+            columns: ['workspace_id'];
+            isOneToOne: false;
+            referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
         ];
-      };
-      projects: {
-        Row: {
-          created_at: string | null;
-          id: string;
-          name: string;
-          slug: string;
-        };
-        Insert: {
-          created_at?: string | null;
-          id?: string;
-          name: string;
-          slug: string;
-        };
-        Update: {
-          created_at?: string | null;
-          id?: string;
-          name?: string;
-          slug?: string;
-        };
-        Relationships: [];
       };
     };
     Views: {
@@ -580,20 +602,94 @@ export interface Database {
       is_allowed_api_token: {
         Args: {
           apitoken: string;
-          tokentype: Database['public']['Enums']['token_type'][];
+          tokentype: Database['public']['Enums']['api_token_type'][];
         };
         Returns: boolean;
       };
     };
     Enums: {
+      api_token_type: 'full_access' | 'public_access';
       icon_radius_type: 'rounded-full' | 'rounded-none' | 'rounded-md';
-      notification_types: 'comment' | 'post';
-      status_options: 'in review' | 'planned' | 'in progress' | 'completed' | 'rejected';
+      notification_type: 'comment' | 'post';
+      status_type: 'in review' | 'planned' | 'in progress' | 'completed' | 'rejected';
       theme_type: 'dark' | 'light' | 'custom';
-      token_type: 'full_access' | 'public_access';
     };
     CompositeTypes: {
       [_ in never]: never;
     };
   };
-}
+};
+
+type PublicSchema = Database[Extract<keyof Database, 'public'>];
+
+export type Tables<
+  PublicTableNameOrOptions extends
+    | keyof (PublicSchema['Tables'] & PublicSchema['Views'])
+    | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+        Database[PublicTableNameOrOptions['schema']]['Views'])
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? (Database[PublicTableNameOrOptions['schema']]['Tables'] &
+      Database[PublicTableNameOrOptions['schema']]['Views'])[TableName] extends {
+      Row: infer R;
+    }
+    ? R
+    : never
+  : PublicTableNameOrOptions extends keyof (PublicSchema['Tables'] & PublicSchema['Views'])
+  ? (PublicSchema['Tables'] & PublicSchema['Views'])[PublicTableNameOrOptions] extends {
+      Row: infer R;
+    }
+    ? R
+    : never
+  : never;
+
+export type TablesInsert<
+  PublicTableNameOrOptions extends keyof PublicSchema['Tables'] | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Insert: infer I;
+    }
+    ? I
+    : never
+  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
+  ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
+      Insert: infer I;
+    }
+    ? I
+    : never
+  : never;
+
+export type TablesUpdate<
+  PublicTableNameOrOptions extends keyof PublicSchema['Tables'] | { schema: keyof Database },
+  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicTableNameOrOptions['schema']]['Tables']
+    : never = never,
+> = PublicTableNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicTableNameOrOptions['schema']]['Tables'][TableName] extends {
+      Update: infer U;
+    }
+    ? U
+    : never
+  : PublicTableNameOrOptions extends keyof PublicSchema['Tables']
+  ? PublicSchema['Tables'][PublicTableNameOrOptions] extends {
+      Update: infer U;
+    }
+    ? U
+    : never
+  : never;
+
+export type Enums<
+  PublicEnumNameOrOptions extends keyof PublicSchema['Enums'] | { schema: keyof Database },
+  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
+    ? keyof Database[PublicEnumNameOrOptions['schema']]['Enums']
+    : never = never,
+> = PublicEnumNameOrOptions extends { schema: keyof Database }
+  ? Database[PublicEnumNameOrOptions['schema']]['Enums'][EnumName]
+  : PublicEnumNameOrOptions extends keyof PublicSchema['Enums']
+  ? PublicSchema['Enums'][PublicEnumNameOrOptions]
+  : never;

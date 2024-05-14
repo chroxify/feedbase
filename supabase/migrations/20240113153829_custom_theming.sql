@@ -4,8 +4,6 @@ drop policy "Enable update for authenticated users only" on "public"."feedback";
 
 alter table "public"."project_configs" drop constraint "project_configs_project_id_fkey";
 
-alter table "public"."project_configs" add column "custom_theme" theme_type not null default 'default'::theme_type;
-
 alter table "public"."project_configs" add column "custom_theme_accent" text;
 
 alter table "public"."project_configs" add column "custom_theme_background" text;

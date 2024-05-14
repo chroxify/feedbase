@@ -79,7 +79,7 @@ export default function DashboardSection() {
                 Customize your hub to reflect your brand&apos;s unique identity and style.
               </p>
 
-              {/* Project Logo */}
+              {/* Workspace Logo */}
               <div className='mt-2 flex h-full w-full flex-row items-center justify-between'>
                 <div className='space-y-1'>
                   <Label className='text-foreground/70 text-sm '>Logo</Label>

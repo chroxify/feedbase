@@ -1,5 +1,5 @@
 import React from 'react';
-import { getProjectAnalytics } from '@/lib/api/projects';
+import { getProjectAnalytics } from '@/lib/api/workspace';
 import AnalyticsCards from '@/components/dashboard/analytics/chart-cards';
 
 export default async function AnalyticsPage({ params }: { params: { slug: string } }) {

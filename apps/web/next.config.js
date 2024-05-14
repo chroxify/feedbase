@@ -28,7 +28,7 @@ const nextConfig = {
         protocol: hostPath[0],
         hostname: hostPath[1].replace('//', ''),
         port: hostPath[2],
-        pathname: '/storage/v1/object/public/projects/**',
+        pathname: '/storage/v1/object/public/workspaces/**',
       },
     ],
   },

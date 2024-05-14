@@ -64,7 +64,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
   // On delete comment
   async function onDelete() {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/feedback/${comment.feedback_id}/comments/${comment.id}`, {
+      fetch(`/api/v1/workspaces/${projectSlug}/feedback/${comment.feedback_id}/comments/${comment.id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -104,12 +104,15 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
     setComment(updatedComment);
 
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/feedback/${comment.feedback_id}/comments/${comment.id}/upvote`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
+      fetch(
+        `/api/v1/workspaces/${projectSlug}/feedback/${comment.feedback_id}/comments/${comment.id}/upvote`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      )
         .then((res) => res.json())
         .then((data) => {
           if (data.error) {
@@ -138,7 +141,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
 
     // Create promise
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/feedback/${comment.feedback_id}/comments`, {
+      fetch(`/api/v1/workspaces/${projectSlug}/feedback/${comment.feedback_id}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

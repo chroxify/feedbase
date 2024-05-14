@@ -42,11 +42,11 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
     error,
     isLoading,
     mutate,
-  } = useSWR<ChangelogProps['Row'][]>(`/api/v1/projects/${projectSlug}/changelogs`, fetcher);
+  } = useSWR<ChangelogProps['Row'][]>(`/api/v1/workspaces/${projectSlug}/changelogs`, fetcher);
 
   async function onDeleteChangelog(changelog: ChangelogProps['Row']) {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/changelogs/${changelog.id}`, {
+      fetch(`/api/v1/workspaces/${projectSlug}/changelogs/${changelog.id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
 
   async function onDuplicateChangelog(changelog: ChangelogProps['Row']) {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/changelogs`, {
+      fetch(`/api/v1/workspaces/${projectSlug}/changelogs`, {
         method: 'POST',
         body: JSON.stringify({
           title: changelog.title,

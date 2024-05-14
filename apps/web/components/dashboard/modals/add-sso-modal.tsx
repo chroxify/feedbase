@@ -55,7 +55,7 @@ export default function AddSSOAuthModal({
     setIsLoading(true);
 
     // Send request
-    const res = await fetch(`/api/v1/projects/${projectSlug}/config/integrations/sso`, {
+    const res = await fetch(`/api/v1/workspaces/${projectSlug}/config/integrations/sso`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

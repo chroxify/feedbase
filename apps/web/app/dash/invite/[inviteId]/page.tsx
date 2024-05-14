@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation';
-import { getProjectInvite } from '@/lib/api/invites';
+import { getProjectInvite } from '@/lib/api/invite';
 import { getCurrentUser } from '@/lib/api/user';
 import ProjectInviteForm from '@/components/layout/accept-invite-form';
 

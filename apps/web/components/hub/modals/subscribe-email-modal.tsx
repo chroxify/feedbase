@@ -72,7 +72,7 @@ export default function SubscribeToEmailUpdates({
             </ResponsiveDialogDescription>
           </ResponsiveDialogHeader>
           <div className='flex flex-col gap-4'>
-            {/* Project Name */}
+            {/* Workspace Name */}
             <div className='flex flex-col gap-2'>
               <div className='flex flex-row items-center gap-2'>
                 <Label htmlFor='email'>Email</Label>

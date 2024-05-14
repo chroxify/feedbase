@@ -104,7 +104,7 @@ export default function FeedbackSection() {
 
                   {/* Description */}
                   <div className={cn('line-clamp-2 max-w-full text-sm', PROSE_CN)}>
-                    Allow custom domains for each project. This will allow users to use their own domain for
+                    Allow custom domains for each workspace. This will allow users to use their own domain for
                     the feedback portal.
                   </div>
                 </div>

@@ -1,6 +1,6 @@
 import { decode } from 'base64-arraybuffer';
 import { withUserAuth } from '../auth';
-import { NotificationProps, ProfileProps, ProjectProps } from '../types';
+import { NotificationProps, ProfileProps, WorkspaceProps } from '../types';
 
 // Get current user
 export const getCurrentUser = withUserAuth<ProfileProps['Row']>(async (user, supabase, error) => {
@@ -25,21 +25,21 @@ export const getCurrentUser = withUserAuth<ProfileProps['Row']>(async (user, sup
     return { data: null, error: { message: profileError.message, status: 500 } };
   }
 
-  // Return projects
+  // Return workspaces
   return { data: profile, error: null };
 });
 
-// Get all projects for an user
-export const getUserProjects = withUserAuth<ProjectProps['Row'][]>(async (user, supabase, error) => {
+// Get all workspaces for an user
+export const getUserProjects = withUserAuth<WorkspaceProps['Row'][]>(async (user, supabase, error) => {
   // If any errors, return error
   if (error) {
     return { data: null, error };
   }
 
-  // Get all projects for user
-  const { data: projects, error: projectsError } = await supabase
+  // Get all workspaces for user
+  const { data: workspaces, error: projectsError } = await supabase
     .from('project_members')
-    .select('projects (*)')
+    .select('workspaces (*)')
     .eq('member_id', user!.id);
 
   // Check for errors
@@ -47,12 +47,12 @@ export const getUserProjects = withUserAuth<ProjectProps['Row'][]>(async (user, 
     return { data: null, error: { message: projectsError.message, status: 500 } };
   }
 
-  // Restructure projects data
-  const restructuredData = projects.map((item) =>
-    'projects' in item ? item.projects : item
-  ) as ProjectProps['Row'][];
+  // Restructure workspaces data
+  const restructuredData = workspaces.map((item) =>
+    'workspaces' in item ? item.workspaces : item
+  ) as WorkspaceProps['Row'][];
 
-  // Return projects
+  // Return workspaces
   return { data: restructuredData, error: null };
 });
 
@@ -136,10 +136,10 @@ export const getUserNotifications = withUserAuth<NotificationProps[]>(async (use
     return { data: null, error: { message: 'user not found.', status: 404 } };
   }
 
-  // Get all projects user is a member of
-  const { data: projects, error: projectsError } = await supabase
+  // Get all workspaces user is a member of
+  const { data: workspaces, error: projectsError } = await supabase
     .from('project_members')
-    .select('projects (*)')
+    .select('workspaces (*)')
     .eq('member_id', user.id);
 
   // Check for errors
@@ -147,17 +147,17 @@ export const getUserNotifications = withUserAuth<NotificationProps[]>(async (use
     return { data: null, error: { message: projectsError.message, status: 500 } };
   }
 
-  // Restructure projects data
-  const restructuredData = projects.map((item) =>
-    'projects' in item ? item.projects : item
-  ) as ProjectProps['Row'][];
+  // Restructure workspaces data
+  const restructuredData = workspaces.map((item) =>
+    'workspaces' in item ? item.workspaces : item
+  ) as WorkspaceProps['Row'][];
 
   // Get all notifications for user
   const { data: notifications, error: notificationsError } = await supabase
     .from('notifications')
-    .select('*, project:project_id (name, slug, icon), initiator:initiator_id (full_name)')
+    .select('*, workspace:workspace_id (name, slug, icon), initiator:initiator_id (full_name)')
     .in(
-      'project_id',
+      'workspace_id',
       restructuredData.map((item) => item.id)
     )
     .neq('initiator_id', user.id);
@@ -211,7 +211,7 @@ export const archiveUserNotification = (
     const { data: projectMember, error: projectMemberError } = await supabase
       .from('project_members')
       .select()
-      .eq('project_id', notification.project_id)
+      .eq('workspace_id', notification.workspace_id)
       .eq('member_id', user.id)
       .single();
 
@@ -220,9 +220,9 @@ export const archiveUserNotification = (
       return { data: null, error: { message: projectMemberError.message, status: 500 } };
     }
 
-    // Check if user is a member of the project
+    // Check if user is a member of the workspace
     if (!projectMember) {
-      return { data: null, error: { message: 'user is not a member of the project.', status: 403 } };
+      return { data: null, error: { message: 'user is not a member of the workspace.', status: 403 } };
     }
 
     // Append user to has_archived array
@@ -237,7 +237,7 @@ export const archiveUserNotification = (
         has_archived: updatedNotification,
       })
       .eq('id', notificationId)
-      .select('*, project:project_id (name, slug, icon), initiator:initiator_id (full_name)')
+      .select('*, workspace:workspace_id (name, slug, icon), initiator:initiator_id (full_name)')
       .single();
 
     // Check for errors

@@ -59,7 +59,7 @@ export default function CommentsList({
 
     // Create promise
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/feedback/${feedbackId}/comments`, {
+      fetch(`/api/v1/workspaces/${projectSlug}/feedback/${feedbackId}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

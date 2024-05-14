@@ -15,7 +15,7 @@ import {
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
 import { toast } from 'sonner';
-import { sendSlackConfirmation } from '@/lib/api/integrations';
+import { sendSlackConfirmation } from '@/lib/api/integration';
 import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function SlackIntegrationModal({
@@ -49,7 +49,7 @@ export default function SlackIntegrationModal({
     setOpen(false);
 
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/config/integrations/slack`, {
+      fetch(`/api/v1/workspaces/${projectSlug}/config/integrations/slack`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

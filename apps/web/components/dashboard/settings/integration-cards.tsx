@@ -12,7 +12,7 @@ import {
 } from '@feedbase/ui/components/dropdown-menu';
 import { MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
-import { ProjectConfigWithoutSecretProps } from '@/lib/types';
+import { WorkspaceConfigWithoutSecretProps } from '@/lib/types';
 import DiscordIntegrationModal from '@/components/dashboard/modals/connect-discord-modal';
 import DefaultTooltip from '@/components/shared/tooltip';
 import AddSSOAuthModal from '../modals/add-sso-modal';
@@ -26,21 +26,21 @@ const integrationStatusMap: Record<string, string> = {
 };
 
 export default function IntegrationCards({
-  projectConfig,
+  workspaceConfig,
   projectSlug,
 }: {
-  projectConfig: ProjectConfigWithoutSecretProps;
+  workspaceConfig: WorkspaceConfigWithoutSecretProps;
   projectSlug: string;
 }) {
   const initialIntegrations = Object.keys(integrationStatusMap)
-    .filter((key) => (projectConfig as Record<string, unknown>)[key])
+    .filter((key) => (workspaceConfig as Record<string, unknown>)[key])
     .map((key) => integrationStatusMap[key]);
 
   const [enabledIntegrations, setEnabledIntegrations] = useState<string[]>(initialIntegrations);
 
   async function disconnectIntegration(integration: string) {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/projects/${projectSlug}/config/integrations/${integration}`, {
+      fetch(`/api/v1/workspaces/${projectSlug}/config/integrations/${integration}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ export default function IntegrationCards({
       <Card className='flex w-full flex-col'>
         <CardHeader>
           <CardTitle>Integrations</CardTitle>
-          <CardDescription>Configure your project&apos;s integrations.</CardDescription>
+          <CardDescription>Configure your workspace&apos;s integrations.</CardDescription>
         </CardHeader>
         <CardContent>
           {/* Gird 2x2 */}

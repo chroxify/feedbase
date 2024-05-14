@@ -4,13 +4,13 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@feedbase/ui/components/button';
 import { Card, CardDescription, CardFooter, CardHeader, CardTitle } from '@feedbase/ui/components/card';
 import { toast } from 'sonner';
-import { ProjectProps } from '@/lib/types';
+import { WorkspaceProps } from '@/lib/types';
 
 export default function UnsubscribeChangelogCard({
-  project,
+  workspace,
   subId,
 }: {
-  project: ProjectProps['Row'];
+  workspace: WorkspaceProps['Row'];
   subId: string;
 }) {
   const router = useRouter();
@@ -18,7 +18,7 @@ export default function UnsubscribeChangelogCard({
   // on click unsubscribe
   async function unsubscribe() {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/${project.slug}/changelogs/subscribers`, {
+      fetch(`/api/v1/${workspace.slug}/changelogs/subscribers`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -55,9 +55,9 @@ export default function UnsubscribeChangelogCard({
   return (
     <Card className='flex w-full flex-col gap-4 p-6 sm:max-w-md sm:p-8'>
       <CardHeader className='p-0'>
-        <CardTitle>Unsubscribe from {project.name} Changelogs</CardTitle>
+        <CardTitle>Unsubscribe from {workspace.name} Changelogs</CardTitle>
         <CardDescription>
-          You will no longer receive changelog updates from {project.name}. You can resubscribe at any time.
+          You will no longer receive changelog updates from {workspace.name}. You can resubscribe at any time.
         </CardDescription>
       </CardHeader>
       <CardFooter className='p-0'>

@@ -68,7 +68,7 @@ function renderNotifications({
       {notifications?.map((notification) => (
         <Link
           href={formatRootUrl(
-            notification.project.slug,
+            notification.workspace.slug,
             `/feedback/${notification.feedback_id}${
               notification.type === 'comment' ? `?comment=${notification.comment_id}` : ''
             }`
@@ -76,9 +76,9 @@ function renderNotifications({
           key={notification.id}
           className='min-h-16 hover:bg-foreground/5 flex h-full w-full flex-row items-center gap-2 border-b px-3 py-5 last:border-b-0'>
           {/* Icon */}
-          {notification.project.icon ? (
+          {notification.workspace.icon ? (
             <Avatar className='h-[40px] w-[40px] border hover:cursor-pointer'>
-              <AvatarImage src={notification.project.icon || ''} alt={notification.project.name} />
+              <AvatarImage src={notification.workspace.icon || ''} alt={notification.workspace.name} />
             </Avatar>
           ) : (
             <div className='text-foreground/60 text-light flex transform-none flex-row items-center justify-center rounded-full border p-2.5'>
