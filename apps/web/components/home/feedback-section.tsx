@@ -136,7 +136,7 @@ export default function FeedbackSection() {
               <div className='mt-3 flex h-full flex-col items-start gap-3'>
                 {/* TODO: RE-ENABLE / REWORK THIS */}
                 {/* <TagCombobox
-                  projectTags={demoTags}
+                  workspaceTags={demoTags}
                   onSelect={(tags) => demoTags.filter((tag) => tags.includes(tag.value))}
                   triggerClassName='w-full sm:w-full mt-5'
                   demo

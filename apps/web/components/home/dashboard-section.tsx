@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -97,7 +98,7 @@ export default function DashboardSection() {
                       </p>
 
                       {logo.url ? (
-                        <img
+                        <Image
                           src={logo.url}
                           alt='Preview'
                           width={45}

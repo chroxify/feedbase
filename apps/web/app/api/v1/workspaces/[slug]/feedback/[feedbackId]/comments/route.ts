@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { createCommentForFeedbackById, getCommentsForFeedbackById } from '@/lib/api/comment';
-import { FeedbackCommentProps } from '@/lib/types';
+import { CommentProps } from '@/lib/types';
 
 /* 
     Create feedback comment
@@ -11,7 +11,7 @@ import { FeedbackCommentProps } from '@/lib/types';
     }
 */
 export async function POST(req: Request, context: { params: { slug: string; feedbackId: string } }) {
-  const { content, reply_to_id: replyToId } = (await req.json()) as FeedbackCommentProps['Insert'];
+  const { content, reply_to_id: replyToId } = (await req.json()) as CommentProps['Insert'];
 
   if (!content) {
     return NextResponse.json({ error: 'Content cannot be empty' }, { status: 400 });

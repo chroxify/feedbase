@@ -19,7 +19,7 @@ export default function FeedbackLoading() {
 
       {/* Content */}
       <div className='flex h-full w-full flex-col items-center justify-center gap-5 px-5 sm:px-10 md:px-10 lg:px-20'>
-        <FeedbackHeader isLoggedIn={false} projectSlug='' /> {/* Provide placeholder values */}
+        <FeedbackHeader isLoggedIn={false} workspaceSlug='' /> {/* Provide placeholder values */}
         {/* Main */}
         <div className='flex h-full w-full flex-col justify-between'>
           {[1, 2, 3, 4, 5].map((index) => (

@@ -23,7 +23,7 @@ import { formatRootUrl } from '@/lib/utils';
 import { CodeIcon } from '@/components/shared/icons/icons-animated';
 import LottiePlayer from '@/components/shared/lottie-player';
 
-export function ApiSheet({ projectSlug }: { projectSlug: string }) {
+export function ApiSheet({ workspaceSlug }: { workspaceSlug: string }) {
   const [isHover, setIsHover] = useState<boolean>(false);
   const currentTheme = useTheme();
 
@@ -32,7 +32,7 @@ export function ApiSheet({ projectSlug }: { projectSlug: string }) {
       id: 'bash',
       name: 'cURL',
       content: `curl --request GET \\
-  --url ${formatRootUrl('', `/api/v1/${projectSlug}/changelogs`)} \\
+  --url ${formatRootUrl('', `/api/v1/${workspaceSlug}/changelogs`)} \\
   --header 'Content-Type: application/json'`,
     },
     {
@@ -40,7 +40,7 @@ export function ApiSheet({ projectSlug }: { projectSlug: string }) {
       name: 'JavaScript',
       content: `const options = {method: 'GET'};
 
-fetch('${formatRootUrl('', `/api/v1/${projectSlug}/changelogs`)}', options)
+fetch('${formatRootUrl('', `/api/v1/${workspaceSlug}/changelogs`)}', options)
   .then(response => response.json())
   .then(data => console.log(data));`,
     },
@@ -49,7 +49,7 @@ fetch('${formatRootUrl('', `/api/v1/${projectSlug}/changelogs`)}', options)
       name: 'Python',
       content: `import requests
 
-url = '${formatRootUrl('', `/api/v1/${projectSlug}/changelogs`)}'
+url = '${formatRootUrl('', `/api/v1/${workspaceSlug}/changelogs`)}'
 response = requests.get(url)
 print(response.json())`,
     },
@@ -85,7 +85,7 @@ print(response.json())`,
             <Label>Public Endpoint</Label>
             <div className='flex h-8 items-center justify-between rounded-md border p-2'>
               <span className='text-foreground text-sm'>
-                {formatRootUrl('', `/api/v1/${projectSlug}/changelogs`)}
+                {formatRootUrl('', `/api/v1/${workspaceSlug}/changelogs`)}
               </span>
               <Button
                 variant='ghost'
@@ -94,7 +94,7 @@ print(response.json())`,
                 data-copied='false'
                 onClick={(event) => {
                   // Copy content to clipboard
-                  navigator.clipboard.writeText(formatRootUrl('', `/api/v1/${projectSlug}/changelogs`));
+                  navigator.clipboard.writeText(formatRootUrl('', `/api/v1/${workspaceSlug}/changelogs`));
 
                   // Store currentTarget
                   const currentTarget = event.currentTarget;

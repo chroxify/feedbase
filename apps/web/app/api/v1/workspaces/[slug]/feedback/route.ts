@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createFeedback, getAllProjectFeedback } from '@/lib/api/feedback';
+import { createFeedback, getAllWorkspaceFeedback } from '@/lib/api/feedback';
 import { FeedbackWithUserInputProps } from '@/lib/types';
 
 export const runtime = 'edge';
@@ -50,7 +50,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
     GET /api/v1/workspaces/[slug]/feedback
 */
 export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: feedback, error } = await getAllProjectFeedback(context.params.slug, 'route', false);
+  const { data: feedback, error } = await getAllWorkspaceFeedback(context.params.slug, 'route', false);
 
   // If any errors thrown, return error
   if (error) {

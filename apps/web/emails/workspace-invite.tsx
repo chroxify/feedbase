@@ -16,7 +16,7 @@ import {
 } from '@react-email/components';
 import { formatRootUrl } from '@/lib/utils';
 
-interface ProjectInviteEmailProps {
+interface WorkspaceInviteEmailProps {
   email: string;
   invitedByFullName: string;
   invitedByEmail: string;
@@ -24,13 +24,13 @@ interface ProjectInviteEmailProps {
   inviteLink: string;
 }
 
-export default function ProjectInviteEmail({
+export default function WorkspaceInviteEmail({
   email,
   invitedByFullName,
   invitedByEmail,
   workspaceName,
   inviteLink,
-}: ProjectInviteEmailProps) {
+}: WorkspaceInviteEmailProps) {
   const previewText = `Join ${workspaceName} on Feedbase`;
 
   return (

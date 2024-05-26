@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
-import { getUserProjects } from '@/lib/api/user';
-import { createProject } from '@/lib/api/workspace';
+import { getUserWorkspaces } from '@/lib/api/user';
+import { createWorkspace } from '@/lib/api/workspace';
 
 /*
     Create Workspace
@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   }
 
   // Create Workspace
-  const { data: workspace, error } = await createProject({ name, slug }, 'route');
+  const { data: workspace, error } = await createWorkspace({ name, slug }, 'route');
 
   // Check for errors
   if (error) {
@@ -31,12 +31,12 @@ export async function POST(req: Request) {
 }
 
 /*
-    Get User Projects
+    Get User Workspaces
     GET /api/v1/workspaces
 */
 export async function GET(req: Request) {
-  // Get User Projects
-  const { data: workspaces, error } = await getUserProjects('route');
+  // Get User Workspaces
+  const { data: workspaces, error } = await getUserWorkspaces('route');
 
   // Check for errors
   if (error) {

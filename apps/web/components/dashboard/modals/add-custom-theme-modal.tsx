@@ -17,7 +17,7 @@ import {
 } from '@feedbase/ui/components/responsive-dialog';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronUp } from 'lucide-react';
-import { WorkspaceConfigWithoutSecretProps } from '@/lib/types';
+import { WorkspaceThemeProps } from '@/lib/types';
 import { hexToHSL, hslToHex } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
 
@@ -55,21 +55,14 @@ function ColorInput({
 
 export default function CustomizeThemeModal({
   children,
-  workspaceConfig,
-  setWorkspaceConfig,
+  workspaceTheme,
+  setWorkspaceTheme,
 }: {
   children: React.ReactNode;
-  workspaceConfig: WorkspaceConfigWithoutSecretProps;
-  setWorkspaceConfig: React.Dispatch<React.SetStateAction<WorkspaceConfigWithoutSecretProps>>;
+  workspaceTheme: WorkspaceThemeProps['Row'];
+  setWorkspaceTheme: React.Dispatch<React.SetStateAction<WorkspaceThemeProps['Row']>>;
 }) {
-  const [colorScheme, setColorScheme] = useState({
-    root: hslToHex(workspaceConfig.custom_theme_root) || '',
-    background: hslToHex(workspaceConfig.custom_theme_background) || '',
-    secondary_background: hslToHex(workspaceConfig.custom_theme_secondary_background) || '',
-    foreground: hslToHex(workspaceConfig.custom_theme_primary_foreground) || '',
-    accent: hslToHex(workspaceConfig.custom_theme_accent) || '',
-    border: hslToHex(workspaceConfig.custom_theme_border) || '',
-  });
+  const [colorScheme, setColorScheme] = useState<WorkspaceThemeProps['Row']>(workspaceTheme);
 
   return (
     <ResponsiveDialog>
@@ -92,7 +85,7 @@ export default function CustomizeThemeModal({
             </div>
 
             <ColorInput
-              value={colorScheme.root}
+              value={colorScheme.root || ''}
               onChange={(e) => {
                 // if first character is not #, add it
                 if (!e.target.value.startsWith('#')) {
@@ -112,7 +105,7 @@ export default function CustomizeThemeModal({
             </div>
 
             <ColorInput
-              value={colorScheme.foreground}
+              value={colorScheme.foreground || ''}
               onChange={(e) => {
                 // if first character is not #, add it
                 if (!e.target.value.startsWith('#')) {
@@ -132,7 +125,7 @@ export default function CustomizeThemeModal({
             </div>
 
             <ColorInput
-              value={colorScheme.background}
+              value={colorScheme.background || ''}
               onChange={(e) => {
                 // if first character is not #, add it
                 if (!e.target.value.startsWith('#')) {
@@ -152,7 +145,7 @@ export default function CustomizeThemeModal({
             </div>
 
             <ColorInput
-              value={colorScheme.secondary_background}
+              value={colorScheme.secondary_background || ''}
               onChange={(e) => {
                 // if first character is not #, add it
                 if (!e.target.value.startsWith('#')) {
@@ -172,7 +165,7 @@ export default function CustomizeThemeModal({
             </div>
 
             <ColorInput
-              value={colorScheme.accent}
+              value={colorScheme.accent || ''}
               onChange={(e) => {
                 // if first character is not #, add it
                 if (!e.target.value.startsWith('#')) {
@@ -192,7 +185,7 @@ export default function CustomizeThemeModal({
             </div>
 
             <ColorInput
-              value={colorScheme.border}
+              value={colorScheme.border || ''}
               onChange={(e) => {
                 // if first character is not #, add it
                 if (!e.target.value.startsWith('#')) {
@@ -217,28 +210,34 @@ export default function CustomizeThemeModal({
           {/* Small wireframe replica of website with color scheme */}
           <div
             className='flex h-96 w-full flex-col gap-4 overflow-y-hidden rounded-md border'
-            style={{ backgroundColor: colorScheme.root, textDecorationStyle: 'solid' }}>
+            style={{ backgroundColor: colorScheme.root || '', textDecorationStyle: 'solid' }}>
             {/* Header */}
             <div
               className='flex flex-row items-center justify-between border-b p-4'
-              style={{ borderColor: colorScheme.border }}>
-              <Icons.LogoText className='fill-foreground h-6 w-20' style={{ fill: colorScheme.foreground }} />
+              style={{ borderColor: colorScheme.border || '' }}>
+              <Icons.LogoText
+                className='fill-foreground h-6 w-20'
+                style={{ fill: colorScheme.foreground || '' }}
+              />
               <div
                 className='flex h-5 w-12 items-center justify-center rounded-md bg-white text-[10px]'
-                style={{ backgroundColor: colorScheme.background, color: colorScheme.foreground }}>
+                style={{
+                  backgroundColor: colorScheme.background || '',
+                  color: colorScheme.foreground || '',
+                }}>
                 Login
               </div>
             </div>
 
             {/* Body */}
             <div className='flex flex-col gap-4 px-4'>
-              <div className='w-full border-b px-2 pb-4' style={{ borderColor: colorScheme.border }}>
-                <p className='text-sm ' style={{ color: colorScheme.foreground }}>
+              <div className='w-full border-b px-2 pb-4' style={{ borderColor: colorScheme.border || '' }}>
+                <p className='text-sm ' style={{ color: colorScheme.foreground || '' }}>
                   Feedback
                 </p>
                 <p
                   className='text-foreground text-xs '
-                  style={{ color: colorScheme.foreground, opacity: 0.5 }}>
+                  style={{ color: colorScheme.foreground || '', opacity: 0.5 }}>
                   Have a suggestion or found a bug? Let us know!
                 </p>
               </div>
@@ -248,18 +247,18 @@ export default function CustomizeThemeModal({
                   <div
                     className='flex h-5 w-10 items-center justify-center rounded-md border bg-white text-[10px]'
                     style={{
-                      backgroundColor: colorScheme.secondary_background,
-                      borderColor: colorScheme.border,
-                      color: colorScheme.foreground,
+                      backgroundColor: colorScheme.secondary_background || '',
+                      borderColor: colorScheme.border || '',
+                      color: colorScheme.foreground || '',
                     }}>
                     New
                   </div>
                   <div
                     className='flex h-5 w-10 items-center justify-center rounded-md border bg-white text-[10px]'
                     style={{
-                      backgroundColor: colorScheme.secondary_background,
-                      borderColor: colorScheme.border,
-                      color: colorScheme.foreground,
+                      backgroundColor: colorScheme.secondary_background || '',
+                      borderColor: colorScheme.border || '',
+                      color: colorScheme.foreground || '',
                     }}>
                     Top
                   </div>
@@ -269,18 +268,18 @@ export default function CustomizeThemeModal({
                   <div
                     className='flex h-5 w-20 items-center justify-start rounded-md border bg-white pl-1.5 text-[10px]'
                     style={{
-                      backgroundColor: colorScheme.secondary_background,
-                      borderColor: colorScheme.border,
-                      color: colorScheme.foreground,
+                      backgroundColor: colorScheme.secondary_background || '',
+                      borderColor: colorScheme.border || '',
+                      color: colorScheme.foreground || '',
                     }}>
                     Search
                   </div>
                   <div
                     className='flex h-5 w-10 items-center justify-center rounded-md border bg-white text-[10px]'
                     style={{
-                      backgroundColor: colorScheme.secondary_background,
-                      borderColor: colorScheme.border,
-                      color: colorScheme.foreground,
+                      backgroundColor: colorScheme.secondary_background || '',
+                      borderColor: colorScheme.border || '',
+                      color: colorScheme.foreground || '',
                     }}>
                     Post
                   </div>
@@ -291,23 +290,25 @@ export default function CustomizeThemeModal({
                 <div
                   className='flex w-full rounded-md border'
                   key={`feedback-${i}`} // eslint-disable-line react/no-array-index-key
-                  style={{ borderColor: colorScheme.border }}>
+                  style={{ borderColor: colorScheme.border || '' }}>
                   <div
                     className='flex h-full w-6 items-center justify-center border-r'
-                    style={{ borderColor: colorScheme.border }}>
+                    style={{ borderColor: colorScheme.border || '' }}>
                     <ChevronUp
                       className='text-foreground/50 h-4 w-4'
-                      style={{ color: colorScheme.foreground }}
+                      style={{ color: colorScheme.foreground || '' }}
                     />
                   </div>
 
                   <div className='flex flex-col p-1'>
-                    <p className='text-foreground/80 text-[11px] ' style={{ color: colorScheme.foreground }}>
+                    <p
+                      className='text-foreground/80 text-[11px] '
+                      style={{ color: colorScheme.foreground || '' }}>
                       Demo Feedback Idea
                     </p>
                     <p
                       className='text-foreground text-[10px] '
-                      style={{ color: colorScheme.foreground, opacity: 0.6 }}>
+                      style={{ color: colorScheme.foreground || '', opacity: 0.6 }}>
                       This is a demo feedback message to test theming.
                     </p>
                   </div>
@@ -323,18 +324,18 @@ export default function CustomizeThemeModal({
           <ResponsiveDialogClose asChild>
             <Button
               type='submit'
-              disabled={Object.values(colorScheme).some((prop) => prop.length < 4)}
+              disabled={Object.values(colorScheme).some((prop) => prop?.length ?? 0 < 4)}
               onClick={() => {
                 // Update workspace config
-                setWorkspaceConfig((prev) => ({
+                setWorkspaceTheme((prev) => ({
                   ...prev,
-                  workspace_theme: 'custom',
-                  custom_theme_root: hexToHSL(colorScheme.root) || '',
-                  custom_theme_background: hexToHSL(colorScheme.background) || '',
-                  custom_theme_secondary_background: hexToHSL(colorScheme.secondary_background) || '',
-                  custom_theme_primary_foreground: hexToHSL(colorScheme.foreground) || '',
-                  custom_theme_accent: hexToHSL(colorScheme.accent) || '',
-                  custom_theme_border: hexToHSL(colorScheme.border) || '',
+                  theme: 'custom',
+                  root: hexToHSL(colorScheme.root) || '',
+                  background: hexToHSL(colorScheme.background) || '',
+                  secondary_background: hexToHSL(colorScheme.secondary_background) || '',
+                  foreground: hexToHSL(colorScheme.foreground) || '',
+                  accent: hexToHSL(colorScheme.accent) || '',
+                  border: hexToHSL(colorScheme.border) || '',
                 }));
               }}>
               Set theme

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { subscribeToProjectChangelogs, unsubscribeFromProjectChangelogs } from '@/lib/api/public';
+import { subscribeToWorkspaceChangelogs, unsubscribeFromWorkspaceChangelogs } from '@/lib/api/public';
 
 /*
   Subscribe to workspace changelogs
@@ -17,7 +17,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
   }
 
   // Subscribe to workspace changelogs
-  const { data: subscriber, error } = await subscribeToProjectChangelogs(context.params.slug, email);
+  const { data: subscriber, error } = await subscribeToWorkspaceChangelogs(context.params.slug, email);
 
   // If any errors thrown, return error
   if (error) {
@@ -44,7 +44,7 @@ export async function DELETE(req: Request, context: { params: { slug: string } }
   }
 
   // Unsubscribe from workspace changelogs
-  const { error } = await unsubscribeFromProjectChangelogs(context.params.slug, subId);
+  const { error } = await unsubscribeFromWorkspaceChangelogs(context.params.slug, subId);
 
   // If any errors thrown, return error
   if (error) {

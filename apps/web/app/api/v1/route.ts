@@ -23,14 +23,14 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
       },
     ],
     paths: {
-      '/{projectSlug}/atom': {
+      '/{workspaceSlug}/atom': {
         get: {
           description: 'Generate atom feed for workspace changelog',
-          operationId: 'getProjectChangelogsAtom',
+          operationId: 'getWorkspaceChangelogsAtom',
           security: [],
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -73,14 +73,14 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/{projectSlug}/changelogs': {
+      '/{workspaceSlug}/changelogs': {
         get: {
           description: 'Get public workspace changelogs',
-          operationId: 'getPublicProjectChangelogs',
+          operationId: 'getPublicWorkspaceChangelogs',
           security: [],
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -126,13 +126,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}': {
+      '/workspaces/{workspaceSlug}': {
         get: {
           description: 'Get a workspace by slug',
           operationId: 'getWorkspaceBySlug',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -176,10 +176,10 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
         },
         patch: {
           description: 'Update a workspace by slug',
-          operationId: 'updateProjectBySlug',
+          operationId: 'updateWorkspaceBySlug',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -194,7 +194,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
             content: {
               'application/json': {
                 schema: {
-                  $ref: '#/components/schemas/ProjectUpdate',
+                  $ref: '#/components/schemas/WorkspaceUpdate',
                 },
               },
             },
@@ -234,10 +234,10 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
         },
         delete: {
           description: 'Delete a workspace by slug',
-          operationId: 'deleteProjectBySlug',
+          operationId: 'deleteWorkspaceBySlug',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -280,13 +280,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}/changelogs': {
+      '/workspaces/{workspaceSlug}/changelogs': {
         get: {
           description: 'Get all workspace changelogs',
-          operationId: 'getProjectChangelogs',
+          operationId: 'getWorkspaceChangelogs',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -333,10 +333,10 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
         },
         post: {
           description: 'Create workspace changelog',
-          operationId: 'createProjectChangelog',
+          operationId: 'createWorkspaceChangelog',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -390,13 +390,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}/changelogs/{changelogId}': {
+      '/workspaces/{workspaceSlug}/changelogs/{changelogId}': {
         put: {
           description: 'Update workspace changelog by id',
-          operationId: 'updateProjectChangelogById',
+          operationId: 'updateWorkspaceChangelogById',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -446,10 +446,10 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
         },
         delete: {
           description: 'Delete workspace changelog by id',
-          operationId: 'deleteProjectChangelogById',
+          operationId: 'deleteWorkspaceChangelogById',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -487,13 +487,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}/config': {
+      '/workspaces/{workspaceSlug}/config': {
         get: {
           description: 'Get workspace config',
-          operationId: 'getProjectConfig',
+          operationId: 'getWorkspaceConfig',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -508,7 +508,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
               content: {
                 'application/json': {
                   schema: {
-                    $ref: '#/components/schemas/ProjectConfig',
+                    $ref: '#/components/schemas/WorkspaceConfig',
                   },
                 },
               },
@@ -537,10 +537,10 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
         },
         patch: {
           description: 'Update workspace config',
-          operationId: 'updateProjectConfig',
+          operationId: 'updateWorkspaceConfig',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -556,7 +556,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
               'application/json': {
                 schema: {
                   type: 'object',
-                  $ref: '#/components/schemas/ProjectConfigUpdate',
+                  $ref: '#/components/schemas/WorkspaceConfigUpdate',
                 },
               },
             },
@@ -568,7 +568,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
                 'application/json': {
                   schema: {
                     type: 'object',
-                    $ref: '#/components/schemas/ProjectConfig',
+                    $ref: '#/components/schemas/WorkspaceConfig',
                   },
                 },
               },
@@ -596,13 +596,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}/feedback': {
+      '/workspaces/{workspaceSlug}/feedback': {
         get: {
           description: 'Get all workspace feedback',
-          operationId: 'getProjectFeedback',
+          operationId: 'getWorkspaceFeedback',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -649,10 +649,10 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
         },
         post: {
           description: 'Create workspace feedback',
-          operationId: 'createProjectFeedback',
+          operationId: 'createWorkspaceFeedback',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -706,13 +706,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}/feedback/{feedbackId}': {
+      '/workspaces/{workspaceSlug}/feedback/{feedbackId}': {
         get: {
           description: 'Get workspace feedback by id',
-          operationId: 'getProjectFeedbackById',
+          operationId: 'getWorkspaceFeedbackById',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -765,10 +765,10 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
         },
         patch: {
           description: 'Update workspace feedback by id',
-          operationId: 'updateProjectFeedbackById',
+          operationId: 'updateWorkspaceFeedbackById',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -832,10 +832,10 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
         },
         delete: {
           description: 'Delete workspace feedback by id',
-          operationId: 'deleteProjectFeedbackById',
+          operationId: 'deleteWorkspaceFeedbackById',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -887,13 +887,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}/feedback/{feedbackId}/comments': {
+      '/workspaces/{workspaceSlug}/feedback/{feedbackId}/comments': {
         get: {
           description: 'Get feedback comments',
           operationId: 'getFeedbackComments',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -948,13 +948,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}/feedback/{feedbackId}/comments/{commentId}': {
+      '/workspaces/{workspaceSlug}/feedback/{feedbackId}/comments/{commentId}': {
         delete: {
           description: 'Delete workspace feedback comment by id',
-          operationId: 'deleteProjectFeedbackCommentById',
+          operationId: 'deleteWorkspaceFeedbackCommentById',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -1015,13 +1015,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}/feedback/{feedbackId}/upvotes': {
+      '/workspaces/{workspaceSlug}/feedback/{feedbackId}/upvotes': {
         get: {
           description: 'Get feedback upvoters',
           operationId: 'getFeedbackUpvoters',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -1076,13 +1076,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}/feedback/tags': {
+      '/workspaces/{workspaceSlug}/feedback/tags': {
         get: {
           description: 'Get feedback tags',
           operationId: 'getFeedbackTags',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -1132,7 +1132,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           operationId: 'createFeedbackTag',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -1186,13 +1186,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}/feedback/tags/{tagName}': {
+      '/workspaces/{workspaceSlug}/feedback/tags/{tagName}': {
         delete: {
           description: 'Delete feedback tag by name',
           operationId: 'deleteFeedbackTagByName',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -1244,13 +1244,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}/invites': {
+      '/workspaces/{workspaceSlug}/invites': {
         get: {
           description: 'List workspace team invites',
-          operationId: 'getProjectInvites',
+          operationId: 'getWorkspaceInvites',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -1267,7 +1267,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
                   schema: {
                     type: 'array',
                     items: {
-                      $ref: '#/components/schemas/ExtendedProjectInvite',
+                      $ref: '#/components/schemas/ExtendedWorkspaceInvite',
                     },
                   },
                 },
@@ -1297,10 +1297,10 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
         },
         post: {
           description: 'Create a workspace invite',
-          operationId: 'createProjectInvite',
+          operationId: 'createWorkspaceInvite',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -1331,7 +1331,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
               content: {
                 'application/json': {
                   schema: {
-                    $ref: '#/components/schemas/ProjectInvite',
+                    $ref: '#/components/schemas/WorkspaceInvite',
                   },
                 },
               },
@@ -1359,13 +1359,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}/invites/{inviteId}': {
+      '/workspaces/{workspaceSlug}/invites/{inviteId}': {
         delete: {
           description: 'Delete workspace invite by id',
-          operationId: 'deleteProjectInviteById',
+          operationId: 'deleteWorkspaceInviteById',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -1389,7 +1389,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
               content: {
                 'application/json': {
                   schema: {
-                    $ref: '#/components/schemas/ProjectInvite',
+                    $ref: '#/components/schemas/WorkspaceInvite',
                   },
                 },
               },
@@ -1417,13 +1417,13 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
           },
         },
       },
-      '/workspaces/{projectSlug}/members': {
+      '/workspaces/{workspaceSlug}/members': {
         get: {
           description: 'Get workspace members',
-          operationId: 'getProjectMembers',
+          operationId: 'getWorkspaceMembers',
           parameters: [
             {
-              name: 'projectSlug',
+              name: 'workspaceSlug',
               in: 'path',
               description: 'Workspace slug',
               required: true,
@@ -1441,7 +1441,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
                   schema: {
                     type: 'array',
                     items: {
-                      $ref: '#/components/schemas/ProjectMember',
+                      $ref: '#/components/schemas/WorkspaceMember',
                     },
                   },
                 },
@@ -1501,7 +1501,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
             },
           },
         },
-        ProjectUpdate: {
+        WorkspaceUpdate: {
           type: 'object',
           properties: {
             name: {
@@ -1667,7 +1667,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
             },
           },
         },
-        ProjectConfig: {
+        WorkspaceConfig: {
           type: 'object',
           properties: {
             id: {
@@ -1705,7 +1705,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
             },
           },
         },
-        ProjectConfigUpdate: {
+        WorkspaceConfigUpdate: {
           type: 'object',
           properties: {
             changelog_preview_style: {
@@ -2025,7 +2025,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
             },
           },
         },
-        ProjectInvite: {
+        WorkspaceInvite: {
           type: 'object',
           properties: {
             id: {
@@ -2052,7 +2052,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
             },
           },
         },
-        ExtendedProjectInvite: {
+        ExtendedWorkspaceInvite: {
           type: 'object',
           properties: {
             id: {
@@ -2101,7 +2101,7 @@ export function GET(): NextResponse<OpenAPIV3.Document> {
             },
           },
         },
-        ProjectMember: {
+        WorkspaceMember: {
           type: 'object',
           properties: {
             id: {

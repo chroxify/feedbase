@@ -1,4 +1,4 @@
-import { getAllProjectFeedback } from '@/lib/api/feedback';
+import { getAllWorkspaceFeedback } from '@/lib/api/feedback';
 import { formatRootUrl } from '@/lib/utils';
 
 /*
@@ -6,7 +6,7 @@ import { formatRootUrl } from '@/lib/utils';
   GET /api/v1/workspaces/:slug/feedback/export
 */
 export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: feedback, error } = await getAllProjectFeedback(context.params.slug, 'route');
+  const { data: feedback, error } = await getAllWorkspaceFeedback(context.params.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {

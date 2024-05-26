@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
-import { getUserProjects } from '@/lib/api/user';
+import { getUserWorkspaces } from '@/lib/api/user';
 import Onboarding from '@/components/layout/onboarding';
 
-export default async function Projects() {
-  const { data: workspaces, error } = await getUserProjects('server');
+export default async function Workspaces() {
+  const { data: workspaces, error } = await getUserWorkspaces('server');
 
   if (error) {
     // Redirect to login if the user is not authenticated

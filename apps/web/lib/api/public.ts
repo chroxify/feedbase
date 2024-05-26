@@ -8,7 +8,7 @@ import {
 } from '@/lib/types';
 
 // Get Public Workspace Changelogs
-export const getPublicProjectChangelogs = withWorkspaceAuth<ChangelogWithAuthorProps[]>(
+export const getPublicWorkspaceChangelogs = withWorkspaceAuth<ChangelogWithAuthorProps[]>(
   async (user, supabase, workspace, error) => {
     // If any errors, return error
     if (error) {
@@ -33,7 +33,7 @@ export const getPublicProjectChangelogs = withWorkspaceAuth<ChangelogWithAuthorP
 );
 
 // Get Public Workspace Feedback
-export const getPublicProjectFeedback = withWorkspaceAuth<FeedbackWithUserProps[]>(
+export const getPublicWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProps[]>(
   async (user, supabase, workspace, error) => {
     // If any errors, return error
     if (error) {
@@ -43,7 +43,7 @@ export const getPublicProjectFeedback = withWorkspaceAuth<FeedbackWithUserProps[
     // Get feedback and also include complete user object
     const { data: feedback, error: feedbackError } = await supabase
       .from('feedback')
-      .select('*, user:user_id (*)')
+      .select('*, user:profile (avatar_url, full_name)')
       .eq('workspace_id', workspace!.id);
 
     // Check for errors
@@ -62,7 +62,7 @@ export const getPublicProjectFeedback = withWorkspaceAuth<FeedbackWithUserProps[
     // Get team members
     const { data: teamMembers, error: teamMembersError } = await supabase
       .from('workspace_member')
-      .select('profiles (full_name, avatar_url), *')
+      .select('profile (full_name, avatar_url), *')
       .eq('workspace_id', workspace!.id);
 
     // Check for errors
@@ -105,7 +105,7 @@ export const getPublicProjectFeedback = withWorkspaceAuth<FeedbackWithUserProps[
 );
 
 // Subscribe to workspace changelogs
-export const subscribeToProjectChangelogs = (projectSlug: string, email: string) =>
+export const subscribeToWorkspaceChangelogs = (workspaceSlug: string, email: string) =>
   withWorkspaceAuth<ChangelogSubscriberProps['Row']>(async (user, supabase, workspace, error) => {
     // If any errors, return error
     if (error) {
@@ -144,10 +144,10 @@ export const subscribeToProjectChangelogs = (projectSlug: string, email: string)
 
     // Return subscriber
     return { data: subscriber, error: null };
-  })(projectSlug, 'server', true, false);
+  })(workspaceSlug, 'server', true, false);
 
 // Unsubscribe from workspace changelogs
-export const unsubscribeFromProjectChangelogs = (projectSlug: string, subId: string) =>
+export const unsubscribeFromWorkspaceChangelogs = (workspaceSlug: string, subId: string) =>
   withWorkspaceAuth<ChangelogWithAuthorProps[]>(async (user, supabase, workspace, error) => {
     // If any errors, return error
     if (error) {
@@ -180,4 +180,4 @@ export const unsubscribeFromProjectChangelogs = (projectSlug: string, subId: str
 
     // Return success
     return { data, error: null };
-  })(projectSlug, 'server', true, false);
+  })(workspaceSlug, 'server', true, false);

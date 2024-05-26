@@ -20,11 +20,11 @@ import { toast } from 'sonner';
 import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function AddSSOAuthModal({
-  projectSlug,
+  workspaceSlug,
   enabledIntegrations,
   setEnabledIntegrations,
 }: {
-  projectSlug: string;
+  workspaceSlug: string;
   enabledIntegrations: string[];
   setEnabledIntegrations: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
@@ -55,7 +55,7 @@ export default function AddSSOAuthModal({
     setIsLoading(true);
 
     // Send request
-    const res = await fetch(`/api/v1/workspaces/${projectSlug}/config/integrations/sso`, {
+    const res = await fetch(`/api/v1/workspaces/${workspaceSlug}/config/integrations/sso`, {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',

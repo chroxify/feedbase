@@ -15,15 +15,15 @@ import {
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
 import { toast } from 'sonner';
-import { sendSlackConfirmation } from '@/lib/api/integration';
+// import { sendSlackConfirmation } from '@/lib/api/integration';
 import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function SlackIntegrationModal({
-  projectSlug,
+  workspaceSlug,
   enabledIntegrations,
   setEnabledIntegrations,
 }: {
-  projectSlug: string;
+  workspaceSlug: string;
   enabledIntegrations: string[];
   setEnabledIntegrations: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
@@ -49,7 +49,7 @@ export default function SlackIntegrationModal({
     setOpen(false);
 
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${projectSlug}/config/integrations/slack`, {
+      fetch(`/api/v1/workspaces/${workspaceSlug}/config/integrations/slack`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -77,7 +77,7 @@ export default function SlackIntegrationModal({
       success: () => {
         setIsLoading(false);
         setEnabledIntegrations([...enabledIntegrations, 'slack']);
-        sendSlackConfirmation(projectSlug, webhook);
+        // sendSlackConfirmation(workspaceSlug, webhook);
         return 'Slack integration connected successfully.';
       },
       error: (err) => {

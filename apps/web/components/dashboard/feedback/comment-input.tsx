@@ -24,11 +24,11 @@ import { Icons } from '@/components/shared/icons/icons-static';
 import RichTextEditor from '@/components/shared/tiptap-editor';
 
 export default function CommentInput({
-  projectSlug,
+  workspaceSlug,
   feedbackId,
   parentCommentId,
 }: {
-  projectSlug: string;
+  workspaceSlug: string;
   feedbackId: string;
   parentCommentId?: string;
 }) {
@@ -50,7 +50,7 @@ export default function CommentInput({
   });
 
   const { trigger: postComment, isMutating: isPostingComment } = useSWRMutation(
-    `/api/v1/workspaces/${projectSlug}/feedback/${feedbackId}/comments`,
+    `/api/v1/workspaces/${workspaceSlug}/feedback/${feedbackId}/comments`,
     actionFetcher,
     {
       onSuccess: () => {

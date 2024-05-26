@@ -14,18 +14,18 @@ import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronsUpDownIcon, GlobeIcon, Plus } from 'lucide-react';
 import { WorkspaceProps } from '@/lib/types';
-import AddProjectDialog from '@/components/dashboard/modals/add-workspace-modal';
+import AddWorkspaceDialog from '@/components/dashboard/modals/add-workspace-modal';
 
-export default function ProjectDropdown({
+export default function WorkspaceDropdown({
   workspaces,
-  activeProject,
+  activeWorkspace,
   className,
 }: {
   workspaces: WorkspaceProps['Row'][];
-  activeProject: WorkspaceProps['Row'] | null;
+  activeWorkspace: WorkspaceProps['Row'] | null;
   className?: string;
 }) {
-  const [selectedProject, setSelectedProject] = useState<WorkspaceProps['Row'] | null>(activeProject);
+  const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceProps['Row'] | null>(activeWorkspace);
 
   return (
     <DropdownMenu>
@@ -33,10 +33,10 @@ export default function ProjectDropdown({
         <Button variant='ghost' className={cn('group w-full justify-between rounded-lg p-1', className)}>
           {/* TODO!! BROKEN CZ .icon missing */}
           <div className='flex flex-row items-center justify-start gap-2'>
-            {activeProject?.icon ? (
+            {activeWorkspace?.icon ? (
               <div className='ml-[2px] flex items-center justify-center'>
                 <Image
-                  src={activeProject.icon}
+                  src={activeWorkspace.icon}
                   width={22}
                   height={22}
                   className='rounded-sm'
@@ -50,7 +50,7 @@ export default function ProjectDropdown({
             )}
             {/* While selected workspace is null (incase of unexpected error), show skeleton */}
             <span className='text-sm'>
-              {selectedProject ? selectedProject.name : <Skeleton className='h-4 w-20' />}
+              {selectedWorkspace ? selectedWorkspace.name : <Skeleton className='h-4 w-20' />}
             </span>
           </div>
           <ChevronsUpDownIcon className='text-muted-foreground group-hover:text-foreground h-3.5 w-3.5 transition-colors' />
@@ -61,7 +61,7 @@ export default function ProjectDropdown({
           <Link href={`/${workspace.slug}`} key={workspace.id}>
             <DropdownMenuItem
               onSelect={() => {
-                setSelectedProject(workspace);
+                setSelectedWorkspace(workspace);
               }}
               className='flex flex-row items-center gap-2'>
               {workspace.icon ? (
@@ -81,7 +81,7 @@ export default function ProjectDropdown({
             </DropdownMenuItem>
           </Link>
         ))}
-        <AddProjectDialog
+        <AddWorkspaceDialog
           trigger={
             <DropdownMenuItem
               onSelect={(event) => {

@@ -1,12 +1,13 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Button } from '@feedbase/ui/components/button';
 import { cn } from '@feedbase/ui/lib/utils';
 import { satoshi } from '@feedbase/ui/styles/fonts';
-import { ProfileProps, WorkspaceConfigWithoutSecretProps, WorkspaceProps } from '@/lib/types';
+import { ProfileProps, WorkspaceProps, WorkspaceThemeProps } from '@/lib/types';
 import { hslToHex } from '@/lib/utils';
 import UserDropdown from '../shared/user-dropdown';
 import AuthModal from './modals/login-signup-modal';
@@ -20,13 +21,13 @@ export default function Header({
   tabs,
   intialTab,
   workspace,
-  config,
+  workspaceTheme,
   user,
 }: {
   tabs: TabProps[];
   intialTab: TabProps;
   workspace: WorkspaceProps['Row'];
-  config: WorkspaceConfigWithoutSecretProps;
+  workspaceTheme: WorkspaceThemeProps['Row'];
   user: ProfileProps['Row'] | null;
 }) {
   const [currentTab, setCurrentTab] = useState(intialTab);
@@ -47,10 +48,10 @@ export default function Header({
         {/* Branding */}
         <Link
           className='flex cursor-pointer select-none flex-row items-center gap-3'
-          href={config.logo_redirect_url || '/'}>
+          href={workspace.icon_redirect_url || '/'}>
           {/* Logo Image */}
           {workspace?.icon ? (
-            <img
+            <Image
               src={workspace?.icon || ''}
               alt='Logo'
               width={35}
@@ -73,24 +74,20 @@ export default function Header({
         {user ? (
           <UserDropdown
             user={user}
-            iconColor={
-              config.workspace_theme === 'custom'
-                ? hslToHex(config.custom_theme_primary_foreground)
-                : undefined
-            }
+            iconColor={workspaceTheme.theme === 'custom' ? hslToHex(workspaceTheme.foreground) : undefined}
           />
         ) : null}
 
         {/* Login */}
-        {!config.integration_sso_status && !user && (
-          <AuthModal projectSlug={workspace?.slug || ''}>
+        {!workspace.sso_auth_enabled && !user && (
+          <AuthModal workspaceSlug={workspace?.slug || ''}>
             <Button variant='default'>Login</Button>
           </AuthModal>
         )}
 
         {/* SSO */}
-        {config.integration_sso_status && !user ? (
-          <Link href={config.integration_sso_url || ''}>
+        {workspace.sso_auth_enabled && !user ? (
+          <Link href={workspace.sso_auth_url || ''}>
             <Button variant='default'>Login with {workspace?.name}</Button>
           </Link>
         ) : null}

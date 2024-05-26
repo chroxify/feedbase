@@ -7,7 +7,7 @@ import { Label } from '@feedbase/ui/components/label';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { toast } from 'sonner';
 import useCreateQueryString from '@/lib/hooks/use-query-router';
-import { FeedbackCommentWithUserProps, ProfileProps } from '@/lib/types';
+import { CommentWithUserProps, ProfileProps } from '@/lib/types';
 import { Icons } from '@/components/shared/icons/icons-static';
 import RichTextEditor from '@/components/shared/tiptap-editor';
 import AuthModal from '../../modals/login-signup-modal';
@@ -16,12 +16,12 @@ import { CommentSortCombobox } from './sort-combobox';
 
 export default function CommentsList({
   feedbackComments,
-  projectSlug,
+  workspaceSlug,
   feedbackId,
   user,
 }: {
-  feedbackComments: FeedbackCommentWithUserProps[] | null;
-  projectSlug: string;
+  feedbackComments: CommentWithUserProps[] | null;
+  workspaceSlug: string;
   feedbackId: string;
   user: ProfileProps['Row'] | null;
 }) {
@@ -59,7 +59,7 @@ export default function CommentsList({
 
     // Create promise
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${projectSlug}/feedback/${feedbackId}/comments`, {
+      fetch(`/api/v1/workspaces/${workspaceSlug}/feedback/${feedbackId}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -96,20 +96,25 @@ export default function CommentsList({
 
   // Render comments recursively
   const renderComments = useCallback(
-    (comments: FeedbackCommentWithUserProps[] | undefined) => {
-      return comments?.map((comment: FeedbackCommentWithUserProps) => (
-        <Comment commentData={comment} projectSlug={projectSlug} user={user} key={comment.id} id={comment.id}>
+    (comments: CommentWithUserProps[] | undefined) => {
+      return comments?.map((comment: CommentWithUserProps) => (
+        <Comment
+          commentData={comment}
+          workspaceSlug={workspaceSlug}
+          user={user}
+          key={comment.id}
+          id={comment.id}>
           {renderComments(comment.replies)} {/* Recursive call for replies */}
         </Comment>
       ));
     },
-    [projectSlug, user]
+    [workspaceSlug, user]
   );
 
   // Calculate total comments and replies
   const calculateTotalCommentsAndReplies = useCallback(
-    (comments: FeedbackCommentWithUserProps[] | undefined): number => {
-      return (comments ?? []).reduce((acc: number, comment: FeedbackCommentWithUserProps) => {
+    (comments: CommentWithUserProps[] | undefined): number => {
+      return (comments ?? []).reduce((acc: number, comment: CommentWithUserProps) => {
         const commentCount = 1 + (comment.replies ? calculateTotalCommentsAndReplies(comment.replies) : 0);
         return acc + commentCount;
       }, 0);
@@ -173,7 +178,7 @@ export default function CommentsList({
           <p className='text-foreground/90 text-sm '>Please authenticate to take part in the discussion.</p>
 
           <div className='flex flex-row items-center gap-2'>
-            <AuthModal projectSlug={projectSlug}>
+            <AuthModal workspaceSlug={workspaceSlug}>
               <p className='text-foreground/90 font- hover:text-foreground cursor-pointer text-xs transition-colors'>
                 Login / Sign up →
               </p>

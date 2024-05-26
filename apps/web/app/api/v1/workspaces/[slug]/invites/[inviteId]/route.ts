@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { acceptProjectInvite, deleteProjectInvite } from '@/lib/api/invite';
+import { acceptWorkspaceInvite, deleteWorkspaceInvite } from '@/lib/api/invite';
 
 /*
   Accept workspace invite
   POST /api/v1/workspaces/[slug]/invites/[inviteId]
 */
 export async function POST(req: Request, context: { params: { slug: string; inviteId: string } }) {
-  const { data: invite, error } = await acceptProjectInvite(context.params.inviteId, 'route');
+  const { data: invite, error } = await acceptWorkspaceInvite(context.params.inviteId, 'route');
 
   // If any errors thrown, return error
   if (error) {
@@ -22,7 +22,7 @@ export async function POST(req: Request, context: { params: { slug: string; invi
   DELETE /api/v1/workspaces/[slug]/invites/[inviteId]
 */
 export async function DELETE(req: Request, context: { params: { slug: string; inviteId: string } }) {
-  const { data: invite, error } = await deleteProjectInvite(context.params.inviteId, 'route');
+  const { data: invite, error } = await deleteWorkspaceInvite(context.params.inviteId, 'route');
 
   // If any errors thrown, return error
   if (error) {

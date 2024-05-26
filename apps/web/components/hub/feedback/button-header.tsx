@@ -12,10 +12,10 @@ import AuthModal from '../modals/login-signup-modal';
 
 export default function FeedbackHeader({
   isLoggedIn,
-  projectSlug,
+  workspaceSlug,
 }: {
   isLoggedIn: boolean;
-  projectSlug: string;
+  workspaceSlug: string;
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -99,13 +99,13 @@ export default function FeedbackHeader({
           </div>
 
           {isLoggedIn ? (
-            <CreatePostModal projectSlug={projectSlug}>
+            <CreatePostModal workspaceSlug={workspaceSlug}>
               <Button variant='default' className='font-base shrink-0 text-sm'>
                 Create Post
               </Button>
             </CreatePostModal>
           ) : (
-            <AuthModal projectSlug={projectSlug}>
+            <AuthModal workspaceSlug={workspaceSlug}>
               <Button variant='default' className='font-base shrink-0 text-sm'>
                 Create Post
               </Button>

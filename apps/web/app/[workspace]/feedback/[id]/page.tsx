@@ -6,7 +6,7 @@ import { Separator } from '@feedbase/ui/components/separator';
 import { cn } from '@feedbase/ui/lib/utils';
 import { BadgeCheck, CheckCircle2, CircleDashed, CircleDot, CircleDotDashed, XCircle } from 'lucide-react';
 import { getCommentsForFeedbackById } from '@/lib/api/comment';
-import { getPublicProjectFeedback } from '@/lib/api/public';
+import { getPublicWorkspaceFeedback } from '@/lib/api/public';
 import { getCurrentUser } from '@/lib/api/user';
 import { PROSE_CN } from '@/lib/constants';
 import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
@@ -19,7 +19,7 @@ type Props = {
 // Metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Get feedback
-  const { data: feedbackList, error } = await getPublicProjectFeedback(
+  const { data: feedbackList, error } = await getPublicWorkspaceFeedback(
     params.workspace,
     'server',
     true,
@@ -70,7 +70,7 @@ const statusOptions = [
 ];
 
 export default async function FeedbackDetails({ params }: Props) {
-  const { data: feedbackList, error } = await getPublicProjectFeedback(
+  const { data: feedbackList, error } = await getPublicWorkspaceFeedback(
     params.workspace,
     'server',
     true,
@@ -105,7 +105,7 @@ export default async function FeedbackDetails({ params }: Props) {
   const { data: user } = await getCurrentUser('server');
 
   return (
-    <AnalyticsWrapper projectSlug={params.workspace} feedbackId={params.id}>
+    <AnalyticsWrapper workspaceSlug={params.workspace} feedbackId={params.id}>
       {/* // Row Splitting up date and Content  */}
       <div className='relative flex w-full flex-row px-5 sm:px-10 md:px-8 lg:px-10' key={feedback.id}>
         <div className='flex h-full w-full flex-col md:w-5/6 md:border-r md:pr-5 lg:flex-row'>
@@ -242,7 +242,7 @@ export default async function FeedbackDetails({ params }: Props) {
             <CommentsList
               feedbackComments={comments}
               feedbackId={feedback.id}
-              projectSlug={params.workspace}
+              workspaceSlug={params.workspace}
               user={user}
             />
           </div>

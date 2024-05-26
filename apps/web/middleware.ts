@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { PostgrestError } from '@supabase/supabase-js';
+import { Database } from './lib/supabase';
 
 export const config = {
   matcher: [
@@ -18,7 +19,7 @@ export const config = {
 
 export default async function middleware(req: NextRequest) {
   // Create a Supabase client configured to use cookies
-  const supabase = createServerClient(
+  const supabase = createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -81,22 +82,22 @@ export default async function middleware(req: NextRequest) {
     process.env.CUSTOM_DOMAIN_WHITELIST?.split(',').includes(hostname)
   ) {
     // Retrieve the workspace from the database
-    const { data, error } = (await supabase
-      .from('project_configs')
-      .select('workspace:workspace_id (slug)')
+    const { data: workspace, error } = await supabase
+      .from('workspace')
+      .select()
       .eq('custom_domain', hostname)
       .eq('custom_domain_verified', true)
-      .single()) as { data: { workspace: { slug: string } } | null; error: PostgrestError | null };
+      .single();
 
     // If the workspace doesn't exist, return 404
-    if (error || !data) {
+    if (error || !workspace) {
       return NextResponse.next();
     }
 
     // If the workspace exists, rewrite the request to the workspace's folder
     return NextResponse.rewrite(
       new URL(
-        `/${data?.workspace?.slug}${path}${
+        `/${workspace.slug}${path}${
           req.nextUrl.searchParams ? `?${req.nextUrl.searchParams.toString()}` : ''
         }`,
         req.url
@@ -104,7 +105,7 @@ export default async function middleware(req: NextRequest) {
       {
         headers: {
           'x-pathname': path,
-          'x-workspace': data?.workspace?.slug,
+          'x-workspace': workspace.slug,
           'x-powered-by': 'Feedbase',
         },
       }

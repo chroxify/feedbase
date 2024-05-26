@@ -39,11 +39,11 @@ const navTabs = [
 export default function NavbarMobile({
   tabs,
   initialTab,
-  currentProject,
+  currentWorkspace,
 }: {
   tabs: SidebarTabsProps;
   initialTab: SidebarTabProps;
-  currentProject: WorkspaceProps['Row'];
+  currentWorkspace: WorkspaceProps['Row'];
 }) {
   const [activeTab, setActiveTab] = useState(initialTab.slug);
   const [isPWA, setIsPWA] = useState(false);
@@ -78,7 +78,7 @@ export default function NavbarMobile({
       {navTabs.map((tab, index) => (
         // If roadmap, don't link to the page
         <Link
-          href={tab.slug === 'roadmap' ? '#' : `/${currentProject.slug}/${tab.slug}`}
+          href={tab.slug === 'roadmap' ? '#' : `/${currentWorkspace.slug}/${tab.slug}`}
           key={tab.slug}
           className='dr h-full w-full p-3 transition-all duration-150 active:scale-[80%]'>
           <Button

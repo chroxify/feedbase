@@ -28,7 +28,7 @@ export function TagCombobox({ initialTags, onTagsChange }: TagComboboxProps) {
   );
   const [openColorDialog, setOpenColorDialog] = React.useState(false);
   const [search, setSearch] = React.useState('');
-  const { tags: projectTags, loading: tagsLoading } = useTags();
+  const { tags: workspaceTags, loading: tagsLoading } = useTags();
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const EmptyItem = () => {
@@ -123,7 +123,7 @@ export function TagCombobox({ initialTags, onTagsChange }: TagComboboxProps) {
             {tagsLoading ? 'Loading tags...' : 'No tags found, start typing to create a new tag'}
           </CommandEmpty>
           <CommandGroup>
-            {projectTags?.map((tag) => (
+            {workspaceTags?.map((tag) => (
               <CommandItem
                 key={tag.id}
                 value={tag.name}
@@ -134,7 +134,7 @@ export function TagCombobox({ initialTags, onTagsChange }: TagComboboxProps) {
                     ? selectedTags.filter((t) => t.name.toLowerCase() !== currentValue)
                     : ([
                         ...selectedTags,
-                        projectTags.find((t) => t.name.toLowerCase() === currentValue),
+                        workspaceTags.find((t) => t.name.toLowerCase() === currentValue),
                       ].filter(Boolean) as {
                         name: string;
                         color: string;
@@ -147,7 +147,7 @@ export function TagCombobox({ initialTags, onTagsChange }: TagComboboxProps) {
                   // Call onTagsChange
                   const newTagsIds = [] as string[];
                   newTags.forEach((t) => {
-                    const matchingTag = projectTags.find((pt) => pt.name === t.name);
+                    const matchingTag = workspaceTags.find((pt) => pt.name === t.name);
                     if (matchingTag) {
                       newTagsIds.push(matchingTag.id);
                     }

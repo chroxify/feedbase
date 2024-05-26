@@ -1,9 +1,9 @@
 import { ReadonlyRequestCookies } from 'next/dist/server/web/spec-extension/adapters/request-cookies';
 import { cookies, headers } from 'next/headers';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { SupabaseClient, UserMetadata } from '@supabase/supabase-js';
+import { PostgrestError, SupabaseClient, UserMetadata } from '@supabase/supabase-js';
 import { Database } from '@/lib/supabase';
-import { ApiResponse, ErrorProps, FeedbackProps, ProfileProps, WorkspaceProps } from '@/lib/types';
+import { ApiResponse, ErrorProps, FeedbackProps, WorkspaceApiKeyProps, WorkspaceProps } from '@/lib/types';
 
 export interface ClientCookiesConfig {
   cookies: {
@@ -66,7 +66,7 @@ async function createClient(cType: 'server' | 'route', isPublic = false) {
             ...createCookiesConfig(cookieStore, ['get', 'set', 'remove']),
             global: {
               headers: {
-                lumkey: authHeader ? authHeader.split(' ')[1] : '',
+                fbkey: authHeader ? authHeader.split(' ')[1] : '',
               },
             },
           }
@@ -78,36 +78,45 @@ async function createClient(cType: 'server' | 'route', isPublic = false) {
     const apiKey = authHeader.split(' ')[1];
 
     // Fetch api key
-    const { data, error } = (await supabase
-      .from('project_api_keys')
-      .select('workspace_id, permission, creator:creator_id (*)')
-      .eq('token', apiKey)
-      .single()) as unknown as {
-      data: {
-        permission: 'full_access' | 'public_access';
-        creator: ProfileProps['Row'];
-        workspace_id: string;
-      };
-      error: ErrorProps;
-    };
+    const { data: workspaceApiKey, error } = (await supabase
+      .rpc('get_workspace_api_key', {
+        api_key_secret: apiKey,
+      })
+      .single()) as { data: WorkspaceApiKeyProps['Row']; error: PostgrestError | null };
 
     // If error is not null, then the api key is invalid
-    if (error) {
+    if (error || !workspaceApiKey.id) {
       return {
         supabase,
         user: { data: null, error: { message: 'unauthorized, invalid api key.', status: 401 } },
       };
     }
 
+    // Get api key data
     // TODO: Expand this further, also supporting public access for feedback etc.
-    if (data.permission === 'public_access' && !isPublic) {
+    if (workspaceApiKey.permission === 'public_access' && !isPublic) {
       return {
         supabase,
         user: { data: null, error: { message: 'unauthorized, missing permissions.', status: 403 } },
       };
     }
 
-    return { supabase, user: { data: { user: data.creator }, error: null }, apiKey: data };
+    // Get user from api key
+    const { data: user, error: userError } = (await supabase
+      .from('profile')
+      .select()
+      .eq('id', workspaceApiKey.creator_id)
+      .single()) as { data: UserMetadata; error: PostgrestError | null };
+
+    // If error is not null, then the user does not exist
+    if (userError) {
+      return {
+        supabase,
+        user: { data: null, error: { message: 'user not found.', status: 404 } },
+      };
+    }
+
+    return { supabase, user: { data: user, error: null }, apiKey: workspaceApiKey };
   }
 
   const user = await supabase.auth.getUser();
@@ -130,7 +139,7 @@ type WithWorkspaceAuthHandler<T> = (
 export const withWorkspaceAuth = <T>(handler: WithWorkspaceAuthHandler<T>) => {
   return async (slug: string, cType: 'server' | 'route', allowAnonAccess = false, requireLogin = true) => {
     // Get the user from the session
-    const { supabase, user, apiKey } = await createClient(cType, allowAnonAccess);
+    const { supabase, user } = await createClient(cType, allowAnonAccess);
 
     // If user.error is not null, then the user is likely not logged in
     if ((user.error !== null && requireLogin) || user.data === null) {
@@ -144,35 +153,39 @@ export const withWorkspaceAuth = <T>(handler: WithWorkspaceAuthHandler<T>) => {
     }
 
     // Get workspace from database
-    const { data: workspace, error } = await supabase.from('workspaces').select().eq('slug', slug).single();
+    const { data: workspace, error: workspaceError } = await supabase
+      .from('workspace')
+      .select()
+      .eq('slug', slug)
+      .single();
 
     // If error is not null, then the workspace does not exist
-    if (error) {
+    if (workspaceError) {
       return handler(user.data.user, supabase, workspace, { message: 'workspace not found.', status: 404 });
     }
 
     // If api key exists, check if the api key has access to the workspace
-    if (apiKey && apiKey.workspace_id !== workspace.id) {
-      return handler(user.data.user, supabase, workspace, {
-        message: 'unauthorized, invalid api key.',
-        status: 401,
-      });
-    }
+    // if (apiKey && apiKey.workspace_id !== workspace.id) {
+    //   return handler(user.data.user, supabase, workspace, {
+    //     message: 'unauthorized, invalid api key.',
+    //     status: 401,
+    //   });
+    // }
 
-    // Check if user is a member of the workspace
-    if (!allowAnonAccess) {
-      const { error: projectMemberError } = await supabase
-        .from('project_members')
-        .select()
-        .eq('workspace_id', workspace.id)
-        .eq('member_id', user.data.user!.id)
-        .single();
+    // // Check if user is a member of the workspace
+    // if (!allowAnonAccess) {
+    //   const { error: workspaceMemberError } = await supabase
+    //     .from('workspace_member')
+    //     .select()
+    //     .eq('workspace_id', workspace.id)
+    //     .eq('member_id', user.data.user!.id)
+    //     .single();
 
-      // If not null, user is not a member of the workspace and should not be able to access it
-      if (projectMemberError) {
-        return handler(user.data.user, supabase, workspace, { message: 'workspace not found.', status: 404 });
-      }
-    }
+    //   // If not null, user is not a member of the workspace and should not be able to access it
+    //   if (workspaceMemberError) {
+    //     return handler(user.data.user, supabase, workspace, { message: 'workspace not found.', status: 404 });
+    //   }
+    // }
 
     return handler(user.data.user, supabase, workspace, null, allowAnonAccess);
   };

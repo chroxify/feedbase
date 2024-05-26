@@ -15,15 +15,15 @@ import {
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
 import { toast } from 'sonner';
-import { sendDiscordConfirmation } from '@/lib/api/integration';
+// import { sendDiscordConfirmation } from '@/lib/api/integration';
 import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function DiscordIntegrationModal({
-  projectSlug,
+  workspaceSlug,
   enabledIntegrations,
   setEnabledIntegrations,
 }: {
-  projectSlug: string;
+  workspaceSlug: string;
   enabledIntegrations: string[];
   setEnabledIntegrations: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
@@ -61,7 +61,7 @@ export default function DiscordIntegrationModal({
     setOpen(false);
 
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${projectSlug}/config/integrations/discord`, {
+      fetch(`/api/v1/workspaces/${workspaceSlug}/config/integrations/discord`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export default function DiscordIntegrationModal({
       success: () => {
         setIsLoading(false);
         setEnabledIntegrations([...enabledIntegrations, 'discord']);
-        sendDiscordConfirmation(projectSlug, webhook, role === '' ? undefined : role);
+        // sendDiscordConfirmation(workspaceSlug, webhook, role === '' ? undefined : role);
         return 'Discord integration connected successfully!';
       },
       error: (err) => {

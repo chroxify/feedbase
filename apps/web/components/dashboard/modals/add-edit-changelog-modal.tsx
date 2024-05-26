@@ -39,12 +39,12 @@ import DefaultTooltip from '@/components/shared/tooltip';
 
 export function AddChangelogModal({
   children,
-  projectSlug,
+  workspaceSlug,
   changelogData,
   isEdit,
 }: {
   children: React.ReactNode;
-  projectSlug: string;
+  workspaceSlug: string;
   changelogData?: ChangelogProps['Row'];
   isEdit?: boolean;
 }) {
@@ -53,7 +53,7 @@ export function AddChangelogModal({
   const [alertOpen, setAlertOpen] = useState<boolean>(false);
   const [notifySubscribers, setNotifySubscribers] = useState<boolean>(true);
   const { data: subscribersCount } = useSWR<{ count: number }>(
-    `/api/v1/workspaces/${projectSlug}/changelogs/subscribers/count`,
+    `/api/v1/workspaces/${workspaceSlug}/changelogs/subscribers/count`,
     fetcher,
     { revalidateOnFocus: false }
   );
@@ -81,7 +81,7 @@ export function AddChangelogModal({
     }
 
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${projectSlug}/changelogs`, {
+      fetch(`/api/v1/workspaces/${workspaceSlug}/changelogs`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -112,7 +112,7 @@ export function AddChangelogModal({
     toast.promise(promise, {
       loading: `${createType === 'publish' ? 'Publishing' : 'Creating'} changelog...`,
       success: () => {
-        mutate(`/api/v1/workspaces/${projectSlug}/changelogs`);
+        mutate(`/api/v1/workspaces/${workspaceSlug}/changelogs`);
         setData({
           ...data,
           title: '',
@@ -143,7 +143,7 @@ export function AddChangelogModal({
     }
 
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${projectSlug}/changelogs/${data.id}`, {
+      fetch(`/api/v1/workspaces/${workspaceSlug}/changelogs/${data.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -173,7 +173,7 @@ export function AddChangelogModal({
     toast.promise(promise, {
       loading: `${updateType === 'publish' ? 'Publishing' : 'Updating'} changelog...`,
       success: () => {
-        mutate(`/api/v1/workspaces/${projectSlug}/changelogs`);
+        mutate(`/api/v1/workspaces/${workspaceSlug}/changelogs`);
         setData({
           ...data,
           title: '',

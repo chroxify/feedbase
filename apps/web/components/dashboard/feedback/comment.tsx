@@ -16,19 +16,19 @@ import { cn } from '@feedbase/ui/lib/utils';
 import { BadgeCheck, MoreVertical, Trash2Icon } from 'lucide-react';
 import { toast } from 'sonner';
 import { PROSE_CN } from '@/lib/constants';
-import { FeedbackCommentWithUserProps } from '@/lib/types';
+import { CommentWithUserProps } from '@/lib/types';
 import { formatRootUrl } from '@/lib/utils';
 import CommentInput from './comment-input';
 
 // Define a type for the props
 interface CommentProps extends React.HTMLAttributes<HTMLDivElement> {
-  commentData: FeedbackCommentWithUserProps;
-  projectSlug: string;
+  commentData: CommentWithUserProps;
+  workspaceSlug: string;
   children?: React.ReactNode;
 }
 
-export default function Comment({ commentData, projectSlug, children, ...props }: CommentProps) {
-  const [comment, setComment] = useState<FeedbackCommentWithUserProps>(commentData);
+export default function Comment({ commentData, workspaceSlug, children, ...props }: CommentProps) {
+  const [comment, setComment] = useState<CommentWithUserProps>(commentData);
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [timeAgo, setTimeAgo] = useState<string>('');
   const router = useRouter();
@@ -60,7 +60,7 @@ export default function Comment({ commentData, projectSlug, children, ...props }
   // On delete comment
   async function onDelete() {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${projectSlug}/feedback/${comment.feedback_id}/comments/${comment.id}`, {
+      fetch(`/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments/${comment.id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -101,7 +101,7 @@ export default function Comment({ commentData, projectSlug, children, ...props }
 
     const promise = new Promise((resolve, reject) => {
       fetch(
-        `/api/v1/workspaces/${projectSlug}/feedback/${comment.feedback_id}/comments/${comment.id}/upvote`,
+        `/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments/${comment.id}/upvote`,
         {
           method: 'POST',
           headers: {
@@ -242,7 +242,7 @@ export default function Comment({ commentData, projectSlug, children, ...props }
               size='sm'
               onClick={() => {
                 navigator.clipboard.writeText(
-                  formatRootUrl(projectSlug, `/feedback/${comment.feedback_id}?comment=${comment.id}`)
+                  formatRootUrl(workspaceSlug, `/feedback/${comment.feedback_id}?comment=${comment.id}`)
                 );
 
                 toast.success('Copied link to clipboard.');
@@ -254,7 +254,7 @@ export default function Comment({ commentData, projectSlug, children, ...props }
           {/* Reply Input */}
           {isReplying ? (
             <CommentInput
-              projectSlug={projectSlug}
+              workspaceSlug={workspaceSlug}
               feedbackId={comment.feedback_id}
               parentCommentId={comment.id}
             />

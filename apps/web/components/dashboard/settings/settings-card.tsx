@@ -23,10 +23,12 @@ export default function SettingsCard({
       <div className={cn('grid w-full grid-cols-2 flex-col items-end justify-center gap-5', className)}>
         {children}
 
-        {showSave ? <div className='col-span-2 flex w-full gap-2'>
+        {showSave ? (
+          <div className='col-span-2 flex w-full gap-2'>
             <Button variant='default'>Save</Button>
             <Button variant='outline'>Cancel</Button>
-          </div> : null}
+          </div>
+        ) : null}
       </div>
     </div>
   );

@@ -16,7 +16,7 @@ import {
 import { toast } from 'sonner';
 import InputGroup from '@/components/shared/input-group';
 
-export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode }) {
+export default function AddWorkspaceDialog({ trigger }: { trigger: React.ReactNode }) {
   const [name, setName] = useState<string>('');
   const [slug, setSlug] = useState<string>('');
 
@@ -27,7 +27,7 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
     setSlug(event.target.value);
   }
 
-  async function onCreateProject() {
+  async function onCreateWorkspace() {
     const promise = new Promise((resolve, reject) => {
       fetch(`/api/v1/workspaces`, {
         method: 'POST',
@@ -123,7 +123,7 @@ export default function AddProjectDialog({ trigger }: { trigger: React.ReactNode
           <Button
             type='submit'
             className='w-fit'
-            onClick={onCreateProject}
+            onClick={onCreateWorkspace}
             disabled={name === '' || slug === ''}>
             Create Workspace
           </Button>

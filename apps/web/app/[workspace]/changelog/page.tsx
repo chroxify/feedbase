@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Separator } from '@feedbase/ui/components/separator';
 import { fontMono } from '@feedbase/ui/styles/fonts';
-import { getPublicProjectChangelogs } from '@/lib/api/public';
-import { getWorkspaceBySlug, getWorkspaceConfigBySlug } from '@/lib/api/workspace';
+import { getWorkspaceModuleConfig } from '@/lib/api/module';
+import { getPublicWorkspaceChangelogs } from '@/lib/api/public';
+import { getWorkspaceBySlug } from '@/lib/api/workspace';
 import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
 import SubscribeToEmailUpdates from '@/components/hub/modals/subscribe-email-modal';
 
@@ -31,7 +32,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function Changelogs({ params }: Props) {
   // Get changelogs
-  const { data: changelogs, error } = await getPublicProjectChangelogs(
+  const { data: changelogs, error } = await getPublicWorkspaceChangelogs(
     params.workspace,
     'server',
     true,
@@ -45,11 +46,11 @@ export default async function Changelogs({ params }: Props) {
 
   // Sort changelogs by publish_date (newest first)
   changelogs.sort((a, b) => {
-    return new Date(b.created_at!).getTime() - new Date(a.created_at!).getTime();
+    return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
   });
 
   // Get workspace config
-  const { data: workspaceConfig, error: workspaceConfigError } = await getWorkspaceConfigBySlug(
+  const { data: workspaceConfig, error: workspaceConfigError } = await getWorkspaceModuleConfig(
     params.workspace,
     'server',
     true,
@@ -62,7 +63,7 @@ export default async function Changelogs({ params }: Props) {
   }
 
   // Get workspace
-  const { data: workspace, error: projectError } = await getWorkspaceBySlug(
+  const { data: workspace, error: workspaceError } = await getWorkspaceBySlug(
     params.workspace,
     'server',
     true,
@@ -70,12 +71,12 @@ export default async function Changelogs({ params }: Props) {
   );
 
   // If workspace is undefined redirects to 404
-  if (projectError?.status === 404 || !workspace) {
+  if (workspaceError?.status === 404 || !workspace) {
     notFound();
   }
 
   return (
-    <AnalyticsWrapper className='flex h-full w-full flex-col gap-10' projectSlug={params.workspace}>
+    <AnalyticsWrapper className='flex h-full w-full flex-col gap-10' workspaceSlug={params.workspace}>
       <div className='flex items-center px-5 sm:px-10 md:px-10 lg:px-20'>
         <div className='flex w-full flex-col items-start gap-4'>
           <h1 className='text-3xl font-medium sm:text-4xl'>Changelog</h1>
@@ -86,7 +87,7 @@ export default async function Changelogs({ params }: Props) {
           {/* Buttons */}
           <div className='flex select-none flex-row flex-wrap items-center gap-4 text-sm'>
             {/* Email */}
-            <SubscribeToEmailUpdates projectSlug={params.workspace}>
+            <SubscribeToEmailUpdates workspaceSlug={params.workspace}>
               <button
                 type='button'
                 className='hover:text-foreground/95 text-highlight transition-colors duration-200'>
@@ -139,8 +140,8 @@ export default async function Changelogs({ params }: Props) {
                 <div className='relative flex'>
                   <div className='flex w-full pb-4 md:w-[200px] md:pb-0'>
                     <p className='text-foreground/60 w-full text-sm font-light'>
-                      <time className='sticky top-10' dateTime={changelog.created_at!}>
-                        {new Date(changelog.created_at!).toLocaleDateString('en-US', {
+                      <time className='sticky top-10' dateTime={changelog.created_at}>
+                        {new Date(changelog.created_at).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric',

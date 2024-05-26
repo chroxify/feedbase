@@ -15,7 +15,7 @@ import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
 import { BadgeCheck, MoreVertical } from 'lucide-react';
 import { toast } from 'sonner';
-import { FeedbackCommentWithUserProps, ProfileProps } from '@/lib/types';
+import { CommentWithUserProps, ProfileProps } from '@/lib/types';
 import { formatRootUrl } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
 import RichTextEditor from '@/components/shared/tiptap-editor';
@@ -23,14 +23,14 @@ import AuthModal from '../../modals/login-signup-modal';
 
 // Define a type for the props
 interface CommentProps extends React.HTMLAttributes<HTMLDivElement> {
-  commentData: FeedbackCommentWithUserProps;
-  projectSlug: string;
+  commentData: CommentWithUserProps;
+  workspaceSlug: string;
   user: ProfileProps['Row'] | null;
   children?: React.ReactNode;
 }
 
-export default function Comment({ commentData, projectSlug, user, children, ...props }: CommentProps) {
-  const [comment, setComment] = useState<FeedbackCommentWithUserProps>(commentData);
+export default function Comment({ commentData, workspaceSlug, user, children, ...props }: CommentProps) {
+  const [comment, setComment] = useState<CommentWithUserProps>(commentData);
   const [replyContent, setReplyContent] = useState<string>('');
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [timeAgo, setTimeAgo] = useState<string>('');
@@ -64,7 +64,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
   // On delete comment
   async function onDelete() {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${projectSlug}/feedback/${comment.feedback_id}/comments/${comment.id}`, {
+      fetch(`/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments/${comment.id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -105,7 +105,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
 
     const promise = new Promise((resolve, reject) => {
       fetch(
-        `/api/v1/workspaces/${projectSlug}/feedback/${comment.feedback_id}/comments/${comment.id}/upvote`,
+        `/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments/${comment.id}/upvote`,
         {
           method: 'POST',
           headers: {
@@ -141,7 +141,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
 
     // Create promise
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${projectSlug}/feedback/${comment.feedback_id}/comments`, {
+      fetch(`/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -257,7 +257,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
           {/* Bottom Row */}
           <div className='flex w-full flex-row items-center justify-start gap-1.5'>
             {/* Upvote Button */}
-            <AuthModal projectSlug={projectSlug} disabled={user !== null}>
+            <AuthModal workspaceSlug={workspaceSlug} disabled={user !== null}>
               <Button
                 variant='ghost'
                 className={cn(
@@ -283,7 +283,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
             </AuthModal>
 
             {/* Reply Button */}
-            <AuthModal projectSlug={projectSlug} disabled={user !== null}>
+            <AuthModal workspaceSlug={workspaceSlug} disabled={user !== null}>
               <Button
                 variant='ghost'
                 className='text-foreground/60 hover:text-highlight -ml-2 text-sm  hover:bg-transparent'
@@ -304,7 +304,7 @@ export default function Comment({ commentData, projectSlug, user, children, ...p
               size='sm'
               onClick={() => {
                 navigator.clipboard.writeText(
-                  formatRootUrl(projectSlug, `/feedback/${comment.feedback_id}?comment=${comment.id}`)
+                  formatRootUrl(workspaceSlug, `/feedback/${comment.feedback_id}?comment=${comment.id}`)
                 );
 
                 toast.success('Copied link to clipboard.');

@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { createProjectApiKey, getProjectApiKeys } from '@/lib/api/workspace';
+import { createWorkspaceApiKey, getWorkspaceApiKeys } from '@/lib/api/api-key';
+import { ApiKeyPermissions } from '@/lib/types';
 
 /*
   Get all API keys for a workspace
@@ -7,7 +8,7 @@ import { createProjectApiKey, getProjectApiKeys } from '@/lib/api/workspace';
 */
 export async function GET(req: Request, context: { params: { slug: string } }) {
   // Get all api keys
-  const { data: apiKeys, error } = await getProjectApiKeys(context.params.slug, 'route');
+  const { data: apiKeys, error } = await getWorkspaceApiKeys(context.params.slug, 'route');
 
   if (error) {
     return NextResponse.json(error, { status: error.status });
@@ -25,7 +26,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
   }
 */
 export async function POST(req: Request, context: { params: { slug: string } }) {
-  const { name, permission } = (await req.json()) as { name: string; permission: string };
+  const { name, permission } = (await req.json()) as { name: string; permission: ApiKeyPermissions };
 
   // Validate input
   if (!name || !permission) {
@@ -33,7 +34,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
   }
 
   // Create api key
-  const { data: apiKey, error } = await createProjectApiKey(
+  const { data: apiKey, error } = await createWorkspaceApiKey(
     context.params.slug,
     { name, permission },
     'route'

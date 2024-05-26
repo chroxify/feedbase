@@ -17,10 +17,10 @@ import { Icons } from '@/components/shared/icons/icons-static';
 import PostEditor from '@/components/shared/tiptap-editor';
 
 export default function CreatePostModal({
-  projectSlug,
+  workspaceSlug,
   children,
 }: {
-  projectSlug: string;
+  workspaceSlug: string;
   children: React.ReactNode;
 }) {
   const [open, setOpen] = useState<boolean>(false);
@@ -36,7 +36,7 @@ export default function CreatePostModal({
 
     // Create promise
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${projectSlug}/feedback`, {
+      fetch(`/api/v1/workspaces/${workspaceSlug}/feedback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

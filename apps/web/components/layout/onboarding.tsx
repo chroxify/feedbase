@@ -25,7 +25,7 @@ export default function Onboarding() {
     setSlug(event.target.value);
   }
 
-  async function onCreateProject(event: React.FormEvent<HTMLFormElement>) {
+  async function onCreateWorkspace(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const promise = new Promise((resolve, reject) => {
       fetch(`/api/v1/workspaces`, {
@@ -65,7 +65,7 @@ export default function Onboarding() {
   }
 
   return (
-    <form onSubmit={onCreateProject}>
+    <form onSubmit={onCreateWorkspace}>
       <Card className='px-3 py-4'>
         <CardHeader>
           <CardTitle>Create your first workspace</CardTitle>

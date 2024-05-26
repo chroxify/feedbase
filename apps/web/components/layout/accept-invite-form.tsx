@@ -9,7 +9,7 @@ import { toast } from 'sonner';
 import { ExtendedInviteProps, ProfileProps } from '@/lib/types';
 import { formatRootUrl } from '@/lib/utils';
 
-export default function ProjectInviteForm({
+export default function WorkspaceInviteForm({
   invite,
   user,
 }: {

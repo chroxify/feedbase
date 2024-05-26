@@ -1,9 +1,10 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Separator } from '@feedbase/ui/components/separator';
-import { getPublicProjectFeedback } from '@/lib/api/public';
+import { getWorkspaceModuleConfig } from '@/lib/api/module';
+import { getPublicWorkspaceFeedback } from '@/lib/api/public';
 import { getCurrentUser } from '@/lib/api/user';
-import { getWorkspaceBySlug, getWorkspaceConfigBySlug } from '@/lib/api/workspace';
+import { getWorkspaceBySlug } from '@/lib/api/workspace';
 import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
 import FeedbackHeader from '@/components/hub/feedback/button-header';
 import FeedbackList from '@/components/hub/feedback/feedback-list';
@@ -32,17 +33,17 @@ export default async function Feedback({ params }: Props) {
   // Get current user
   const { data: user } = await getCurrentUser('server');
 
-  const { data: feedback, error } = await getPublicProjectFeedback(params.workspace, 'server', true, false);
+  const { data: feedback, error } = await getPublicWorkspaceFeedback(params.workspace, 'server', true, false);
 
   if (error) {
     return <div>{error.message}</div>;
   }
 
   // Fetch workspace config if user not logged in
-  const { data: config } = await getWorkspaceConfigBySlug(params.workspace, 'server', true, false);
+  // const { data: config } = await getWorkspaceModuleConfig(params.workspace, 'server', true, false);
 
   return (
-    <AnalyticsWrapper className='items-center gap-10 pb-10' projectSlug={params.workspace}>
+    <AnalyticsWrapper className='items-center gap-10 pb-10' workspaceSlug={params.workspace}>
       {/* Header */}
       <div className='flex w-full px-5 sm:px-10 md:px-10 lg:px-20'>
         <div className='flex w-full flex-col items-start gap-4'>
@@ -58,16 +59,11 @@ export default async function Feedback({ params }: Props) {
 
       {/* content */}
       <div className='flex h-full w-full flex-col items-center justify-center gap-5 px-5 sm:px-10 md:px-10 lg:px-20'>
-        <FeedbackHeader isLoggedIn={!!user} projectSlug={params.workspace} />
+        <FeedbackHeader isLoggedIn={!!user} workspaceSlug={params.workspace} />
 
         {/* Main */}
         <div className='flex h-full w-full flex-col justify-between'>
-          <FeedbackList
-            feedback={feedback}
-            projectSlug={params.workspace}
-            isLoggedIn={!!user}
-            workspaceConfig={config}
-          />
+          <FeedbackList feedback={feedback} workspaceSlug={params.workspace} isLoggedIn={!!user} />
         </div>
       </div>
     </AnalyticsWrapper>

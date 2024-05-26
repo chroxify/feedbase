@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getProjectAnalytics } from '@/lib/api/workspace';
+import { getWorkspaceAnalytics } from '@/lib/api/workspace';
 
 /*
   Get Analytics
@@ -20,7 +20,7 @@ export async function GET(req: NextRequest, context: { params: { slug: string } 
     return NextResponse.json({ error: 'Invalid start or end date.' }, { status: 400 });
   }
 
-  const { data: analyticsData, error } = await getProjectAnalytics(context.params.slug, 'route');
+  const { data: analyticsData, error } = await getWorkspaceAnalytics(context.params.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {

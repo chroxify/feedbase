@@ -14,28 +14,48 @@ import { Label } from '@feedbase/ui/components/label';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronsUpDownIcon } from 'lucide-react';
-import useWorkspaceConfig from '@/lib/swr/use-workspace-config';
-import { WorkspaceConfigWithoutSecretProps } from '@/lib/types';
+import useWorkspace from '@/lib/swr/use-workspace';
+import useWorkspaceTheme from '@/lib/swr/use-workspace-theme';
+import { WorkspaceProps, WorkspaceThemeProps } from '@/lib/types';
 import SettingsCard from '@/components/dashboard/settings/settings-card';
 import FetchError from '@/components/shared/fetch-error';
 import FileDrop from '@/components/shared/file-drop';
 import InputGroup from '@/components/shared/input-group';
 
 export default function GeneralSettings({ params }: { params: { slug: string } }) {
-  const { workspaceConfig: workspaceConfigData, isValidating, error, mutate } = useWorkspaceConfig();
-  const [workspaceConfig, setWorkspaceConfig] = useState<WorkspaceConfigWithoutSecretProps | undefined>(
-    workspaceConfigData
-  );
+  const {
+    workspace: workspaceData,
+    loading: workspaceLoading,
+    error: workspaceError,
+    mutate: workspaceMutate,
+  } = useWorkspace();
+  const {
+    workspaceTheme: workspaceThemeData,
+    loading: workspaceThemeLoading,
+    error: workspaceThemeError,
+    mutate: workspaceThemeMutate,
+  } = useWorkspaceTheme();
+
+  const [workspace, setWorkspace] = useState<WorkspaceProps['Row']>();
+  const [workspaceTheme, setWorkspaceTheme] = useState<WorkspaceThemeProps['Row']>();
 
   useEffect(() => {
-    setWorkspaceConfig(workspaceConfigData);
-  }, [workspaceConfigData]);
+    setWorkspace(workspaceData);
+    setWorkspaceTheme(workspaceThemeData);
+  }, [workspaceData, workspaceThemeData]);
 
-  if (error) {
-    return <FetchError error={error} mutate={mutate} isValidating={isValidating} />;
+  if (workspaceError || workspaceThemeError) {
+    return (
+      <FetchError
+        name='branding settings'
+        error={workspaceError !== null ? workspaceError : workspaceThemeError}
+        mutate={workspaceError !== null ? workspaceMutate : workspaceThemeMutate}
+        isValidating={workspaceError !== null ? workspaceLoading : workspaceThemeLoading}
+      />
+    );
   }
 
-  if (isValidating && !workspaceConfig) {
+  if (workspaceLoading || workspaceThemeLoading) {
     return (
       <>
         <SettingsCard title='Branding' description='Customize your workspace branding.'>
@@ -53,7 +73,7 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
     );
   }
 
-  if (workspaceConfig) {
+  if (workspace && workspaceTheme) {
     return (
       <>
         <SettingsCard title='Branding' description='Customize your workspace branding.'>
@@ -61,14 +81,11 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
             <Label className='text-foreground/70 text-sm'>Name</Label>
             <Input
               className='w-full'
-              value={workspaceConfig?.workspace.name}
+              value={workspace.name}
               onChange={(e) => {
-                setWorkspaceConfig({
-                  ...workspaceConfig,
-                  workspace: {
-                    ...workspaceConfig.workspace,
-                    name: e.target.value,
-                  },
+                setWorkspace({
+                  ...workspace,
+                  name: e.target.value,
                 });
               }}
             />
@@ -79,14 +96,11 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
             <Label className='text-foreground/70 text-sm '>Slug</Label>
 
             <InputGroup
-              value={workspaceConfig?.workspace.slug}
+              value={workspace.slug}
               onChange={(e) => {
-                setWorkspaceConfig({
-                  ...workspaceConfig,
-                  workspace: {
-                    ...workspaceConfig.workspace,
-                    slug: e.target.value,
-                  },
+                setWorkspace({
+                  ...workspace,
+                  slug: e.target.value,
                 });
               }}
               suffix={`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`}
@@ -102,15 +116,10 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
 
             {/* File Upload */}
             <div className='flex items-center gap-2.5'>
-              <Avatar
-                className={cn('h-12 w-12 hover:cursor-pointer', workspaceConfig?.workspace_icon_radius)}>
-                <AvatarImage
-                  src={workspaceConfig?.workspace_icon || ''}
-                  alt={workspaceConfig?.workspace.name}
-                />
-                <AvatarFallback
-                  className={cn('bg-muted select-none text-sm', workspaceConfig?.workspace_icon_radius)}>
-                  {workspaceConfig?.workspace.name[0]}
+              <Avatar className={cn('h-12 w-12 hover:cursor-pointer', workspace.icon_radius)}>
+                <AvatarImage src={workspace.icon || ''} alt={workspace.name} />
+                <AvatarFallback className={cn('bg-muted select-none text-sm', workspace.icon_radius)}>
+                  {workspace.name[0]}
                 </AvatarFallback>
               </Avatar>
               <div className='flex flex-col gap-1'>
@@ -118,7 +127,7 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                   <Button variant='secondary' size='sm' className='w-fit'>
                     Upload
                   </Button>
-                  {workspaceConfig?.workspace_icon ? (
+                  {workspace.icon ? (
                     <Button variant='destructive' size='sm' className='w-fit'>
                       Remove
                     </Button>
@@ -134,9 +143,9 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant='outline' className='w-fit font-normal'>
-                  {workspaceConfig?.workspace_icon_radius === 'rounded-md'
+                  {workspace.icon_radius === 'rounded-md'
                     ? 'Rounded'
-                    : workspaceConfig?.workspace_icon_radius === 'rounded-full'
+                    : workspace.icon_radius === 'rounded-full'
                     ? 'Circle'
                     : 'Square'}
                   <ChevronsUpDownIcon className='text-secondary-foreground ml-2 h-3.5 w-3.5' />
@@ -145,27 +154,27 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
               <DropdownMenuContent align='start'>
                 <DropdownMenuItem
                   onClick={() => {
-                    setWorkspaceConfig({
-                      ...workspaceConfig,
-                      workspace_icon_radius: 'rounded-md',
+                    setWorkspace({
+                      ...workspace,
+                      icon_radius: 'rounded-md',
                     });
                   }}>
                   Rounded
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    setWorkspaceConfig({
-                      ...workspaceConfig,
-                      workspace_icon_radius: 'rounded-full',
+                    setWorkspace({
+                      ...workspace,
+                      icon_radius: 'rounded-full',
                     });
                   }}>
                   Circle
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    setWorkspaceConfig({
-                      ...workspaceConfig,
-                      workspace_icon_radius: 'rounded-none',
+                    setWorkspace({
+                      ...workspace,
+                      icon_radius: 'rounded-none',
                     });
                   }}>
                   Square
@@ -180,11 +189,11 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
             <Label className='text-foreground/70 text-sm '>Redirect URL</Label>
             <Input
               className='w-full'
-              value={workspaceConfig?.logo_redirect_url || ''}
+              value={workspace.icon_redirect_url || ''}
               onChange={(e) => {
-                setWorkspaceConfig({
-                  ...workspaceConfig,
-                  logo_redirect_url: e.target.value,
+                setWorkspace({
+                  ...workspace,
+                  icon_redirect_url: e.target.value,
                 });
               }}
               placeholder='Leave blank to use default'
@@ -200,9 +209,9 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
               labelComponent={<Label className='text-foreground/70 text-sm'>OG Image</Label>}
               image={null}
               setImage={(e: string | null) => {
-                setWorkspaceConfig({
-                  ...workspaceConfig,
-                  workspace_og_image: e,
+                setWorkspace({
+                  ...workspace,
+                  opengraph_image: e,
                 });
               }}
               className='h-40 w-80'
@@ -219,13 +228,13 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
           <button
             className='flex h-full w-full flex-col items-center gap-2'
             onClick={() => {
-              setWorkspaceConfig({ ...workspaceConfig, workspace_theme: 'light' });
+              setWorkspaceTheme({ ...workspaceTheme, theme: 'light' });
             }}
             type='button'>
             <div
               className={cn(
                 'border-border/50 h-full w-full items-center rounded-md border-2 p-1',
-                workspaceConfig.workspace_theme === 'light' &&
+                workspaceTheme.theme === 'light' &&
                   'ring-ring ring-offset-root ring-2 ring-offset-2 transition-shadow'
               )}>
               <div className='space-y-2 rounded-sm bg-[#F4F4F5] p-2'>
@@ -249,13 +258,13 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
           <button
             className='flex h-full w-full flex-col items-center gap-2'
             onClick={() => {
-              setWorkspaceConfig({ ...workspaceConfig, workspace_theme: 'dark' });
+              setWorkspaceTheme({ ...workspaceTheme, theme: 'dark' });
             }}
             type='button'>
             <div
               className={cn(
                 'border-border/50 bg-root h-full w-full items-center rounded-md border-2 p-1',
-                workspaceConfig.workspace_theme === 'dark' &&
+                workspaceTheme.theme === 'dark' &&
                   'ring-ring ring-offset-root ring-2 ring-offset-2 transition-shadow'
               )}>
               <div className='space-y-2 rounded-sm bg-[#0D0D0E] p-2'>
@@ -280,13 +289,13 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
             type='button'
             className='flex h-full w-full flex-col items-center gap-2'
             onClick={() => {
-              setWorkspaceConfig({ ...workspaceConfig, workspace_theme: 'custom' });
+              setWorkspaceTheme({ ...workspaceTheme, theme: 'custom' });
             }}>
             <div className='relative h-full w-full'>
               <div
                 className={cn(
                   'border-border/50 bg-root items-center rounded-md border-2 p-1',
-                  workspaceConfig.workspace_theme === 'custom' &&
+                  workspaceTheme.theme === 'custom' &&
                     'ring-ring ring-offset-root ring-2 ring-offset-2 transition-shadow'
                 )}>
                 <div className='space-y-2 rounded-sm bg-[#F4F4F5] p-2'>

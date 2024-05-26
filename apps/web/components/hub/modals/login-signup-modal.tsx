@@ -14,11 +14,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@feedbase/ui/component
 import { UserAuthForm } from '@/components/user-auth-form';
 
 export default function AuthModal({
-  projectSlug,
+  workspaceSlug,
   children,
   disabled,
 }: {
-  projectSlug: string;
+  workspaceSlug: string;
   children: React.ReactNode;
   disabled?: boolean;
 }) {

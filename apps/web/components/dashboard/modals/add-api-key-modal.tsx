@@ -28,12 +28,12 @@ import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function AddApiKeyDialog({
   children,
-  projectSlug,
+  workspaceSlug,
   disabled,
   mutateKeys,
 }: {
   children: React.ReactNode;
-  projectSlug: string;
+  workspaceSlug: string;
   disabled?: boolean;
   mutateKeys: () => void;
 }) {
@@ -48,7 +48,7 @@ export default function AddApiKeyDialog({
   // Create API Key
   async function createApiKey() {
     const promise = new Promise<WorkspaceApiKeyProps['Row']>((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${projectSlug}/api-keys`, {
+      fetch(`/api/v1/workspaces/${workspaceSlug}/api-keys`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

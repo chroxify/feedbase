@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { updateWorkspaceConfigBySlug } from '@/lib/api/workspace';
+import { updateWorkspaceIntegrations } from '@/lib/api/integration';
 
 /*
     Update Slack integration
@@ -10,13 +10,13 @@ import { updateWorkspaceConfigBySlug } from '@/lib/api/workspace';
     }
 */
 export async function PATCH(req: Request, context: { params: { slug: string } }) {
-  const { status, webhook } = (await req.json()) as {
-    status: boolean;
+  const { enabled, webhook } = (await req.json()) as {
+    enabled: boolean;
     webhook: string;
   };
 
   // If status is true, make sure webhook and roleId are not empty
-  if (status && !webhook) {
+  if (enabled && !webhook) {
     return NextResponse.json(
       { error: 'webhook is required when enabling Slack integration.' },
       { status: 400 }
@@ -24,11 +24,11 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
   }
 
   // Update workspace config
-  const { data: updatedProjectConfig, error } = await updateWorkspaceConfigBySlug(
+  const { data: updatedWorkspaceConfig, error } = await updateWorkspaceIntegrations(
     context.params.slug,
     {
-      integration_slack_status: status,
-      integration_slack_webhook: status ? webhook : null,
+      slack_enabled: enabled,
+      slack_webhook: enabled ? webhook : null,
     },
     'route'
   );
@@ -39,5 +39,5 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
   }
 
   // Return updated workspace config
-  return NextResponse.json(updatedProjectConfig, { status: 200 });
+  return NextResponse.json(updatedWorkspaceConfig, { status: 200 });
 }

@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
@@ -9,7 +10,6 @@ import {
   ResponsiveDialog,
   ResponsiveDialogClose,
   ResponsiveDialogContent,
-  ResponsiveDialogDescription,
   ResponsiveDialogFooter,
   ResponsiveDialogHeader,
   ResponsiveDialogTitle,
@@ -109,7 +109,7 @@ export default function UpdateProfileModal({
                 </p>
 
                 {avatar ? (
-                  <img
+                  <Image
                     src={avatar}
                     alt='Preview'
                     width={45}

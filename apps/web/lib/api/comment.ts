@@ -1,13 +1,13 @@
 import { withFeedbackAuth } from '../auth';
-import { FeedbackCommentProps, FeedbackCommentWithUserProps } from '../types';
+import { CommentProps, CommentWithUserProps } from '../types';
 
 // Create comment for feedback by id
 export const createCommentForFeedbackById = (
-  data: FeedbackCommentProps['Insert'],
-  projectSlug: string,
+  data: CommentProps['Insert'],
+  workspaceSlug: string,
   cType: 'server' | 'route'
 ) =>
-  withFeedbackAuth<FeedbackCommentProps['Row']>(async (user, supabase, feedback, workspace, error) => {
+  withFeedbackAuth<CommentProps['Row']>(async (user, supabase, feedback, workspace, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -16,7 +16,7 @@ export const createCommentForFeedbackById = (
     // If reply_to_id is provided, make sure comment exists
     if (data.reply_to_id) {
       const { data: replyToComment, error: replyToCommentError } = await supabase
-        .from('feedback_comments')
+        .from('comment')
         .select()
         .eq('id', data.reply_to_id)
         .single();
@@ -39,7 +39,7 @@ export const createCommentForFeedbackById = (
 
     // Create comment
     const { data: comment, error: commentError } = await supabase
-      .from('feedback_comments')
+      .from('comment')
       .insert({
         feedback_id: data.feedback_id,
         user_id: user!.id,
@@ -54,19 +54,9 @@ export const createCommentForFeedbackById = (
       return { data: null, error: { message: commentError.message, status: 500 } };
     }
 
-    // Increment comment count
-    const { error: feedbackError } = await supabase
-      .from('feedback')
-      .update({ comment_count: feedback!.comment_count + 1 })
-      .eq('id', feedback!.id);
-
-    if (feedbackError) {
-      return { data: null, error: { message: feedbackError.message, status: 500 } };
-    }
-
     // Create workspace notification
     await supabase
-      .from('notifications')
+      .from('notification')
       .insert({
         type: 'comment',
         workspace_id: workspace!.id,
@@ -79,10 +69,10 @@ export const createCommentForFeedbackById = (
 
     // Return comment
     return { data: comment, error: null };
-  })(data.feedback_id, projectSlug, cType);
+  })(data.feedback_id, workspaceSlug, cType);
 
 // Get comments for feedback by id
-export const getCommentsForFeedbackById = withFeedbackAuth<FeedbackCommentWithUserProps[]>(
+export const getCommentsForFeedbackById = withFeedbackAuth<CommentWithUserProps[]>(
   async (user, supabase, feedback, workspace, error) => {
     // If any errors, return error
     if (error) {
@@ -91,7 +81,7 @@ export const getCommentsForFeedbackById = withFeedbackAuth<FeedbackCommentWithUs
 
     // Get comments
     const { data: comments, error: commentsError } = await supabase
-      .from('feedback_comments')
+      .from('comment')
       .select('*, user:user_id (*)')
       .eq('feedback_id', feedback!.id);
 
@@ -100,13 +90,13 @@ export const getCommentsForFeedbackById = withFeedbackAuth<FeedbackCommentWithUs
       return { data: null, error: { message: commentsError.message, status: 500 } };
     }
 
-    // Convert comments to FeedbackCommentWithUserProps[]
-    const feedbackData = comments as unknown as FeedbackCommentWithUserProps[];
+    // Convert comments to CommentWithUserProps[]
+    const commentsData = comments as unknown as CommentWithUserProps[];
 
     // Get team members
     const { data: teamMembers, error: teamMembersError } = await supabase
-      .from('project_members')
-      .select('profiles (full_name, avatar_url), *')
+      .from('workspace_member')
+      .select('profile (full_name, avatar_url), *')
       .eq('workspace_id', workspace!.id);
 
     if (teamMembersError) {
@@ -114,24 +104,33 @@ export const getCommentsForFeedbackById = withFeedbackAuth<FeedbackCommentWithUs
     }
 
     // Set team members
-    feedbackData.forEach((comment) => {
+    commentsData.forEach((comment) => {
       comment.user.isTeamMember = teamMembers.some((member) => member.member_id === comment.user_id);
     });
 
     // Check if user has upvoted any comments
     if (user) {
-      feedbackData.forEach((comment) => {
-        if (comment.upvoters) {
-          comment.has_upvoted = comment.upvoters.includes(user.id);
-        }
+      // Get upvoters
+      const { data: userUpvotes, error: userUpvotesError } = await supabase
+        .from('comment_upvoter')
+        .select()
+        .eq('profile_id', user.id);
+
+      if (userUpvotesError) {
+        return { data: null, error: { message: userUpvotesError.message, status: 500 } };
+      }
+
+      // Set has_upvoted property
+      commentsData.forEach((comment) => {
+        comment.has_upvoted = userUpvotes.some((upvote) => upvote.comment_id === comment.id);
       });
     }
 
     // Restructure comments to have replies as a property
-    const commentsWithReplies = feedbackData.map((comment) => {
+    const commentsWithReplies = commentsData.map((comment) => {
       // If comment has a reply_to_id, add it to the replies array of the comment it's replying to
       if (comment.reply_to_id) {
-        const replyToComment = feedbackData.find((c) => c.id === comment.reply_to_id);
+        const replyToComment = commentsData.find((c) => c.id === comment.reply_to_id);
 
         if (replyToComment) {
           if (!replyToComment.replies) {
@@ -150,8 +149,8 @@ export const getCommentsForFeedbackById = withFeedbackAuth<FeedbackCommentWithUs
     });
 
     // Remove null values from commentsWithReplies array
-    const nonNullCommentsWithReplies: FeedbackCommentWithUserProps[] = commentsWithReplies.filter(
-      (comment): comment is FeedbackCommentWithUserProps => comment !== null
+    const nonNullCommentsWithReplies: CommentWithUserProps[] = commentsWithReplies.filter(
+      (comment): comment is CommentWithUserProps => comment !== null
     );
 
     // Return comments
@@ -163,10 +162,10 @@ export const getCommentsForFeedbackById = withFeedbackAuth<FeedbackCommentWithUs
 export const deleteCommentForFeedbackById = (
   commentId: string,
   feedbackId: string,
-  projectSlug: string,
+  workspaceSlug: string,
   cType: 'server' | 'route'
 ) =>
-  withFeedbackAuth<FeedbackCommentProps['Row']>(async (user, supabase, feedback, workspace, error) => {
+  withFeedbackAuth<CommentProps['Row']>(async (user, supabase, feedback, workspace, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -174,7 +173,7 @@ export const deleteCommentForFeedbackById = (
 
     // Make sure comment exists
     const { data: comment, error: commentError } = await supabase
-      .from('feedback_comments')
+      .from('comment')
       .select()
       .eq('id', commentId)
       .single();
@@ -196,7 +195,7 @@ export const deleteCommentForFeedbackById = (
 
     // Delete comment
     const { data: deletedComment, error: deletedCommentError } = await supabase
-      .from('feedback_comments')
+      .from('comment')
       .delete()
       .eq('id', commentId)
       .select()
@@ -207,28 +206,18 @@ export const deleteCommentForFeedbackById = (
       return { data: null, error: { message: deletedCommentError.message, status: 500 } };
     }
 
-    // Decrement comment count
-    const { error: feedbackError } = await supabase
-      .from('feedback')
-      .update({ comment_count: feedback!.comment_count - 1 })
-      .eq('id', feedback!.id);
-
-    if (feedbackError) {
-      return { data: null, error: { message: feedbackError.message, status: 500 } };
-    }
-
     // Return deletedComment
     return { data: deletedComment, error: null };
-  })(feedbackId, projectSlug, cType);
+  })(feedbackId, workspaceSlug, cType);
 
 // Upvote comment for feedback by id
 export const upvoteCommentForFeedbackById = (
   commentId: string,
   feedbackId: string,
-  projectSlug: string,
+  workspaceSlug: string,
   cType: 'server' | 'route'
 ) =>
-  withFeedbackAuth<FeedbackCommentWithUserProps>(async (user, supabase, feedback, workspace, error) => {
+  withFeedbackAuth<CommentProps['Row']>(async (user, supabase, feedback, workspace, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -236,7 +225,7 @@ export const upvoteCommentForFeedbackById = (
 
     // Make sure comment exists
     const { data: comment, error: commentError } = await supabase
-      .from('feedback_comments')
+      .from('comment')
       .select()
       .eq('id', commentId)
       .single();
@@ -251,36 +240,55 @@ export const upvoteCommentForFeedbackById = (
       return { data: null, error: { message: 'comment not found.', status: 404 } };
     }
 
-    if (!comment.upvoters) {
-      comment.upvoters = []; // Initialize upvoters array if it doesn't exist
+    // Check if user has already upvoted the comment
+    const { data: upvoter, error: upvoterError } = await supabase
+      .from('comment_upvoter')
+      .select()
+      .eq('profile_id', user!.id)
+      .eq('comment_id', commentId)
+      .single();
+
+    // Check for errors
+    if (upvoterError) {
+      return { data: null, error: { message: upvoterError.message, status: 500 } };
     }
 
-    const isUserUpvoted = comment.upvoters.includes(user!.id);
+    // If user has already upvoted the comment, delete upvote
+    if (upvoter) {
+      const { error: deletedUpvoteError } = await supabase
+        .from('comment_upvoter')
+        .delete()
+        .eq('id', upvoter.id)
+        .select()
+        .single();
 
-    const { data: updatedComment, error: updatedCommentError } = await supabase
-      .from('feedback_comments')
-      .update({
-        upvoters: isUserUpvoted
-          ? comment.upvoters.filter((upvoter) => upvoter !== user!.id)
-          : comment.upvoters.concat(user!.id),
-        upvotes: isUserUpvoted ? comment.upvotes - 1 : comment.upvotes + 1,
-      })
-      .eq('id', commentId)
+      // Check for errors
+      if (deletedUpvoteError) {
+        return { data: null, error: { message: deletedUpvoteError.message, status: 500 } };
+      }
+
+      // Return comment without upvote
+      return {
+        data: { ...comment, upvotes: comment.upvotes - 1 },
+        error: null,
+      };
+    }
+
+    // Create upvote
+    const { error: upvoteError } = await supabase
+      .from('comment_upvoter')
+      .insert({ profile_id: user!.id, comment_id: commentId })
       .select()
       .single();
 
-    if (updatedCommentError) {
-      return { data: null, error: { message: updatedCommentError.message, status: 500 } };
+    // Check for errors
+    if (upvoteError) {
+      return { data: null, error: { message: upvoteError.message, status: 500 } };
     }
 
-    // Convert comments to FeedbackCommentWithUserProps[]
-    const feedbackData = updatedComment as unknown as FeedbackCommentWithUserProps;
-
-    // Check if user has upvoted any comments
-    if (feedbackData.upvoters) {
-      feedbackData.has_upvoted = feedbackData.upvoters.includes(user!.id);
-    }
-
-    // Return updatedComment
-    return { data: feedbackData, error: null };
-  })(feedbackId, projectSlug, cType);
+    // Return comment with upvote
+    return {
+      data: { ...comment, upvotes: comment.upvotes - 1 },
+      error: null,
+    };
+  })(feedbackId, workspaceSlug, cType);

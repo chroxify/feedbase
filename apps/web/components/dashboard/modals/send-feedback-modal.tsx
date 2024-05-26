@@ -18,10 +18,10 @@ import { Icons } from '@/components/shared/icons/icons-static';
 
 export default function FeedbackModal({
   children,
-  projectSlug,
+  workspaceSlug,
 }: {
   children: React.ReactNode;
-  projectSlug: string;
+  workspaceSlug: string;
 }) {
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -34,7 +34,7 @@ export default function FeedbackModal({
 
     // Create promise
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${projectSlug}/feedback`, {
+      fetch(`/api/v1/workspaces/${workspaceSlug}/feedback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

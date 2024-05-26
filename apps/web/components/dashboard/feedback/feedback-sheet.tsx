@@ -40,7 +40,7 @@ import { toast } from 'sonner';
 import useSWR, { useSWRConfig } from 'swr';
 import useSWRMutation from 'swr/mutation';
 import { PROSE_CN } from '@/lib/constants';
-import { FeedbackCommentWithUserProps, FeedbackWithUserProps } from '@/lib/types';
+import { CommentWithUserProps, FeedbackWithUserProps } from '@/lib/types';
 import { actionFetcher, fetcher, formatRootUrl } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
 import DefaultTooltip from '@/components/shared/tooltip';
@@ -66,15 +66,15 @@ export function FeedbackSheet({
   const [currentFeedback, setCurrentFeedback] = useState(initialFeedback);
   const [open, setOpen] = useState(false);
 
-  const { data: comments, isLoading: commentsLoading } = useSWR<FeedbackCommentWithUserProps[]>(
+  const { data: comments, isLoading: commentsLoading } = useSWR<CommentWithUserProps[]>(
     currentFeedback.id && open ? `/api/v1/workspaces/${slug}/feedback/${currentFeedback.id}/comments` : null,
     fetcher
   );
 
   // Render comments recursively
-  const renderComments = useCallback((comments: FeedbackCommentWithUserProps[] | undefined) => {
-    return comments?.map((comment: FeedbackCommentWithUserProps) => (
-      <Comment commentData={comment} projectSlug='x' key={comment.id} id={comment.id}>
+  const renderComments = useCallback((comments: CommentWithUserProps[] | undefined) => {
+    return comments?.map((comment: CommentWithUserProps) => (
+      <Comment commentData={comment} workspaceSlug='x' key={comment.id} id={comment.id}>
         {renderComments(comment.replies)}
       </Comment>
     ));
@@ -285,7 +285,7 @@ export function FeedbackSheet({
             </SheetHeader>
 
             {/* Feedback Comment Field */}
-            <CommentInput feedbackId={currentFeedback.id} projectSlug={slug} />
+            <CommentInput feedbackId={currentFeedback.id} workspaceSlug={slug} />
 
             {/* Comments / Activity */}
             <Tabs defaultValue='comments' className='w-full space-y-4'>

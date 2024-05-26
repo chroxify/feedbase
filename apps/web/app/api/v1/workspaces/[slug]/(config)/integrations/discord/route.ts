@@ -1,24 +1,24 @@
 import { NextResponse } from 'next/server';
-import { updateWorkspaceConfigBySlug } from '@/lib/api/workspace';
+import { updateWorkspaceIntegrations } from '@/lib/api/integration';
 
 /*
     Update Discord integration
     PATCH /api/v1/workspaces/:slug/config/integrations/discord
     {
-        status: boolean,
+        enabled: boolean,
         webhook: string,
         roleId: string,
     }
 */
 export async function PATCH(req: Request, context: { params: { slug: string } }) {
-  const { status, webhook, roleId } = (await req.json()) as {
-    status: boolean;
+  const { enabled, webhook, roleId } = (await req.json()) as {
+    enabled: boolean;
     webhook: string;
-    roleId: string;
+    roleId: number;
   };
 
   // If status is true, make sure webhook and roleId are not empty
-  if (status && !webhook) {
+  if (enabled && !webhook) {
     return NextResponse.json(
       { error: 'webhook is required when enabling Discord integration.' },
       { status: 400 }
@@ -26,12 +26,12 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
   }
 
   // Update workspace config
-  const { data: updatedProjectConfig, error } = await updateWorkspaceConfigBySlug(
+  const { data: updatedWorkspaceConfig, error } = await updateWorkspaceIntegrations(
     context.params.slug,
     {
-      integration_discord_status: status,
-      integration_discord_webhook: status ? webhook : null,
-      integration_discord_role_id: status ? roleId : null,
+      discord_enabled: enabled,
+      discord_webhook: enabled ? webhook : null,
+      discord_role_id: enabled ? roleId : null,
     },
     'route'
   );
@@ -42,5 +42,5 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
   }
 
   // Return updated workspace config
-  return NextResponse.json(updatedProjectConfig, { status: 200 });
+  return NextResponse.json(updatedWorkspaceConfig, { status: 200 });
 }

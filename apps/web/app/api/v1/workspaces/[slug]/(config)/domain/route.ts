@@ -1,21 +1,21 @@
 import { NextResponse } from 'next/server';
-import { getWorkspaceConfigBySlug, updateWorkspaceConfigBySlug } from '@/lib/api/workspace';
+import { getWorkspaceBySlug, updateWorkspaceBySlug } from '@/lib/api/workspace';
 
 /*
   GET /api/v1/workspaces/:slug/config/domain
 */
 export async function GET(req: Request, context: { params: { slug: string } }) {
   // Get workspace
-  const { data, error } = await getWorkspaceConfigBySlug(context.params.slug, 'route');
+  const { data: workspace, error: workspaceError } = await getWorkspaceBySlug(context.params.slug, 'route');
 
   // If any errors thrown, return error
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: error.status });
+  if (workspaceError) {
+    return NextResponse.json({ error: workspaceError.message }, { status: workspaceError.status });
   }
 
   const [configResponse, domainResponse] = await Promise.all([
     fetch(
-      `https://api.vercel.com/v6/domains/${data.custom_domain}/config${
+      `https://api.vercel.com/v6/domains/${workspace.custom_domain}/config${
         process.env.VERCEL_TEAM_ID ? `?teamId=${process.env.VERCEL_TEAM_ID}` : ''
       }`,
       {
@@ -27,9 +27,9 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
       }
     ),
     fetch(
-      `https://api.vercel.com/v9/projects/${process.env.VERCEL_PROJECT_ID}/domains/${data.custom_domain}${
-        process.env.VERCEL_TEAM_ID ? `?teamId=${process.env.VERCEL_TEAM_ID}` : ''
-      }`,
+      `https://api.vercel.com/v9/projects/${process.env.VERCEL_PROJECT_ID}/domains/${
+        workspace.custom_domain
+      }${process.env.VERCEL_TEAM_ID ? `?teamId=${process.env.VERCEL_TEAM_ID}` : ''}`,
       {
         method: 'GET',
         headers: {
@@ -58,7 +58,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
   if (!domainData.verified && !configData.misconfigured) {
     const verifyResponse = await fetch(
       `https://api.vercel.com/v9/projects/${process.env.VERCEL_PROJECT_ID}/domains/${
-        data.custom_domain
+        workspace.custom_domain
       }/verify${process.env.VERCEL_TEAM_ID ? `?teamId=${process.env.VERCEL_TEAM_ID}` : ''}`,
       {
         method: 'POST',
@@ -104,7 +104,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
 
   // If verification succeeded, update workspace config
   if (domainData?.verified && !configData.misconfigured) {
-    const { error: updateError } = await updateWorkspaceConfigBySlug(
+    const { error: updateError } = await updateWorkspaceBySlug(
       context.params.slug,
       { custom_domain_verified: true },
       'route'
@@ -141,21 +141,15 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
   }
 
   // Get workspace config
-  const { data: workspaceConfig, error: workspaceConfigError } = await getWorkspaceConfigBySlug(
-    context.params.slug,
-    'route'
-  );
+  const { data: workspace, error: workspaceError } = await getWorkspaceBySlug(context.params.slug, 'route');
 
   // If any errors thrown, return error
-  if (workspaceConfigError) {
-    return NextResponse.json(
-      { error: workspaceConfigError.message },
-      { status: workspaceConfigError.status }
-    );
+  if (workspaceError) {
+    return NextResponse.json({ error: workspaceError.message }, { status: workspaceError.status });
   }
 
   // If workspace already has a domain, return error
-  if (workspaceConfig.custom_domain) {
+  if (workspace.custom_domain) {
     return NextResponse.json({ error: 'Workspace already has a custom domain' }, { status: 409 });
   }
 
@@ -192,7 +186,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
   }
 
   // Update workspace config
-  const { error } = await updateWorkspaceConfigBySlug(
+  const { error } = await updateWorkspaceBySlug(
     context.params.slug,
     { custom_domain: responseData.name, custom_domain_verified: false },
     'route'
@@ -212,21 +206,21 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
 */
 export async function DELETE(req: Request, context: { params: { slug: string } }) {
   // Get workspace
-  const { data, error } = await getWorkspaceConfigBySlug(context.params.slug, 'route');
+  const { data: workspace, error: workspaceError } = await getWorkspaceBySlug(context.params.slug, 'route');
 
   // If any errors thrown, return error
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: error.status });
+  if (workspaceError) {
+    return NextResponse.json({ error: workspaceError.message }, { status: workspaceError.status });
   }
 
   // If no domain, return error
-  if (!data?.custom_domain) {
+  if (!workspace?.custom_domain) {
     return NextResponse.json({ error: 'Workspace does not have a custom domain' }, { status: 400 });
   }
 
   // Delete domain from Vercel
   const response = await fetch(
-    `https://api.vercel.com/v9/projects/${process.env.VERCEL_PROJECT_ID}/domains/${data?.custom_domain}${
+    `https://api.vercel.com/v9/projects/${process.env.VERCEL_PROJECT_ID}/domains/${workspace?.custom_domain}${
       process.env.VERCEL_TEAM_ID ? `?teamId=${process.env.VERCEL_TEAM_ID}` : ''
     }`,
     {
@@ -246,20 +240,20 @@ export async function DELETE(req: Request, context: { params: { slug: string } }
   }
 
   // Update workspace config
-  const { data: updatedProjectConfig, error: updatedProjectConfigError } = await updateWorkspaceConfigBySlug(
+  const { data: updatedWorkspaceConfig, error: updatedWorkspaceConfigError } = await updateWorkspaceBySlug(
     context.params.slug,
-    { custom_domain: null, custom_domain_verified: null },
+    { custom_domain: null, custom_domain_verified: false },
     'route'
   );
 
   // If any errors thrown, return error
-  if (updatedProjectConfigError) {
+  if (updatedWorkspaceConfigError) {
     return NextResponse.json(
-      { error: updatedProjectConfigError.message },
-      { status: updatedProjectConfigError.status }
+      { error: updatedWorkspaceConfigError.message },
+      { status: updatedWorkspaceConfigError.status }
     );
   }
 
   // Return response
-  return NextResponse.json(updatedProjectConfig, { status: 200 });
+  return NextResponse.json(updatedWorkspaceConfig, { status: 200 });
 }

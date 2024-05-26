@@ -14,13 +14,13 @@ export default function Changelog({ params }: { params: { slug: string } }) {
 
         <div className='flex items-center gap-3'>
           {/* Api Docs Button */}
-          <ApiSheet projectSlug={params.slug} />
+          <ApiSheet workspaceSlug={params.slug} />
 
           {/* Seperator Line */}
           <Separator orientation='vertical' className='h-6' />
 
           {/* Create new Button */}
-          <AddChangelogModal projectSlug={params.slug}>
+          <AddChangelogModal workspaceSlug={params.slug}>
             <Button variant='default' className='flex items-center gap-1'>
               <Plus className='-ml-[2px] inline-flex h-[18px] w-[18px]' />
               New Changelog
@@ -30,7 +30,7 @@ export default function Changelog({ params }: { params: { slug: string } }) {
       </div>
 
       {/* Changelogs */}
-      <ChangelogList projectSlug={params.slug} />
+      <ChangelogList workspaceSlug={params.slug} />
     </div>
   );
 }

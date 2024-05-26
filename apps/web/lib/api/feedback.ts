@@ -1,5 +1,4 @@
-import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
-import { PostgrestError } from '@supabase/supabase-js';
+// import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
 import { withFeedbackAuth, withWorkspaceAuth } from '../auth';
 import {
   FeedbackProps,
@@ -14,7 +13,7 @@ import { isValidEmail } from '../utils';
 
 // Create a feedback post
 export const createFeedback = (
-  projectSlug: string,
+  workspaceSlug: string,
   data: FeedbackWithUserInputProps,
   cType: 'server' | 'route'
 ) =>
@@ -27,7 +26,7 @@ export const createFeedback = (
     // Check if tags exist
     if (data.tags && data.tags.length > 0) {
       // Get all feedback tags for workspace
-      const { data: projectTags, error: tagsError } = await supabase
+      const { data: workspaceTags, error: tagsError } = await supabase
         .from('feedback_tag')
         .select()
         .eq('workspace_id', workspace!.id);
@@ -38,7 +37,7 @@ export const createFeedback = (
       }
 
       // If no tags, return error
-      if (!projectTags || projectTags.length === 0) {
+      if (!workspaceTags || workspaceTags.length === 0) {
         return { data: null, error: { message: 'no tags found for workspace.', status: 404 } };
       }
 
@@ -48,7 +47,7 @@ export const createFeedback = (
       // Loop through tags
       data.tags.forEach((tag) => {
         // Check if tag exists
-        const tagExists = projectTags.find((t) => t.id === tag);
+        const tagExists = workspaceTags.find((t) => t.id === tag);
 
         // If tag doesn't exist, add to invalid tags
         if (!tagExists) {
@@ -68,7 +67,7 @@ export const createFeedback = (
       }
 
       // Convert tags into raw tags json array objects: [{name: name, color: color}]
-      data.raw_tags = projectTags
+      data.raw_tags = workspaceTags
         .filter((tag) => data.tags!.includes(tag.id))
         .map((tag) => {
           return { name: tag.name, color: tag.color };
@@ -228,63 +227,64 @@ export const createFeedback = (
       return { data: null, error: { message: feedbackError.message, status: 500 } };
     }
 
-    // Convert feedback to unknown type and then to test type
-    const feedbackData = feedback as unknown as FeedbackWithUserProps;
+    // TODO: Handle all of this in trigger.dev
+    // Convert feedback to unknown type and then to FeedbackWithUserProps type
+    // const feedbackData = feedback as unknown as FeedbackWithUserProps;
 
-    // Fetch Workspace Config for integrations
-    const { data: workspaceConfig, error: workspaceConfigError } = await supabase
-      .from('workspace_config')
-      .select()
-      .eq('workspace_id', workspace!.id)
-      .single();
+    // // Fetch Workspace Config for integrations
+    // const { data: workspaceConfig, error: workspaceConfigError } = await supabase
+    //   .from('workspace_config')
+    //   .select()
+    //   .eq('workspace_id', workspace!.id)
+    //   .single();
 
-    // Check for errors
-    if (workspaceConfigError) {
-      return { data: null, error: { message: workspaceConfigError.message, status: 500 } };
-    }
+    // // Check for errors
+    // if (workspaceConfigError) {
+    //   return { data: null, error: { message: workspaceConfigError.message, status: 500 } };
+    // }
 
-    //! Note: The waitUntil function is currently a highly experimental api and might break in the future
-    // Once there is a better way to do this, it should be replaced
-    // https://github.com/vercel/next.js/issues/50522#issuecomment-1838593482
+    // //! Note: The waitUntil function is currently a highly experimental api and might break in the future
+    // // Once there is a better way to do this, it should be replaced
+    // // https://github.com/vercel/next.js/issues/50522#issuecomment-1838593482
 
-    // Check if Discord integration is enabled
-    if (workspaceConfig.integration_discord_status) {
-      // Send Discord notification asynchronously without waiting for it to complete
-      waitUntil(async () => {
-        // sendDiscordNotification(feedbackData, workspace!, workspaceConfig);
-      });
-    }
+    // // Check if Discord integration is enabled
+    // if (workspaceConfig.integration_discord_status) {
+    //   // Send Discord notification asynchronously without waiting for it to complete
+    //   waitUntil(async () => {
+    //     // sendDiscordNotification(feedbackData, workspace!, workspaceConfig);
+    //   });
+    // }
 
-    // Check if Slack integration is enabled
-    if (workspaceConfig.integration_slack_status) {
-      // Send Slack notification asynchronously without waiting for it to complete
-      waitUntil(async () => {
-        // sendSlackNotification(feedbackData, workspace!, workspaceConfig);
-      });
-    }
+    // // Check if Slack integration is enabled
+    // if (workspaceConfig.integration_slack_status) {
+    //   // Send Slack notification asynchronously without waiting for it to complete
+    //   waitUntil(async () => {
+    //     // sendSlackNotification(feedbackData, workspace!, workspaceConfig);
+    //   });
+    // }
 
-    // Create workspace notification
-    waitUntil(async () => {
-      await supabase
-        .from('notification')
-        .insert({
-          type: 'post',
-          workspace_id: workspace!.id,
-          initiator_id: user!.id,
-          feedback_id: feedbackData.id,
-        })
-        .select()
-        .single();
-    });
+    // // Create workspace notification
+    // waitUntil(async () => {
+    //   await supabase
+    //     .from('notification')
+    //     .insert({
+    //       type: 'post',
+    //       workspace_id: workspace!.id,
+    //       initiator_id: user!.id,
+    //       feedback_id: feedbackData.id,
+    //     })
+    //     .select()
+    //     .single();
+    // });
 
     // Return feedback
     return { data: feedback, error: null };
-  })(projectSlug, cType, true, true);
+  })(workspaceSlug, cType, true, true);
 
 // Update a feedback post
 export const updateFeedbackByID = (
   id: string,
-  projectSlug: string,
+  workspaceSlug: string,
   data: FeedbackWithUserInputProps,
   cType: 'server' | 'route'
 ) =>
@@ -297,7 +297,7 @@ export const updateFeedbackByID = (
     // Check if tags exist
     if (data.tags !== undefined) {
       // Get all feedback tags for workspace
-      const { data: projectTags, error: tagsError } = await supabase
+      const { data: workspaceTags, error: tagsError } = await supabase
         .from('feedback_tag')
         .select()
         .eq('workspace_id', workspace!.id);
@@ -308,7 +308,7 @@ export const updateFeedbackByID = (
       }
 
       // If no tags, return error
-      if (!projectTags || projectTags.length === 0) {
+      if (!workspaceTags || workspaceTags.length === 0) {
         return { data: null, error: { message: 'no tags found for workspace.', status: 404 } };
       }
 
@@ -318,7 +318,7 @@ export const updateFeedbackByID = (
       // Loop through tags
       data.tags.forEach((tag) => {
         // Check if tag exists
-        const tagExists = projectTags.find((t) => t.id === tag);
+        const tagExists = workspaceTags.find((t) => t.id === tag);
 
         // If tag doesn't exist, add to invalid tags
         if (!tagExists) {
@@ -338,7 +338,7 @@ export const updateFeedbackByID = (
       }
 
       // Convert tags into raw tags json array objects: [{name: name, color: color}]
-      data.raw_tags = projectTags
+      data.raw_tags = workspaceTags
         .filter((tag) => data.tags!.includes(tag.id))
         .map((tag) => {
           return { name: tag.name, color: tag.color };
@@ -365,7 +365,7 @@ export const updateFeedbackByID = (
 
     // Return feedback
     return { data: updatedFeedback, error: null };
-  })(id, projectSlug, cType);
+  })(id, workspaceSlug, cType);
 
 // Get a feedback post
 export const getFeedbackByID = withFeedbackAuth<FeedbackWithUserProps>(
@@ -462,7 +462,7 @@ export const getFeedbackUpvotersById = withFeedbackAuth<ProfileProps['Row'][]>(
 // Upvote feedback by ID
 export const upvoteFeedbackByID = (
   id: string,
-  projectSlug: string,
+  workspaceSlug: string,
   cType: 'server' | 'route',
   hasUserUpvoted = false,
   isAnonymous = false
@@ -477,19 +477,19 @@ export const upvoteFeedbackByID = (
     }
 
     // Get workspace config
-    const { data: workspaceConfig, error: workspaceConfigError } = await supabase
-      .from('workspace_config')
+    const { data: workspaceModuleConfig, error: workspaceModuleConfigError } = await supabase
+      .from('workspace_module')
       .select()
       .eq('workspace_id', workspace!.id)
       .single();
 
     // Check for errors
-    if (workspaceConfigError) {
-      return { data: null, error: { message: workspaceConfigError.message, status: 500 } };
+    if (workspaceModuleConfigError) {
+      return { data: null, error: { message: workspaceModuleConfigError.message, status: 500 } };
     }
 
     // Check if anonymous upvoting is enabled
-    if (!workspaceConfig.feedback_allow_anon_upvoting && isAnonymous) {
+    if (!workspaceModuleConfig.feedback_anon_upvoting && isAnonymous) {
       return { data: null, error: { message: 'anonymous upvoting is not allowed.', status: 403 } };
     }
 
@@ -566,10 +566,10 @@ export const upvoteFeedbackByID = (
 
     // Return feedback
     return { data: updatedFeedback, error: null };
-  })(id, projectSlug, cType, !isAnonymous);
+  })(id, workspaceSlug, cType, !isAnonymous);
 
 // Get all feedback posts
-export const getAllProjectFeedback = withWorkspaceAuth<FeedbackWithUserProps[]>(
+export const getAllWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProps[]>(
   async (user, supabase, workspace, error) => {
     // If any errors, return error
     if (error) {
@@ -623,7 +623,7 @@ export const getAllProjectFeedback = withWorkspaceAuth<FeedbackWithUserProps[]>(
 
 // Create feedback tag
 export const createFeedbackTag = (
-  projectSlug: string,
+  workspaceSlug: string,
   data: { name: string; color: string },
   cType: 'server' | 'route'
 ) =>
@@ -668,10 +668,10 @@ export const createFeedbackTag = (
 
     // Return feedback
     return { data: tag, error: null };
-  })(projectSlug, cType);
+  })(workspaceSlug, cType);
 
 // Delete feedback tag by name
-export const deleteFeedbackTagByName = (projectSlug: string, tagName: string, cType: 'server' | 'route') =>
+export const deleteFeedbackTagByName = (workspaceSlug: string, tagName: string, cType: 'server' | 'route') =>
   withWorkspaceAuth<FeedbackTagProps['Row']>(async (user, supabase, workspace, error) => {
     // If any errors, return error
     if (error) {
@@ -706,7 +706,7 @@ export const deleteFeedbackTagByName = (projectSlug: string, tagName: string, cT
 
     // Return success
     return { data: deletedTag, error: null };
-  })(projectSlug, cType);
+  })(workspaceSlug, cType);
 
 // Get all workspace feedback tags
 export const getAllFeedbackTags = withWorkspaceAuth<FeedbackTagProps['Row'][]>(

@@ -1,4 +1,5 @@
-import { getWorkspaceBySlug, getWorkspaceConfigBySlug } from '@/lib/api/workspace';
+import { getWorkspaceModuleConfig } from '@/lib/api/module';
+import { getWorkspaceBySlug } from '@/lib/api/workspace';
 
 // import HubConfigCards from '@/components/dashboard/settings/hub-cards';
 
@@ -11,7 +12,7 @@ export default async function HubSettings({ params }: { params: { slug: string }
   }
 
   // Fetch workspace config
-  const { data: workspaceConfig, error: configError } = await getWorkspaceConfigBySlug(params.slug, 'server');
+  const { data: workspaceConfig, error: configError } = await getWorkspaceModuleConfig(params.slug, 'server');
 
   if (configError) {
     return <div>{configError.message}</div>;

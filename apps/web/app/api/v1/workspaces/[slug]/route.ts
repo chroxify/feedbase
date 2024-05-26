@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { deleteProjectBySlug, getWorkspaceBySlug, updateProjectBySlug } from '@/lib/api/workspace';
+import { deleteWorkspaceBySlug, getWorkspaceBySlug, updateWorkspaceBySlug } from '@/lib/api/workspace';
 import { WorkspaceProps } from '@/lib/types';
 
 /*
@@ -14,7 +14,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
   }
 
   // Return workspace
-  return NextResponse.json({ workspace }, { status: 200 });
+  return NextResponse.json(workspace, { status: 200 });
 }
 
 /*
@@ -34,12 +34,12 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
     slug,
     icon,
     icon_radius: iconRadius,
-    og_image: OGImage,
+    opengraph_image: OGImage,
   } = (await req.json()) as WorkspaceProps['Update'];
 
-  const { data: updatedProject, error } = await updateProjectBySlug(
+  const { data: updatedWorkspace, error } = await updateWorkspaceBySlug(
     context.params.slug,
-    { name, slug, icon, icon_radius: iconRadius, og_image: OGImage },
+    { name, slug, icon, icon_radius: iconRadius, opengraph_image: OGImage },
     'route'
   );
 
@@ -49,7 +49,7 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
   }
 
   // Return updated workspace
-  return NextResponse.json(updatedProject, { status: 200 });
+  return NextResponse.json(updatedWorkspace, { status: 200 });
 }
 
 /*
@@ -57,7 +57,7 @@ export async function PATCH(req: Request, context: { params: { slug: string } })
     DELETE /api/v1/workspaces/[slug]
 */
 export async function DELETE(req: Request, context: { params: { slug: string } }) {
-  const { data, error } = await deleteProjectBySlug(context.params.slug, 'route');
+  const { data, error } = await deleteWorkspaceBySlug(context.params.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {

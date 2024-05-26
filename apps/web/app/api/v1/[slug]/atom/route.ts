@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getPublicProjectChangelogs } from '@/lib/api/public';
+import { getPublicWorkspaceChangelogs } from '@/lib/api/public';
 import { getWorkspaceBySlug } from '@/lib/api/workspace';
 
 /*
@@ -14,7 +14,7 @@ export async function GET(req: Request, context: { params: { slug: string } }) {
     return NextResponse.json({ error: error.message }, { status: error.status });
   }
 
-  const { data: changelogs, error: changelogError } = await getPublicProjectChangelogs(
+  const { data: changelogs, error: changelogError } = await getPublicWorkspaceChangelogs(
     context.params.slug,
     'route',
     true,

@@ -33,7 +33,7 @@ import { fetcher } from '@/lib/utils';
 import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';
 import AnimatedTabs from '@/components/layout/animated-tabs';
 
-export default function ChangelogList({ projectSlug }: { projectSlug: string }) {
+export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string }) {
   const [tab, setTab] = useState('Drafts');
   const [changelogs, setChangelogs] = useState<ChangelogProps['Row'][]>();
 
@@ -42,11 +42,11 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
     error,
     isLoading,
     mutate,
-  } = useSWR<ChangelogProps['Row'][]>(`/api/v1/workspaces/${projectSlug}/changelogs`, fetcher);
+  } = useSWR<ChangelogProps['Row'][]>(`/api/v1/workspaces/${workspaceSlug}/changelogs`, fetcher);
 
   async function onDeleteChangelog(changelog: ChangelogProps['Row']) {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${projectSlug}/changelogs/${changelog.id}`, {
+      fetch(`/api/v1/workspaces/${workspaceSlug}/changelogs/${changelog.id}`, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
 
   async function onDuplicateChangelog(changelog: ChangelogProps['Row']) {
     const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${projectSlug}/changelogs`, {
+      fetch(`/api/v1/workspaces/${workspaceSlug}/changelogs`, {
         method: 'POST',
         body: JSON.stringify({
           title: changelog.title,
@@ -220,7 +220,7 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
               <h3 className='text-foreground text-center text-2xl font-medium'>No changelogs found.</h3>
               <p className='text-muted-foreground text-center'>Create a new changelog to get started.</p>
             </div>
-            <AddChangelogModal projectSlug={projectSlug}>
+            <AddChangelogModal workspaceSlug={workspaceSlug}>
               <Button size='sm'>Create Changelog</Button>
             </AddChangelogModal>
           </div>
@@ -297,7 +297,7 @@ export default function ChangelogList({ projectSlug }: { projectSlug: string }) 
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className=' justify-between' align='end'>
-                <AddChangelogModal projectSlug={projectSlug} changelogData={changelog} isEdit>
+                <AddChangelogModal workspaceSlug={workspaceSlug} changelogData={changelog} isEdit>
                   <DropdownMenuItem
                     onSelect={(event) => {
                       event.preventDefault();

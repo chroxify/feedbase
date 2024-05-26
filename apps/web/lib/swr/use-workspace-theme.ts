@@ -1,24 +1,24 @@
 import { useParams } from 'next/navigation';
 import useSWR from 'swr';
-import { WorkspaceConfigWithoutSecretProps } from '@/lib/types';
+import { WorkspaceThemeProps } from '@/lib/types';
 import { fetcher } from '../utils';
 
-export default function useWorkspaceConfig() {
+export default function useWorkspaceTheme() {
   const { slug } = useParams<{ slug: string }>();
 
   const {
-    data: workspaceConfig,
+    data: workspaceTheme,
     isValidating,
     error,
     mutate,
-  } = useSWR<WorkspaceConfigWithoutSecretProps>(`/api/v1/workspaces/${slug}/config`, fetcher, {
+  } = useSWR<WorkspaceThemeProps['Row']>(`/api/v1/workspaces/${slug}/theme`, fetcher, {
     revalidateOnFocus: false,
     errorRetryInterval: 30000,
   });
 
   return {
-    workspaceConfig,
-    loading: !workspaceConfig,
+    workspaceTheme,
+    loading: !workspaceTheme,
     mutate,
     error,
     isValidating,

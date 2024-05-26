@@ -35,13 +35,13 @@
 //   workspaceData: WorkspaceProps['Row'];
 //   workspaceConfigData: WorkspaceConfigWithoutSecretProps;
 // }) {
-//   const [workspace, setProject] = useState<WorkspaceProps['Row']>(workspaceData);
+//   const [workspace, setWorkspace] = useState<WorkspaceProps['Row']>(workspaceData);
 //   const [workspaceConfig, setWorkspaceConfig] =
 //     useState<WorkspaceConfigWithoutSecretProps>(workspaceConfigData);
 //   const [ogImage, setOgImage] = useState<string | null>(workspaceConfig.workspace_og_image || null);
 //   const router = useRouter();
 
-//   async function handleSaveProject(noToast?: boolean) {
+//   async function handleSaveWorkspace(noToast?: boolean) {
 //     const promise = new Promise((resolve, reject) => {
 //       fetch(`/api/v1/workspaces/${workspaceData.slug}`, {
 //         method: 'PATCH',
@@ -85,7 +85,7 @@
 //   }
 
 //   // handle save workspace config
-//   async function handleSaveProjectConfig() {
+//   async function handleSaveWorkspaceConfig() {
 //     const promise = new Promise((resolve, reject) => {
 //       fetch(`/api/v1/workspaces/${workspaceData.slug}/config`, {
 //         method: 'PATCH',
@@ -217,18 +217,18 @@
 //         } else {
 //           const reader = new FileReader();
 //           reader.onload = (e) => {
-//             setProject((prev) => ({ ...prev, icon: e.target?.result as string }));
+//             setWorkspace((prev) => ({ ...prev, icon: e.target?.result as string }));
 //           };
 //           reader.readAsDataURL(file);
 //         }
 //       }
 //     },
-//     [setProject]
+//     [setWorkspace]
 //   );
 
 //   // Set the workspace data to the new one (Due to data://urls)
 //   useEffect(() => {
-//     setProject((prev) => ({ ...prev, icon: workspaceData.icon }));
+//     setWorkspace((prev) => ({ ...prev, icon: workspaceData.icon }));
 //     setOgImage(workspaceData.og_image || null);
 //   }, [workspaceData.icon, workspaceData.og_image]);
 
@@ -289,7 +289,7 @@
 //                 <Select
 //                   defaultValue={workspace.icon_radius || 'rounded-md'}
 //                   onValueChange={(value) => {
-//                     setProject((prev) => ({ ...prev, icon_radius: value }));
+//                     setWorkspace((prev) => ({ ...prev, icon_radius: value }));
 //                   }}>
 //                   <SelectTrigger className='w-[160px] text-sm'>
 //                     <SelectValue placeholder='Select a radius' />
@@ -425,8 +425,8 @@
 //                   workspaceConfig.logo_redirect_url === workspaceConfigData.logo_redirect_url
 //                 )
 //               ) {
-//                 handleSaveProjectConfig();
-//                 handleSaveProject(true);
+//                 handleSaveWorkspaceConfig();
+//                 handleSaveWorkspace(true);
 //                 return;
 //               }
 
@@ -436,10 +436,10 @@
 //                 workspace.icon_radius === workspaceData.icon_radius &&
 //                 (ogImage === workspaceData.og_image || (!ogImage && !workspaceData.og_image))
 //               ) {
-//                 handleSaveProjectConfig();
+//                 handleSaveWorkspaceConfig();
 //               } else {
 //                 // If only workspace changed, save only the workspace
-//                 handleSaveProject();
+//                 handleSaveWorkspace();
 //               }
 //             }}>
 //             Save changes
@@ -548,7 +548,7 @@
 //               workspaceConfig.changelog_twitter_handle === workspaceConfigData.changelog_twitter_handle &&
 //               workspaceConfig.changelog_enabled === workspaceConfigData.changelog_enabled
 //             }
-//             onClick={handleSaveProjectConfig}>
+//             onClick={handleSaveWorkspaceConfig}>
 //             Save changes
 //           </Button>
 //         </CardFooter>
@@ -594,7 +594,7 @@
 //               workspaceConfig.feedback_allow_anon_upvoting ===
 //               workspaceConfigData.feedback_allow_anon_upvoting
 //             }
-//             onClick={handleSaveProjectConfig}>
+//             onClick={handleSaveWorkspaceConfig}>
 //             Save changes
 //           </Button>
 //         </CardFooter>

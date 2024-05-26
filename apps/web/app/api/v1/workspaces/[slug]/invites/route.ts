@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
-import { createProjectInvite, getProjectInvites } from '@/lib/api/invite';
+import { createWorkspaceInvite, getWorkspaceInvites } from '@/lib/api/invite';
 
 /*
   Get all workspace invites
   GET /api/v1/workspaces/[slug]/invites
 */
 export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: invites, error } = await getProjectInvites(context.params.slug, 'route');
+  const { data: invites, error } = await getWorkspaceInvites(context.params.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {
@@ -34,7 +34,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
   }
 
   // Create invite
-  const { data: invite, error } = await createProjectInvite(context.params.slug, 'route', email);
+  const { data: invite, error } = await createWorkspaceInvite(context.params.slug, 'route', email);
 
   // If any errors thrown, return error
   if (error) {

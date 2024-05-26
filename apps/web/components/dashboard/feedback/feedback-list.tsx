@@ -30,7 +30,7 @@ import { FeedbackSheet } from './feedback-sheet';
 type DateSortedFeedbackProps = Record<string, FeedbackWithUserProps[]>;
 
 export default function FeedbackList() {
-  const { slug: projectSlug } = useParams<{ slug: string }>();
+  const { slug: workspaceSlug } = useParams<{ slug: string }>();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -42,8 +42,8 @@ export default function FeedbackList() {
     error,
     isLoading,
     mutate,
-  } = useSWR<FeedbackWithUserProps[]>(`/api/v1/workspaces/${projectSlug}/feedback`, fetcher);
-  const { tags: projectTags } = useTags();
+  } = useSWR<FeedbackWithUserProps[]>(`/api/v1/workspaces/${workspaceSlug}/feedback`, fetcher);
+  const { tags: workspaceTags } = useTags();
 
   // Query params
   const tags = searchParams.get('tags') || '';
@@ -159,11 +159,11 @@ export default function FeedbackList() {
     setFeedbackFilters({
       tags: {
         i:
-          projectTags?.filter((tag) => {
+          workspaceTags?.filter((tag) => {
             return tags.split(',').includes(tag.name.toLowerCase());
           }) ?? [],
         e:
-          projectTags?.filter((tag) => {
+          workspaceTags?.filter((tag) => {
             return tags.split(',').includes(`!${tag.name.toLowerCase()}`);
           }) ?? [],
       },
@@ -197,7 +197,7 @@ export default function FeedbackList() {
       },
       search,
     } as FeedbackFilterProps);
-  }, [search, tags, status, projectTags, mutate]);
+  }, [search, tags, status, workspaceTags, mutate]);
 
   return (
     <>

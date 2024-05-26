@@ -3,14 +3,14 @@
 import React, { useState } from 'react';
 import { useServerInsertedHTML } from 'next/navigation';
 import { createStyleRegistry, StyleRegistry } from 'styled-jsx';
-import { WorkspaceConfigWithoutSecretProps } from '@/lib/types';
+import { WorkspaceThemeProps } from '@/lib/types';
 
 export default function CustomThemeWrapper({
   children,
-  workspaceConfig,
+  workspaceTheme,
 }: {
   children: React.ReactNode;
-  workspaceConfig: WorkspaceConfigWithoutSecretProps;
+  workspaceTheme: WorkspaceThemeProps['Row'];
 }) {
   // eslint-disable-next-line react/hook-use-state
   const [jsxStyleRegistry] = useState(() => createStyleRegistry());
@@ -24,31 +24,31 @@ export default function CustomThemeWrapper({
   return (
     <StyleRegistry registry={jsxStyleRegistry}>
       <main className='feedbase-hub bg-root flex min-h-screen min-w-full flex-col justify-between'>
-        {workspaceConfig.workspace_theme === 'custom' && (
+        {workspaceTheme.theme === 'custom' && (
           <style jsx global>{`
             .feedbase-hub {
-              --root-background: ${workspaceConfig.custom_theme_root};
+              --root-background: ${workspaceTheme.root};
 
-              --background: ${workspaceConfig.custom_theme_secondary_background};
-              --foreground: ${workspaceConfig.custom_theme_primary_foreground};
+              --background: ${workspaceTheme.secondary_background};
+              --foreground: ${workspaceTheme.foreground};
 
-              --popover: ${workspaceConfig.custom_theme_root};
-              --card: ${workspaceConfig.custom_theme_root};
+              --popover: ${workspaceTheme.root};
+              --card: ${workspaceTheme.root};
 
-              --primary: ${workspaceConfig.custom_theme_background};
-              --primary-foreground: ${workspaceConfig.custom_theme_root};
+              --primary: ${workspaceTheme.background};
+              --primary-foreground: ${workspaceTheme.root};
 
-              --secondary: ${workspaceConfig.custom_theme_secondary_background};
+              --secondary: ${workspaceTheme.secondary_background};
 
-              --accent: ${workspaceConfig.custom_theme_secondary_background} / 0.3;
+              --accent: ${workspaceTheme.secondary_background} / 0.3;
 
-              --muted: ${workspaceConfig.custom_theme_secondary_background} / 0.5;
+              --muted: ${workspaceTheme.secondary_background} / 0.5;
 
-              --highlight: ${workspaceConfig.custom_theme_accent};
+              --highlight: ${workspaceTheme.accent};
 
-              --ring: ${workspaceConfig.custom_theme_accent} / 0.3;
-              --border: ${workspaceConfig.custom_theme_border};
-              --input: ${workspaceConfig.custom_theme_border};
+              --ring: ${workspaceTheme.accent} / 0.3;
+              --border: ${workspaceTheme.border};
+              --input: ${workspaceTheme.border};
             }
           `}</style>
         )}

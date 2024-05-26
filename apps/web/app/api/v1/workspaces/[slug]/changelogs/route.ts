@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { createChangelog, getAllProjectChangelogs } from '@/lib/api/changelog';
+import { createChangelog, getAllWorkspaceChangelogs } from '@/lib/api/changelog';
 import { ChangelogProps } from '@/lib/types';
 
 export const runtime = 'edge';
@@ -21,7 +21,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
     title,
     summary,
     content,
-    image,
+    thumbnail,
     publish_date: publishDate,
     published,
     notify_subscribers: notifySubscribers,
@@ -43,7 +43,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
       title: title || '',
       summary: summary || '',
       content: content || '',
-      image: image || '',
+      thumbnail: thumbnail || null,
       publish_date: publishDate || null,
       published: published || false,
       workspace_id: 'dummy-id',
@@ -68,7 +68,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
     GET /api/v1/workspaces/[slug]/changelogs
 */
 export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: changelogs, error } = await getAllProjectChangelogs(context.params.slug, 'route', true);
+  const { data: changelogs, error } = await getAllWorkspaceChangelogs(context.params.slug, 'route', true);
 
   // If any errors thrown, return error
   if (error) {

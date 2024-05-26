@@ -9,7 +9,7 @@ import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronUp, MessagesSquare } from 'lucide-react';
 import { toast } from 'sonner';
 import { PROSE_CN } from '@/lib/constants';
-import { FeedbackWithUserProps, WorkspaceConfigWithoutSecretProps } from '@/lib/types';
+import { FeedbackWithUserProps } from '@/lib/types';
 import AuthModal from '../modals/login-signup-modal';
 
 interface FeedbackWithTimeAgo extends FeedbackWithUserProps {
@@ -18,13 +18,11 @@ interface FeedbackWithTimeAgo extends FeedbackWithUserProps {
 
 export default function FeedbackList({
   feedback,
-  projectSlug,
-  workspaceConfig,
+  workspaceSlug,
   isLoggedIn,
 }: {
   feedback: FeedbackWithUserProps[];
-  projectSlug: string;
-  workspaceConfig: WorkspaceConfigWithoutSecretProps | null;
+  workspaceSlug: string;
   isLoggedIn: boolean;
 }) {
   // Update the feedback list with the timeAgo field
@@ -119,76 +117,76 @@ export default function FeedbackList({
     const newFeedbackList = [...feedbackList];
 
     // Update feedback has_upvoted
-    const hasUpvoted =
-      workspaceConfig?.feedback_allow_anon_upvoting && !isLoggedIn
-        ? !JSON.parse(window?.localStorage?.getItem('upvotes') || '{}')[feedback.id]
-        : !feedback.has_upvoted;
+    // const hasUpvoted =
+    //   workspaceConfig?.feedback_allow_anon_upvoting && !isLoggedIn
+    //     ? !JSON.parse(window?.localStorage?.getItem('upvotes') || '{}')[feedback.id]
+    //     : !feedback.has_upvoted;
 
-    newFeedbackList[index] = {
-      ...newFeedbackList[index],
-      has_upvoted: hasUpvoted,
-      upvotes: feedback.upvotes + (hasUpvoted ? 1 : -1),
-    };
+    // newFeedbackList[index] = {
+    //   ...newFeedbackList[index],
+    //   has_upvoted: hasUpvoted,
+    //   upvotes: feedback.upvotes + (hasUpvoted ? 1 : -1),
+    // };
 
-    // Update feedback.has_upvoted for immediate UI feedback
-    feedback.has_upvoted = hasUpvoted;
+    // // Update feedback.has_upvoted for immediate UI feedback
+    // feedback.has_upvoted = hasUpvoted;
 
-    // Set feedbackList
-    setFeedbackList(newFeedbackList);
+    // // Set feedbackList
+    // setFeedbackList(newFeedbackList);
 
-    // If anon upvoting is allowed, store new upvote state in local storage
-    if (workspaceConfig?.feedback_allow_anon_upvoting && !isLoggedIn) {
-      const upvotes = JSON.parse(window?.localStorage?.getItem('upvotes') || '{}');
-      upvotes[feedback.id] = hasUpvoted;
-      window?.localStorage?.setItem('upvotes', JSON.stringify(upvotes));
-    }
+    // // If anon upvoting is allowed, store new upvote state in local storage
+    // if (workspaceConfig?.feedback_allow_anon_upvoting && !isLoggedIn) {
+    //   const upvotes = JSON.parse(window?.localStorage?.getItem('upvotes') || '{}');
+    //   upvotes[feedback.id] = hasUpvoted;
+    //   window?.localStorage?.setItem('upvotes', JSON.stringify(upvotes));
+    // }
 
-    const promise = new Promise((resolve, reject) => {
-      fetch(
-        `/api/v1/workspaces/${projectSlug}/feedback/${feedback.id}/upvotes${
-          workspaceConfig?.feedback_allow_anon_upvoting && !isLoggedIn
-            ? `?has_upvoted=${!feedback.has_upvoted}`
-            : ''
-        }`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-            reject(data.error);
-          } else {
-            resolve(data);
-          }
-        })
-        .catch((err) => {
-          reject(err.message);
-        });
-    });
+    // const promise = new Promise((resolve, reject) => {
+    //   fetch(
+    //     `/api/v1/workspaces/${workspaceSlug}/feedback/${feedback.id}/upvotes${
+    //       workspaceConfig?.feedback_allow_anon_upvoting && !isLoggedIn
+    //         ? `?has_upvoted=${!feedback.has_upvoted}`
+    //         : ''
+    //     }`,
+    //     {
+    //       method: 'POST',
+    //       headers: {
+    //         'Content-Type': 'application/json',
+    //       },
+    //     }
+    //   )
+    //     .then((res) => res.json())
+    //     .then((data) => {
+    //       if (data.error) {
+    //         reject(data.error);
+    //       } else {
+    //         resolve(data);
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       reject(err.message);
+    //     });
+    // });
 
-    promise.catch((err) => {
-      toast.error(err);
+    // promise.catch((err) => {
+    //   toast.error(err);
 
-      // Update upvotes
-      newFeedbackList[index].upvotes = feedback.upvotes + (feedback.has_upvoted ? -1 : 1);
+    //   // Update upvotes
+    //   newFeedbackList[index].upvotes = feedback.upvotes + (feedback.has_upvoted ? -1 : 1);
 
-      // Update feedback
-      newFeedbackList[index].has_upvoted = !feedback.has_upvoted;
+    //   // Update feedback
+    //   newFeedbackList[index].has_upvoted = !feedback.has_upvoted;
 
-      // Set feedbackList
-      setFeedbackList(newFeedbackList);
+    //   // Set feedbackList
+    //   setFeedbackList(newFeedbackList);
 
-      // If anon upvoting is allowed, store upvote state in localstorage
-      if (workspaceConfig?.feedback_allow_anon_upvoting) {
-        const upvotes = JSON.parse(window?.localStorage?.getItem('upvotes') || '{}');
-        upvotes[feedback.id] = newFeedbackList[index].has_upvoted;
-        window?.localStorage?.setItem('upvotes', JSON.stringify(upvotes));
-      }
-    });
+    //   // If anon upvoting is allowed, store upvote state in localstorage
+    //   if (workspaceConfig?.feedback_allow_anon_upvoting) {
+    //     const upvotes = JSON.parse(window?.localStorage?.getItem('upvotes') || '{}');
+    //     upvotes[feedback.id] = newFeedbackList[index].has_upvoted;
+    //     window?.localStorage?.setItem('upvotes', JSON.stringify(upvotes));
+    //   }
+    // });
   }
 
   useEffect(() => {
@@ -212,25 +210,25 @@ export default function FeedbackList({
   }
 
   // Set upvotes from localstorage
-  useEffect(() => {
-    if (workspaceConfig?.feedback_allow_anon_upvoting && !isLoggedIn) {
-      const upvotes = JSON.parse(window?.localStorage?.getItem('upvotes') || '{}');
-      const newFeedbackList = [...feedbackList];
+  // useEffect(() => {
+  //   if (workspaceConfig?.feedback_allow_anon_upvoting && !isLoggedIn) {
+  //     const upvotes = JSON.parse(window?.localStorage?.getItem('upvotes') || '{}');
+  //     const newFeedbackList = [...feedbackList];
 
-      for (const feedback of newFeedbackList) {
-        feedback.has_upvoted = upvotes[feedback.id] || false;
-      }
+  //     for (const feedback of newFeedbackList) {
+  //       feedback.has_upvoted = upvotes[feedback.id] || false;
+  //     }
 
-      // Update feedbackList only if it has changed
-      setFeedbackList((prevFeedbackList) => {
-        // Update feedbackList only if it has changed
-        if (!areFeedbackListsEqual(newFeedbackList, prevFeedbackList)) {
-          return newFeedbackList;
-        }
-        return prevFeedbackList; // No change, return the previous state
-      });
-    }
-  }, [feedbackList, isLoggedIn, workspaceConfig]);
+  //     // Update feedbackList only if it has changed
+  //     setFeedbackList((prevFeedbackList) => {
+  //       // Update feedbackList only if it has changed
+  //       if (!areFeedbackListsEqual(newFeedbackList, prevFeedbackList)) {
+  //         return newFeedbackList;
+  //       }
+  //       return prevFeedbackList; // No change, return the previous state
+  //     });
+  //   }
+  // }, [feedbackList, isLoggedIn, workspaceConfig]);
 
   return (
     <>
@@ -240,8 +238,9 @@ export default function FeedbackList({
           key={feedback.id}>
           {/* Upvotes */}
           <AuthModal
-            projectSlug={projectSlug}
-            disabled={isLoggedIn || workspaceConfig?.feedback_allow_anon_upvoting ? true : undefined}>
+            workspaceSlug={workspaceSlug}
+            // disabled={isLoggedIn || workspaceConfig?.feedback_allow_anon_upvoting ? true : undefined}
+          >
             <div className='flex items-center border-r'>
               {/* Upvotes */}
               <Button
@@ -249,7 +248,7 @@ export default function FeedbackList({
                 size='sm'
                 className='group/upvote flex h-full flex-col items-center rounded-sm px-4 transition-all duration-150 hover:bg-transparent active:scale-[85%]'
                 onClick={() => {
-                  if (!isLoggedIn && !workspaceConfig?.feedback_allow_anon_upvoting) return;
+                  // if (!isLoggedIn && !workspaceConfig?.feedback_allow_anon_upvoting) return;
 
                   onUpvote(feedback);
                 }}>

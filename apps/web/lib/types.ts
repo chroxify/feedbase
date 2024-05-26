@@ -4,18 +4,17 @@ import { IconObject } from '@/components/shared/icons/icons-animated';
 // DB Types
 export type WorkspaceProps = Database['public']['Tables']['workspace'];
 
-export type WorkspaceConfigProps = Database['public']['Tables']['workspace_config'];
+export type PublicWorkspaceProps = Database['public']['Views']['workspace_view'];
 
-export type WorkspaceConfigWithoutSecretProps = Omit<
-  Database['public']['Tables']['workspace_config']['Row'],
-  'integration_sso_secret'
-> & {
-  workspace: WorkspaceProps['Row'];
-};
+export type WorkspaceIntegrationProps = Database['public']['Tables']['workspace_integration'];
 
 export type TeamMemberProps = Database['public']['Tables']['profile']['Row'] & {
   joined_at: string;
 };
+
+export type WorkspaceModuleProps = Database['public']['Tables']['workspace_module'];
+
+export type WorkspaceThemeProps = Database['public']['Tables']['workspace_theme'];
 
 export type NotificationProps = Database['public']['Tables']['notification']['Row'] & {
   workspace: { name: string; slug: string; icon: string };
@@ -26,7 +25,9 @@ export type TeamInviteProps = Database['public']['Tables']['workspace_invite'];
 
 export type WorkspaceApiKeyProps = Database['public']['Tables']['workspace_api_key'];
 
-export type WorkspaceApiKeyWithoutTokenProps = Omit<WorkspaceApiKeyProps['Row'], 'token'>;
+export type WorkspaceApiKeyWithTokenProps = Database['public']['Tables']['workspace_api_key']['Row'] & {
+  token: string;
+};
 
 export type ExtendedInviteProps = TeamInviteProps['Row'] & {
   workspace: { name: string; slug: string; icon: string };
@@ -65,12 +66,12 @@ export type FeedbackWithUserInputProps = Database['public']['Tables']['feedback'
   user?: ProfileProps['Update'];
 };
 
-export type FeedbackCommentProps = Database['public']['Tables']['feedback_comment'];
+export type CommentProps = Database['public']['Tables']['comment'];
 
-export type FeedbackCommentWithUserProps = Database['public']['Tables']['feedback_comment']['Row'] & {
+export type CommentWithUserProps = Database['public']['Tables']['comment']['Row'] & {
   user: ProfileProps['Row'] & { isTeamMember: boolean };
   has_upvoted: boolean;
-  replies: FeedbackCommentWithUserProps[];
+  replies: CommentWithUserProps[];
 };
 
 export type ProfileProps = Database['public']['Tables']['profile'];
@@ -99,3 +100,5 @@ export interface CategoryTabProps {
   name: string;
   slug: string;
 }
+
+export type ApiKeyPermissions = 'public_access' | 'full_access';

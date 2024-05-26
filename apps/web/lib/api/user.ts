@@ -1,6 +1,7 @@
 import { decode } from 'base64-arraybuffer';
 import { withUserAuth } from '../auth';
 import { NotificationProps, ProfileProps, WorkspaceProps } from '../types';
+import { uploadToSupabaseStorage } from '../utils';
 
 // Get current user
 export const getCurrentUser = withUserAuth<ProfileProps['Row']>(async (user, supabase, error) => {
@@ -15,7 +16,7 @@ export const getCurrentUser = withUserAuth<ProfileProps['Row']>(async (user, sup
 
   // Get user profile
   const { data: profile, error: profileError } = await supabase
-    .from('profiles')
+    .from('profile')
     .select()
     .eq('id', user.id)
     .single();
@@ -30,30 +31,22 @@ export const getCurrentUser = withUserAuth<ProfileProps['Row']>(async (user, sup
 });
 
 // Get all workspaces for an user
-export const getUserProjects = withUserAuth<WorkspaceProps['Row'][]>(async (user, supabase, error) => {
+export const getUserWorkspaces = withUserAuth<WorkspaceProps['Row'][]>(async (user, supabase, error) => {
   // If any errors, return error
   if (error) {
     return { data: null, error };
   }
 
   // Get all workspaces for user
-  const { data: workspaces, error: projectsError } = await supabase
-    .from('project_members')
-    .select('workspaces (*)')
-    .eq('member_id', user!.id);
+  const { data: workspaces, error: workspacesError } = await supabase.from('workspace').select();
 
   // Check for errors
-  if (projectsError) {
-    return { data: null, error: { message: projectsError.message, status: 500 } };
+  if (workspacesError || !workspaces) {
+    return { data: null, error: { message: workspacesError.message, status: 500 } };
   }
 
-  // Restructure workspaces data
-  const restructuredData = workspaces.map((item) =>
-    'workspaces' in item ? item.workspaces : item
-  ) as WorkspaceProps['Row'][];
-
   // Return workspaces
-  return { data: restructuredData, error: null };
+  return { data: workspaces, error: null };
 });
 
 // Update user profile
@@ -73,41 +66,27 @@ export const updateUserProfile = (
 
     // If avatar url provided, upload to supabase storage
     if (data.avatar_url) {
-      // Check if avatar already exists
-      const { data: avatarData } = await supabase.storage.from('avatars').getPublicUrl(`${user.id}`);
-
-      // Check for errors
-      if (avatarData) {
-        // Delete avatar
-        await supabase.storage.from('avatars').remove([`${user.id}`]);
-      }
-
-      const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(`${user.id}`, decode(data.avatar_url.replace(/^data:image\/\w+;base64,/, '')), {
-          contentType: 'image/png',
-        });
+      const { data: publicUrl, error: uploadError } = await uploadToSupabaseStorage(
+        supabase,
+        'avatars',
+        `${user.id}.png`,
+        decode(data.avatar_url.split(',')[1]),
+        'image/png',
+        true
+      );
 
       // Check for errors
       if (uploadError) {
         return { data: null, error: { message: uploadError.message, status: 500 } };
       }
 
-      // Get public url for avatar
-      const { data: publicUrlData } = supabase.storage.from('avatars').getPublicUrl(`${user.id}`);
-
-      // Check for errors
-      if (!publicUrlData) {
-        return { data: null, error: { message: 'issue uploading avatar.', status: 500 } };
-      }
-
-      // Set avatar url to public url
-      data.avatar_url = publicUrlData.publicUrl;
+      // Update user profile
+      data.avatar_url = publicUrl;
     }
 
     // Update user profile
     const { data: updatedUser, error: updatedUserError } = await supabase
-      .from('profiles')
+      .from('profile')
       .update({
         full_name: data.full_name,
         avatar_url: data.avatar_url,
@@ -137,24 +116,24 @@ export const getUserNotifications = withUserAuth<NotificationProps[]>(async (use
   }
 
   // Get all workspaces user is a member of
-  const { data: workspaces, error: projectsError } = await supabase
-    .from('project_members')
-    .select('workspaces (*)')
+  const { data: workspaces, error: workspacesError } = await supabase
+    .from('workspace_member')
+    .select('workspace (*)')
     .eq('member_id', user.id);
 
   // Check for errors
-  if (projectsError) {
-    return { data: null, error: { message: projectsError.message, status: 500 } };
+  if (workspacesError) {
+    return { data: null, error: { message: workspacesError.message, status: 500 } };
   }
 
   // Restructure workspaces data
   const restructuredData = workspaces.map((item) =>
-    'workspaces' in item ? item.workspaces : item
+    'workspace' in item ? item.workspace : item
   ) as WorkspaceProps['Row'][];
 
   // Get all notifications for user
   const { data: notifications, error: notificationsError } = await supabase
-    .from('notifications')
+    .from('notification')
     .select('*, workspace:workspace_id (name, slug, icon), initiator:initiator_id (full_name)')
     .in(
       'workspace_id',
@@ -192,7 +171,7 @@ export const archiveUserNotification = (
 
     // Get notification
     const { data: notification, error: notificationError } = await supabase
-      .from('notifications')
+      .from('notification')
       .select()
       .eq('id', notificationId)
       .single();
@@ -208,20 +187,20 @@ export const archiveUserNotification = (
     }
 
     // Check if user has access to notification
-    const { data: projectMember, error: projectMemberError } = await supabase
-      .from('project_members')
+    const { data: workspaceMember, error: workspaceMemberError } = await supabase
+      .from('workspace_member')
       .select()
       .eq('workspace_id', notification.workspace_id)
       .eq('member_id', user.id)
       .single();
 
     // Check for errors
-    if (projectMemberError) {
-      return { data: null, error: { message: projectMemberError.message, status: 500 } };
+    if (workspaceMemberError) {
+      return { data: null, error: { message: workspaceMemberError.message, status: 500 } };
     }
 
     // Check if user is a member of the workspace
-    if (!projectMember) {
+    if (!workspaceMember) {
       return { data: null, error: { message: 'user is not a member of the workspace.', status: 403 } };
     }
 
@@ -232,7 +211,7 @@ export const archiveUserNotification = (
 
     // Update notification
     const { data: updatedNotificationData, error: updatedNotificationError } = await supabase
-      .from('notifications')
+      .from('notification')
       .update({
         has_archived: updatedNotification,
       })

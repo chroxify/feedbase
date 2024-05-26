@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/ava
 import { Separator } from '@feedbase/ui/components/separator';
 import { cn } from '@feedbase/ui/lib/utils';
 import { fontMono } from '@feedbase/ui/styles/fonts';
-import { getPublicProjectChangelogs } from '@/lib/api/public';
+import { getPublicWorkspaceChangelogs } from '@/lib/api/public';
 import { formatRootUrl } from '@/lib/utils';
 import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
 import { Icons } from '@/components/shared/icons/icons-static';
@@ -18,7 +18,7 @@ type Props = {
 // Metadata
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   // Get changelogs
-  const { data: changelogs, error } = await getPublicProjectChangelogs(
+  const { data: changelogs, error } = await getPublicWorkspaceChangelogs(
     params.workspace,
     'server',
     true,
@@ -43,7 +43,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       images: [
         {
-          url: changelog.image || '',
+          url: changelog.thumbnail || '',
           width: 1200,
           height: 600,
           alt: changelog.title,
@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ChangelogPage({ params }: Props) {
   // Get changelogs
-  const { data: changelogs, error } = await getPublicProjectChangelogs(
+  const { data: changelogs, error } = await getPublicWorkspaceChangelogs(
     params.workspace,
     'server',
     true,
@@ -83,7 +83,7 @@ export default async function ChangelogPage({ params }: Props) {
   }
 
   return (
-    <AnalyticsWrapper projectSlug={params.workspace} changelogId={changelog.id}>
+    <AnalyticsWrapper workspaceSlug={params.workspace} changelogId={changelog.id}>
       {/* // Row Splitting up date and Content  */}
       <div
         className='relative flex w-full flex-col px-5 sm:px-10 md:flex-row md:px-10 lg:px-20'
@@ -116,7 +116,7 @@ export default async function ChangelogPage({ params }: Props) {
 
           {/* Image */}
           <Image
-            src={changelog.image || ''}
+            src={changelog.thumbnail || ''}
             alt='Thumbnail'
             width={1200}
             height={600}

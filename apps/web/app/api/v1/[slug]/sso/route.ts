@@ -19,20 +19,20 @@ export async function GET(req: NextRequest, context: { params: { slug: string } 
   const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.SUPABASE_SERVICE_ROLE_KEY);
 
   // Get workspace by slug
-  const { data: workspace, error: projectError } = await getWorkspaceBySlug(
+  const { data: workspace, error: workspaceError } = await getWorkspaceBySlug(
     context.params.slug,
     'route',
     true,
     false
   );
 
-  if (projectError) {
-    return NextResponse.json(projectError, { status: 500 });
+  if (workspaceError) {
+    return NextResponse.json(workspaceError, { status: 500 });
   }
 
   // Get workspaces jwt secret
   const { data: workspaceConfig, error: workspaceConfigError } = await supabase
-    .from('project_configs')
+    .from('workspace_configs')
     .select('integration_sso_secret')
     .eq('workspace_id', workspace.id)
     .single();

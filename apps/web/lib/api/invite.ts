@@ -5,7 +5,7 @@ import { ExtendedInviteProps, ProfileProps, TeamInviteProps } from '../types';
 import { formatRootUrl } from '../utils';
 
 // Get all workspace invites
-export const getProjectInvites = withWorkspaceAuth<ExtendedInviteProps[]>(
+export const getWorkspaceInvites = withWorkspaceAuth<ExtendedInviteProps[]>(
   async (user, supabase, workspace, error) => {
     // If any errors, return error
     if (error) {
@@ -32,7 +32,7 @@ export const getProjectInvites = withWorkspaceAuth<ExtendedInviteProps[]>(
 );
 
 // Get workspace invite
-export const getProjectInvite = (inviteId: string, cType: 'server' | 'route') =>
+export const getWorkspaceInvite = (inviteId: string, cType: 'server' | 'route') =>
   withUserAuth<ExtendedInviteProps>(async (user, supabase, error) => {
     // If any errors, return error
     if (error && error.status !== 401) {
@@ -59,7 +59,7 @@ export const getProjectInvite = (inviteId: string, cType: 'server' | 'route') =>
   })(cType);
 
 // Create new workspace invite
-export const createProjectInvite = (slug: string, cType: 'server' | 'route', email: string) =>
+export const createWorkspaceInvite = (slug: string, cType: 'server' | 'route', email: string) =>
   withWorkspaceAuth<TeamInviteProps['Row']>(async (user, supabase, workspace, error) => {
     // If any errors, return error
     if (error) {
@@ -163,7 +163,7 @@ export const createProjectInvite = (slug: string, cType: 'server' | 'route', ema
   })(slug, cType);
 
 // Accept workspace invite
-export const acceptProjectInvite = (inviteId: string, cType: 'server' | 'route') =>
+export const acceptWorkspaceInvite = (inviteId: string, cType: 'server' | 'route') =>
   withUserAuth<TeamInviteProps['Row']>(async (user, supabase, error) => {
     // If any errors, return error
     if (error) {
@@ -234,7 +234,7 @@ export const acceptProjectInvite = (inviteId: string, cType: 'server' | 'route')
   })(cType);
 
 // Delete workspace invite
-export const deleteProjectInvite = (inviteId: string, cType: 'server' | 'route') =>
+export const deleteWorkspaceInvite = (inviteId: string, cType: 'server' | 'route') =>
   withUserAuth<TeamInviteProps['Row']>(async (user, supabase, error) => {
     // If any errors, return error
     if (error) {
