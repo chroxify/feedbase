@@ -24,6 +24,7 @@ import useTags from '@/lib/swr/use-tags';
 import { FeedbackWithUserProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
 import AnimatedTabs from '@/components/shared/animated-tabs';
+import FetchError from '@/components/shared/fetch-error';
 import FeedbackFilterHeader, { FeedbackFilterProps } from '../common/feedback-filters';
 import { FeedbackSheet } from './feedback-sheet';
 
@@ -239,7 +240,7 @@ export default function FeedbackList() {
 
       <div className='flex h-full w-full flex-col items-center justify-start gap-4 overflow-y-auto p-5'>
         {/* eslint-disable react/no-array-index-key */}
-        {isLoading ? (
+        {isLoading && !error ? (
           <div className='flex w-full flex-col'>
             {[...Array(10)].map((_, index) => (
               <div
@@ -266,29 +267,7 @@ export default function FeedbackList() {
         {/* eslint-enable react/no-array-index-key */}
 
         {/* Error State */}
-        {error && !isLoading ? (
-          <div className='flex flex-col items-center gap-2 p-10'>
-            <AlertCircle className='text-secondary-foreground h-7 w-7 stroke-[1.5px]' />
-            <div className='space-y-1.5 text-center'>
-              <div className='text-secondary-foreground text-center'>
-                Failed to load feedback. Please try again.
-              </div>
-              {/* Detailed error message */}
-              {(() => {
-                try {
-                  return (
-                    <p className='text-muted-foreground text-center'>{JSON.parse(error.message)?.error}</p>
-                  );
-                } catch (parseError) {
-                  return null;
-                }
-              })()}
-            </div>
-            <Button size='sm' variant='secondary' onClick={() => mutate()}>
-              Try Again
-            </Button>
-          </div>
-        ) : null}
+        {error ? <FetchError error={error} mutate={mutate} name='feedback' isValidating={isLoading} /> : null}
 
         {/* Empty State */}
         {filteredFeedback.length === 0 && !isLoading && !error && (

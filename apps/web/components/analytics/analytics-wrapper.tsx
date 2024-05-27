@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useParams } from 'next/navigation';
 import { cn } from '@feedbase/ui/lib/utils';
 
 export default function AnalyticsWrapper({

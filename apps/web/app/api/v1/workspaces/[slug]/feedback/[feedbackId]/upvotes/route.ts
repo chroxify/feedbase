@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getFeedbackByID, getFeedbackUpvotersById, upvoteFeedbackByID } from '@/lib/api/feedback';
+import { getFeedbackById, getFeedbackUpvotersById, upvoteFeedbackByID } from '@/lib/api/feedback';
 import { getCurrentUser } from '@/lib/api/user';
 
 /*
@@ -7,7 +7,7 @@ import { getCurrentUser } from '@/lib/api/user';
   GET /api/v1/workspaces/[slug]/feedback/[id]/upvote
 */
 export async function GET(req: Request, context: { params: { slug: string; feedbackId: string } }) {
-  const { data: feedback, error } = await getFeedbackByID(
+  const { data: feedback, error } = await getFeedbackById(
     context.params.feedbackId,
     context.params.slug,
     'route'

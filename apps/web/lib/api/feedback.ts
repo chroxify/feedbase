@@ -1,5 +1,5 @@
 // import { internal_runWithWaitUntil as waitUntil } from 'next/dist/server/web/internal-edge-wait-until';
-import { withFeedbackAuth, withWorkspaceAuth } from '../auth';
+import { withFeedbackAuth, withFeedbackBoardAuth, withWorkspaceAuth } from '../auth';
 import {
   FeedbackProps,
   FeedbackTagProps,
@@ -9,15 +9,14 @@ import {
 } from '../types';
 import { isValidEmail } from '../utils';
 
-// import { sendDiscordNotification, sendSlackNotification } from './integration';
-
 // Create a feedback post
 export const createFeedback = (
+  boardId: string | undefined,
   workspaceSlug: string,
   data: FeedbackWithUserInputProps,
   cType: 'server' | 'route'
 ) =>
-  withWorkspaceAuth<FeedbackProps['Row']>(async (user, supabase, workspace, error) => {
+  withFeedbackBoardAuth<FeedbackProps['Row']>(async (user, supabase, board, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -29,7 +28,7 @@ export const createFeedback = (
       const { data: workspaceTags, error: tagsError } = await supabase
         .from('feedback_tag')
         .select()
-        .eq('workspace_id', workspace!.id);
+        .eq('workspace_id', board!.workspace_id);
 
       // Check for errors
       if (tagsError) {
@@ -74,6 +73,7 @@ export const createFeedback = (
         });
     }
 
+    // TODO: This can be removed with supabase anon auth
     // Check if user is not undefined
     if (data.user !== undefined) {
       // Make sure user has email and its an email
@@ -216,7 +216,8 @@ export const createFeedback = (
         content: data.content,
         status: data.status,
         raw_tags: data.raw_tags,
-        workspace_id: workspace!.id,
+        board_id: board!.id,
+        workspace_id: board!.workspace_id,
         user_id: data.user !== undefined ? data.user_id : user!.id,
       })
       .select('*, user:user_id (*)')
@@ -279,7 +280,7 @@ export const createFeedback = (
 
     // Return feedback
     return { data: feedback, error: null };
-  })(workspaceSlug, cType, true, true);
+  })(boardId, workspaceSlug, cType);
 
 // Update a feedback post
 export const updateFeedbackByID = (
@@ -368,8 +369,8 @@ export const updateFeedbackByID = (
   })(id, workspaceSlug, cType);
 
 // Get a feedback post
-export const getFeedbackByID = withFeedbackAuth<FeedbackWithUserProps>(
-  async (user, supabase, feedback, workspace, error) => {
+export const getFeedbackById = withFeedbackAuth<FeedbackWithUserProps>(
+  async (user, supabase, feedback, board, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -404,8 +405,8 @@ export const getFeedbackByID = withFeedbackAuth<FeedbackWithUserProps>(
 );
 
 // Delete a feedback post
-export const deleteFeedbackByID = withFeedbackAuth<FeedbackProps['Row']>(
-  async (user, supabase, feedback, workspace, error) => {
+export const deleteFeedbackById = withFeedbackAuth<FeedbackProps['Row']>(
+  async (user, supabase, feedback, board, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -431,7 +432,7 @@ export const deleteFeedbackByID = withFeedbackAuth<FeedbackProps['Row']>(
 
 // Get feedback upvoters
 export const getFeedbackUpvotersById = withFeedbackAuth<ProfileProps['Row'][]>(
-  async (user, supabase, feedback, workspace, error) => {
+  async (user, supabase, feedback, board, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -476,7 +477,7 @@ export const upvoteFeedbackByID = (
       return { data: null, error };
     }
 
-    // Get workspace config
+    // Get workspace module config
     const { data: workspaceModuleConfig, error: workspaceModuleConfigError } = await supabase
       .from('workspace_module')
       .select()
@@ -568,9 +569,9 @@ export const upvoteFeedbackByID = (
     return { data: updatedFeedback, error: null };
   })(id, workspaceSlug, cType, !isAnonymous);
 
-// Get all feedback posts
-export const getAllWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProps[]>(
-  async (user, supabase, workspace, error) => {
+// Get all feedback for a board
+export const getAllBoardFeedback = withFeedbackBoardAuth<FeedbackWithUserProps[]>(
+  async (user, supabase, board, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -580,7 +581,7 @@ export const getAllWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProps[]
     const { data: feedback, error: feedbackError } = await supabase
       .from('feedback')
       .select('*, user:user_id (*)')
-      .eq('workspace_id', workspace!.id);
+      .eq('board_id', board!.id);
 
     // Check for errors
     if (feedbackError) {
@@ -615,6 +616,38 @@ export const getAllWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProps[]
         feedback.has_upvoted = upvotedFeedbackIds.includes(feedback.id);
       });
     }
+
+    // Return feedback
+    return { data: feedbackData, error: null };
+  }
+);
+
+// Get all feedback
+export const getAllWorkspaceFeedback = withWorkspaceAuth<FeedbackWithUserProps[]>(
+  async (user, supabase, workspace, error) => {
+    // If any errors, return error
+    if (error) {
+      return { data: null, error };
+    }
+
+    // Get all feedback for workspace
+    const { data: feedback, error: feedbackError } = await supabase
+      .from('feedback')
+      .select('*, user:user_id (*)')
+      .eq('workspace_id', workspace!.id);
+
+    // Check for errors
+    if (feedbackError) {
+      return { data: null, error: { message: feedbackError.message, status: 500 } };
+    }
+
+    // Convert feedback to unknown type and then to test type
+    const feedbackData = feedback as unknown as FeedbackWithUserProps[];
+
+    // Convert raw tags to tags and remove raw tags
+    feedbackData.forEach((feedback) => {
+      feedback.tags = feedback.raw_tags as unknown as FeedbackTagProps['Row'][];
+    });
 
     // Return feedback
     return { data: feedbackData, error: null };

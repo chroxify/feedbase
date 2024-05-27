@@ -3,7 +3,14 @@ import { cookies, headers } from 'next/headers';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
 import { PostgrestError, SupabaseClient, UserMetadata } from '@supabase/supabase-js';
 import { Database } from '@/lib/supabase';
-import { ApiResponse, ErrorProps, FeedbackProps, WorkspaceApiKeyProps, WorkspaceProps } from '@/lib/types';
+import {
+  ApiResponse,
+  ErrorProps,
+  FeedbackBoardProps,
+  FeedbackProps,
+  WorkspaceApiKeyProps,
+  WorkspaceProps,
+} from '@/lib/types';
 
 export interface ClientCookiesConfig {
   cookies: {
@@ -46,7 +53,13 @@ function createCookiesConfig(
 // Create Supabase Client for needed client type
 // Also returns the current user
 // cType: 'server' | 'route'
-async function createClient(cType: 'server' | 'route', isPublic = false) {
+async function createClient(
+  cType: 'server' | 'route',
+  isPublic = false
+): Promise<{
+  supabase: SupabaseClient<Database>;
+  user: UserMetadata;
+}> {
   const headerStore = headers();
   const cookieStore = cookies();
   const authHeader = headerStore.get('authorization');
@@ -116,12 +129,12 @@ async function createClient(cType: 'server' | 'route', isPublic = false) {
       };
     }
 
-    return { supabase, user: { data: user, error: null }, apiKey: workspaceApiKey };
+    return { supabase, user: { data: user, error: null } };
   }
 
   const user = await supabase.auth.getUser();
 
-  return { supabase, user, apiKey: null };
+  return { supabase, user };
 }
 
 type WithWorkspaceAuthHandler<T> = (
@@ -164,30 +177,101 @@ export const withWorkspaceAuth = <T>(handler: WithWorkspaceAuthHandler<T>) => {
       return handler(user.data.user, supabase, workspace, { message: 'workspace not found.', status: 404 });
     }
 
-    // If api key exists, check if the api key has access to the workspace
-    // if (apiKey && apiKey.workspace_id !== workspace.id) {
-    //   return handler(user.data.user, supabase, workspace, {
-    //     message: 'unauthorized, invalid api key.',
-    //     status: 401,
-    //   });
-    // }
-
-    // // Check if user is a member of the workspace
-    // if (!allowAnonAccess) {
-    //   const { error: workspaceMemberError } = await supabase
-    //     .from('workspace_member')
-    //     .select()
-    //     .eq('workspace_id', workspace.id)
-    //     .eq('member_id', user.data.user!.id)
-    //     .single();
-
-    //   // If not null, user is not a member of the workspace and should not be able to access it
-    //   if (workspaceMemberError) {
-    //     return handler(user.data.user, supabase, workspace, { message: 'workspace not found.', status: 404 });
-    //   }
-    // }
-
     return handler(user.data.user, supabase, workspace, null, allowAnonAccess);
+  };
+};
+
+type WithFeedbackBoardAuthHandler<T> = (
+  user: UserMetadata | null,
+  supabase: SupabaseClient<Database>,
+  board: FeedbackBoardProps['Row'] | null,
+  error: ErrorProps | null
+) => ApiResponse<T>;
+
+// withFeedbackBoardAuth is a helper function that can be used to wrap API routes
+// Ensures that the user is logged in and is authorized to access the feedback board with the given slug
+export const withFeedbackBoardAuth = <T>(handler: WithFeedbackBoardAuthHandler<T>) => {
+  return async (
+    boardId: string | undefined,
+    workspaceSlug: string | null | undefined,
+    cType: 'server' | 'route',
+    requireLogin = true
+  ) => {
+    // Get the user from the session
+    const { supabase, user } = await createClient(cType);
+
+    // If user.error is not null, then the user is likely not logged in
+    if ((user.error !== null && requireLogin) || user.data === null) {
+      return handler(null, supabase, null, {
+        message:
+          user.error?.message === 'invalid claim: missing sub claim'
+            ? 'unauthorized, login required.'
+            : user.error?.message,
+        status: user.error?.status || 401,
+      });
+    }
+
+    // Get feedback board from database
+    let board: FeedbackBoardProps['Row'] | null;
+    let error: PostgrestError | null;
+    if (boardId !== undefined) {
+      const { data, error: boardError } = await supabase
+        .from('feedback_board')
+        .select()
+        .eq('id', boardId)
+        .single();
+
+      board = data;
+      error = boardError;
+    } else {
+      if (!workspaceSlug) {
+        return handler(user.data.user, supabase, null, {
+          message: 'workspace slug or board id is required.',
+          status: 400,
+        });
+      }
+
+      const { data, error: workspaceError } = (await supabase
+        .from('workspace')
+        .select('board:default_board_id (*)')
+        .eq('slug', workspaceSlug)
+        .single()) as {
+        data: WorkspaceProps['Row'] & { board: FeedbackBoardProps['Row'] };
+        error: PostgrestError | null;
+      };
+
+      board = data?.board;
+      error = workspaceError;
+    }
+
+    // If error is not null, then the feedback board does not exist
+    if (error || !board) {
+      return handler(user.data.user, supabase, null, {
+        message: 'feedback board not found.',
+        status: 404,
+      });
+    }
+
+    // check if private board
+    if (board.private) {
+      // Make sure user is a member of the workspace
+      const { data: isMember, error: memberError } = await supabase
+        .from('workspace_member')
+        .select()
+        .eq('workspace_id', board.workspace_id)
+        .eq('user_id', user.data.user.id)
+        .single();
+
+      // If error is not null, then the user is not a member of the workspace
+      if (memberError || !isMember) {
+        return handler(user.data.user, supabase, null, {
+          message: 'unauthorized, user is not a member of the workspace.',
+          status: 403,
+        });
+      }
+    }
+
+    return handler(user.data.user, supabase, board, null);
   };
 };
 
@@ -233,12 +317,11 @@ export const withFeedbackAuth = <T>(handler: WithFeedbackAuthHandler<T>) => {
       .from('feedback')
       .select('*, user:user_id (*)')
       .eq('id', id)
-      .eq('workspace_id', workspace.id)
       .single();
 
     // If not null, feedback does not exist
     if (feedbackError) {
-      return handler(user.data.user, supabase, null, workspace, {
+      return handler(user.data.user, supabase, null, null, {
         message: 'feedback not found.',
         status: 404,
       });

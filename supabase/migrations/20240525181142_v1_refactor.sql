@@ -558,6 +558,7 @@ CREATE OR REPLACE FUNCTION public.handle_workspace_setup()
  LANGUAGE plpgsql
 AS $function$DECLARE
     current_user_id UUID;
+    new_board_id UUID;
 BEGIN
     -- Get the authenticated user's ID from Supabase
     SELECT auth.uid() INTO current_user_id;
@@ -577,6 +578,16 @@ BEGIN
     -- Insert into workspace_theme table
     INSERT INTO public.workspace_theme (workspace_id)
     VALUES (NEW.id);
+
+    -- Insert into feedback_board table with default name 'Feature Requests'
+    INSERT INTO public.feedback_board (workspace_id, name)
+    VALUES (NEW.id, 'Feature Requests')
+    RETURNING id INTO new_board_id;
+
+    -- Update the workspace table to set the default_board_id to the new board ID
+    UPDATE public.workspace
+    SET default_board_id = new_board_id
+    WHERE id = NEW.id;
 
     RETURN NEW;
 END;$function$
@@ -1807,3 +1818,93 @@ VALUES('workspaces', 'workspaces', TRUE, FALSE);
 
 INSERT INTO storage.buckets (id, name, public, avif_autodetection)
 VALUES('avatars', 'avatars', TRUE, FALSE);
+
+create policy "Enable insert for workspace member"
+on "public"."feedback_board"
+as permissive
+for insert
+to authenticated
+with check (is_workspace_member(workspace_id));
+
+
+create policy "Enable read access to public boards for all users"
+on "public"."feedback_board"
+as permissive
+for select
+to public
+using ((private = false));
+
+create policy "Enable insert for authenticated users only"
+on "public"."comment_upvoter"
+as permissive
+for insert
+to authenticated
+with check (true);
+
+
+create policy "Enable read access for all users"
+on "public"."comment_upvoter"
+as permissive
+for select
+to public
+using (true);
+
+grant delete on table "public"."feedback_board" to "anon";
+
+grant insert on table "public"."feedback_board" to "anon";
+
+grant references on table "public"."feedback_board" to "anon";
+
+grant select on table "public"."feedback_board" to "anon";
+
+grant trigger on table "public"."feedback_board" to "anon";
+
+grant truncate on table "public"."feedback_board" to "anon";
+
+grant update on table "public"."feedback_board" to "anon";
+
+grant delete on table "public"."feedback_board" to "authenticated";
+
+grant insert on table "public"."feedback_board" to "authenticated";
+
+grant references on table "public"."feedback_board" to "authenticated";
+
+grant select on table "public"."feedback_board" to "authenticated";
+
+grant trigger on table "public"."feedback_board" to "authenticated";
+
+grant truncate on table "public"."feedback_board" to "authenticated";
+
+grant update on table "public"."feedback_board" to "authenticated";
+
+grant delete on table "public"."feedback_board" to "service_role";
+
+grant insert on table "public"."feedback_board" to "service_role";
+
+grant references on table "public"."feedback_board" to "service_role";
+
+grant select on table "public"."feedback_board" to "service_role";
+
+grant trigger on table "public"."feedback_board" to "service_role";
+
+grant truncate on table "public"."feedback_board" to "service_role";
+
+grant update on table "public"."feedback_board" to "service_role";
+
+create table "public"."feedback_board" (
+    "id" uuid not null default gen_random_uuid(),
+    "name" text not null,
+    "created_at" timestamp with time zone not null default now(),
+    "workspace_id" uuid not null,
+    "private" boolean not null default false
+);
+
+alter table "public"."feedback_board" enable row level security;
+
+alter table "public"."changelog" add column "publish_date" timestamp with time zone;
+
+alter table "public"."feedback" drop column "upvoters";
+
+alter table "public"."feedback" add column "board_id" uuid not null;
+
+alter table "public"."workspace" add column "default_board_id" uuid;

@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { deleteFeedbackByID, getFeedbackByID, updateFeedbackByID } from '@/lib/api/feedback';
+import { deleteFeedbackById, getFeedbackById, updateFeedbackByID } from '@/lib/api/feedback';
 import { FeedbackWithUserInputProps } from '@/lib/types';
 
 /*
@@ -7,7 +7,7 @@ import { FeedbackWithUserInputProps } from '@/lib/types';
     GET /api/v1/workspaces/[slug]/feedback/[id]
 */
 export async function GET(req: Request, context: { params: { slug: string; feedbackId: string } }) {
-  const { data: feedback, error } = await getFeedbackByID(
+  const { data: feedback, error } = await getFeedbackById(
     context.params.feedbackId,
     context.params.slug,
     'route'
@@ -42,7 +42,7 @@ export async function PATCH(req: Request, context: { params: { slug: string; fee
       title: title || '',
       content: content || '',
       status: status?.toLowerCase() as FeedbackWithUserInputProps['status'],
-      workspace_id: 'dummy-id',
+      board_id: 'dummy-id',
       user_id: 'dummy-id',
       tags: tags || undefined,
     },
@@ -63,7 +63,7 @@ export async function PATCH(req: Request, context: { params: { slug: string; fee
     DELETE /api/v1/workspaces/[slug]/feedback/[id]
 */
 export async function DELETE(req: Request, context: { params: { slug: string; feedbackId: string } }) {
-  const { data: feedback, error } = await deleteFeedbackByID(
+  const { data: feedback, error } = await deleteFeedbackById(
     context.params.feedbackId,
     context.params.slug,
     'route'

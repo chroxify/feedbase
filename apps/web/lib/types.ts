@@ -53,6 +53,8 @@ export type ChangelogSubscriberProps = Database['public']['Tables']['changelog_s
 
 export type FeedbackProps = Database['public']['Tables']['feedback'];
 
+export type FeedbackBoardProps = Database['public']['Tables']['feedback_board'];
+
 export type FeedbackTagProps = Database['public']['Tables']['feedback_tag'];
 
 export type FeedbackWithUserProps = Database['public']['Tables']['feedback']['Row'] & {
