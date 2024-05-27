@@ -10,7 +10,7 @@ export class Feedbase {
   private readonly token: string;
 
   /**
-   * @param slug - The slug of the project to access.
+   * @param slug - The slug of the workspace to access.
    * @param token - The authentication token for accessing the Feedbase API.
    * @param baseUrl - (Optional) The base URL of the Feedbase API. Defaults to 'https://dash.feedbase.app'.
    */
@@ -26,9 +26,9 @@ export class Feedbase {
   }
 
   /**
-   * Gets the public changelogs for the project.
+   * Gets the public changelogs for the workspace.
    *
-   * @returns A promise that resolves to the changelogs for the project.
+   * @returns A promise that resolves to the changelogs for the workspace.
    */
   public async getChangelogs(): Promise<ChangelogsResponse> {
     try {
@@ -51,7 +51,7 @@ export class Feedbase {
   }
 
   /**
-   * Submit feedback for the project.
+   * Submit feedback for the workspace.
    *
    * @param title - The title of the feedback.
    * @param content - The feedback content.
@@ -69,7 +69,7 @@ export class Feedbase {
   ) {
     try {
       const res = await _request(
-        `${this.baseUrl}/api/v1/projects/${this.slug}/feedback`,
+        `${this.baseUrl}/api/v1/workspaces/${this.slug}/feedback`,
         'POST',
         this.token,
         {

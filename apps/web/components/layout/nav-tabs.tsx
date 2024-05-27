@@ -19,7 +19,7 @@ export default function NavTabs({
   const [activeTab, setActiveTab] = useState(initialTab.slug);
   const [isHover, setIsHover] = useState('');
   const pathname = usePathname();
-  const { slug: projectSlug } = useParams<{ slug: string }>();
+  const { slug: workspaceSlug } = useParams<{ slug: string }>();
 
   // Check current active tab based on url
   useEffect(() => {
@@ -40,7 +40,7 @@ export default function NavTabs({
           <Label className='pb-1 text-xs font-medium'>{key}</Label>
           {tabs[key].map((tab) => (
             <Link
-              href={`/${projectSlug}/${tab.slug}`}
+              href={`/${workspaceSlug}/${tab.slug}`}
               key={tab.slug}
               className={tab.slug === 'feedback' || tab.slug === 'roadmap' ? 'cursor-default' : ''}>
               <Button

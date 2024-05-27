@@ -10,8 +10,8 @@ import {
 } from '@feedbase/ui/components/dropdown-menu';
 import { createBrowserClient } from '@supabase/ssr';
 import { ProfileProps } from '@/lib/types';
-import UpdateProfileModal from '../dashboard/modals/edit-profile-modal';
-import FeedbackModal from '../dashboard/modals/send-feedback-modal';
+import UpdateProfileModal from '../modals/edit-profile-modal';
+import FeedbackModal from '../modals/send-feedback-modal';
 import { ChatIcon, LogoutIcon, ProfileIcon } from './icons/icons-animated';
 import LottiePlayer from './lottie-player';
 
@@ -72,7 +72,7 @@ export default function UserDropdown({
         </UpdateProfileModal>
 
         {/* Feedback */}
-        <FeedbackModal projectSlug='hub'>
+        <FeedbackModal workspaceSlug='hub'>
           <DropdownMenuItem
             className='flex flex-row items-center justify-start gap-2 hover:cursor-pointer'
             onMouseEnter={() => {

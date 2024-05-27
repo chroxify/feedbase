@@ -1,9 +1,9 @@
 import { Button } from '@feedbase/ui/components/button';
 import { Separator } from '@feedbase/ui/components/separator';
 import { Plus } from 'lucide-react';
-import { ApiSheet } from '@/components/dashboard/changelogs/api-sheet';
-import ChangelogList from '@/components/dashboard/changelogs/changelog-list';
-import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';
+import { ApiSheet } from '@/components/changelog/api-sheet';
+import ChangelogList from '@/components/changelog/changelog-list';
+import { AddChangelogModal } from '@/components/modals/add-edit-changelog-modal';
 
 export default function Changelog({ params }: { params: { slug: string } }) {
   return (
@@ -14,13 +14,13 @@ export default function Changelog({ params }: { params: { slug: string } }) {
 
         <div className='flex items-center gap-3'>
           {/* Api Docs Button */}
-          <ApiSheet projectSlug={params.slug} />
+          <ApiSheet workspaceSlug={params.slug} />
 
           {/* Seperator Line */}
           <Separator orientation='vertical' className='h-6' />
 
           {/* Create new Button */}
-          <AddChangelogModal projectSlug={params.slug}>
+          <AddChangelogModal workspaceSlug={params.slug}>
             <Button variant='default' className='flex items-center gap-1'>
               <Plus className='-ml-[2px] inline-flex h-[18px] w-[18px]' />
               New Changelog
@@ -30,7 +30,7 @@ export default function Changelog({ params }: { params: { slug: string } }) {
       </div>
 
       {/* Changelogs */}
-      <ChangelogList projectSlug={params.slug} />
+      <ChangelogList workspaceSlug={params.slug} />
     </div>
   );
 }

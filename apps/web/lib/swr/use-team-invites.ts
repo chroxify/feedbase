@@ -11,7 +11,7 @@ export default function useTeamInvites() {
     isValidating,
     error,
     mutate,
-  } = useSWR<ExtendedInviteProps[]>(`/api/v1/projects/${slug}/invites`, fetcher);
+  } = useSWR<ExtendedInviteProps[]>(`/api/v1/workspaces/${slug}/invites`, fetcher);
 
   return {
     teamInvites,

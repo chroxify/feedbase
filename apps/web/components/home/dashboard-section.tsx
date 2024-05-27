@@ -1,6 +1,7 @@
 'use client';
 
 import { useCallback, useState } from 'react';
+import Image from 'next/image';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -79,7 +80,7 @@ export default function DashboardSection() {
                 Customize your hub to reflect your brand&apos;s unique identity and style.
               </p>
 
-              {/* Project Logo */}
+              {/* Workspace Logo */}
               <div className='mt-2 flex h-full w-full flex-row items-center justify-between'>
                 <div className='space-y-1'>
                   <Label className='text-foreground/70 text-sm '>Logo</Label>
@@ -97,7 +98,7 @@ export default function DashboardSection() {
                       </p>
 
                       {logo.url ? (
-                        <img
+                        <Image
                           src={logo.url}
                           alt='Preview'
                           width={45}

@@ -104,7 +104,7 @@ export default function FeedbackSection() {
 
                   {/* Description */}
                   <div className={cn('line-clamp-2 max-w-full text-sm', PROSE_CN)}>
-                    Allow custom domains for each project. This will allow users to use their own domain for
+                    Allow custom domains for each workspace. This will allow users to use their own domain for
                     the feedback portal.
                   </div>
                 </div>
@@ -136,7 +136,7 @@ export default function FeedbackSection() {
               <div className='mt-3 flex h-full flex-col items-start gap-3'>
                 {/* TODO: RE-ENABLE / REWORK THIS */}
                 {/* <TagCombobox
-                  projectTags={demoTags}
+                  workspaceTags={demoTags}
                   onSelect={(tags) => demoTags.filter((tag) => tags.includes(tag.value))}
                   triggerClassName='w-full sm:w-full mt-5'
                   demo

@@ -1,17 +1,17 @@
-import { ProfileProps, ProjectProps } from '@/lib/types';
-import InboxPopover from '@/components/layout/inbox-popover';
+import { ProfileProps, WorkspaceProps } from '@/lib/types';
 import { Icons } from '@/components/shared/icons/icons-static';
 import UserDropdown from '@/components/shared/user-dropdown';
-import ProjectDropdown from './project-dropdown';
+import InboxPopover from '@/components/workspace/inbox-popover';
+import WorkspaceDropdown from '../workspace/workspace-dropdown';
 
 export default function DashboardHeader({
   user,
-  projects,
-  currentProject,
+  workspaces,
+  currentWorkspace,
 }: {
   user: ProfileProps['Row'];
-  projects: ProjectProps['Row'][];
-  currentProject: ProjectProps['Row'];
+  workspaces: WorkspaceProps['Row'][];
+  currentWorkspace: WorkspaceProps['Row'];
 }) {
   return (
     <div className='bg-root fixed top-0 z-50 flex h-14 w-full flex-row items-center justify-between border-b px-5'>
@@ -22,8 +22,8 @@ export default function DashboardHeader({
         {/* Seperator */}
         <div className='bg-border h-5 w-[1px] rotate-[35deg] transform' />
 
-        {/* Project */}
-        <ProjectDropdown projects={projects} activeProject={currentProject} />
+        {/* Workspace */}
+        <WorkspaceDropdown workspaces={workspaces} activeWorkspace={currentWorkspace} />
       </div>
 
       <div className='flex flex-row items-center gap-2'>

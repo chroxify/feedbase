@@ -17,7 +17,7 @@ import { ChevronsUpDown, MoreHorizontal } from 'lucide-react';
 import useTeamInvites from '@/lib/swr/use-team-invites';
 import useTeamMembers from '@/lib/swr/use-team-members';
 import { formatTimeAgo } from '@/lib/utils';
-import SettingsCard from '@/components/dashboard/settings/settings-card';
+import SettingsCard from '@/components/settings/settings-card';
 import FetchError from '@/components/shared/fetch-error';
 
 export default function TeamSettings({ params }: { params: { slug: string } }) {
@@ -57,7 +57,7 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
   if (!filteredMembers && isValidatingMember && !filteredInvites && inviteIsValidating) {
     return (
       <>
-        <SettingsCard title='Invite a Team Member' description='Invite a new team member to this project.'>
+        <SettingsCard title='Invite a Team Member' description='Invite a new team member to this workspace.'>
           <div className='col-span-1 -mt-1 w-full space-y-1'>
             <Label className='text-foreground/70 text-sm '>Email</Label>
             <div className='flex w-full gap-2'>
@@ -69,7 +69,7 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
             </Label>
           </div>
         </SettingsCard>
-        <SettingsCard title='Team Members' description='Manage the team members of this project.'>
+        <SettingsCard title='Team Members' description='Manage the team members of this workspace.'>
           <div className='col-span-2 flex w-full flex-col items-start justify-start gap-5'>
             <div className='flex w-2/5 items-center gap-2'>
               <Input
@@ -141,7 +141,7 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
       <>
         <SettingsCard
           title='Invite a Team Member'
-          description='Invite a new team member to this project.'
+          description='Invite a new team member to this workspace.'
           className='gap-5'>
           <div className='col-span-1 -mt-1 w-full space-y-1'>
             <Label className='text-foreground/70 text-sm '>Email</Label>
@@ -155,7 +155,7 @@ export default function TeamSettings({ params }: { params: { slug: string } }) {
           </div>
         </SettingsCard>
 
-        <SettingsCard title='Team Members' description='Manage the team members of this project.'>
+        <SettingsCard title='Team Members' description='Manage the team members of this workspace.'>
           <div className='col-span-2 flex w-full flex-col items-start justify-start gap-5'>
             {/* Action Row */}
             <div className='flex w-2/5 items-center gap-2'>

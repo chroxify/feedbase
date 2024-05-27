@@ -7,7 +7,7 @@ export default function useTags() {
   const { slug } = useParams<{ slug: string }>();
 
   const { data: tags, isValidating } = useSWR<FeedbackTagProps['Row'][]>(
-    `/api/v1/projects/${slug}/feedback/tags`,
+    `/api/v1/workspaces/${slug}/feedback/tags`,
     fetcher
   );
 

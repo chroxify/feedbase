@@ -1,3 +1,6 @@
+import { SupabaseClient } from '@supabase/supabase-js';
+import { ApiResponse } from './types';
+
 export function isSlugValid(slug: string) {
   // check if slug contains invalid characters
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.exec(slug.toLowerCase())) {
@@ -232,4 +235,59 @@ export function formatTimeAgo(date: Date): string {
     return `${Math.floor(interval)}m`;
   }
   return `${Math.floor(seconds)}s`;
+}
+
+export async function uploadToSupabaseStorage(
+  supabaseClient: SupabaseClient,
+  bucketName: string,
+  fileName: string,
+  fileData: string | ArrayBuffer | Uint8Array | Blob,
+  contentType: string,
+  unique = false
+): Promise<ApiResponse<string>> {
+  // Check if file already exists
+  const { data: existingFileData } = await supabaseClient.storage.from(bucketName).getPublicUrl(fileName);
+
+  // If file already exists and unique is true, replace the file instead of uploading a new one
+  if (existingFileData && unique) {
+    const { error: updateError } = await supabaseClient.storage.from(bucketName).update(fileName, fileData, {
+      contentType,
+    });
+
+    if (updateError) {
+      return {
+        data: null,
+        error: {
+          message: updateError.message,
+          status: 500,
+        },
+      };
+    }
+  } else {
+    const { error: uploadError } = await supabaseClient.storage
+      .from(bucketName)
+      .upload(unique ? `${fileName}-${Date.now()}` : fileName, fileData, {
+        contentType,
+      });
+
+    if (uploadError) {
+      return {
+        data: null,
+        error: {
+          message: uploadError.message,
+          status: 500,
+        },
+      };
+    }
+  }
+
+  // Get the public URL of the uploaded file
+  const { data: publicUrlData } = await supabaseClient.storage
+    .from(bucketName)
+    .getPublicUrl(unique ? `${fileName}-${Date.now()}` : fileName);
+
+  return {
+    data: publicUrlData?.publicUrl,
+    error: null,
+  };
 }

@@ -14,99 +14,112 @@ import { Label } from '@feedbase/ui/components/label';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronsUpDownIcon } from 'lucide-react';
-import useProjectConfig from '@/lib/swr/use-project-config';
-import { ProjectConfigWithoutSecretProps } from '@/lib/types';
-import SettingsCard from '@/components/dashboard/settings/settings-card';
+import useWorkspace from '@/lib/swr/use-workspace';
+import useWorkspaceTheme from '@/lib/swr/use-workspace-theme';
+import { WorkspaceProps, WorkspaceThemeProps } from '@/lib/types';
+import SettingsCard from '@/components/settings/settings-card';
 import FetchError from '@/components/shared/fetch-error';
 import FileDrop from '@/components/shared/file-drop';
 import InputGroup from '@/components/shared/input-group';
 
 export default function GeneralSettings({ params }: { params: { slug: string } }) {
-  const { projectConfig: projectConfigData, isValidating, error, mutate } = useProjectConfig();
-  const [projectConfig, setProjectConfig] = useState<ProjectConfigWithoutSecretProps | undefined>(
-    projectConfigData
-  );
+  const {
+    workspace: workspaceData,
+    loading: workspaceLoading,
+    error: workspaceError,
+    mutate: workspaceMutate,
+  } = useWorkspace();
+  const {
+    workspaceTheme: workspaceThemeData,
+    loading: workspaceThemeLoading,
+    error: workspaceThemeError,
+    mutate: workspaceThemeMutate,
+  } = useWorkspaceTheme();
+
+  const [workspace, setWorkspace] = useState<WorkspaceProps['Row']>();
+  const [workspaceTheme, setWorkspaceTheme] = useState<WorkspaceThemeProps['Row']>();
 
   useEffect(() => {
-    setProjectConfig(projectConfigData);
-  }, [projectConfigData]);
+    setWorkspace(workspaceData);
+    setWorkspaceTheme(workspaceThemeData);
+  }, [workspaceData, workspaceThemeData]);
 
-  if (error) {
-    return <FetchError error={error} mutate={mutate} isValidating={isValidating} />;
+  if (workspaceError || workspaceThemeError) {
+    return (
+      <FetchError
+        name='branding settings'
+        error={workspaceError !== null ? workspaceError : workspaceThemeError}
+        mutate={workspaceError !== null ? workspaceMutate : workspaceThemeMutate}
+        isValidating={workspaceError !== null ? workspaceLoading : workspaceThemeLoading}
+      />
+    );
   }
 
-  if (isValidating && !projectConfig) {
+  if (workspaceLoading || workspaceThemeLoading) {
     return (
       <>
-        <SettingsCard title='Branding' description='Customize your project branding.'>
+        <SettingsCard title='Branding' description='Customize your workspace branding.'>
           <Skeleton className='col-span-2 h-96 w-full' />
         </SettingsCard>
-        <SettingsCard title='Theme' description='Customize your project theme.' className='grid-cols-3'>
+        <SettingsCard title='Theme' description='Customize your workspace theme.' className='grid-cols-3'>
           <Skeleton className='h-44 w-full' />
           <Skeleton className='h-44 w-full' />
           <Skeleton className='h-44 w-full' />
         </SettingsCard>
-        <SettingsCard title='Danger Zone' description='Permanently delete your project.'>
+        <SettingsCard title='Danger Zone' description='Permanently delete your workspace.'>
           <Skeleton className='col-span-2 h-32 w-full' />
         </SettingsCard>
       </>
     );
   }
 
-  if (projectConfig) {
+  if (workspace && workspaceTheme) {
     return (
       <>
-        <SettingsCard title='Branding' description='Customize your project branding.'>
+        <SettingsCard title='Branding' description='Customize your workspace branding.'>
           <div className='-mt-1 w-full space-y-1'>
             <Label className='text-foreground/70 text-sm'>Name</Label>
             <Input
               className='w-full'
-              value={projectConfig?.project.name}
+              value={workspace.name}
               onChange={(e) => {
-                setProjectConfig({
-                  ...projectConfig,
-                  project: {
-                    ...projectConfig.project,
-                    name: e.target.value,
-                  },
+                setWorkspace({
+                  ...workspace,
+                  name: e.target.value,
                 });
               }}
             />
-            <Label className='text-muted-foreground text-xs'>This is the name of your project.</Label>
+            <Label className='text-muted-foreground text-xs'>This is the name of your workspace.</Label>
           </div>
 
           <div className='-mt-1 w-full space-y-1'>
             <Label className='text-foreground/70 text-sm '>Slug</Label>
 
             <InputGroup
-              value={projectConfig?.project.slug}
+              value={workspace.slug}
               onChange={(e) => {
-                setProjectConfig({
-                  ...projectConfig,
-                  project: {
-                    ...projectConfig.project,
-                    slug: e.target.value,
-                  },
+                setWorkspace({
+                  ...workspace,
+                  slug: e.target.value,
                 });
               }}
               suffix={`.${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`}
               placeholder='feedbase'
             />
 
-            <Label className='text-muted-foreground text-xs'>This is the subdomain of your project.</Label>
+            <Label className='text-muted-foreground text-xs'>This is the subdomain of your workspace.</Label>
           </div>
 
-          {/* Project Logo */}
+          {/* Workspace Logo */}
           <div className='col-span-1 flex h-full w-full flex-col gap-1'>
             <Label className='text-foreground/70 text-sm '>Logo</Label>
 
             {/* File Upload */}
             <div className='flex items-center gap-2.5'>
-              <Avatar className={cn('h-12 w-12 hover:cursor-pointer', projectConfig?.project_icon_radius)}>
-                <AvatarImage src={projectConfig?.project_icon || ''} alt={projectConfig?.project.name} />
-                <AvatarFallback
-                  className={cn('bg-muted select-none text-sm', projectConfig?.project_icon_radius)}>
-                  {projectConfig?.project.name[0]}
+              <Avatar className={cn('h-12 w-12 hover:cursor-pointer', workspace.icon_radius)}>
+                <AvatarImage src={workspace.icon || ''} alt={workspace.name} />
+                <AvatarFallback className={cn('bg-muted select-none text-sm', workspace.icon_radius)}>
+                  {workspace.name[0]}
                 </AvatarFallback>
               </Avatar>
               <div className='flex flex-col gap-1'>
@@ -114,7 +127,7 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
                   <Button variant='secondary' size='sm' className='w-fit'>
                     Upload
                   </Button>
-                  {projectConfig?.project_icon ? (
+                  {workspace.icon ? (
                     <Button variant='destructive' size='sm' className='w-fit'>
                       Remove
                     </Button>
@@ -130,9 +143,9 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant='outline' className='w-fit font-normal'>
-                  {projectConfig?.project_icon_radius === 'rounded-md'
+                  {workspace.icon_radius === 'rounded-md'
                     ? 'Rounded'
-                    : projectConfig?.project_icon_radius === 'rounded-full'
+                    : workspace.icon_radius === 'rounded-full'
                     ? 'Circle'
                     : 'Square'}
                   <ChevronsUpDownIcon className='text-secondary-foreground ml-2 h-3.5 w-3.5' />
@@ -141,27 +154,27 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
               <DropdownMenuContent align='start'>
                 <DropdownMenuItem
                   onClick={() => {
-                    setProjectConfig({
-                      ...projectConfig,
-                      project_icon_radius: 'rounded-md',
+                    setWorkspace({
+                      ...workspace,
+                      icon_radius: 'rounded-md',
                     });
                   }}>
                   Rounded
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    setProjectConfig({
-                      ...projectConfig,
-                      project_icon_radius: 'rounded-full',
+                    setWorkspace({
+                      ...workspace,
+                      icon_radius: 'rounded-full',
                     });
                   }}>
                   Circle
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => {
-                    setProjectConfig({
-                      ...projectConfig,
-                      project_icon_radius: 'rounded-none',
+                    setWorkspace({
+                      ...workspace,
+                      icon_radius: 'rounded-none',
                     });
                   }}>
                   Square
@@ -169,23 +182,25 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Label className='text-muted-foreground text-xs'>This is the radius of your project.</Label>
+            <Label className='text-muted-foreground text-xs'>This is the radius of your workspace.</Label>
           </div>
 
           <div className='col-span-1 -mt-1 w-full space-y-1'>
             <Label className='text-foreground/70 text-sm '>Redirect URL</Label>
             <Input
               className='w-full'
-              value={projectConfig?.logo_redirect_url || ''}
+              value={workspace.icon_redirect_url || ''}
               onChange={(e) => {
-                setProjectConfig({
-                  ...projectConfig,
-                  logo_redirect_url: e.target.value,
+                setWorkspace({
+                  ...workspace,
+                  icon_redirect_url: e.target.value,
                 });
               }}
               placeholder='Leave blank to use default'
             />
-            <Label className='text-muted-foreground text-xs'>This is the redirect URL of your project.</Label>
+            <Label className='text-muted-foreground text-xs'>
+              This is the redirect URL of your workspace.
+            </Label>
           </div>
 
           {/* OG Image */}
@@ -194,30 +209,32 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
               labelComponent={<Label className='text-foreground/70 text-sm'>OG Image</Label>}
               image={null}
               setImage={(e: string | null) => {
-                setProjectConfig({
-                  ...projectConfig,
-                  project_og_image: e,
+                setWorkspace({
+                  ...workspace,
+                  opengraph_image: e,
                 });
               }}
               className='h-40 w-80'
             />
 
-            <Label className='text-foreground/50 text-xs'>The OG Image used when sharing your project.</Label>
+            <Label className='text-foreground/50 text-xs'>
+              The OG Image used when sharing your workspace.
+            </Label>
           </div>
         </SettingsCard>
 
-        <SettingsCard title='Theme' description='Customize your project theme.' className='grid-cols-3'>
+        <SettingsCard title='Theme' description='Customize your workspace theme.' className='grid-cols-3'>
           {/* Thanks to https://github.com/openstatushq for the inspiration of the theme previews */}
           <button
             className='flex h-full w-full flex-col items-center gap-2'
             onClick={() => {
-              setProjectConfig({ ...projectConfig, custom_theme: 'light' });
+              setWorkspaceTheme({ ...workspaceTheme, theme: 'light' });
             }}
             type='button'>
             <div
               className={cn(
                 'border-border/50 h-full w-full items-center rounded-md border-2 p-1',
-                projectConfig.custom_theme === 'light' &&
+                workspaceTheme.theme === 'light' &&
                   'ring-ring ring-offset-root ring-2 ring-offset-2 transition-shadow'
               )}>
               <div className='space-y-2 rounded-sm bg-[#F4F4F5] p-2'>
@@ -241,13 +258,13 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
           <button
             className='flex h-full w-full flex-col items-center gap-2'
             onClick={() => {
-              setProjectConfig({ ...projectConfig, custom_theme: 'dark' });
+              setWorkspaceTheme({ ...workspaceTheme, theme: 'dark' });
             }}
             type='button'>
             <div
               className={cn(
                 'border-border/50 bg-root h-full w-full items-center rounded-md border-2 p-1',
-                projectConfig.custom_theme === 'dark' &&
+                workspaceTheme.theme === 'dark' &&
                   'ring-ring ring-offset-root ring-2 ring-offset-2 transition-shadow'
               )}>
               <div className='space-y-2 rounded-sm bg-[#0D0D0E] p-2'>
@@ -272,13 +289,13 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
             type='button'
             className='flex h-full w-full flex-col items-center gap-2'
             onClick={() => {
-              setProjectConfig({ ...projectConfig, custom_theme: 'custom' });
+              setWorkspaceTheme({ ...workspaceTheme, theme: 'custom' });
             }}>
             <div className='relative h-full w-full'>
               <div
                 className={cn(
                   'border-border/50 bg-root items-center rounded-md border-2 p-1',
-                  projectConfig.custom_theme === 'custom' &&
+                  workspaceTheme.theme === 'custom' &&
                     'ring-ring ring-offset-root ring-2 ring-offset-2 transition-shadow'
                 )}>
                 <div className='space-y-2 rounded-sm bg-[#F4F4F5] p-2'>
@@ -321,7 +338,7 @@ export default function GeneralSettings({ params }: { params: { slug: string } }
           </button>
         </SettingsCard>
 
-        <SettingsCard title='Danger Zone' description='Permanently delete your project.'>
+        <SettingsCard title='Danger Zone' description='Permanently delete your workspace.'>
           <div className='-mt-1 flex w-full flex-col space-y-1'>
             <Button variant='destructive' className='w-fit'>
               Delete this Workspace

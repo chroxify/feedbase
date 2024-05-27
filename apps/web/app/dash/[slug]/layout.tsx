@@ -1,6 +1,6 @@
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { getCurrentUser, getUserProjects } from '@/lib/api/user';
+import { getCurrentUser, getUserWorkspaces } from '@/lib/api/user';
 import { DASH_DOMAIN } from '@/lib/constants';
 import { SidebarTabsProps } from '@/lib/types';
 import DashboardHeader from '@/components/layout/header';
@@ -39,7 +39,7 @@ const tabs: SidebarTabsProps = {
       slug: 'analytics',
     },
   ],
-  Project: [
+  Workspace: [
     {
       name: 'Settings',
       icon: SettingsIcon,
@@ -51,7 +51,7 @@ const tabs: SidebarTabsProps = {
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   // Headers
   const headerList = headers();
-  const projectSlug = headerList.get('x-project');
+  const workspaceSlug = headerList.get('x-workspace');
   const pathname = headerList.get('x-pathname');
 
   // Fetch user
@@ -61,20 +61,20 @@ export default async function DashboardLayout({ children }: { children: React.Re
     return redirect(`${DASH_DOMAIN}/login`);
   }
 
-  // Fetch the user's projects
-  const { data: projects } = await getUserProjects('server');
+  // Fetch the user's workspaces
+  const { data: workspaces } = await getUserWorkspaces('server');
 
-  // Check if the user has any projects
-  if (!projects || projects.length === 0) {
+  // Check if the user has any workspaces
+  if (!workspaces || workspaces.length === 0) {
     return redirect(`${DASH_DOMAIN}`);
   }
 
-  // Get the project with the current slug
-  const currentProject = projects.find((project) => project.slug === projectSlug);
+  // Get the workspace with the current slug
+  const currentWorkspace = workspaces.find((workspace) => workspace.slug === workspaceSlug);
 
-  // If currentProject is undefined, redirect to the first project
-  if (!currentProject) {
-    return redirect(`/${projects[0].slug}`);
+  // If currentWorkspace is undefined, redirect to the first workspace
+  if (!currentWorkspace) {
+    return redirect(`/${workspaces[0].slug}`);
   }
 
   // Retrieve the currently active tab
@@ -87,7 +87,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
       {/* Header with logo and hub button */}
       {/* BUG: Find a way to solve issue of scroll bar getting removed on avatar dialog open */}
       {/* https://github.com/radix-ui/primitives/discussions/1100 */}
-      <DashboardHeader user={user} projects={projects} currentProject={currentProject} />
+      <DashboardHeader user={user} workspaces={workspaces} currentWorkspace={currentWorkspace} />
 
       {/* Sidebar */}
       <Sidebar tabs={tabs} initialTab={activeTab || tabs.Modules[0]} />
@@ -98,7 +98,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
       </div>
 
       {/* Navbar (mobile) */}
-      <NavbarMobile tabs={tabs} initialTab={activeTab || tabs.Modules[0]} currentProject={currentProject} />
+      <NavbarMobile
+        tabs={tabs}
+        initialTab={activeTab || tabs.Modules[0]}
+        currentWorkspace={currentWorkspace}
+      />
     </main>
   );
 }
