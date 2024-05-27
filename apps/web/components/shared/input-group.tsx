@@ -1,6 +1,15 @@
 import { Input } from '@feedbase/ui/components/input';
 import { cn } from '@feedbase/ui/lib/utils';
 
+type InputGroupProps = {
+  prefix?: React.ReactNode;
+  suffix?: React.ReactNode;
+  placeholder?: string;
+  value: string;
+  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  groupClassName?: string;
+} & React.InputHTMLAttributes<HTMLInputElement>;
+
 export default function InputGroup({
   prefix,
   suffix,
@@ -8,14 +17,8 @@ export default function InputGroup({
   value,
   onChange,
   groupClassName,
-}: {
-  prefix?: React.ReactNode;
-  suffix?: React.ReactNode;
-  placeholder?: string;
-  value: string;
-  onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  groupClassName?: string;
-}) {
+  ...props
+}: InputGroupProps) {
   return (
     <div className='bg-background focus-within:ring-ring ring-offset-root flex h-8 w-full rounded-md border  text-sm transition-shadow duration-200 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-1'>
       {prefix ? (
@@ -32,6 +35,7 @@ export default function InputGroup({
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        {...props}
       />
       {suffix ? (
         <div

@@ -109,7 +109,7 @@ export default function AddWorkspaceDialog({ trigger }: { trigger: React.ReactNo
           </div>
         </div>
         <ResponsiveDialogFooter>
-          <ResponsiveDialogClose asChild>
+          <ResponsiveDialogClose>
             <Button
               variant='secondary'
               className='w-full'

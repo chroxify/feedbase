@@ -68,6 +68,7 @@ export default function SSOSettings() {
               <InputGroup
                 value={secret}
                 groupClassName='px-2 cursor-pointer'
+                readOnly
                 suffix={
                   <CopyCheckIcon
                     content={secret}
@@ -89,7 +90,7 @@ export default function SSOSettings() {
                   }}
                   id='copied'
                 />
-                <Label htmlFor='copied' className='text-secondary-foreground cursor-auto text-sm'>
+                <Label htmlFor='copied' className='text-secondary-foreground cursor-default text-sm'>
                   I have copied this token
                 </Label>
               </div>

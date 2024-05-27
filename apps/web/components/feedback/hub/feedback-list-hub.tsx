@@ -7,7 +7,6 @@ import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/ava
 import { Button } from '@feedbase/ui/components/button';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronUp, MessagesSquare } from 'lucide-react';
-import { toast } from 'sonner';
 import { PROSE_CN } from '@/lib/constants';
 import { FeedbackWithUserProps } from '@/lib/types';
 import AuthModal from '../../modals/login-signup-modal';

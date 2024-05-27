@@ -109,7 +109,7 @@ export default function UpdateProfileModal({
                 </p>
 
                 {avatar ? (
-                  <Image
+                  <img
                     src={avatar}
                     alt='Preview'
                     width={45}
