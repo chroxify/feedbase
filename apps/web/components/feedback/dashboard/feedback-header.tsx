@@ -10,7 +10,7 @@ import { Plus, X } from 'lucide-react';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import { SearchIcon } from '@/components/shared/icons/icons-animated';
 import LottiePlayer from '@/components/shared/lottie-player';
-import { FilterCombobox } from './filter-combobox';
+import { FilterCombobox } from '../common/filter-combobox';
 
 export default function FeedbackHeader() {
   const [searchActive, setSearchActive] = useState(false);

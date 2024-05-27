@@ -56,19 +56,25 @@ export default function SortFeedbackDropdown() {
       <DropdownMenuContent className='w-36' align='end'>
         <DropdownMenuItem
           className='flex items-center gap-1.5'
-          onSelect={() => { createQueryParams('sort', 'upvotes'); }}>
+          onSelect={() => {
+            createQueryParams('sort', 'upvotes');
+          }}>
           <ThumbsUp className='h-4 w-4' />
           Upvotes
         </DropdownMenuItem>
         <DropdownMenuItem
           className='flex items-center gap-1.5'
-          onSelect={() => { createQueryParams('sort', 'recent'); }}>
+          onSelect={() => {
+            createQueryParams('sort', 'recent');
+          }}>
           <CalendarClock className='h-4 w-4' />
           Recent
         </DropdownMenuItem>
         <DropdownMenuItem
           className='flex items-center gap-1.5'
-          onSelect={() => { createQueryParams('sort', 'trending'); }}>
+          onSelect={() => {
+            createQueryParams('sort', 'trending');
+          }}>
           <Flame className='h-4 w-4' />
           Trending
         </DropdownMenuItem>

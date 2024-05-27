@@ -1,6 +1,6 @@
 import { Label } from '@feedbase/ui/components/label';
 import { Switch } from '@feedbase/ui/components/switch';
-import SettingsCard from '@/components/dashboard/settings/settings-card';
+import SettingsCard from '@/components/settings/settings-card';
 
 export default function FeedbackSettings() {
   return (

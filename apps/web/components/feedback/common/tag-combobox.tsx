@@ -14,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '@feedbase/ui/components
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronsUpDownIcon, Tags } from 'lucide-react';
 import useTags from '@/lib/swr/use-tags';
-import { CreateTagModal } from '../modals/add-tag-modal';
+import { CreateTagModal } from '../../modals/add-tag-modal';
 
 interface TagComboboxProps {
   initialTags: { name: string; color: string }[];

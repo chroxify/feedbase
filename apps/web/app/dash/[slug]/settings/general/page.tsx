@@ -17,7 +17,7 @@ import { ChevronsUpDownIcon } from 'lucide-react';
 import useWorkspace from '@/lib/swr/use-workspace';
 import useWorkspaceTheme from '@/lib/swr/use-workspace-theme';
 import { WorkspaceProps, WorkspaceThemeProps } from '@/lib/types';
-import SettingsCard from '@/components/dashboard/settings/settings-card';
+import SettingsCard from '@/components/settings/settings-card';
 import FetchError from '@/components/shared/fetch-error';
 import FileDrop from '@/components/shared/file-drop';
 import InputGroup from '@/components/shared/input-group';

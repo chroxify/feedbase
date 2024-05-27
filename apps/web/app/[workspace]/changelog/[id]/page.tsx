@@ -8,7 +8,7 @@ import { cn } from '@feedbase/ui/lib/utils';
 import { fontMono } from '@feedbase/ui/styles/fonts';
 import { getPublicWorkspaceChangelogs } from '@/lib/api/public';
 import { formatRootUrl } from '@/lib/utils';
-import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
+import AnalyticsWrapper from '@/components/analytics/analytics-wrapper';
 import { Icons } from '@/components/shared/icons/icons-static';
 
 type Props = {

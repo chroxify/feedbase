@@ -7,8 +7,8 @@ import { Input } from '@feedbase/ui/components/input';
 import { cn } from '@feedbase/ui/lib/utils';
 import { Clock3, Flame, Search, Star } from 'lucide-react';
 import useCreateQueryString from '@/lib/hooks/use-query-router';
-import CreatePostModal from '../modals/create-post-modal';
-import AuthModal from '../modals/login-signup-modal';
+import CreatePostModal from '../../modals/create-post-modal';
+import AuthModal from '../../modals/login-signup-modal';
 
 export default function FeedbackHeader({
   isLoggedIn,

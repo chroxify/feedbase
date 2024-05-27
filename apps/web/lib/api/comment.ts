@@ -217,78 +217,80 @@ export const upvoteCommentForFeedbackById = (
   workspaceSlug: string,
   cType: 'server' | 'route'
 ) =>
-  withFeedbackAuth<CommentProps['Row']>(async (user, supabase, feedback, workspace, error) => {
-    // If any errors, return error
-    if (error) {
-      return { data: null, error };
-    }
+  withFeedbackAuth<CommentProps['Row'] & { has_upvoted: boolean }>(
+    async (user, supabase, feedback, workspace, error) => {
+      // If any errors, return error
+      if (error) {
+        return { data: null, error };
+      }
 
-    // Make sure comment exists
-    const { data: comment, error: commentError } = await supabase
-      .from('comment')
-      .select()
-      .eq('id', commentId)
-      .single();
+      // Make sure comment exists
+      const { data: comment, error: commentError } = await supabase
+        .from('comment')
+        .select()
+        .eq('id', commentId)
+        .single();
 
-    // Check for errors
-    if (commentError) {
-      return { data: null, error: { message: commentError.message, status: 500 } };
-    }
+      // Check for errors
+      if (commentError) {
+        return { data: null, error: { message: commentError.message, status: 500 } };
+      }
 
-    // Check if comment exists
-    if (!comment) {
-      return { data: null, error: { message: 'comment not found.', status: 404 } };
-    }
+      // Check if comment exists
+      if (!comment) {
+        return { data: null, error: { message: 'comment not found.', status: 404 } };
+      }
 
-    // Check if user has already upvoted the comment
-    const { data: upvoter, error: upvoterError } = await supabase
-      .from('comment_upvoter')
-      .select()
-      .eq('profile_id', user!.id)
-      .eq('comment_id', commentId)
-      .single();
-
-    // Check for errors
-    if (upvoterError) {
-      return { data: null, error: { message: upvoterError.message, status: 500 } };
-    }
-
-    // If user has already upvoted the comment, delete upvote
-    if (upvoter) {
-      const { error: deletedUpvoteError } = await supabase
+      // Check if user has already upvoted the comment
+      const { data: upvoter, error: upvoterError } = await supabase
         .from('comment_upvoter')
-        .delete()
-        .eq('id', upvoter.id)
+        .select()
+        .eq('profile_id', user!.id)
+        .eq('comment_id', commentId)
+        .single();
+
+      // Check for errors
+      if (upvoterError && upvoterError.code !== 'PGRST116') {
+        return { data: null, error: { message: upvoterError.message, status: 500 } };
+      }
+
+      // If user has already upvoted the comment, delete upvote
+      if (upvoter) {
+        const { error: deletedUpvoteError } = await supabase
+          .from('comment_upvoter')
+          .delete()
+          .eq('id', upvoter.id)
+          .select()
+          .single();
+
+        // Check for errors
+        if (deletedUpvoteError) {
+          return { data: null, error: { message: deletedUpvoteError.message, status: 500 } };
+        }
+
+        // Return comment without upvote
+        return {
+          data: { ...comment, upvotes: comment.upvotes - 1, has_upvoted: false },
+          error: null,
+        };
+      }
+
+      // Create upvote
+      const { error: upvoteError } = await supabase
+        .from('comment_upvoter')
+        .insert({ profile_id: user!.id, comment_id: commentId })
         .select()
         .single();
 
       // Check for errors
-      if (deletedUpvoteError) {
-        return { data: null, error: { message: deletedUpvoteError.message, status: 500 } };
+      if (upvoteError) {
+        return { data: null, error: { message: upvoteError.message, status: 500 } };
       }
 
-      // Return comment without upvote
+      // Return comment with upvote
       return {
-        data: { ...comment, upvotes: comment.upvotes - 1 },
+        data: { ...comment, upvotes: comment.upvotes + 1, has_upvoted: true },
         error: null,
       };
     }
-
-    // Create upvote
-    const { error: upvoteError } = await supabase
-      .from('comment_upvoter')
-      .insert({ profile_id: user!.id, comment_id: commentId })
-      .select()
-      .single();
-
-    // Check for errors
-    if (upvoteError) {
-      return { data: null, error: { message: upvoteError.message, status: 500 } };
-    }
-
-    // Return comment with upvote
-    return {
-      data: { ...comment, upvotes: comment.upvotes - 1 },
-      error: null,
-    };
-  })(feedbackId, workspaceSlug, cType);
+  )(feedbackId, workspaceSlug, cType);

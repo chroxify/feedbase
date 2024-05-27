@@ -1,5 +1,5 @@
-import FeedbackHeader from '@/components/dashboard/feedback/feedback-header';
-import FeedbackList from '@/components/dashboard/feedback/feedback-list';
+import FeedbackHeader from '@/components/feedback/dashboard/feedback-header';
+import FeedbackList from '@/components/feedback/dashboard/feedback-list';
 
 export default async function Feedback() {
   return (

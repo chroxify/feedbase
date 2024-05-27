@@ -14,7 +14,7 @@ import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronsUpDownIcon, GlobeIcon, Plus } from 'lucide-react';
 import { WorkspaceProps } from '@/lib/types';
-import AddWorkspaceDialog from '@/components/dashboard/modals/add-workspace-modal';
+import AddWorkspaceDialog from '@/components/modals/add-workspace-modal';
 
 export default function WorkspaceDropdown({
   workspaces,

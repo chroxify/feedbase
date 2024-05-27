@@ -1,6 +1,6 @@
 import React from 'react';
 import { getWorkspaceAnalytics } from '@/lib/api/workspace';
-import AnalyticsCards from '@/components/dashboard/analytics/chart-cards';
+import AnalyticsCards from '@/components/analytics/chart-cards';
 
 export default async function AnalyticsPage({ params }: { params: { slug: string } }) {
   const { data, error } = await getWorkspaceAnalytics(params.slug, 'server');

@@ -1,13 +1,12 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { Separator } from '@feedbase/ui/components/separator';
-import { getWorkspaceModuleConfig } from '@/lib/api/module';
 import { getPublicWorkspaceFeedback } from '@/lib/api/public';
 import { getCurrentUser } from '@/lib/api/user';
 import { getWorkspaceBySlug } from '@/lib/api/workspace';
-import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
-import FeedbackHeader from '@/components/hub/feedback/button-header';
-import FeedbackList from '@/components/hub/feedback/feedback-list';
+import AnalyticsWrapper from '@/components/analytics/analytics-wrapper';
+import FeedbackHeader from '@/components/feedback/hub/button-header';
+import FeedbackList from '@/components/feedback/hub/feedback-list-hub';
 
 type Props = {
   params: { workspace: string };

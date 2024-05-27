@@ -18,7 +18,7 @@ import {
 } from '@feedbase/ui/components/responsive-dialog';
 import { toast } from 'sonner';
 import { formatRootUrl } from '@/lib/utils';
-import SettingsCard from '@/components/dashboard/settings/settings-card';
+import SettingsCard from '@/components/settings/settings-card';
 import CopyCheckIcon from '@/components/shared/copy-check-icon';
 import InputGroup from '@/components/shared/input-group';
 

@@ -1,6 +1,6 @@
 import { notFound, redirect } from 'next/navigation';
 import { getWorkspaceBySlug } from '@/lib/api/workspace';
-import UnsubscribeChangelogCard from '@/components/layout/unsubscribe-card';
+import UnsubscribeChangelogCard from '@/components/changelog/unsubscribe-card';
 
 export default async function ChangelogUnsubscribe({
   params,

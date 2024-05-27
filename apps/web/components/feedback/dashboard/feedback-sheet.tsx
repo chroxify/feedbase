@@ -42,12 +42,12 @@ import useSWRMutation from 'swr/mutation';
 import { PROSE_CN } from '@/lib/constants';
 import { CommentWithUserProps, FeedbackWithUserProps } from '@/lib/types';
 import { actionFetcher, fetcher, formatRootUrl } from '@/lib/utils';
+import Comment from '@/components/feedback/comments/comment';
+import CommentInput from '@/components/feedback/comments/comment-input';
+import { StatusCombobox } from '@/components/feedback/common/status-combobox';
+import { TagCombobox } from '@/components/feedback/common/tag-combobox';
 import { Icons } from '@/components/shared/icons/icons-static';
 import DefaultTooltip from '@/components/shared/tooltip';
-import Comment from './comment';
-import CommentInput from './comment-input';
-import { StatusCombobox } from './status-combobox';
-import { TagCombobox } from './tag-combobox';
 
 export function FeedbackSheet({
   feedback,
@@ -72,13 +72,16 @@ export function FeedbackSheet({
   );
 
   // Render comments recursively
-  const renderComments = useCallback((comments: CommentWithUserProps[] | undefined) => {
-    return comments?.map((comment: CommentWithUserProps) => (
-      <Comment commentData={comment} workspaceSlug='x' key={comment.id} id={comment.id}>
-        {renderComments(comment.replies)}
-      </Comment>
-    ));
-  }, []);
+  const renderComments = useCallback(
+    (comments: CommentWithUserProps[] | undefined) => {
+      return comments?.map((comment: CommentWithUserProps) => (
+        <Comment commentData={comment} workspaceSlug={slug} key={comment.id} id={comment.id}>
+          {renderComments(comment.replies)}
+        </Comment>
+      ));
+    },
+    [slug]
+  );
 
   // Navigate feedback
   const navigateFeedback = useCallback(
@@ -332,7 +335,7 @@ export function FeedbackSheet({
                 ) : null}
 
                 {/* Comments */}
-                {comments && comments.length > 0 && !commentsLoading ? renderComments(comments) : null}
+                {comments && comments.length > 0 ? renderComments(comments) : null}
               </TabsContent>
               <TabsContent value='activity'>
                 {/* TODO */}

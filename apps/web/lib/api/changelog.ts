@@ -26,7 +26,7 @@ export const createChangelog = (
       const imagePath = `${workspace!.slug}/changelog/${Math.random().toString(36).substring(7)}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('workspaces')
+        .from('workspace')
         // workspace.slug/changelog/random-string
         .upload(imagePath, decode(data.thumbnail.replace(/^data:image\/\w+;base64,/, '')), {
           contentType: 'image/png',
@@ -38,7 +38,7 @@ export const createChangelog = (
       }
 
       // Get public URL
-      const { data: publicUrlData } = supabase.storage.from('workspaces').getPublicUrl(imagePath);
+      const { data: publicUrlData } = supabase.storage.from('workspace').getPublicUrl(imagePath);
 
       // Check for errors
       if (!publicUrlData) {
@@ -216,7 +216,7 @@ export const updateChangelog = (
       const imagePath = `${workspace!.slug}/changelog/${Math.random().toString(36).substring(7)}`;
 
       const { error: uploadError } = await supabase.storage
-        .from('workspaces')
+        .from('workspace')
         .upload(imagePath, decode(data.thumbnail.replace(/^data:image\/\w+;base64,/, '')), {
           contentType: 'image/png',
         });
@@ -227,7 +227,7 @@ export const updateChangelog = (
       }
 
       // Get public URL
-      const { data: publicUrlData } = supabase.storage.from('workspaces').getPublicUrl(imagePath);
+      const { data: publicUrlData } = supabase.storage.from('workspace').getPublicUrl(imagePath);
 
       // Check for errors
       if (!publicUrlData) {

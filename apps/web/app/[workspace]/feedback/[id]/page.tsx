@@ -9,8 +9,8 @@ import { getCommentsForFeedbackById } from '@/lib/api/comment';
 import { getPublicWorkspaceFeedback } from '@/lib/api/public';
 import { getCurrentUser } from '@/lib/api/user';
 import { PROSE_CN } from '@/lib/constants';
-import AnalyticsWrapper from '@/components/hub/analytics-wrapper';
-import CommentsList from '@/components/hub/feedback/comments/comments-list';
+import AnalyticsWrapper from '@/components/analytics/analytics-wrapper';
+import CommentsList from '@/components/feedback/hub/comments-list';
 
 type Props = {
   params: { workspace: string; id: string };

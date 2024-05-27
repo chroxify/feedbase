@@ -23,8 +23,8 @@ import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import useTags from '@/lib/swr/use-tags';
 import { FeedbackWithUserProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
-import AnimatedTabs from '@/components/layout/animated-tabs';
-import FeedbackFilterHeader, { FeedbackFilterProps } from './feedback-filters';
+import AnimatedTabs from '@/components/shared/animated-tabs';
+import FeedbackFilterHeader, { FeedbackFilterProps } from '../common/feedback-filters';
 import { FeedbackSheet } from './feedback-sheet';
 
 type DateSortedFeedbackProps = Record<string, FeedbackWithUserProps[]>;

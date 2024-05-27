@@ -17,7 +17,7 @@ import { ChevronsUpDown, MoreHorizontal } from 'lucide-react';
 import useTeamInvites from '@/lib/swr/use-team-invites';
 import useTeamMembers from '@/lib/swr/use-team-members';
 import { formatTimeAgo } from '@/lib/utils';
-import SettingsCard from '@/components/dashboard/settings/settings-card';
+import SettingsCard from '@/components/settings/settings-card';
 import FetchError from '@/components/shared/fetch-error';
 
 export default function TeamSettings({ params }: { params: { slug: string } }) {

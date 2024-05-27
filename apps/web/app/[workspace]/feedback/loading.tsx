@@ -1,6 +1,6 @@
 import { Separator } from '@feedbase/ui/components/separator';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
-import FeedbackHeader from '@/components/hub/feedback/button-header';
+import FeedbackHeader from '@/components/feedback/hub/button-header';
 
 export default function FeedbackLoading() {
   return (

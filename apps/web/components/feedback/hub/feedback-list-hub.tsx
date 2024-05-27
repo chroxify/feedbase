@@ -10,7 +10,7 @@ import { ChevronUp, MessagesSquare } from 'lucide-react';
 import { toast } from 'sonner';
 import { PROSE_CN } from '@/lib/constants';
 import { FeedbackWithUserProps } from '@/lib/types';
-import AuthModal from '../modals/login-signup-modal';
+import AuthModal from '../../modals/login-signup-modal';
 
 interface FeedbackWithTimeAgo extends FeedbackWithUserProps {
   timeAgo: string;

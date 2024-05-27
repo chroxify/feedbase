@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -15,9 +14,11 @@ import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
 import { BadgeCheck, MoreVertical, Trash2Icon } from 'lucide-react';
 import { toast } from 'sonner';
+import { mutate } from 'swr';
+import useSWRMutation from 'swr/mutation';
 import { PROSE_CN } from '@/lib/constants';
-import { CommentWithUserProps } from '@/lib/types';
-import { formatRootUrl } from '@/lib/utils';
+import { CommentProps as CommentDbProps, CommentWithUserProps } from '@/lib/types';
+import { actionFetcher, formatRootUrl } from '@/lib/utils';
 import CommentInput from './comment-input';
 
 // Define a type for the props
@@ -31,7 +32,6 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
   const [comment, setComment] = useState<CommentWithUserProps>(commentData);
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [timeAgo, setTimeAgo] = useState<string>('');
-  const router = useRouter();
 
   // Time ago
   function formatTimeAgo(date: Date) {
@@ -57,78 +57,56 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
     return 'just now';
   }
 
-  // On delete comment
-  async function onDelete() {
-    const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments/${comment.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-            reject(data.error);
-          } else {
-            resolve(data);
-          }
-        })
-        .catch((err) => {
-          reject(err.message);
+  // delete comment
+  const { trigger: deleteComment } = useSWRMutation(
+    `/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments/${comment.id}`,
+    actionFetcher,
+    {
+      onSuccess: () => {
+        mutate(`/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments`);
+      },
+      onError: () => {
+        toast.error(`Failed to delete comment.`);
+      },
+    }
+  );
+
+  // upvote comment
+  const { trigger: upvoteComment } = useSWRMutation(
+    `/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments/${comment.id}/upvote`,
+    actionFetcher,
+    {
+      onSuccess: (data: CommentDbProps['Row'] & { has_upvoted: boolean }) => {
+        setComment((prev) => {
+          return {
+            ...prev,
+            upvotes: data.upvotes,
+            has_upvoted: data.has_upvoted,
+          };
         });
-    });
-
-    promise
-      .then(() => {
-        // Reload comments
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error(err);
-      });
-  }
-
-  // On upvote comment
-  async function onUpvote() {
-    // Update comment
-    const updatedComment = { ...comment }; // Create a copy of the comment
-    updatedComment.upvotes = comment.upvotes + (comment.has_upvoted ? -1 : 1);
-    updatedComment.has_upvoted = !comment.has_upvoted;
-
-    // Update state
-    setComment(updatedComment);
-
-    const promise = new Promise((resolve, reject) => {
-      fetch(
-        `/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments/${comment.id}/upvote`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-            reject(data.error);
-          } else {
-            resolve(data);
-          }
-        })
-        .catch((err) => {
-          reject(err.message);
+        mutate(`/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments`);
+      },
+      onError: (error) => {
+        toast.error(`Failed to upvote comment - ${  error}`);
+        setComment((prev) => {
+          return {
+            ...prev,
+            upvotes: prev.upvotes + (prev.has_upvoted ? -1 : 1),
+            has_upvoted: !prev.has_upvoted,
+          };
         });
-    });
-
-    promise.catch((err) => {
-      // Revert the comment to its previous state
-      setComment(comment);
-
-      toast.error(err);
-    });
-  }
+      },
+      optimisticData: () => {
+        setComment((prev) => {
+          return {
+            ...prev,
+            upvotes: prev.upvotes + (prev.has_upvoted ? -1 : 1),
+            has_upvoted: !prev.has_upvoted,
+          };
+        });
+      },
+    }
+  );
 
   useEffect(() => {
     setTimeAgo(formatTimeAgo(new Date(comment.created_at)));
@@ -175,7 +153,11 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align='end' className='w-[160px]'>
-            <DropdownMenuDestructiveItem className='flex flex-row items-center gap-2' onClick={onDelete}>
+            <DropdownMenuDestructiveItem
+              className='flex flex-row items-center gap-2'
+              onClick={() => {
+                deleteComment({ method: 'DELETE' });
+              }}>
               <Trash2Icon className='h-4 w-4' />
               Delete
             </DropdownMenuDestructiveItem>
@@ -210,7 +192,7 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
               )}
               size='sm'
               onClick={() => {
-                onUpvote();
+                upvoteComment({});
               }}>
               <span
                 className={cn(

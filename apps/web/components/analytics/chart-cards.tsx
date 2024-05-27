@@ -4,8 +4,8 @@ import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@feedbase/ui/components/card';
 import { cn } from '@feedbase/ui/lib/utils';
 import { AnalyticsProps } from '@/lib/types';
-import BarList from '@/components/dashboard/analytics/bar-list';
-import LineChart from '@/components/dashboard/analytics/line-chart';
+import BarList from '@/components/analytics/bar-list';
+import LineChart from '@/components/analytics/line-chart';
 
 export default function AnalyticsCards({
   analyticsData,

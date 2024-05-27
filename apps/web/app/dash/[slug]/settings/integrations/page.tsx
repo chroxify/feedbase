@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
-import FeedbackModal from '@/components/dashboard/modals/send-feedback-modal';
-import SettingsCard from '@/components/dashboard/settings/settings-card';
+import FeedbackModal from '@/components/modals/send-feedback-modal';
+import SettingsCard from '@/components/settings/settings-card';
 
 function IntegrationCard({
   title,

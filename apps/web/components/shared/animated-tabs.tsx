@@ -97,8 +97,12 @@ export default function AnimatedTabs({ tabs, selectedTab, setSelectedTab, classN
               { 'text-foreground': hoveredTabIndex === i || selectedTabIndex === i }
             )}
             ref={(el) => (buttonRefs[i] = el)}
-            onPointerEnter={(e) => { onEnterTab(e, i); }}
-            onFocus={(e) => { onEnterTab(e, i); }}
+            onPointerEnter={(e) => {
+              onEnterTab(e, i);
+            }}
+            onFocus={(e) => {
+              onEnterTab(e, i);
+            }}
             onClick={() => {
               setSelectedTabIndex(i);
               setSelectedTab(item.label);
@@ -114,7 +118,7 @@ export default function AnimatedTabs({ tabs, selectedTab, setSelectedTab, classN
         className='bg-secondary absolute left-0 top-0 z-10 rounded-md transition-[width]'
         style={hoverStyles}
       /> */}
-      <div className="bg-primary absolute bottom-0 left-0 z-10 h-0.5 rounded-full" style={selectStyles} />
+      <div className='bg-primary absolute bottom-0 left-0 z-10 h-0.5 rounded-full' style={selectStyles} />
     </nav>
   );
 }

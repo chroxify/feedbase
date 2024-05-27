@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerClient, type CookieOptions } from '@supabase/ssr';
-import { PostgrestError } from '@supabase/supabase-js';
 import { Database } from './lib/supabase';
 
 export const config = {

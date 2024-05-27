@@ -9,8 +9,8 @@ import { cn } from '@feedbase/ui/lib/utils';
 import { satoshi } from '@feedbase/ui/styles/fonts';
 import { ProfileProps, WorkspaceProps, WorkspaceThemeProps } from '@/lib/types';
 import { hslToHex } from '@/lib/utils';
+import AuthModal from '../modals/login-signup-modal';
 import UserDropdown from '../shared/user-dropdown';
-import AuthModal from './modals/login-signup-modal';
 
 interface TabProps {
   name: string;

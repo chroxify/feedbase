@@ -30,8 +30,8 @@ import { toast } from 'sonner';
 import useSWR from 'swr';
 import { ChangelogProps } from '@/lib/types';
 import { fetcher } from '@/lib/utils';
-import { AddChangelogModal } from '@/components/dashboard/modals/add-edit-changelog-modal';
-import AnimatedTabs from '@/components/layout/animated-tabs';
+import { AddChangelogModal } from '@/components/modals/add-edit-changelog-modal';
+import AnimatedTabs from '@/components/shared/animated-tabs';
 
 export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string }) {
   const [tab, setTab] = useState('Drafts');
@@ -86,7 +86,7 @@ export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string
           title: changelog.title,
           summary: changelog.summary,
           content: changelog.content,
-          image: changelog.image,
+          image: changelog.thumbnail,
           publish_date: new Date().toISOString(),
           published: false,
         }),
@@ -233,11 +233,11 @@ export default function ChangelogList({ workspaceSlug }: { workspaceSlug: string
             key={changelog.id}>
             {/* Image */}
             <div className='flex h-full min-w-[190px] flex-col items-center justify-center'>
-              {changelog.image ? (
+              {changelog.thumbnail ? (
                 <div className='border-input bg-background hover:bg-accent group relative h-full w-full flex-col items-center justify-center rounded-md border shadow-sm transition-all'>
                   <div className='absolute h-full w-full rounded-md'>
                     <Image
-                      src={changelog.image}
+                      src={changelog.thumbnail}
                       alt='Preview Image'
                       fill
                       sizes='100%'

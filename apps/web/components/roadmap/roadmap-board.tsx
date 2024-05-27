@@ -10,7 +10,7 @@ import { STATUS_OPTIONS } from '@/lib/constants';
 import useFeedback from '@/lib/swr/use-feedback';
 import { FeedbackWithUserProps } from '@/lib/types';
 import { actionFetcher } from '@/lib/utils';
-import AnimatedTabs from '@/components/layout/animated-tabs';
+import AnimatedTabs from '@/components/shared/animated-tabs';
 import FeedbackKanban from './kanban';
 
 type sortingOptions = 'upvotes' | 'created' | 'trending';

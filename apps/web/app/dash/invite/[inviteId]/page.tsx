@@ -1,7 +1,7 @@
 import { notFound } from 'next/navigation';
 import { getWorkspaceInvite } from '@/lib/api/invite';
 import { getCurrentUser } from '@/lib/api/user';
-import WorkspaceInviteForm from '@/components/layout/accept-invite-form';
+import WorkspaceInviteForm from '@/components/workspace/accept-invite-form';
 
 export default async function WorkspaceInvite({ params }: { params: { inviteId: string } }) {
   const { data: invite, error: inviteError } = await getWorkspaceInvite(params.inviteId, 'server');

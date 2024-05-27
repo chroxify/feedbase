@@ -218,7 +218,7 @@ export const withFeedbackAuth = <T>(handler: WithFeedbackAuthHandler<T>) => {
     }
 
     // Get workspace from database
-    const { data: workspace, error } = await supabase.from('workspaces').select().eq('slug', slug).single();
+    const { data: workspace, error } = await supabase.from('workspace').select().eq('slug', slug).single();
 
     // If error is not null, then the workspace does not exist
     if (error) {

@@ -12,7 +12,7 @@ import { Button } from '@feedbase/ui/components/button';
 import { ChevronUp, LayoutGrid, LucideIcon, Plus } from 'lucide-react';
 import { STATUS_OPTIONS } from '@/lib/constants';
 import { FeedbackWithUserProps } from '@/lib/types';
-import { FeedbackSheet } from '../feedback/feedback-sheet';
+import { FeedbackSheet } from '@/components/feedback/dashboard/feedback-sheet';
 import { Draggable } from './draggable';
 import { Droppable } from './droppable';
 
