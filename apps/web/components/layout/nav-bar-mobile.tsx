@@ -78,7 +78,7 @@ export default function NavbarMobile({
       {navTabs.map((tab, index) => (
         // If roadmap, don't link to the page
         <Link
-          href={tab.slug === 'roadmap' ? '#' : `/${currentWorkspace.slug}/${tab.slug}`}
+          href={`/${currentWorkspace.slug}/${tab.slug}`}
           key={tab.slug}
           className='dr h-full w-full p-3 transition-all duration-150 active:scale-[80%]'>
           <Button

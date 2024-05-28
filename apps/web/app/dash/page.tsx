@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 import { getUserWorkspaces } from '@/lib/api/user';
 import Onboarding from '@/components/workspace/onboarding';
+import WorkspaceOverview from '@/components/workspace/workspace-overview';
 
 export default async function Workspaces() {
   const { data: workspaces, error } = await getUserWorkspaces('server');
@@ -14,15 +15,10 @@ export default async function Workspaces() {
     return <div>{error.message}</div>;
   }
 
-  // Redirect to the first workspace
-  if (workspaces.length > 0) {
-    return redirect(`/${workspaces[0].slug}`);
-  }
-
   // TODO: Improve this and make this redirect to an onboarding page if the user has no workspaces
   return (
     <div className='flex h-screen w-full items-center justify-center'>
-      <Onboarding />
+      {workspaces && workspaces.length > 0 ? <WorkspaceOverview workspaces={workspaces} /> : <Onboarding />}
     </div>
   );
 }

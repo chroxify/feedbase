@@ -22,17 +22,23 @@ export default function WorkspaceDropdown({
   className,
 }: {
   workspaces: WorkspaceProps['Row'][];
-  activeWorkspace: WorkspaceProps['Row'] | null;
+  activeWorkspace: WorkspaceProps['Row'] | undefined;
   className?: string;
 }) {
-  const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceProps['Row'] | null>(activeWorkspace);
+  const [selectedWorkspace, setSelectedWorkspace] = useState<WorkspaceProps['Row'] | undefined>(
+    activeWorkspace
+  );
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant='ghost' className={cn('group w-full justify-between rounded-lg p-1', className)}>
-          {/* TODO!! BROKEN CZ .icon missing */}
-          <div className='flex flex-row items-center justify-start gap-2'>
+        <Button
+          variant='ghost'
+          className={cn(
+            'group w-fit min-w-[100px] shrink-0 justify-between rounded-lg pl-1 pr-1.5',
+            className
+          )}>
+          <div className='flex flex-row items-center justify-start gap-1.5'>
             {activeWorkspace?.icon ? (
               <div className='ml-[2px] flex items-center justify-center'>
                 <Image
