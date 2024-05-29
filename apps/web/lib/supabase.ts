@@ -62,7 +62,7 @@ export type Database = {
             foreignKeyName: 'changelogs_project_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
-            referencedRelation: 'workspace_view';
+            referencedRelation: 'workspace_public';
             referencedColumns: ['id'];
           },
         ];
@@ -98,7 +98,7 @@ export type Database = {
             foreignKeyName: 'changelog_subscribers_project_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
-            referencedRelation: 'workspace_view';
+            referencedRelation: 'workspace_public';
             referencedColumns: ['id'];
           },
         ];
@@ -257,7 +257,7 @@ export type Database = {
             foreignKeyName: 'public_feedback_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
-            referencedRelation: 'workspace_view';
+            referencedRelation: 'workspace_public';
             referencedColumns: ['id'];
           },
         ];
@@ -296,7 +296,7 @@ export type Database = {
             foreignKeyName: 'public_boards_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
-            referencedRelation: 'workspace_view';
+            referencedRelation: 'workspace_public';
             referencedColumns: ['id'];
           },
         ];
@@ -335,7 +335,7 @@ export type Database = {
             foreignKeyName: 'feedback_tags_project_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
-            referencedRelation: 'workspace_view';
+            referencedRelation: 'workspace_public';
             referencedColumns: ['id'];
           },
         ];
@@ -440,7 +440,7 @@ export type Database = {
             foreignKeyName: 'notifications_project_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
-            referencedRelation: 'workspace_view';
+            referencedRelation: 'workspace_public';
             referencedColumns: ['id'];
           },
         ];
@@ -572,7 +572,7 @@ export type Database = {
             foreignKeyName: 'project_api_keys_project_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
-            referencedRelation: 'workspace_view';
+            referencedRelation: 'workspace_public';
             referencedColumns: ['id'];
           },
           {
@@ -634,7 +634,7 @@ export type Database = {
             foreignKeyName: 'public_workspace_integration_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: true;
-            referencedRelation: 'workspace_view';
+            referencedRelation: 'workspace_public';
             referencedColumns: ['id'];
           },
         ];
@@ -683,7 +683,7 @@ export type Database = {
             foreignKeyName: 'project_invites_project_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
-            referencedRelation: 'workspace_view';
+            referencedRelation: 'workspace_public';
             referencedColumns: ['id'];
           },
         ];
@@ -726,7 +726,7 @@ export type Database = {
             foreignKeyName: 'project_members_project_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
-            referencedRelation: 'workspace_view';
+            referencedRelation: 'workspace_public';
             referencedColumns: ['id'];
           },
         ];
@@ -771,7 +771,7 @@ export type Database = {
             foreignKeyName: 'public_workspace_module_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: true;
-            referencedRelation: 'workspace_view';
+            referencedRelation: 'workspace_public';
             referencedColumns: ['id'];
           },
         ];
@@ -825,14 +825,14 @@ export type Database = {
             foreignKeyName: 'public_workspace_theme_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: true;
-            referencedRelation: 'workspace_view';
+            referencedRelation: 'workspace_public';
             referencedColumns: ['id'];
           },
         ];
       };
     };
     Views: {
-      workspace_view: {
+      workspace_public: {
         Row: {
           icon: string | null;
           icon_radius: Database['public']['Enums']['icon_radius_type'] | null;

@@ -4,7 +4,7 @@ import { IconObject } from '@/components/shared/icons/icons-animated';
 // DB Types
 export type WorkspaceProps = Database['public']['Tables']['workspace'];
 
-export type PublicWorkspaceProps = Database['public']['Views']['workspace_view'];
+export type PublicWorkspaceProps = Database['public']['Views']['workspace_public'];
 
 export type WorkspaceIntegrationProps = Database['public']['Tables']['workspace_integration'];
 
