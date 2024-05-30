@@ -32,6 +32,14 @@ const nextConfig = {
       },
     ],
   },
+  async rewrites() {
+    return [
+      {
+        source: '/:slug/board/:id',
+        destination: '/:slug?board=:id',
+      },
+    ];
+  },
 };
 
 module.exports = withPWA(nextConfig);

@@ -27,7 +27,7 @@ import { STATUS_OPTIONS } from '@/lib/constants';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
 import useTags from '@/lib/swr/use-tags';
 
-export function FilterCombobox() {
+export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon' }) {
   const [search, setSearch] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [pages, setPages] = React.useState<string[]>([]);
@@ -59,9 +59,10 @@ export function FilterCombobox() {
       <PopoverTrigger asChild>
         <Button
           variant='outline'
-          className='text-secondary-foreground hover:text-foreground flex items-center gap-1'>
+          className='text-secondary-foreground hover:text-foreground flex items-center gap-1'
+          size={size}>
           <Filter className='h-4 w-4' />
-          Filter
+          {size === 'icon' ? null : 'Filter'}
         </Button>
       </PopoverTrigger>
       <PopoverContent className='w-fit min-w-[200px] p-0' side='bottom' align='end'>
