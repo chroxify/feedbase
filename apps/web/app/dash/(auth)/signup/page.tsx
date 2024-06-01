@@ -11,7 +11,7 @@ import {
   CardTitle,
 } from '@feedbase/ui/components/card';
 import { createServerClient } from '@supabase/ssr';
-import { UserAuthForm } from '@/components/user-auth-form';
+import { UserAuthForm } from '@/components/shared/user-auth-form';
 
 export const metadata: Metadata = {
   title: 'Sign up to Feedbase',

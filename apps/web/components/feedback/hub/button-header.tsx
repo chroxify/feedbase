@@ -173,7 +173,7 @@ export default function FeedbackHeader({
               </Button>
             </CreatePostModal>
           ) : (
-            <AuthModal workspaceSlug={workspaceSlug}>
+            <AuthModal>
               <Button variant='default'>
                 Create Post
                 <PlusIcon className='ml-1 h-4 w-4' />

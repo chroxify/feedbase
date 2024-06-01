@@ -136,7 +136,7 @@ export default function Header({
 
         {/* Login */}
         {!workspace.sso_auth_enabled && !user && (
-          <AuthModal workspaceSlug={workspace?.slug || ''}>
+          <AuthModal>
             <Button variant='default'>Login</Button>
           </AuthModal>
         )}

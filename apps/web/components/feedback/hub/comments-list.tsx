@@ -178,7 +178,7 @@ export default function CommentsList({
           <p className='text-foreground/90 text-sm '>Please authenticate to take part in the discussion.</p>
 
           <div className='flex flex-row items-center gap-2'>
-            <AuthModal workspaceSlug={workspaceSlug}>
+            <AuthModal>
               <p className='text-foreground/90 font- hover:text-foreground cursor-pointer text-xs transition-colors'>
                 Login / Sign up →
               </p>
