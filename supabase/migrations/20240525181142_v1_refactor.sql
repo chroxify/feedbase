@@ -547,8 +547,16 @@ CREATE OR REPLACE FUNCTION public.handle_new_user()
  LANGUAGE plpgsql
  SECURITY DEFINER
 AS $function$begin
+  -- Check if the user is anonymous
+  if new.is_anonymous then
+    -- If the user is anonymous, do not insert and return the new row
+    return new;
+  end if;
+
+  -- If the user is not anonymous, proceed with the insertion
   insert into public.profile (id, full_name, avatar_url, email)
   values (new.id, new.raw_user_meta_data->>'full_name', new.raw_user_meta_data->>'avatar_url', new.email);
+
   return new;
 end;$function$
 ;
@@ -571,23 +579,18 @@ BEGIN
     INSERT INTO public.workspace_integration (workspace_id)
     VALUES (NEW.id);
 
-    -- Insert into workspace_module table
-    INSERT INTO public.workspace_module (workspace_id)
-    VALUES (NEW.id);
-
-    -- Insert into workspace_theme table
-    INSERT INTO public.workspace_theme (workspace_id)
-    VALUES (NEW.id);
-
     -- Insert into feedback_board table with default name 'Feature Requests'
     INSERT INTO public.feedback_board (workspace_id, name)
     VALUES (NEW.id, 'Feature Requests')
     RETURNING id INTO new_board_id;
 
-    -- Update the workspace table to set the default_board_id to the new board ID
-    UPDATE public.workspace
-    SET default_board_id = new_board_id
-    WHERE id = NEW.id;
+    -- Insert into workspace_module table
+    INSERT INTO public.workspace_module (workspace_id, feedback_default_board_id)
+    VALUES (NEW.id, new_board_id);
+
+    -- Insert into workspace_theme table
+    INSERT INTO public.workspace_theme (workspace_id)
+    VALUES (NEW.id);
 
     RETURN NEW;
 END;$function$
@@ -1819,6 +1822,16 @@ VALUES('workspaces', 'workspaces', TRUE, FALSE);
 INSERT INTO storage.buckets (id, name, public, avif_autodetection)
 VALUES('avatars', 'avatars', TRUE, FALSE);
 
+create table "public"."feedback_board" (
+    "id" uuid not null default gen_random_uuid(),
+    "name" text not null,
+    "created_at" timestamp with time zone not null default now(),
+    "workspace_id" uuid not null,
+    "private" boolean not null default false
+);
+
+alter table "public"."feedback_board" enable row level security;
+
 create policy "Enable insert for workspace member"
 on "public"."feedback_board"
 as permissive
@@ -1891,16 +1904,6 @@ grant truncate on table "public"."feedback_board" to "service_role";
 
 grant update on table "public"."feedback_board" to "service_role";
 
-create table "public"."feedback_board" (
-    "id" uuid not null default gen_random_uuid(),
-    "name" text not null,
-    "created_at" timestamp with time zone not null default now(),
-    "workspace_id" uuid not null,
-    "private" boolean not null default false
-);
-
-alter table "public"."feedback_board" enable row level security;
-
 alter table "public"."changelog" add column "publish_date" timestamp with time zone;
 
 alter table "public"."feedback" drop column "upvoters";
@@ -1908,3 +1911,60 @@ alter table "public"."feedback" drop column "upvoters";
 alter table "public"."feedback" add column "board_id" uuid not null;
 
 alter table "public"."workspace" add column "default_board_id" uuid;
+
+drop policy "Enable read for workspace member" on "public"."workspace";
+
+drop policy "Enable select access for workspace member" on "public"."workspace_module";
+
+drop policy "Enable select for workspace member" on "public"."workspace_theme";
+
+create policy "Enable read access for all users"
+on "public"."workspace"
+as permissive
+for select
+to public
+using (true);
+
+create policy "Enable read access for all users"
+on "public"."workspace_module"
+as permissive
+for select
+to public
+using (true);
+
+create policy "Enable read access for all users"
+on "public"."workspace_theme"
+as permissive
+for select
+to public
+using (true);
+
+drop view if exists "public"."workspace_view";
+
+alter table "public"."workspace" drop column "default_board_id";
+
+alter table "public"."workspace_module" add column "feedback_default_board_id" uuid not null;
+
+CREATE UNIQUE INDEX feedback_board_pkey ON public.feedback_board USING btree (id);
+
+CREATE UNIQUE INDEX workspace_module_feedback_default_board_id_key ON public.workspace_module USING btree (feedback_default_board_id);
+
+alter table "public"."feedback_board" add constraint "feedback_board_pkey" PRIMARY KEY using index "feedback_board_pkey";
+
+alter table "public"."feedback_board" add constraint "public_feedback_board_workspace_id_fkey" FOREIGN KEY (workspace_id) REFERENCES workspace(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
+
+alter table "public"."feedback_board" validate constraint "public_feedback_board_workspace_id_fkey";
+
+alter table "public"."workspace_module" add constraint "public_workspace_module_feedback_default_board_id_fkey" FOREIGN KEY (feedback_default_board_id) REFERENCES feedback_board(id) ON UPDATE CASCADE ON DELETE CASCADE not valid;
+
+alter table "public"."workspace_module" validate constraint "public_workspace_module_feedback_default_board_id_fkey";
+
+alter table "public"."workspace_module" add constraint "workspace_module_feedback_default_board_id_key" UNIQUE using index "workspace_module_feedback_default_board_id_key";
+
+create or replace view "public"."workspace_view" as  SELECT workspace.id,
+    workspace.name,
+    workspace.slug,
+    workspace.icon,
+    workspace.icon_radius,
+    workspace.opengraph_image
+   FROM workspace;

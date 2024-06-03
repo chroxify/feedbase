@@ -1,120 +1,38 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useParams, usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import { Label } from '@feedbase/ui/components/label';
 import { Separator } from '@feedbase/ui/components/separator';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
 import { cn } from '@feedbase/ui/lib/utils';
-import {
-  AlertCircle,
-  CheckCircle2,
-  ChevronUp,
-  CircleDot,
-  CircleDotDashed,
-  Info,
-  XCircle,
-} from 'lucide-react';
-import useSWR from 'swr';
+import { CheckCircle2, ChevronUp, CircleDot, CircleDotDashed, Info, XCircle } from 'lucide-react';
 import { STATUS_OPTIONS } from '@/lib/constants';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
-import useTags from '@/lib/swr/use-tags';
+import useFeedback from '@/lib/swr/use-feedback';
 import { FeedbackWithUserProps } from '@/lib/types';
-import { fetcher } from '@/lib/utils';
 import AnimatedTabs from '@/components/shared/animated-tabs';
 import FetchError from '@/components/shared/fetch-error';
-import FeedbackFilterHeader, { FeedbackFilterProps } from '../common/feedback-filters';
+import FeedbackFilterHeader, { FilterFeedback } from '../common/feedback-filters';
 import { FeedbackSheet } from './feedback-sheet';
 
 type DateSortedFeedbackProps = Record<string, FeedbackWithUserProps[]>;
 
 export default function FeedbackList() {
-  const { slug: workspaceSlug } = useParams<{ slug: string }>();
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
   const createQueryParams = useQueryParamRouter(router, pathname, searchParams);
   const [tab, setTab] = useState('All');
-  const [feedbackFilters, setFeedbackFilters] = useState<FeedbackFilterProps>();
-  const {
-    data: feedbackList,
-    error,
-    isLoading,
-    mutate,
-  } = useSWR<FeedbackWithUserProps[]>(`/api/v1/workspaces/${workspaceSlug}/feedback`, fetcher);
-  const { tags: workspaceTags } = useTags();
-
-  // Query params
-  const tags = searchParams.get('tags') || '';
-  const status = searchParams.get('status') || '';
-  const search = searchParams.get('search') || '';
+  const { feedback: feedbackList, error, loading: isLoading, mutate } = useFeedback();
 
   // Filter feedback by query params if they exist
   const filteredFeedback =
-    feedbackList
-      ?.filter((feedback) => {
-        // Filter by tab
-        if (tab !== 'All' && feedback.status?.toLowerCase() !== tab.toLowerCase()) return false;
-
-        // Filter by search
-        if (search) {
-          // Include feedback if it doesn't have '!' in front of the search
-          if (!search.startsWith('!')) {
-            if (!feedback.title.toLowerCase().includes(search.toLowerCase())) {
-              return false;
-            }
-          } else if (feedback.title.toLowerCase().includes(search.slice(1).toLowerCase())) {
-            return false;
-          }
-        }
-
-        // Filter by tag/tags, if tags are multiple then they are separated by comma
-        if (tags) {
-          const includeTags = tags.split(',').filter((tag) => !tag.startsWith('!'));
-          const excludeTags = tags
-            .split(',')
-            .filter((tag) => tag.startsWith('!'))
-            .map((tag) => tag.slice(1));
-
-          if (
-            includeTags.length > 0 &&
-            !includeTags.some((tag) => feedback.tags?.some((t) => t.name.toLowerCase() === tag))
-          ) {
-            return false;
-          }
-
-          if (
-            excludeTags.length > 0 &&
-            excludeTags.some((tag) => feedback.tags?.some((t) => t.name.toLowerCase() === tag))
-          ) {
-            return false;
-          }
-        }
-
-        // Filter by status
-        if (status) {
-          // Include feedback if it doesn't have '!' in front of the status
-          if (
-            status.split(',').some((s) => !s.startsWith('!')) &&
-            !status.split(',').some((s) => feedback.status?.toLowerCase() === s)
-          ) {
-            return false;
-          }
-
-          // Exclude feedback if it has '!' in front of the status
-          if (
-            status.split(',').some((s) => s.startsWith('!')) &&
-            status.split(',').some((s) => feedback.status?.toLowerCase() === s.slice(1))
-          ) {
-            return false;
-          }
-        }
-
-        return true;
-      })
-      .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()) || [];
+    FilterFeedback(feedbackList || [], tab).sort(
+      (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+    ) || [];
 
   // Categorize feedback by date - Today, Yesterday, Last 7 days, Last 30 days, Older
   const dateSortedFeedback: DateSortedFeedbackProps = filteredFeedback.reduce<DateSortedFeedbackProps>(
@@ -150,55 +68,6 @@ export default function FeedbackList() {
     const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
     return `${day} ${month}`;
   }
-
-  // Handle filter changes
-  useEffect(() => {
-    // Mutate data with complete revalidation
-    mutate(undefined, { revalidate: true });
-
-    // Set feedback filters
-    setFeedbackFilters({
-      tags: {
-        i:
-          workspaceTags?.filter((tag) => {
-            return tags.split(',').includes(tag.name.toLowerCase());
-          }) ?? [],
-        e:
-          workspaceTags?.filter((tag) => {
-            return tags.split(',').includes(`!${tag.name.toLowerCase()}`);
-          }) ?? [],
-      },
-      status: {
-        i:
-          status
-            .split(',')
-            .map((s) => {
-              if (!s.startsWith('!')) {
-                return STATUS_OPTIONS.find(
-                  (option) =>
-                    option.label.toLowerCase() === s.replace('!', '').replace('+', ' ').toLowerCase()
-                );
-              }
-              return null;
-            })
-            .filter(Boolean) ?? [],
-        e:
-          status
-            .split(',')
-            .map((s) => {
-              if (s.startsWith('!')) {
-                return STATUS_OPTIONS.find(
-                  (option) =>
-                    option.label.toLowerCase() === s.replace('!', '').replace('+', ' ').toLowerCase()
-                );
-              }
-              return null;
-            })
-            .filter(Boolean) ?? [],
-      },
-      search,
-    } as FeedbackFilterProps);
-  }, [search, tags, status, workspaceTags, mutate]);
 
   return (
     <>
@@ -236,7 +105,7 @@ export default function FeedbackList() {
       <Separator />
 
       {/* Filters */}
-      {feedbackFilters ? <FeedbackFilterHeader filters={feedbackFilters} /> : null}
+      <FeedbackFilterHeader mutate={mutate} className='border-b px-5' />
 
       <div className='flex h-full w-full flex-col items-center justify-start gap-4 overflow-y-auto p-5'>
         {/* eslint-disable react/no-array-index-key */}

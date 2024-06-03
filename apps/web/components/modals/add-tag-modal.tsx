@@ -66,7 +66,7 @@ export function CreateTagModal({
   const router = useRouter();
   const { slug } = useParams<{ slug: string }>();
 
-  const { trigger } = useSWRMutation(`/api/v1/workspaces/${slug}/feedback/tags`, actionFetcher, {
+  const { trigger: createTag } = useSWRMutation(`/api/v1/workspaces/${slug}/feedback/tags`, actionFetcher, {
     onSuccess: () => {
       toast.success('Tag created successfully');
       router.push(pathname);
@@ -86,7 +86,7 @@ export function CreateTagModal({
             <CommandItem
               key={color.name.toLowerCase()}
               onSelect={() => {
-                trigger({ name: tagName, color: color.hex });
+                createTag({ name: tagName, color: color.hex });
                 setOpen(false);
               }}
               className='flex h-10 flex-row items-center gap-1 rounded-md  hover:cursor-pointer'>

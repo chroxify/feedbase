@@ -37,7 +37,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
       title: title || '',
       content: content || '',
       status: status?.toLowerCase() as FeedbackWithUserInputProps['status'],
-      board_id: boardId,
+      board_id: boardId || '',
       workspace_id: context.params.slug,
       user_id: 'dummy-id',
       tags: tags || [],

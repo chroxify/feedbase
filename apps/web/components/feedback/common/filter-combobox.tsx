@@ -136,6 +136,9 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
                       // Set statuses
                       setSelectedStatuses(newStatuses);
 
+                      // Close popover
+                      setOpen(false);
+
                       // Apply statuses
                       createQueryParams('status', newStatuses.join(','));
                     }}>
@@ -173,6 +176,9 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
 
                       // Set tags
                       setSelectedTags(newTags);
+
+                      // Close popover
+                      setOpen(false);
 
                       // Apply tags
                       createQueryParams('tags', newTags.join(','));

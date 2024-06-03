@@ -13,7 +13,7 @@ import {
 } from '@feedbase/ui/components/dropdown-menu';
 import { cn } from '@feedbase/ui/lib/utils';
 import { satoshi } from '@feedbase/ui/styles/fonts';
-import { ChevronDoubleUpIcon, ChevronUpDownIcon } from '@heroicons/react/24/solid';
+import { ChevronUpDownIcon } from '@heroicons/react/24/solid';
 import { ProfileProps, WorkspaceProps, WorkspaceThemeProps } from '@/lib/types';
 import { hslToHex } from '@/lib/utils';
 import AuthModal from '../modals/login-signup-modal';
@@ -127,7 +127,7 @@ export default function Header({
       {/* User, Login */}
       <div className='flex items-center gap-4'>
         {/* User */}
-        {user ? (
+        {user && !user.is_anonymous ? (
           <UserDropdown
             user={user}
             iconColor={workspaceTheme.theme === 'custom' ? hslToHex(workspaceTheme.foreground) : undefined}
@@ -135,14 +135,14 @@ export default function Header({
         ) : null}
 
         {/* Login */}
-        {!workspace.sso_auth_enabled && !user && (
+        {!workspace.sso_auth_enabled && (!user || user?.is_anonymous) ? (
           <AuthModal>
             <Button variant='default'>Login</Button>
           </AuthModal>
-        )}
+        ) : null}
 
         {/* SSO */}
-        {workspace.sso_auth_enabled && !user ? (
+        {workspace.sso_auth_enabled && (!user || user?.is_anonymous) ? (
           <Link href={workspace.sso_auth_url || ''}>
             <Button variant='default'>Login with {workspace?.name}</Button>
           </Link>

@@ -1,16 +1,13 @@
 import { Metadata } from 'next';
 import { headers } from 'next/headers';
-import Link from 'next/link';
-import { notFound, useRouter } from 'next/navigation';
-import { Button } from '@feedbase/ui/components/button';
+import { notFound } from 'next/navigation';
 import { Separator } from '@feedbase/ui/components/separator';
-import { Skeleton } from '@feedbase/ui/components/skeleton';
-import { cn } from '@feedbase/ui/lib/utils';
 import { getWorkspaceBoards } from '@/lib/api/boards';
-import { getPublicWorkspaceFeedback } from '@/lib/api/public';
+import { getWorkspaceModuleConfig } from '@/lib/api/module';
 import { getCurrentUser } from '@/lib/api/user';
 import { getWorkspaceBySlug } from '@/lib/api/workspace';
 import AnalyticsWrapper from '@/components/analytics/analytics-wrapper';
+import FeedbackBoardList from '@/components/feedback/hub/board-list';
 import FeedbackHeader from '@/components/feedback/hub/button-header';
 import FeedbackList from '@/components/feedback/hub/feedback-list-hub';
 
@@ -41,12 +38,6 @@ export default async function Feedback({ params }: Props) {
   // Get current user
   const { data: user } = await getCurrentUser('server');
 
-  const { data: feedback, error } = await getPublicWorkspaceFeedback(params.workspace, 'server', true, false);
-
-  if (error) {
-    return <div>{error.message}</div>;
-  }
-
   // Fetch feedback boards
   const { data: boards, error: boardError } = await getWorkspaceBoards(
     params.workspace,
@@ -59,8 +50,20 @@ export default async function Feedback({ params }: Props) {
     return <div>{boardError.message}</div>;
   }
 
-  // Search for the board mathing the pathname by /board/board-name format
-  const currentBoard = boards.find(
+  // Get workspace module config
+  const { data: moduleConfig, error: moduleError } = await getWorkspaceModuleConfig(
+    params.workspace,
+    'server',
+    true,
+    false
+  );
+
+  if (moduleError) {
+    return <div>{moduleError.message}</div>;
+  }
+
+  // Search for the initial board mathing the pathname by /board/board-name format
+  const initialBoard = boards.find(
     (board) => pathname?.includes(`/board/${board.name.toLowerCase().replace(/\s+/g, '-')}`)
   );
 
@@ -82,43 +85,16 @@ export default async function Feedback({ params }: Props) {
       <div className='flex w-full gap-8 px-5 sm:px-8 lg:px-14'>
         {/* Filter Header, Feedback List */}
         <div className='flex h-full w-full flex-col items-center justify-center'>
-          <FeedbackHeader isLoggedIn={!!user} workspaceSlug={params.workspace} />
+          <FeedbackHeader user={user} moduleConfig={moduleConfig} />
 
           {/* Main */}
           <div className='flex h-full w-full flex-col justify-between'>
-            <FeedbackList feedback={feedback} workspaceSlug={params.workspace} isLoggedIn={!!user} />
+            <FeedbackList workspaceSlug={params.workspace} feedbackBoards={boards} />
           </div>
         </div>
 
         {/* Boards */}
-        <div className='-mt-1 flex h-full w-fit min-w-[250px] flex-col items-start justify-start gap-2'>
-          <span className='text-sm'>Boards</span>
-          <div className='flex h-full w-full flex-col gap-1.5'>
-            <Link href="/" passHref>
-              <Button
-                key='all'
-                variant={currentBoard ? 'ghost' : 'outline'}
-                className={cn(
-                  'text-secondary-foreground w-full justify-start text-sm font-normal',
-                  !currentBoard && 'text-foreground'
-                )}>
-                View All Boards
-              </Button>
-            </Link>
-            {boards.map((board) => (
-              <Link href={`/board/${board.name.toLowerCase().replace(/\s+/g, '-')}`} passHref key={board.id}>
-                <Button
-                  variant={currentBoard?.id === board.id ? 'outline' : 'ghost'}
-                  className={cn(
-                    'text-secondary-foreground w-full justify-start text-sm font-normal',
-                    currentBoard?.id === board.id && 'text-foreground'
-                  )}>
-                  {board.name}
-                </Button>
-              </Link>
-            ))}
-          </div>
-        </div>
+        <FeedbackBoardList boards={boards} initialBoard={initialBoard} />
       </div>
     </AnalyticsWrapper>
   );

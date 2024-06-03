@@ -36,7 +36,7 @@ const nextConfig = {
     return [
       {
         source: '/:slug/board/:id',
-        destination: '/:slug?board=:id',
+        destination: '/:slug',
       },
     ];
   },

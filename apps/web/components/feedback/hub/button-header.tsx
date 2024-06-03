@@ -10,20 +10,20 @@ import {
   DropdownMenuTrigger,
 } from '@feedbase/ui/components/dropdown-menu';
 import { Input } from '@feedbase/ui/components/input';
-import { cn } from '@feedbase/ui/lib/utils';
 import { ChevronUpDownIcon } from '@heroicons/react/24/solid';
-import { Clock3, Flame, Plus, PlusIcon, Search, Star, ThumbsUp } from 'lucide-react';
+import { Clock3, Flame, PlusIcon, Search, ThumbsUp } from 'lucide-react';
 import useCreateQueryString from '@/lib/hooks/use-query-router';
+import { ProfileProps, WorkspaceModuleProps } from '@/lib/types';
 import CreatePostModal from '../../modals/create-post-modal';
 import AuthModal from '../../modals/login-signup-modal';
 import { FilterCombobox } from '../common/filter-combobox';
 
 export default function FeedbackHeader({
-  isLoggedIn,
-  workspaceSlug,
+  user,
+  moduleConfig,
 }: {
-  isLoggedIn: boolean;
-  workspaceSlug: string;
+  user: ProfileProps['Row'] | null;
+  moduleConfig: WorkspaceModuleProps['Row'];
 }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -38,54 +38,7 @@ export default function FeedbackHeader({
   return (
     <>
       {/* Header */}
-      <div className='flex w-full flex-col items-start justify-between gap-2 md:h-12 md:flex-row'>
-        {/* Sort By Buttons */}
-        {/* <div className='flex w-full flex-row items-center justify-start gap-2 md:w-fit'>
-          <Button
-            variant='outline'
-            className={cn(
-              'text-foreground/70 hover:text-foreground/80 border text-sm  transition-all duration-200',
-              currentSort === '' && 'bg-secondary ring-ring/80 text-foreground/80 ring-1'
-            )}
-            onClick={() => {
-              setCurrentSort('');
-              createQueryString('sort', '');
-            }}
-            size='sm'>
-            <Clock3 className='mr-1.5 h-4 w-4' />
-            New
-          </Button>
-          <Button
-            variant='outline'
-            className={cn(
-              'text-foreground/70 hover:text-foreground/80 border text-sm  transition-all duration-200',
-              currentSort === 'trending' && 'bg-secondary ring-ring/80 text-foreground/80 ring-1'
-            )}
-            onClick={() => {
-              setCurrentSort('trending');
-              createQueryString('sort', 'trending');
-            }}
-            size='sm'>
-            <Flame className='mr-1 h-4 w-4' />
-            Trending
-          </Button>
-
-          <Button
-            variant='outline'
-            className={cn(
-              'text-foreground/70 hover:text-foreground/80 border text-sm  transition-all duration-200',
-              currentSort === 'upvotes' && 'bg-secondary ring-ring/80 text-foreground/80 ring-1'
-            )}
-            onClick={() => {
-              setCurrentSort('upvotes');
-              createQueryString('sort', 'upvotes');
-            }}
-            size='sm'>
-            <Star className='mr-1 h-4 w-4' />
-            Top
-          </Button>
-        </div> */}
-
+      <div className='flex w-full flex-col items-start justify-between gap-2 md:flex-row'>
         {/* Sort Dropdown */}
         <div className='flex gap-1.5'>
           <DropdownMenu>
@@ -166,8 +119,8 @@ export default function FeedbackHeader({
             <Search className='text-muted-foreground absolute left-3 h-4 w-4' />
           </div>
 
-          {isLoggedIn ? (
-            <CreatePostModal workspaceSlug={workspaceSlug}>
+          {(user && !user.is_anonymous) || moduleConfig?.feedback_anon_posting ? (
+            <CreatePostModal>
               <Button variant='default' className='font-base shrink-0 text-sm'>
                 Create Post
               </Button>

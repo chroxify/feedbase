@@ -31,7 +31,9 @@ export default function AuthModal({ children, disabled }: { children: React.Reac
             <EmailSignUp label='Register with Email' />
           )}
           <Button
-            onClick={() => { setAuthType(authType === 'sign-in' ? 'sign-up' : 'sign-in'); }}
+            onClick={() => {
+              setAuthType(authType === 'sign-in' ? 'sign-up' : 'sign-in');
+            }}
             variant='outline'
             className='-mt-3'>
             {authType === 'sign-in' ? 'Register with Email' : 'Sign in with Email'}

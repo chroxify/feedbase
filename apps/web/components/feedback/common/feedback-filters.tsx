@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -9,34 +9,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@feedbase/ui/components/dropdown-menu';
+import { cn } from '@feedbase/ui/lib/utils';
 import { CircleDashed, CircleX, LucideIcon, Plus, Tag, Tags, TextCursorInputIcon, X } from 'lucide-react';
+import { KeyedMutator } from 'swr';
+import { useActiveFilters } from '@/lib/hooks/use-active-filters';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
-import { FeedbackTagProps } from '@/lib/types';
-
-// Feedback Filter Props
-export interface FeedbackFilterProps {
-  tags: {
-    i: FeedbackTagProps['Row'][];
-    e: FeedbackTagProps['Row'][];
-  };
-  status: {
-    i: { label: string; icon: LucideIcon }[];
-    e: { label: string; icon: LucideIcon }[];
-  };
-  search: string;
-  board: {
-    i: string[];
-    e: string[];
-  };
-  created_date: {
-    b: string;
-    a: string;
-  };
-  eta: {
-    b: string;
-    a: string;
-  };
-}
+import useTags from '@/lib/swr/use-tags';
+import { FeedbackFilterProps, FeedbackWithUserProps } from '@/lib/types';
 
 // Filter Action Dropdown Option Props
 interface FilterActionDropdownOptions {
@@ -105,43 +84,132 @@ function FeedbackFilter({
   );
 }
 
-export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFilterProps }) {
+// Filter Feedback Helper Function
+export function FilterFeedback(feedbackList: FeedbackWithUserProps[], tab?: string): FeedbackWithUserProps[] {
+  const { tags } = useTags();
+  const feedbackFilters = useActiveFilters(useSearchParams(), tags);
+
+  return feedbackList.filter((feedback) => {
+    // Filter by tab
+    if (tab && tab !== 'All' && feedback.status?.toLowerCase() !== tab.toLowerCase()) return false;
+
+    // Filter by search
+    if (feedbackFilters.search) {
+      // Include feedback if it doesn't have '!' in front of the search
+      if (!feedbackFilters.search.startsWith('!')) {
+        if (!feedback.title.toLowerCase().includes(feedbackFilters.search.toLowerCase())) {
+          return false;
+        }
+      } else if (feedback.title.toLowerCase().includes(feedbackFilters.search.slice(1).toLowerCase())) {
+        return false;
+      }
+    }
+
+    // Filter by tag/tags
+    if (feedbackFilters.tags.i.length > 0 || feedbackFilters.tags.e.length > 0) {
+      if (
+        feedbackFilters.tags.i.length > 0 &&
+        !feedbackFilters.tags.i.some(
+          (tag) => feedback.tags?.some((t) => t.name.toLowerCase() === tag.name.toLowerCase())
+        )
+      ) {
+        return false;
+      }
+
+      if (
+        feedbackFilters.tags.e.length > 0 &&
+        feedbackFilters.tags.e.some(
+          (tag) => feedback.tags?.some((t) => t.name.toLowerCase() === tag.name.toLowerCase())
+        )
+      ) {
+        return false;
+      }
+    }
+
+    // Filter by status
+    if (feedbackFilters.status.i.length > 0 || feedbackFilters.status.e.length > 0) {
+      // Include feedback if it doesn't have '!' in front of the status
+      if (
+        feedbackFilters.status.i.length > 0 &&
+        !feedbackFilters.status.i.some((s) => feedback.status?.toLowerCase() === s.label.toLowerCase())
+      ) {
+        return false;
+      }
+
+      // Exclude feedback if it has '!' in front of the status
+      if (
+        feedbackFilters.status.e.length > 0 &&
+        feedbackFilters.status.e.some((s) => feedback.status?.toLowerCase() === s.label.toLowerCase())
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  });
+}
+
+export default function FeedbackFilterHeader({
+  mutate,
+  className,
+}: {
+  mutate: KeyedMutator<FeedbackWithUserProps[]>;
+  className?: string;
+}) {
   const searchParams = useSearchParams();
   const createQueryParams = useQueryParamRouter(useRouter(), usePathname(), searchParams);
+  const [feedbackFilters, setFeedbackFilters] = useState<FeedbackFilterProps | null>(null);
+  const { tags: workspaceTags } = useTags();
+  const activeFilters = useActiveFilters(searchParams, workspaceTags);
+
+  // Handle filter changes
+  useEffect(() => {
+    // Mutate data with complete revalidation
+    mutate(undefined, { revalidate: true });
+
+    // Set feedback filters
+    setFeedbackFilters(activeFilters);
+  }, [searchParams, mutate]);
+
+  if (!feedbackFilters) return null;
 
   return (
-    Object.values(filters).some((subObject) =>
+    Object.values(feedbackFilters).some((subObject) =>
       Object.values(subObject).some(
         (subValue) =>
           subValue !== null && subValue !== undefined && !(Array.isArray(subValue) && subValue.length === 0)
       )
     ) && (
-      <div className='flex h-fit w-full flex-wrap items-center justify-start gap-2.5 border-b px-5 py-3 text-xs'>
+      <div
+        className={cn(
+          'flex h-fit w-full flex-wrap items-center justify-start gap-2.5 py-3 text-xs',
+          className
+        )}>
         {/* Search */}
-        {filters.search ? (
+        {feedbackFilters.search ? (
           <FeedbackFilter
             filter={{ icon: TextCursorInputIcon, label: 'Search' }}
             action={{
-              label: filters.search.startsWith('!') ? 'excludes' : 'includes',
+              label: feedbackFilters.search.startsWith('!') ? 'excludes' : 'includes',
               options: [
                 {
                   icon: Plus,
                   label: 'Include',
                   onSelect: () => {
-                    createQueryParams('search', filters.search.replaceAll('!', ''));
+                    createQueryParams('search', feedbackFilters.search.replaceAll('!', ''));
                   },
                 },
                 {
                   icon: CircleX,
                   label: 'Do not include',
                   onSelect: () => {
-                    createQueryParams('search', `!${filters.search.replaceAll('!', '')}`);
+                    createQueryParams('search', `!${feedbackFilters.search.replaceAll('!', '')}`);
                   },
                 },
               ],
             }}
             appliedFilters={
-              <span className='text-foreground px-2'>{filters.search.replaceAll('!', '')}</span>
+              <span className='text-foreground px-2'>{feedbackFilters.search.replaceAll('!', '')}</span>
             }
             onClear={() => {
               createQueryParams('search', '');
@@ -150,11 +218,11 @@ export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFil
         ) : null}
 
         {/* Included Tags */}
-        {filters.tags && filters.tags.i.length > 0 ? (
+        {feedbackFilters.tags && feedbackFilters.tags.i.length > 0 ? (
           <FeedbackFilter
-            filter={{ icon: filters.tags.i.length > 1 ? Tags : Tag, label: 'Tags' }}
+            filter={{ icon: feedbackFilters.tags.i.length > 1 ? Tags : Tag, label: 'Tags' }}
             action={{
-              label: filters.tags.i.length > 1 ? 'includes all of' : 'includes',
+              label: feedbackFilters.tags.i.length > 1 ? 'includes all of' : 'includes',
               options: [
                 {
                   icon: Plus,
@@ -168,8 +236,8 @@ export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFil
                     createQueryParams(
                       'tags',
                       [
-                        ...filters.tags.e.map((tag) => `!${tag.name}`),
-                        ...filters.tags.i.map((tag) => `!${tag.name}`),
+                        ...feedbackFilters.tags.e.map((tag) => `!${tag.name}`),
+                        ...feedbackFilters.tags.i.map((tag) => `!${tag.name}`),
                       ].join(',')
                     );
                   },
@@ -181,41 +249,41 @@ export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFil
                 <div className='flex flex-row items-center justify-center gap-1.5'>
                   {/* Overlapping colors */}
                   <div className='flex flex-row gap-1 pl-2'>
-                    {filters.tags.i.length > 0 &&
-                      filters.tags.i.map((tag, index) => (
+                    {feedbackFilters.tags.i.length > 0 &&
+                      feedbackFilters.tags.i.map((tag, index) => (
                         <div
                           key={tag?.name ?? index}
                           className='border-root -ml-2 h-2.5 w-2.5 rounded-full border-[1px]'
                           style={{
                             backgroundColor: tag?.color,
-                            zIndex: filters.tags.i.length - index,
+                            zIndex: feedbackFilters.tags.i.length - index,
                           }}
                         />
                       ))}
                   </div>
 
                   {/* Tag name / count */}
-                  {filters.tags.i.length > 1 ? (
-                    <span>{filters.tags.i.length} Tags</span>
+                  {feedbackFilters.tags.i.length > 1 ? (
+                    <span>{feedbackFilters.tags.i.length} Tags</span>
                   ) : (
-                    <span>{filters.tags.i[0]?.name}</span>
+                    <span>{feedbackFilters.tags.i[0]?.name}</span>
                   )}
                 </div>
               </span>
             }
             onClear={() => {
               // Clear all included tags
-              createQueryParams('tags', filters.tags.e.map((tag) => `!${tag.name}`).join(','));
+              createQueryParams('tags', feedbackFilters.tags.e.map((tag) => `!${tag.name}`).join(','));
             }}
           />
         ) : null}
 
         {/* Excluded Tags */}
-        {filters.tags && filters.tags.e.length > 0 ? (
+        {feedbackFilters.tags && feedbackFilters.tags.e.length > 0 ? (
           <FeedbackFilter
-            filter={{ icon: filters.tags.e.length > 1 ? Tags : Tag, label: 'Tags' }}
+            filter={{ icon: feedbackFilters.tags.e.length > 1 ? Tags : Tag, label: 'Tags' }}
             action={{
-              label: filters.tags.e.length > 1 ? 'excludes all of' : 'excludes',
+              label: feedbackFilters.tags.e.length > 1 ? 'excludes all of' : 'excludes',
               options: [
                 {
                   icon: Plus,
@@ -225,8 +293,8 @@ export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFil
                     createQueryParams(
                       'tags',
                       [
-                        ...filters.tags.i.map((tag) => tag.name),
-                        ...filters.tags.e.map((tag) => `${tag.name}`),
+                        ...feedbackFilters.tags.i.map((tag) => tag.name),
+                        ...feedbackFilters.tags.e.map((tag) => `${tag.name}`),
                       ].join(',')
                     );
                   },
@@ -239,53 +307,53 @@ export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFil
                 <div className='flex flex-row items-center justify-center gap-1.5'>
                   {/* Overlapping colors */}
                   <div className='flex flex-row gap-1 pl-2'>
-                    {filters.tags.e.length > 0 &&
-                      filters.tags.e.map((tag, index) => (
+                    {feedbackFilters.tags.e.length > 0 &&
+                      feedbackFilters.tags.e.map((tag, index) => (
                         <div
                           key={tag?.name ?? index}
                           className='border-root -ml-2 h-2.5 w-2.5 rounded-full border-[1px]'
                           style={{
                             backgroundColor: tag?.color,
-                            zIndex: filters.tags.e.length - index,
+                            zIndex: feedbackFilters.tags.e.length - index,
                           }}
                         />
                       ))}
                   </div>
 
                   {/* Tag name / count */}
-                  {filters.tags.e.length > 1 ? (
-                    <span>{filters.tags.e.length} Tags</span>
+                  {feedbackFilters.tags.e.length > 1 ? (
+                    <span>{feedbackFilters.tags.e.length} Tags</span>
                   ) : (
-                    <span>{filters.tags.e[0]?.name}</span>
+                    <span>{feedbackFilters.tags.e[0]?.name}</span>
                   )}
                 </div>
               </span>
             }
             onClear={() => {
               // Clear all excluded tags
-              createQueryParams('tags', filters.tags.i.map((tag) => tag.name).join(','));
+              createQueryParams('tags', feedbackFilters.tags.i.map((tag) => tag.name).join(','));
             }}
           />
         ) : null}
 
         {/* Included Statuses */}
-        {filters.status && filters.status.i.length > 0 ? (
+        {feedbackFilters.status && feedbackFilters.status.i.length > 0 ? (
           <FeedbackFilter
             filter={{ icon: CircleDashed, label: 'Status' }}
             action={{
-              label: filters.status.i.length > 1 ? 'includes all of' : 'includes',
+              label: feedbackFilters.status.i.length > 1 ? 'is any of' : 'is',
               options: [
-                { icon: Plus, label: 'Include' },
+                { icon: Plus, label: 'Is' },
                 {
                   icon: CircleX,
-                  label: 'Do not include',
+                  label: 'Is not',
                   onSelect: () => {
                     // Change all currently included statuses to excluded
                     createQueryParams(
                       'status',
                       [
-                        ...filters.status.e.map((status) => `!${status.label}`),
-                        ...filters.status.i.map((status) => `!${status.label}`),
+                        ...feedbackFilters.status.e.map((status) => `!${status.label}`),
+                        ...feedbackFilters.status.i.map((status) => `!${status.label}`),
                       ].join(',')
                     );
                   },
@@ -297,54 +365,57 @@ export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFil
                 <div className='flex flex-row items-center justify-center gap-1.5'>
                   {/* Overlapping icons */}
                   <div className='flex flex-row gap-1 pl-3'>
-                    {filters.status.i.length > 0 &&
-                      filters.status.i.map((s, index) => (
+                    {feedbackFilters.status.i.length > 0 &&
+                      feedbackFilters.status.i.map((s, index) => (
                         <s.icon
                           key={s.label.toLowerCase()}
                           className='bg-root -ml-3 h-3.5 w-3.5 rounded-full'
-                          style={{ zIndex: filters.status.i.length - index }}
+                          style={{ zIndex: feedbackFilters.status.i.length - index }}
                         />
                       ))}
                   </div>
 
                   {/* Labels */}
-                  {filters.status.i.length > 1 ? (
-                    <span>{filters.status.i.length} Statuses</span>
+                  {feedbackFilters.status.i.length > 1 ? (
+                    <span>{feedbackFilters.status.i.length} Statuses</span>
                   ) : (
-                    <span>{filters.status.i[0].label}</span>
+                    <span>{feedbackFilters.status.i[0].label}</span>
                   )}
                 </div>
               </span>
             }
             onClear={() => {
               // Clear all included statuses
-              createQueryParams('status', filters.status.e.map((status) => `!${status.label}`).join(','));
+              createQueryParams(
+                'status',
+                feedbackFilters.status.e.map((status) => `!${status.label}`).join(',')
+              );
             }}
           />
         ) : null}
 
         {/* Excluded Statuses */}
-        {filters.status && filters.status.e.length > 0 ? (
+        {feedbackFilters.status && feedbackFilters.status.e.length > 0 ? (
           <FeedbackFilter
             filter={{ icon: CircleDashed, label: 'Status' }}
             action={{
-              label: filters.status.e.length > 1 ? 'excludes all of' : 'excludes',
+              label: 'is not',
               options: [
                 {
                   icon: Plus,
-                  label: 'Include',
+                  label: 'Is',
                   onSelect: () => {
                     // Change all currently excluded statuses to included
                     createQueryParams(
                       'status',
                       [
-                        ...filters.status.i.map((status) => status.label),
-                        ...filters.status.e.map((status) => `${status.label}`),
+                        ...feedbackFilters.status.i.map((status) => status.label),
+                        ...feedbackFilters.status.e.map((status) => `${status.label}`),
                       ].join(',')
                     );
                   },
                 },
-                { icon: CircleX, label: 'Do not include' },
+                { icon: CircleX, label: 'Is not' },
               ],
             }}
             appliedFilters={
@@ -352,28 +423,28 @@ export default function FeedbackFilterHeader({ filters }: { filters: FeedbackFil
                 <div className='flex flex-row items-center justify-center gap-1.5'>
                   {/* Overlapping icons */}
                   <div className='flex flex-row gap-1 pl-3'>
-                    {filters.status.e.length > 0 &&
-                      filters.status.e.map((s, index) => (
+                    {feedbackFilters.status.e.length > 0 &&
+                      feedbackFilters.status.e.map((s, index) => (
                         <s.icon
                           key={s.label.toLowerCase()}
                           className='bg-root -ml-3 h-3.5 w-3.5 rounded-full'
-                          style={{ zIndex: filters.status.e.length - index }}
+                          style={{ zIndex: feedbackFilters.status.e.length - index }}
                         />
                       ))}
                   </div>
 
                   {/* Label */}
-                  {filters.status.e.length > 1 ? (
-                    <span>{filters.status.e.length} Statuses</span>
+                  {feedbackFilters.status.e.length > 1 ? (
+                    <span>{feedbackFilters.status.e.length} Statuses</span>
                   ) : (
-                    <span>{filters.status.e[0].label}</span>
+                    <span>{feedbackFilters.status.e[0].label}</span>
                   )}
                 </div>
               </span>
             }
             onClear={() => {
               // Clear all excluded statuses
-              createQueryParams('status', filters.status.i.map((status) => status.label).join(','));
+              createQueryParams('status', feedbackFilters.status.i.map((status) => status.label).join(','));
             }}
           />
         ) : null}
