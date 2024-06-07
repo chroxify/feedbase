@@ -25,6 +25,7 @@ import {
 } from 'lucide-react';
 import { STATUS_OPTIONS } from '@/lib/constants';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
+import useFeedbackBoards from '@/lib/swr/use-boards';
 import useTags from '@/lib/swr/use-tags';
 
 export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon' }) {
@@ -33,9 +34,11 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
   const [pages, setPages] = React.useState<string[]>([]);
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [selectedStatuses, setSelectedStatuses] = React.useState<string[]>([]);
+  const [selectedBoards, setSelectedBoards] = React.useState<string[]>([]);
   const searchParams = useSearchParams();
   const createQueryParams = useQueryParamRouter(useRouter(), usePathname(), searchParams);
   const { tags } = useTags();
+  const { feedbackBoards } = useFeedbackBoards();
   const page = pages[pages.length - 1];
 
   React.useEffect(() => {
@@ -44,6 +47,9 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
 
     // Preset statuses
     setSelectedStatuses(searchParams.get('status')?.split(',') || []);
+
+    // Preset boards
+    setSelectedBoards(searchParams.get('board')?.split(',') || []);
   }, [searchParams]);
 
   return (
@@ -88,7 +94,11 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
                   <CircleDashed className='text-secondary-foreground group-aria-selected:text-foreground h-4 w-4 transition-colors' />
                   Status
                 </CommandItem>
-                <CommandItem className='group flex items-center gap-2'>
+                <CommandItem
+                  className='group flex items-center gap-2'
+                  onSelect={() => {
+                    setPages([...pages, 'board']);
+                  }}>
                   <LayoutGrid className='text-secondary-foreground group-aria-selected:text-foreground h-4 w-4 transition-colors' />
                   Board
                 </CommandItem>
@@ -201,13 +211,92 @@ export function FilterCombobox({ size = 'default' }: { size?: 'default' | 'icon'
 
             {page === 'created-date' && (
               <CommandGroup>
-                <CommandItem className='group flex items-center gap-2'>1 day ago</CommandItem>
-                <CommandItem className='group flex items-center gap-2'>1 week ago</CommandItem>
-                <CommandItem className='group flex items-center gap-2'>1 month ago</CommandItem>
-                <CommandItem className='group flex items-center gap-2'>3 months ago</CommandItem>
+                <CommandItem
+                  className='group flex items-center gap-2'
+                  onSelect={() => {
+                    // Date 1 day ago
+                    createQueryParams('ca', new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString());
+
+                    // Close popover
+                    setOpen(false);
+                  }}>
+                  1 day ago
+                </CommandItem>
+                <CommandItem
+                  className='group flex items-center gap-2'
+                  onSelect={() => {
+                    // Date 1 week ago
+                    createQueryParams('ca', new Date(Date.now() - 1000 * 60 * 60 * 24 * 7).toISOString());
+
+                    // Close popover
+                    setOpen(false);
+                  }}>
+                  1 week ago
+                </CommandItem>
+
+                <CommandItem
+                  className='group flex items-center gap-2'
+                  onSelect={() => {
+                    // Date 1 month ago
+                    createQueryParams('ca', new Date(Date.now() - 1000 * 60 * 60 * 24 * 30).toISOString());
+
+                    // Close popover
+                    setOpen(false);
+                  }}>
+                  1 month ago
+                </CommandItem>
+                <CommandItem
+                  className='group flex items-center gap-2'
+                  onSelect={() => {
+                    // Date 3 months ago
+                    createQueryParams('ca', new Date(Date.now() - 1000 * 60 * 60 * 24 * 90).toISOString());
+
+                    // Close popover
+                    setOpen(false);
+                  }}>
+                  3 months ago
+                </CommandItem>
                 <CommandItem className='group flex items-center gap-2'>
                   Custom date or timeframe...
                 </CommandItem>
+              </CommandGroup>
+            )}
+
+            {page === 'board' && (
+              <CommandGroup>
+                {feedbackBoards?.map((board) => (
+                  <CommandItem
+                    key={board.id}
+                    className='group flex items-center gap-2'
+                    onSelect={() => {
+                      // Append or remove board from selectedBoards
+                      const newBoards = selectedBoards.find(
+                        (t) => t.toLowerCase() === board.name.toLowerCase()
+                      )
+                        ? selectedBoards.filter((t) => t.toLowerCase() !== board.name.toLowerCase())
+                        : [...selectedBoards, board.name];
+
+                      // Set boards
+                      setSelectedBoards(newBoards);
+
+                      // Close popover
+                      setOpen(false);
+
+                      // Apply boards
+                      createQueryParams('board', newBoards.join(','));
+                    }}>
+                    <Checkbox
+                      className={cn(
+                        'border-foreground/50 h-3.5 w-3.5 opacity-0 shadow-none group-aria-selected:opacity-100',
+                        selectedBoards.find((t) => t.toLowerCase() === board.name.toLowerCase()) &&
+                          'opacity-100'
+                      )}
+                      iconCn='h-3.5 w-3.5'
+                      checked={!!selectedBoards.find((t) => t.toLowerCase() === board.name.toLowerCase())}
+                    />
+                    {board.name}
+                  </CommandItem>
+                ))}
               </CommandGroup>
             )}
           </CommandList>

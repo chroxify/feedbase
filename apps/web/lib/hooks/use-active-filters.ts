@@ -1,17 +1,21 @@
 'use client';
 
 import { ReadonlyURLSearchParams } from 'next/navigation';
-import { FeedbackFilterProps, FeedbackTagProps } from '@/lib/types';
+import { FeedbackBoardProps, FeedbackFilterProps, FeedbackTagProps } from '@/lib/types';
 import { STATUS_OPTIONS } from '../constants';
 
 export function useActiveFilters(
   searchParams: ReadonlyURLSearchParams,
-  workspaceTags: FeedbackTagProps['Row'][] | undefined
+  workspaceTags: FeedbackTagProps['Row'][] | undefined,
+  feedbackBoards: FeedbackBoardProps['Row'][] | undefined
 ): FeedbackFilterProps {
   const filters = {
     tags: searchParams.get('tags') ?? '',
     status: searchParams.get('status') ?? '',
     search: searchParams.get('search') ?? '',
+    createdBefore: searchParams.get('cb') ?? '',
+    createdAfter: searchParams.get('ca') ?? '',
+    board: searchParams.get('board') ?? '',
   };
 
   const feedbackFilters: FeedbackFilterProps = {
@@ -50,6 +54,20 @@ export function useActiveFilters(
             return null;
           })
           .filter(Boolean) ?? [],
+    },
+    created_date: {
+      b: filters.createdBefore,
+      a: filters.createdAfter,
+    },
+    board: {
+      i:
+        feedbackBoards?.filter((board) => {
+          return filters.board.split(',').includes(board.name.toLowerCase());
+        }) ?? [],
+      e:
+        feedbackBoards?.filter((board) => {
+          return filters.board.split(',').includes(`!${board.name.toLowerCase()}`);
+        }) ?? [],
     },
     search: filters.search,
   } as FeedbackFilterProps;

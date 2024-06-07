@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -10,10 +10,24 @@ import {
   DropdownMenuTrigger,
 } from '@feedbase/ui/components/dropdown-menu';
 import { cn } from '@feedbase/ui/lib/utils';
-import { CircleDashed, CircleX, LucideIcon, Plus, Tag, Tags, TextCursorInputIcon, X } from 'lucide-react';
+import {
+  CalendarMinus,
+  CalendarPlus,
+  CalendarRange,
+  CircleDashed,
+  CircleX,
+  LayoutGrid,
+  LucideIcon,
+  Plus,
+  Tag,
+  Tags,
+  TextCursorInputIcon,
+  X,
+} from 'lucide-react';
 import { KeyedMutator } from 'swr';
 import { useActiveFilters } from '@/lib/hooks/use-active-filters';
 import useQueryParamRouter from '@/lib/hooks/use-query-router';
+import useFeedbackBoards from '@/lib/swr/use-boards';
 import useTags from '@/lib/swr/use-tags';
 import { FeedbackFilterProps, FeedbackWithUserProps } from '@/lib/types';
 
@@ -26,16 +40,19 @@ interface FilterActionDropdownOptions {
 
 // Filter Action Dropdown
 function FilterActionDropdown({
+  current,
   children,
   options,
 }: {
+  current: string;
   children: React.ReactNode;
   options: FilterActionDropdownOptions[];
 }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-      <DropdownMenuContent>
+      <DropdownMenuContent
+        className={cn(current.toLowerCase() === options[0].label.toLowerCase() && 'flex flex-col-reverse')}>
         {options.map((option) => (
           <DropdownMenuItem key={option.label} className='flex gap-1.5' onSelect={option.onSelect}>
             <option.icon className='text-foreground/60 group-hover:text-foreground h-4 w-4 transition-colors' />
@@ -65,7 +82,7 @@ function FeedbackFilter({
         <filter.icon className='text-muted-foreground h-3.5 w-3.5' />
         {filter.label}
       </span>
-      <FilterActionDropdown options={action.options}>
+      <FilterActionDropdown options={action.options} current={action.label}>
         <Button
           variant='ghost'
           className='text-secondary-foreground dark:text-muted-foreground dark:hover:text-foreground hover:text-foreground h-full rounded-none border-x px-2 text-xs font-normal'>
@@ -87,7 +104,8 @@ function FeedbackFilter({
 // Filter Feedback Helper Function
 export function FilterFeedback(feedbackList: FeedbackWithUserProps[], tab?: string): FeedbackWithUserProps[] {
   const { tags } = useTags();
-  const feedbackFilters = useActiveFilters(useSearchParams(), tags);
+  const { feedbackBoards } = useFeedbackBoards();
+  const feedbackFilters = useActiveFilters(useSearchParams(), tags, feedbackBoards);
 
   return feedbackList.filter((feedback) => {
     // Filter by tab
@@ -145,6 +163,21 @@ export function FilterFeedback(feedbackList: FeedbackWithUserProps[], tab?: stri
       }
     }
 
+    // Filter by created before/after
+    if (feedbackFilters.created_date.b || feedbackFilters.created_date.a) {
+      if (feedbackFilters.created_date.b) {
+        if (new Date(feedback.created_at) > new Date(feedbackFilters.created_date.b)) {
+          return false;
+        }
+      }
+
+      if (feedbackFilters.created_date.a) {
+        if (new Date(feedback.created_at) < new Date(feedbackFilters.created_date.a)) {
+          return false;
+        }
+      }
+    }
+
     return true;
   });
 }
@@ -160,20 +193,42 @@ export default function FeedbackFilterHeader({
   const createQueryParams = useQueryParamRouter(useRouter(), usePathname(), searchParams);
   const [feedbackFilters, setFeedbackFilters] = useState<FeedbackFilterProps | null>(null);
   const { tags: workspaceTags } = useTags();
-  const activeFilters = useActiveFilters(searchParams, workspaceTags);
+  const { feedbackBoards } = useFeedbackBoards();
+  const activeFilters = useActiveFilters(searchParams, workspaceTags, feedbackBoards);
 
   // Handle filter changes
   useEffect(() => {
-    // Mutate data with complete revalidation
     mutate(undefined, { revalidate: true });
-
-    // Set feedback filters
     setFeedbackFilters(activeFilters);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, mutate]);
 
-  if (!feedbackFilters) return null;
+  // Check if all values are null, undefined, or empty
+  const isAllEmpty = (filter: FeedbackFilterProps | null): boolean => {
+    if (filter === null) return true;
+
+    return Object.values(filter).every((value) => {
+      if (typeof value === 'string') {
+        return value === null || value === undefined || value === '';
+      } else if (typeof value === 'object' && value !== null) {
+        return Object.values(value).every((subValue) => {
+          if (Array.isArray(subValue)) {
+            return subValue.length === 0;
+          }
+          return subValue === null || subValue === undefined || subValue === '';
+        });
+      }
+      return false;
+    });
+  };
+
+  // Return null if no active filters
+  if (isAllEmpty(feedbackFilters)) {
+    return null;
+  }
 
   return (
+    feedbackFilters &&
     Object.values(feedbackFilters).some((subObject) =>
       Object.values(subObject).some(
         (subValue) =>
@@ -445,6 +500,160 @@ export default function FeedbackFilterHeader({
             onClear={() => {
               // Clear all excluded statuses
               createQueryParams('status', feedbackFilters.status.i.map((status) => status.label).join(','));
+            }}
+          />
+        ) : null}
+
+        {/* Created After Date */}
+        {feedbackFilters.created_date.a ? (
+          <FeedbackFilter
+            filter={{ icon: CalendarRange, label: 'Created' }}
+            action={{
+              label: 'after',
+              options: [
+                {
+                  icon: CalendarPlus,
+                  label: 'after',
+                },
+                {
+                  icon: CalendarMinus,
+                  label: 'before',
+                  onSelect: () => {
+                    createQueryParams([
+                      ['ca', ''],
+                      ['cb', feedbackFilters.created_date.a],
+                    ]);
+                  },
+                },
+              ],
+            }}
+            appliedFilters={
+              <span className='text-foreground px-2'>
+                {new Date(feedbackFilters.created_date.a).toDateString()}
+              </span>
+            }
+            onClear={() => {
+              createQueryParams('ca', '');
+            }}
+          />
+        ) : null}
+
+        {/* Created Before Date */}
+        {feedbackFilters.created_date.b ? (
+          <FeedbackFilter
+            filter={{ icon: CalendarRange, label: 'Created' }}
+            action={{
+              label: 'before',
+              options: [
+                {
+                  icon: CalendarPlus,
+                  label: 'before',
+                },
+                {
+                  icon: CalendarMinus,
+                  label: 'after',
+                  onSelect: () => {
+                    createQueryParams([
+                      ['cb', ''],
+                      ['ca', feedbackFilters.created_date.b],
+                    ]);
+                  },
+                },
+              ],
+            }}
+            appliedFilters={
+              <span className='text-foreground px-2'>
+                {new Date(feedbackFilters.created_date.b).toDateString()}
+              </span>
+            }
+            onClear={() => {
+              createQueryParams('cb', '');
+            }}
+          />
+        ) : null}
+
+        {/* Included Boards */}
+        {feedbackFilters.board && feedbackFilters.board.i.length > 0 ? (
+          <FeedbackFilter
+            filter={{ icon: LayoutGrid, label: 'Board' }}
+            action={{
+              label: feedbackFilters.board.i.length > 1 ? 'is any of' : 'is',
+              options: [
+                { icon: Plus, label: 'Is' },
+                {
+                  icon: CircleX,
+                  label: 'Is not',
+                  onSelect: () => {
+                    // Change all currently included boards to excluded
+                    createQueryParams(
+                      'board',
+                      [
+                        ...feedbackFilters.board.e.map((board) => `!${board.name}`),
+                        ...feedbackFilters.board.i.map((board) => `!${board.name}`),
+                      ].join(',')
+                    );
+                  },
+                },
+              ],
+            }}
+            appliedFilters={
+              <span className='text-foreground select-none px-2'>
+                <div className='flex flex-row items-center justify-center gap-1.5'>
+                  {/* Labels */}
+                  {feedbackFilters.board.i.length > 1 ? (
+                    <span>{feedbackFilters.board.i.length} Boards</span>
+                  ) : (
+                    <span>{feedbackFilters.board.i[0]?.name}</span>
+                  )}
+                </div>
+              </span>
+            }
+            onClear={() => {
+              // Clear all included boards
+              createQueryParams('board', feedbackFilters.board.e.map((board) => `!${board.name}`).join(','));
+            }}
+          />
+        ) : null}
+
+        {/* Excluded Boards */}
+        {feedbackFilters.board && feedbackFilters.board.e.length > 0 ? (
+          <FeedbackFilter
+            filter={{ icon: LayoutGrid, label: 'Board' }}
+            action={{
+              label: 'is not',
+              options: [
+                {
+                  icon: Plus,
+                  label: 'Is',
+                  onSelect: () => {
+                    // Change all currently excluded boards to included
+                    createQueryParams(
+                      'board',
+                      [
+                        ...feedbackFilters.board.i.map((board) => board.name),
+                        ...feedbackFilters.board.e.map((board) => `${board.name}`),
+                      ].join(',')
+                    );
+                  },
+                },
+                { icon: CircleX, label: 'Is not' },
+              ],
+            }}
+            appliedFilters={
+              <span className='text-foreground select-none px-2'>
+                <div className='flex flex-row items-center justify-center gap-1.5'>
+                  {/* Labels */}
+                  {feedbackFilters.board.e.length > 1 ? (
+                    <span>{feedbackFilters.board.e.length} Boards</span>
+                  ) : (
+                    <span>{feedbackFilters.board.e[0]?.name}</span>
+                  )}
+                </div>
+              </span>
+            }
+            onClear={() => {
+              // Clear all excluded boards
+              createQueryParams('board', feedbackFilters.board.i.map((board) => board.name).join(','));
             }}
           />
         ) : null}

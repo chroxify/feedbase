@@ -178,6 +178,24 @@ export const withWorkspaceAuth = <T>(handler: WithWorkspaceAuthHandler<T>) => {
       return handler(user.data.user, supabase, workspace, { message: 'workspace not found.', status: 404 });
     }
 
+    // Make sure user is a member of the workspace
+    if (!allowAnonAccess) {
+      const { data: isMember, error: memberError } = await supabase
+        .from('workspace_member')
+        .select()
+        .eq('workspace_id', workspace.id)
+        .eq('user_id', user.data.user.id)
+        .single();
+
+      // If error is not null, then the user is not a member of the workspace
+      if (memberError || !isMember) {
+        return handler(user.data.user, supabase, workspace, {
+          message: 'unauthorized, user is not a member of the workspace.',
+          status: 403,
+        });
+      }
+    }
+
     return handler(user.data.user, supabase, workspace, null, allowAnonAccess);
   };
 };

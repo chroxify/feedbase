@@ -118,8 +118,8 @@ export interface FeedbackFilterProps {
   };
   search: string;
   board: {
-    i: string[];
-    e: string[];
+    i: FeedbackBoardProps['Row'][];
+    e: FeedbackBoardProps['Row'][];
   };
   created_date: {
     b: string;
