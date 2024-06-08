@@ -68,7 +68,7 @@ export default async function Feedback({ params }: Props) {
   );
 
   return (
-    <AnalyticsWrapper className='items-center gap-9 py-8' workspaceSlug={params.workspace}>
+    <AnalyticsWrapper className='items-center gap-9' workspaceSlug={params.workspace}>
       {/* Title, Description */}
       <div className='flex w-full px-5 sm:px-8 lg:px-14'>
         <div className='flex w-full flex-col items-start gap-2'>
@@ -85,12 +85,11 @@ export default async function Feedback({ params }: Props) {
       <div className='flex w-full gap-8 px-5 sm:px-8 lg:px-14'>
         {/* Filter Header, Feedback List */}
         <div className='flex h-full w-full flex-col items-center justify-center'>
+          {/* Filter Header */}
           <FeedbackHeader user={user} moduleConfig={moduleConfig} />
 
-          {/* Main */}
-          <div className='flex h-full w-full flex-col justify-between'>
-            <FeedbackList workspaceSlug={params.workspace} feedbackBoards={boards} />
-          </div>
+          {/* Feedback List */}
+          <FeedbackList workspaceSlug={params.workspace} feedbackBoards={boards} />
         </div>
 
         {/* Boards */}

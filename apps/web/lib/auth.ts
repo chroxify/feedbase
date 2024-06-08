@@ -184,7 +184,7 @@ export const withWorkspaceAuth = <T>(handler: WithWorkspaceAuthHandler<T>) => {
         .from('workspace_member')
         .select()
         .eq('workspace_id', workspace.id)
-        .eq('user_id', user.data.user.id)
+        .eq('member_id', user.data.user.id)
         .single();
 
       // If error is not null, then the user is not a member of the workspace

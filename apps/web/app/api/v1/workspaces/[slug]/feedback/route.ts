@@ -67,7 +67,7 @@ export async function GET(req: NextRequest, context: { params: { slug: string } 
 
   // If boardId is provided, get feedback by boardId
   if (boardId) {
-    const { data: feedback, error } = await getAllBoardFeedback(boardId, context.params.slug, 'route', false);
+    const { data: feedback, error } = await getAllBoardFeedback(boardId, context.params.slug, 'route');
 
     // If any errors thrown, return error
     if (error) {
@@ -79,7 +79,7 @@ export async function GET(req: NextRequest, context: { params: { slug: string } 
   }
 
   // Get all feedback
-  const { data: feedback, error } = await getAllWorkspaceFeedback(context.params.slug, 'route', false);
+  const { data: feedback, error } = await getAllWorkspaceFeedback(context.params.slug, 'route');
 
   // If any errors thrown, return error
   if (error) {

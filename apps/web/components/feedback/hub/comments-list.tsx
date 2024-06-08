@@ -2,15 +2,11 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Button } from '@feedbase/ui/components/button';
-import { Label } from '@feedbase/ui/components/label';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
-import { toast } from 'sonner';
 import useCreateQueryString from '@/lib/hooks/use-query-router';
 import { CommentWithUserProps, ProfileProps } from '@/lib/types';
-import { Icons } from '@/components/shared/icons/icons-static';
-import RichTextEditor from '@/components/shared/tiptap-editor';
 import AuthModal from '../../modals/login-signup-modal';
+import CommentInput from '../comments/comment-input';
 import Comment from './comment';
 import { CommentSortCombobox } from './sort-combobox';
 
@@ -28,9 +24,7 @@ export default function CommentsList({
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [commentContent, setCommentContent] = useState<string>('');
   const [totalCommentsAndReplies, setTotalCommentsAndReplies] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const createQueryString = useCreateQueryString(router, pathname, searchParams);
 
   // Query params
@@ -51,48 +45,6 @@ export default function CommentsList({
         return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
     }
   });
-
-  // Post comment
-  async function onPostComment() {
-    // Set loading
-    setIsLoading(true);
-
-    // Create promise
-    const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${workspaceSlug}/feedback/${feedbackId}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: commentContent,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-            reject(data.error);
-          } else {
-            resolve(data);
-          }
-        })
-        .catch((err) => {
-          reject(err.message);
-        });
-    });
-
-    promise
-      .then(() => {
-        // Set loading
-        setIsLoading(false);
-
-        // Reload comments
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error(err);
-      });
-  }
 
   // Render comments recursively
   const renderComments = useCallback(
@@ -142,37 +94,7 @@ export default function CommentsList({
     <div className='flex h-full w-full flex-col gap-2 pb-5'>
       {/* Write Comment Text Area */}
       {user ? (
-        <>
-          <div className='prose-invert flex w-full flex-col items-center justify-end rounded-md border p-4'>
-            {/* Editable Comment div with placeholder */}
-            <RichTextEditor
-              content={commentContent}
-              setContent={setCommentContent}
-              placeholder='Write your comment here...'
-            />
-
-            {/* Bottom Row */}
-            <div className='flex w-full flex-row items-center justify-end'>
-              {/* Submit Button */}
-              <Button
-                variant='outline'
-                className='text-foreground/60 flex h-8 items-center justify-between border font-light sm:w-fit'
-                size='sm'
-                onClick={onPostComment}
-                disabled={
-                  // disabled if content is 0 or its only html tags
-                  commentContent.replace(/<[^>]*>?/gm, '').length === 0 || isLoading
-                }>
-                {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
-                Post Comment
-              </Button>
-            </div>
-          </div>
-
-          <Label className='text-foreground/50 text-xs font-light'>
-            Pro Tip: You can use Markdown to format your comment.
-          </Label>
-        </>
+        <CommentInput workspaceSlug={workspaceSlug} feedbackId={feedbackId} />
       ) : (
         <div className='border-highlight/40 bg-highlight/20 flex w-full flex-col justify-between gap-4 rounded-md border p-3 sm:h-10 sm:flex-row sm:items-center'>
           <p className='text-foreground/90 text-sm '>Please authenticate to take part in the discussion.</p>

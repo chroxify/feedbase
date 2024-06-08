@@ -133,7 +133,6 @@ export default function FeedbackList() {
             ))}
           </div>
         ) : null}
-        {/* eslint-enable react/no-array-index-key */}
 
         {/* Error State */}
         {error ? <FetchError error={error} mutate={mutate} name='feedback' isValidating={isLoading} /> : null}

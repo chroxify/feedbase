@@ -143,27 +143,10 @@ export default async function HubLayout({ children, params, searchParams }: Prop
         workspaceTheme={workspaceTheme}
       />
 
-      {/* Separator with max screen width */}
-      <Separator className='bg-border/60' />
-
       {/* Main content */}
-      <div className='flex h-full w-full flex-col items-start justify-start lg:max-w-screen-xl'>
+      <div className='flex h-full w-full flex-col items-start justify-start py-8 pt-[5.5rem] lg:max-w-screen-xl'>
         {children}
       </div>
     </div>
-
-    //    {/* Powered by */}
-    // {/* TODO: Improve */}
-    // {/* <div className='flex h-full w-full flex-col items-center justify-center gap-4 p-5 pb-9'>
-    // <Button
-    //       variant='secondary'
-    //       size='sm'
-    //       className={cn(
-    //         'text-foreground/80  inline-flex items-center rounded-lg px-3 py-1 w-fit text-md hover:text-foreground',
-    //       )}>
-    //       Powered by Feedbase
-    //   </Button>
-    // </div> */}
-    // </CustomThemeWrapper>
   );
 }

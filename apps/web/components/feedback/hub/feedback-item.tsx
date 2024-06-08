@@ -47,7 +47,6 @@ export default function FeedbackItem({
     <div
       className='hover:bg-accent/30 group flex h-full w-full cursor-pointer flex-row items-stretch justify-between border border-b-0 transition-all first:rounded-t-md last:rounded-b-md last:border-b'
       key={feedback.id}>
-      {/* Upvotes */}
       <AuthModal disabled={!forceAuth}>
         <div className='flex items-center border-r'>
           {/* Upvotes */}
@@ -84,7 +83,7 @@ export default function FeedbackItem({
       <Link
         href={`/feedback/${feedback.id}`}
         className='flex flex-grow flex-col items-start justify-between gap-3 p-4'>
-        <div className='flex flex-col gap-1'>
+        <div className='flex flex-col'>
           {/* Title */}
           <span className='text-foreground/90 line-clamp-2 pr-10 text-sm font-medium'>{feedback.title}</span>
 

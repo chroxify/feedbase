@@ -1,6 +1,7 @@
 'use client';
 
 import { usePathname, useSearchParams } from 'next/navigation';
+import { Skeleton } from '@feedbase/ui/components/skeleton';
 import useFeedback from '@/lib/swr/use-feedback';
 import { FeedbackBoardProps } from '@/lib/types';
 import FetchError from '@/components/shared/fetch-error';
@@ -66,13 +67,15 @@ export default function FeedbackList({
   });
 
   return (
-    <>
+    <div className='h-full w-full'>
       <FeedbackFilterHeader mutate={mutate} className='py-0 pt-3' />
 
       {/* Loading state */}
       {loading && !error ? (
-        <div className='flex h-full w-full flex-col items-center justify-center gap-3 pt-10'>
-          <h1 className='text-foreground/90 text-2xl '>Loading feedback...</h1>
+        <div className='flex h-full w-full flex-col gap-1 pt-3'>
+          {[...Array(7)].map((_, index) => (
+            <Skeleton className='h-[6.75rem] w-full' key={`skeleton-${index}`} />
+          ))}
         </div>
       ) : null}
 
@@ -91,12 +94,12 @@ export default function FeedbackList({
 
       {/* Feedback list */}
       {filteredFeedback?.length > 0 && !loading && !error && (
-        <div className='flex h-full w-full flex-col gap-5 pt-3'>
+        <div className='flex h-full w-full flex-col pt-3'>
           {filteredFeedback.map((feedback) => (
             <FeedbackItem key={feedback.id} feedback={feedback} workspaceSlug={workspaceSlug} />
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 }
