@@ -65,18 +65,6 @@ export default async function FeedbackDetails({ params }: Props) {
     notFound();
   }
 
-  // Get comments
-  const { data: comments, error: commentsError } = await getCommentsForFeedbackById(
-    params.id,
-    params.workspace,
-    'server',
-    false
-  );
-
-  if (commentsError) {
-    return <div>{commentsError.message}</div>;
-  }
-
   // Get current user
   const { data: user } = await getCurrentUser('server');
 
@@ -215,12 +203,7 @@ export default async function FeedbackDetails({ params }: Props) {
             </div>
 
             {/* Comments */}
-            <CommentsList
-              feedbackComments={comments}
-              feedbackId={feedback.id}
-              workspaceSlug={params.workspace}
-              user={user}
-            />
+            <CommentsList feedback={feedback} workspaceSlug={params.workspace} isLoggedIn={!!user} />
           </div>
         </div>
 

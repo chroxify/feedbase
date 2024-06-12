@@ -27,10 +27,12 @@ export default function CommentInput({
   workspaceSlug,
   feedbackId,
   parentCommentId,
+  onPostComment,
 }: {
   workspaceSlug: string;
   feedbackId: string;
   parentCommentId?: string;
+  onPostComment?: () => void;
 }) {
   const commentEditor = useRef<Editor | null>(null);
   const [commentContent, setCommentContent] = useState('');
@@ -201,13 +203,13 @@ export default function CommentInput({
         <Button
           variant='default'
           size='sm'
-          // onClick={onPostComment}
           disabled={
             // disabled if content is 0 or its only html tags
             commentContent.replace(/<[^>]*>?/gm, '').length === 0 || isPostingComment
           }
-          onClick={() => {
-            postComment({ content: commentContent, reply_to_id: parentCommentId });
+          onClick={async () => {
+            await postComment({ content: commentContent, reply_to_id: parentCommentId });
+            if (onPostComment) onPostComment();
           }}>
           {isPostingComment ? <Icons.Spinner className='mr-2 h-3.5 w-3.5 animate-spin' /> : null}
           Post {parentCommentId ? 'reply' : 'comment'}

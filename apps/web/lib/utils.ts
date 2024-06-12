@@ -216,8 +216,9 @@ export function formatTimeAgo(date: Date): string {
 
   let interval = seconds / 31536000;
 
-  if (interval > 1) {
-    return `${Math.floor(interval)}y`;
+  // Show the date if it's more than 6 months
+  if (interval > 0.5) {
+    return date.toLocaleDateString();
   }
   interval = seconds / 2592000;
   if (interval > 1) {

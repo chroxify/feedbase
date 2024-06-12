@@ -259,9 +259,7 @@ export const upvoteCommentForFeedbackById = (
         const { error: deletedUpvoteError } = await supabase
           .from('comment_upvoter')
           .delete()
-          .eq('id', upvoter.id)
-          .select()
-          .single();
+          .eq('id', upvoter.id);
 
         // Check for errors
         if (deletedUpvoteError) {
