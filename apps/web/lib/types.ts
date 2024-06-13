@@ -1,10 +1,9 @@
+import { LucideIcon } from 'lucide-react';
 import { Database } from '@/lib/supabase';
 import { IconObject } from '@/components/shared/icons/icons-animated';
 
 // DB Types
 export type WorkspaceProps = Database['public']['Tables']['workspace'];
-
-export type PublicWorkspaceProps = Database['public']['Views']['workspace_view'];
 
 export type WorkspaceIntegrationProps = Database['public']['Tables']['workspace_integration'];
 
@@ -52,6 +51,8 @@ export type ChangelogWithAuthorProps = Database['public']['Tables']['changelog']
 export type ChangelogSubscriberProps = Database['public']['Tables']['changelog_subscriber'];
 
 export type FeedbackProps = Database['public']['Tables']['feedback'];
+
+export type FeedbackUpvoter = Database['public']['Tables']['feedback_upvoter'];
 
 export type FeedbackBoardProps = Database['public']['Tables']['feedback_board'];
 
@@ -104,3 +105,28 @@ export interface CategoryTabProps {
 }
 
 export type ApiKeyPermissions = 'public_access' | 'full_access';
+
+// Feedback Filter Props
+export interface FeedbackFilterProps {
+  tags: {
+    i: FeedbackTagProps['Row'][];
+    e: FeedbackTagProps['Row'][];
+  };
+  status: {
+    i: { label: string; icon: LucideIcon }[];
+    e: { label: string; icon: LucideIcon }[];
+  };
+  search: string;
+  board: {
+    i: FeedbackBoardProps['Row'][];
+    e: FeedbackBoardProps['Row'][];
+  };
+  created_date: {
+    b: string;
+    a: string;
+  };
+  eta: {
+    b: string;
+    a: string;
+  };
+}

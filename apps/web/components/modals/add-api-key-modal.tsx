@@ -189,7 +189,7 @@ export default function AddApiKeyDialog({
               </div>
             </div>
             <ResponsiveDialogFooter>
-              <ResponsiveDialogClose asChild>
+              <ResponsiveDialogClose>
                 <Button
                   variant='outline'
                   type='button'
@@ -245,7 +245,7 @@ export default function AddApiKeyDialog({
             </Label>
           </div>
           <ResponsiveDialogFooter>
-            <ResponsiveDialogClose asChild>
+            <ResponsiveDialogClose>
               <Button
                 variant='default'
                 onClick={() => {

@@ -76,51 +76,52 @@ export default async function Changelogs({ params }: Props) {
   }
 
   return (
-    <AnalyticsWrapper className='flex h-full w-full flex-col gap-10' workspaceSlug={params.workspace}>
-      <div className='flex items-center px-5 sm:px-10 md:px-10 lg:px-20'>
-        <div className='flex w-full flex-col items-start gap-4'>
-          <h1 className='text-3xl font-medium sm:text-4xl'>Changelog</h1>
-          <p className='text-foreground/70 text-base font-light sm:text-lg'>
-            All the latest updates, improvements, and fixes to {workspace.name}.
+    <AnalyticsWrapper className='flex h-full w-full flex-col gap-9' workspaceSlug={params.workspace}>
+      <div className='flex w-full flex-col gap-3 px-5 sm:px-8 lg:px-14'>
+        {/* Title, Description */}
+        <div className='flex w-full flex-col items-start gap-2'>
+          <h1 className='font- text-xl sm:text-2xl'>Changelog</h1>
+          <p className='text-secondary-foreground text-base font-normal'>
+            All the latest updates, improvements, and fixes to {workspace.name}.{' '}
           </p>
+        </div>
 
-          {/* Buttons */}
-          <div className='flex select-none flex-row flex-wrap items-center gap-4 text-sm'>
-            {/* Email */}
-            <SubscribeToEmailUpdates workspaceSlug={params.workspace}>
-              <button
-                type='button'
-                className='hover:text-foreground/95 text-highlight transition-colors duration-200'>
-                Subscribe to Updates
-              </button>
-            </SubscribeToEmailUpdates>
-
-            <span className='text-foreground/70'>·</span>
-
-            {/* Twitter */}
-            {workspaceConfig !== null && workspaceConfig.changelog_twitter_handle !== '' && (
-              <div className='flex w-1/2 flex-row items-center gap-4 sm:w-fit'>
-                <Link
-                  href={`https://x.com/${workspaceConfig.changelog_twitter_handle}`}
-                  target='_blank'
-                  rel='noopener noreferrer'
-                  className='hover:text-foreground/95 text-highlight transition-colors duration-200'>
-                  Follow us on Twitter
-                </Link>
-
-                <span className='text-foreground/70 opacity-0 sm:opacity-100'>·</span>
-              </div>
-            )}
-
-            {/* RRS Update Feed */}
-            <Link
-              href={`/api/v1/${params.workspace}/atom`}
-              target='_blank'
-              rel='noopener noreferrer'
+        {/* Buttons */}
+        <div className='flex select-none flex-row flex-wrap items-center gap-4 text-sm'>
+          {/* Email */}
+          <SubscribeToEmailUpdates workspaceSlug={params.workspace}>
+            <button
+              type='button'
               className='hover:text-foreground/95 text-highlight transition-colors duration-200'>
-              Subscribe to Atom Feed
-            </Link>
-          </div>
+              Subscribe to Updates
+            </button>
+          </SubscribeToEmailUpdates>
+
+          <span className='text-foreground/70'>·</span>
+
+          {/* Twitter */}
+          {workspaceConfig?.changelog_twitter_handle ? (
+            <div className='flex w-1/2 flex-row items-center gap-4 sm:w-fit'>
+              <Link
+                href={`https://x.com/${workspaceConfig.changelog_twitter_handle}`}
+                target='_blank'
+                rel='noopener noreferrer'
+                className='hover:text-foreground/95 text-highlight transition-colors duration-200'>
+                Follow us on Twitter
+              </Link>
+
+              <span className='text-foreground/70 opacity-0 sm:opacity-100'>·</span>
+            </div>
+          ) : null}
+
+          {/* RRS Update Feed */}
+          <Link
+            href={`/api/v1/${params.workspace}/atom`}
+            target='_blank'
+            rel='noopener noreferrer'
+            className='hover:text-foreground/95 text-highlight transition-colors duration-200'>
+            Subscribe to Atom Feed
+          </Link>
         </div>
       </div>
 

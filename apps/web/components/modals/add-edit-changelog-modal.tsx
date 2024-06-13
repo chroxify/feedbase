@@ -64,9 +64,10 @@ export function AddChangelogModal({
     title: changelogData?.title || '',
     content: changelogData?.content || '',
     summary: changelogData?.summary || '',
-    image: changelogData?.image || null,
+    thumbnail: changelogData?.thumbnail || null,
     publish_date: changelogData?.publish_date || new Date().toISOString(),
     published: changelogData?.published || false,
+    created_at: changelogData?.created_at || '',
     slug: 'dummy-slug',
     author_id: 'dummy-author',
   });
@@ -74,7 +75,7 @@ export function AddChangelogModal({
   async function onCreateChangelog(createType: 'draft' | 'publish') {
     // Make sure all required fields are filled out incase published is true
     if (createType === 'publish') {
-      if (!data.title || !data.summary || !data.content || !data.image || !data.publish_date) {
+      if (!data.title || !data.summary || !data.content || !data.thumbnail || !data.publish_date) {
         toast.error('Please fill out all required fields.');
         return;
       }
@@ -90,7 +91,7 @@ export function AddChangelogModal({
           title: data.title || '',
           summary: data.summary || '',
           content: data.content || '',
-          image: data.image || null,
+          image: data.thumbnail || null,
           publish_date: data.publish_date || null,
           published: createType === 'publish',
           notify_subscribers: notifySubscribers,
@@ -118,7 +119,7 @@ export function AddChangelogModal({
           title: '',
           content: '',
           summary: '',
-          image: null,
+          thumbnail: null,
           publish_date: new Date().toISOString(),
         });
         if (createType === 'publish') {
@@ -136,7 +137,7 @@ export function AddChangelogModal({
   async function onEditChangelog(updateType: 'draft' | 'publish') {
     // Make sure all required fields are filled out incase published is true
     if (updateType === 'publish') {
-      if (!data.title || !data.summary || !data.content || !data.image || !data.publish_date) {
+      if (!data.title || !data.summary || !data.content || !data.thumbnail || !data.publish_date) {
         toast.error('Please fill out all required fields.');
         return;
       }
@@ -152,7 +153,7 @@ export function AddChangelogModal({
           title: data.title || '',
           summary: data.summary || '',
           content: data.content || '',
-          image: data.image || null,
+          image: data.thumbnail || null,
           publish_date: data.publish_date || null,
           published: updateType === 'publish',
         }),
@@ -179,7 +180,7 @@ export function AddChangelogModal({
           title: '',
           content: '',
           summary: '',
-          image: null,
+          thumbnail: null,
           publish_date: new Date().toISOString(),
         });
         return `${data.title !== '' ? data.title : 'Draft'} was updated successfully!`;
@@ -212,7 +213,7 @@ export function AddChangelogModal({
     if (!data.publish_date) {
       missingFields.push('Publish Date');
     }
-    if (!data.image) {
+    if (!data.thumbnail) {
       missingFields.push('Image');
     }
     return missingFields;
@@ -259,9 +260,9 @@ export function AddChangelogModal({
           <div className='mr-[1px] flex min-h-full w-full flex-col gap-4 sm:max-w-[270px] lg:max-w-[325px]'>
             {/* Image Upload */}
             <FileDrop
-              image={data.image}
-              setImage={(image: string | null) => {
-                setData({ ...data, image });
+              image={data.thumbnail}
+              setImage={(thumbnail: string | null) => {
+                setData({ ...data, thumbnail });
               }}
               className='sm:h-44 lg:h-48'
               labelComponent={<Label htmlFor='image'>Cover Image</Label>}
@@ -317,7 +318,7 @@ export function AddChangelogModal({
         </div>
 
         <ResponsiveDialogFooter className='sm:px-7 sm:pb-7'>
-          <ResponsiveDialogClose asChild>
+          <ResponsiveDialogClose>
             <Button
               variant='outline'
               onClick={() => {
@@ -326,7 +327,7 @@ export function AddChangelogModal({
                   title: '',
                   content: '',
                   summary: '',
-                  image: null,
+                  thumbnail: null,
                   publish_date: new Date().toISOString(),
                 });
               }}

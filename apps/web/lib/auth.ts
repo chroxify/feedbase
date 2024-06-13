@@ -9,6 +9,7 @@ import {
   FeedbackBoardProps,
   FeedbackProps,
   WorkspaceApiKeyProps,
+  WorkspaceModuleProps,
   WorkspaceProps,
 } from '@/lib/types';
 
@@ -177,6 +178,24 @@ export const withWorkspaceAuth = <T>(handler: WithWorkspaceAuthHandler<T>) => {
       return handler(user.data.user, supabase, workspace, { message: 'workspace not found.', status: 404 });
     }
 
+    // Make sure user is a member of the workspace
+    if (!allowAnonAccess) {
+      const { data: isMember, error: memberError } = await supabase
+        .from('workspace_member')
+        .select()
+        .eq('workspace_id', workspace.id)
+        .eq('member_id', user.data.user.id)
+        .single();
+
+      // If error is not null, then the user is not a member of the workspace
+      if (memberError || !isMember) {
+        return handler(user.data.user, supabase, workspace, {
+          message: 'unauthorized, user is not a member of the workspace.',
+          status: 403,
+        });
+      }
+    }
+
     return handler(user.data.user, supabase, workspace, null, allowAnonAccess);
   };
 };
@@ -214,6 +233,7 @@ export const withFeedbackBoardAuth = <T>(handler: WithFeedbackBoardAuthHandler<T
     // Get feedback board from database
     let board: FeedbackBoardProps['Row'] | null;
     let error: PostgrestError | null;
+
     if (boardId !== undefined) {
       const { data, error: boardError } = await supabase
         .from('feedback_board')
@@ -231,17 +251,32 @@ export const withFeedbackBoardAuth = <T>(handler: WithFeedbackBoardAuthHandler<T
         });
       }
 
-      const { data, error: workspaceError } = (await supabase
+      // Get workspace id
+      const { data: workspace, error: workspaceError } = await supabase
         .from('workspace')
-        .select('board:default_board_id (*)')
+        .select('id')
         .eq('slug', workspaceSlug)
+        .single();
+
+      // If error is not null, then the workspace does not exist
+      if (workspaceError) {
+        return handler(user.data.user, supabase, null, {
+          message: 'workspace not found.',
+          status: 404,
+        });
+      }
+
+      const { data: workspaceModuleConfig, error: configError } = (await supabase
+        .from('workspace_module')
+        .select('*, board:feedback_default_board_id (*)')
+        .eq('workspace_id', workspace.id)
         .single()) as {
-        data: WorkspaceProps['Row'] & { board: FeedbackBoardProps['Row'] };
+        data: WorkspaceModuleProps['Row'] & { board: FeedbackBoardProps['Row'] };
         error: PostgrestError | null;
       };
 
-      board = data?.board;
-      error = workspaceError;
+      board = workspaceModuleConfig.board;
+      error = configError;
     }
 
     // If error is not null, then the feedback board does not exist

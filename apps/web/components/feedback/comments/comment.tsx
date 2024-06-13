@@ -1,6 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@feedbase/ui/components/accordion';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Button } from '@feedbase/ui/components/button';
 import {
@@ -32,6 +38,7 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
   const [comment, setComment] = useState<CommentWithUserProps>(commentData);
   const [isReplying, setIsReplying] = useState<boolean>(false);
   const [timeAgo, setTimeAgo] = useState<string>('');
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
 
   // Time ago
   function formatTimeAgo(date: Date) {
@@ -87,7 +94,7 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
         mutate(`/api/v1/workspaces/${workspaceSlug}/feedback/${comment.feedback_id}/comments`);
       },
       onError: (error) => {
-        toast.error(`Failed to upvote comment - ${  error}`);
+        toast.error(`Failed to upvote comment - ${error}`);
         setComment((prev) => {
           return {
             ...prev,
@@ -112,34 +119,39 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
     setTimeAgo(formatTimeAgo(new Date(comment.created_at)));
   }, [comment.created_at]);
 
+  // if a comment is a nested reply and has more than 3 replies, collapse it by default
+  useEffect(() => {
+    if (comment.replies && comment.replies.length > 3 && comment.reply_to_id !== null) {
+      setIsCollapsed(true);
+    }
+  }, [comment.replies, comment.reply_to_id]);
+
   return (
     <div className='flex h-fit w-full flex-col' {...props}>
       {/* Comment */}
-      <div className='flex flex-row items-center justify-between'>
-        <div className='flex flex-row items-center gap-2'>
-          {/* Author */}
-          <div className='text-foreground/60 flex select-none flex-row items-center justify-start gap-2 '>
-            {/* User */}
-            <Avatar className='h-8 w-8 gap-2 overflow-visible border'>
-              <div className='h-full w-full overflow-hidden rounded-full'>
-                <AvatarImage src={comment.user.avatar_url || ''} alt={comment.user.full_name} />
-                <AvatarFallback className='text-xs '>{comment.user.full_name[0]}</AvatarFallback>
-                {/* If team member, add small verified badge to top of profile picture */}
-                {commentData.user.isTeamMember ? (
-                  <div className='bg-root absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full'>
-                    <BadgeCheck className='fill-highlight stroke-root outline-root z-10 h-4 w-4 outline-2' />
-                  </div>
-                ) : null}
-              </div>
-            </Avatar>
-            {/* Name */}
-            <span className='text-foreground text-sm'>{comment.user.full_name}</span>·{/* Time ago */}
-            {!timeAgo ? (
-              <Skeleton className='h-4 w-20 rounded-sm' />
-            ) : (
-              <span className='text-muted-foreground text-xs'>{timeAgo}</span>
-            )}
-          </div>
+      <div className='relative flex flex-row items-center justify-between'>
+        {/* Author */}
+        <div className='text-foreground/60 group flex select-none flex-row items-center justify-start gap-2'>
+          {/* User */}
+          <Avatar className='h-8 w-8 gap-2 overflow-visible border'>
+            <div className='h-full w-full overflow-hidden rounded-full'>
+              <AvatarImage src={comment.user.avatar_url || ''} alt={comment.user.full_name} />
+              <AvatarFallback className='text-xs '>{comment.user.full_name[0]}</AvatarFallback>
+              {/* If team member, add small verified badge to top of profile picture */}
+              {commentData.user.isTeamMember ? (
+                <div className='bg-root absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full'>
+                  <BadgeCheck className='fill-highlight stroke-root outline-root z-10 h-4 w-4 outline-2' />
+                </div>
+              ) : null}
+            </div>
+          </Avatar>
+          {/* Name */}
+          <span className='text-foreground text-sm'>{comment.user.full_name}</span>·{/* Time ago */}
+          {!timeAgo ? (
+            <Skeleton className='h-4 w-20 rounded-sm' />
+          ) : (
+            <span className='text-muted-foreground text-xs'>{timeAgo}</span>
+          )}
         </div>
 
         {/* Actions */}
@@ -174,7 +186,7 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
           />
         </div>
 
-        {/* Content */}
+        {/* Content, Actions & Replies */}
         <div className='flex h-fit w-full flex-col gap-1 pl-5'>
           {/* Comment Content html */}
           <div
@@ -239,11 +251,31 @@ export default function Comment({ commentData, workspaceSlug, children, ...props
               workspaceSlug={workspaceSlug}
               feedbackId={comment.feedback_id}
               parentCommentId={comment.id}
+              onPostComment={() => {
+                setIsReplying(false);
+              }}
             />
           ) : null}
 
           {/* Replies */}
-          <div className='flex h-full w-full flex-col gap-5 pt-2'>{children}</div>
+          {comment.replies && comment.replies.length > 0 ? (
+            <Accordion
+              type='single'
+              collapsible
+              value={!isCollapsed ? commentData.id : ''}
+              onValueChange={() => {
+                setIsCollapsed((prev) => !prev);
+              }}>
+              <AccordionItem value={commentData.id} className='border-none p-0'>
+                <AccordionTrigger className='text-secondary-foreground flex h-full w-full flex-row items-center justify-start gap-1.5 p-0 text-sm'>
+                  {!isCollapsed ? 'Hide' : 'Show'} {commentData.replies?.length} replies
+                </AccordionTrigger>
+                <AccordionContent className='flex h-full w-full animate-none flex-col gap-5 !overflow-visible pb-0 pt-2 transition-none'>
+                  {children}
+                </AccordionContent>
+              </AccordionItem>
+            </Accordion>
+          ) : null}
         </div>
       </div>
     </div>

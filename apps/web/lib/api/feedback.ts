@@ -3,6 +3,7 @@ import { withFeedbackAuth, withFeedbackBoardAuth, withWorkspaceAuth } from '../a
 import {
   FeedbackProps,
   FeedbackTagProps,
+  FeedbackUpvoter,
   FeedbackWithUserInputProps,
   FeedbackWithUserProps,
   ProfileProps,
@@ -461,17 +462,8 @@ export const getFeedbackUpvotersById = withFeedbackAuth<ProfileProps['Row'][]>(
 );
 
 // Upvote feedback by ID
-export const upvoteFeedbackByID = (
-  id: string,
-  workspaceSlug: string,
-  cType: 'server' | 'route',
-  hasUserUpvoted = false,
-  isAnonymous = false
-) =>
-  withFeedbackAuth<FeedbackProps['Row']>(async (user, supabase, feedback, workspace, error) => {
-    // Set has upvoted
-    let hasUpvoted = hasUserUpvoted;
-
+export const upvoteFeedbackByID = (id: string, workspaceSlug: string, cType: 'server' | 'route') =>
+  withFeedbackAuth<FeedbackUpvoter['Row']>(async (user, supabase, feedback, workspace, error) => {
     // If any errors, return error
     if (error) {
       return { data: null, error };
@@ -490,84 +482,59 @@ export const upvoteFeedbackByID = (
     }
 
     // Check if anonymous upvoting is enabled
-    if (!workspaceModuleConfig.feedback_anon_upvoting && isAnonymous) {
+    if (!workspaceModuleConfig.feedback_anon_upvoting && user!.is_anonymous) {
       return { data: null, error: { message: 'anonymous upvoting is not allowed.', status: 403 } };
     }
 
-    // Upvote for logged in users
-    if (!isAnonymous) {
-      // Get user profile
-      const { data: userProfile, error: profileError } = await supabase
-        .from('profile')
+    // Check if user has already upvoted
+    const { data: upvoter, error: upvoterError } = await supabase
+      .from('feedback_upvoter')
+      .select()
+      .eq('profile_id', user!.id)
+      .eq('feedback_id', feedback!.id);
+
+    // Check for errors
+    if (upvoterError) {
+      return { data: null, error: { message: upvoterError.message, status: 500 } };
+    }
+
+    // Create upvote
+    if (!upvoter || upvoter.length === 0) {
+      const { data: createdUpvote, error: createError } = await supabase
+        .from('feedback_upvoter')
+        .insert({
+          profile_id: user!.id,
+          feedback_id: feedback!.id,
+        })
         .select()
-        .eq('id', user!.id)
         .single();
 
       // Check for errors
-      if (profileError) {
-        return { data: null, error: { message: profileError.message, status: 500 } };
+      if (createError) {
+        return { data: null, error: { message: createError.message, status: 500 } };
       }
 
-      // Check if user has already upvoted
-      const { data: upvoter, error: upvoterErrorCheck } = await supabase
-        .from('feedback_upvoter')
-        .select()
-        .eq('profile_id', userProfile.id)
-        .eq('feedback_id', feedback!.id);
-
-      // Check for errors
-      if (upvoterErrorCheck) {
-        return { data: null, error: { message: upvoterErrorCheck.message, status: 500 } };
-      }
-
-      // Check if upvoter exists
-      if (upvoter && upvoter.length > 0) {
-        // Delete upvoter
-        const { error: deleteError } = await supabase
-          .from('feedback_upvoter')
-          .delete()
-          .eq('id', upvoter[0].id)
-          .select()
-          .single();
-
-        // Check for errors
-        if (deleteError) {
-          return { data: null, error: { message: deleteError.message, status: 500 } };
-        }
-      } else {
-        // Create upvoter
-        const { error: upvoterError } = await supabase
-          .from('feedback_upvoter')
-          .insert({ profile_id: userProfile.id, feedback_id: feedback!.id })
-          .select()
-          .single();
-
-        // Check for errors
-        if (upvoterError) {
-          return { data: null, error: { message: upvoterError.message, status: 500 } };
-        }
-      }
-
-      // Set has upvoted
-      hasUpvoted = upvoter && upvoter.length > 0;
+      // Return success
+      return { data: createdUpvote, error: null };
     }
 
-    // Update feedback upvotes
-    const { data: updatedFeedback, error: updateError } = await supabase
-      .from('feedback')
-      .update({ upvotes: feedback!.upvotes + (hasUpvoted ? -1 : 1) })
-      .eq('id', feedback!.id)
+    // Delete upvote
+    const { data: deletedUpvote, error: deleteError } = await supabase
+      .from('feedback_upvoter')
+      .delete()
+      .eq('profile_id', user!.id)
+      .eq('feedback_id', feedback!.id)
       .select()
       .single();
 
     // Check for errors
-    if (updateError) {
-      return { data: null, error: { message: updateError.message, status: 500 } };
+    if (deleteError) {
+      return { data: null, error: { message: deleteError.message, status: 500 } };
     }
 
-    // Return feedback
-    return { data: updatedFeedback, error: null };
-  })(id, workspaceSlug, cType, !isAnonymous);
+    // Return success
+    return { data: deletedUpvote, error: null };
+  })(id, workspaceSlug, cType);
 
 // Get all feedback for a board
 export const getAllBoardFeedback = withFeedbackBoardAuth<FeedbackWithUserProps[]>(

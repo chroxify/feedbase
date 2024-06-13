@@ -1,44 +1,39 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import { Button } from '@feedbase/ui/components/button';
-import { Label } from '@feedbase/ui/components/label';
 import { Skeleton } from '@feedbase/ui/components/skeleton';
-import { toast } from 'sonner';
 import useCreateQueryString from '@/lib/hooks/use-query-router';
-import { CommentWithUserProps, ProfileProps } from '@/lib/types';
+import useFeedbackComments from '@/lib/swr/use-comments';
+import { CommentWithUserProps, FeedbackWithUserProps } from '@/lib/types';
+import FetchError from '@/components/shared/fetch-error';
 import { Icons } from '@/components/shared/icons/icons-static';
-import RichTextEditor from '@/components/shared/tiptap-editor';
 import AuthModal from '../../modals/login-signup-modal';
-import Comment from './comment';
+import Comment from '../comments/comment';
+import CommentInput from '../comments/comment-input';
 import { CommentSortCombobox } from './sort-combobox';
 
 export default function CommentsList({
-  feedbackComments,
   workspaceSlug,
-  feedbackId,
-  user,
+  feedback,
+  isLoggedIn,
 }: {
-  feedbackComments: CommentWithUserProps[] | null;
   workspaceSlug: string;
-  feedbackId: string;
-  user: ProfileProps['Row'] | null;
+  feedback: FeedbackWithUserProps;
+  isLoggedIn: boolean;
 }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const [commentContent, setCommentContent] = useState<string>('');
-  const [totalCommentsAndReplies, setTotalCommentsAndReplies] = useState<number | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   const createQueryString = useCreateQueryString(router, pathname, searchParams);
+  const { comments, loading, isValidating, error, mutate } = useFeedbackComments(feedback.id);
 
   // Query params
   const sort = searchParams.get('sort') || '';
   const comment = searchParams.get('comment') || '';
 
   // Sort comments by query params if they exist
-  const sortedComments = feedbackComments?.sort((a, b) => {
+  const sortedComments = comments?.sort((a, b) => {
     // Switch case for sort
     switch (sort) {
       case 'oldest':
@@ -52,63 +47,16 @@ export default function CommentsList({
     }
   });
 
-  // Post comment
-  async function onPostComment() {
-    // Set loading
-    setIsLoading(true);
-
-    // Create promise
-    const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${workspaceSlug}/feedback/${feedbackId}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: commentContent,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-            reject(data.error);
-          } else {
-            resolve(data);
-          }
-        })
-        .catch((err) => {
-          reject(err.message);
-        });
-    });
-
-    promise
-      .then(() => {
-        // Set loading
-        setIsLoading(false);
-
-        // Reload comments
-        router.refresh();
-      })
-      .catch((err) => {
-        toast.error(err);
-      });
-  }
-
   // Render comments recursively
   const renderComments = useCallback(
     (comments: CommentWithUserProps[] | undefined) => {
       return comments?.map((comment: CommentWithUserProps) => (
-        <Comment
-          commentData={comment}
-          workspaceSlug={workspaceSlug}
-          user={user}
-          key={comment.id}
-          id={comment.id}>
-          {renderComments(comment.replies)} {/* Recursive call for replies */}
+        <Comment commentData={comment} workspaceSlug={workspaceSlug} key={comment.id} id={comment.id}>
+          {renderComments(comment.replies)}
         </Comment>
       ));
     },
-    [workspaceSlug, user]
+    [workspaceSlug]
   );
 
   // Calculate total comments and replies
@@ -134,51 +82,17 @@ export default function CommentsList({
     }
   }, [comment]);
 
-  useEffect(() => {
-    setTotalCommentsAndReplies(calculateTotalCommentsAndReplies(sortedComments));
-  }, [sortedComments, calculateTotalCommentsAndReplies]);
-
   return (
     <div className='flex h-full w-full flex-col gap-2 pb-5'>
       {/* Write Comment Text Area */}
-      {user ? (
-        <>
-          <div className='prose-invert flex w-full flex-col items-center justify-end rounded-md border p-4'>
-            {/* Editable Comment div with placeholder */}
-            <RichTextEditor
-              content={commentContent}
-              setContent={setCommentContent}
-              placeholder='Write your comment here...'
-            />
-
-            {/* Bottom Row */}
-            <div className='flex w-full flex-row items-center justify-end'>
-              {/* Submit Button */}
-              <Button
-                variant='outline'
-                className='text-foreground/60 flex h-8 items-center justify-between border font-light sm:w-fit'
-                size='sm'
-                onClick={onPostComment}
-                disabled={
-                  // disabled if content is 0 or its only html tags
-                  commentContent.replace(/<[^>]*>?/gm, '').length === 0 || isLoading
-                }>
-                {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
-                Post Comment
-              </Button>
-            </div>
-          </div>
-
-          <Label className='text-foreground/50 text-xs font-light'>
-            Pro Tip: You can use Markdown to format your comment.
-          </Label>
-        </>
+      {isLoggedIn ? (
+        <CommentInput workspaceSlug={workspaceSlug} feedbackId={feedback.id} />
       ) : (
         <div className='border-highlight/40 bg-highlight/20 flex w-full flex-col justify-between gap-4 rounded-md border p-3 sm:h-10 sm:flex-row sm:items-center'>
           <p className='text-foreground/90 text-sm '>Please authenticate to take part in the discussion.</p>
 
           <div className='flex flex-row items-center gap-2'>
-            <AuthModal workspaceSlug={workspaceSlug}>
+            <AuthModal>
               <p className='text-foreground/90 font- hover:text-foreground cursor-pointer text-xs transition-colors'>
                 Login / Sign up →
               </p>
@@ -191,11 +105,11 @@ export default function CommentsList({
       <div className='flex h-full w-full flex-row justify-between pt-5'>
         <div className='flex flex-row items-center gap-1.5'>
           <p className='text-foreground/100 text-sm font-medium'>Comments</p>
-          {totalCommentsAndReplies === null ? (
+          {comments === null ? (
             <Skeleton className='h-6 w-7 rounded-full' />
           ) : (
             <p className='text-foreground/80 bg-secondary select-none rounded-full px-[9px] py-1 text-xs '>
-              {totalCommentsAndReplies}
+              {feedback.comment_count}
             </p>
           )}
         </div>
@@ -210,11 +124,27 @@ export default function CommentsList({
 
       {/* Comments */}
       <div className='flex h-full w-full flex-col gap-5'>
+        {/* Loading State */}
+        {loading && !error ? (
+          <div className='flex w-full flex-col items-center justify-center gap-1 pt-20'>
+            <Icons.Spinner className='text-muted-foreground h-[18px] w-[18px] animate-spin' />
+            <span className='text-secondary-foreground ml-2 text-sm'>Loading comments...</span>
+          </div>
+        ) : null}
+
+        {/* Error State */}
+        {error ? (
+          <FetchError error={error} mutate={mutate} name='comments' isValidating={isValidating} />
+        ) : null}
+
         {/* BUG: This currently forces re-render on each render, a possible way is to also include it in the useCallback but then change logic for scrolling down as it takes a bit until mounted */}
-        {renderComments(sortedComments)}
+        {/* Comments */}
+        {(comments?.length ?? 0) > 0 && !loading && !error && (
+          <div className='flex h-full w-full flex-col gap-5'>{renderComments(sortedComments)}</div>
+        )}
 
         {/* Empty State */}
-        {feedbackComments?.length === 0 && (
+        {comments?.length === 0 && (
           <div className='flex h-full w-full flex-col items-center justify-center pt-10'>
             <p className='text-foreground/60 pb-10 text-sm '>No comments yet</p>
           </div>

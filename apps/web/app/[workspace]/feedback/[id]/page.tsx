@@ -4,11 +4,11 @@ import { notFound } from 'next/navigation';
 import { Avatar, AvatarFallback, AvatarImage } from '@feedbase/ui/components/avatar';
 import { Separator } from '@feedbase/ui/components/separator';
 import { cn } from '@feedbase/ui/lib/utils';
-import { BadgeCheck, CheckCircle2, CircleDashed, CircleDot, CircleDotDashed, XCircle } from 'lucide-react';
+import { BadgeCheck } from 'lucide-react';
 import { getCommentsForFeedbackById } from '@/lib/api/comment';
 import { getPublicWorkspaceFeedback } from '@/lib/api/public';
 import { getCurrentUser } from '@/lib/api/user';
-import { PROSE_CN } from '@/lib/constants';
+import { PROSE_CN, STATUS_OPTIONS } from '@/lib/constants';
 import AnalyticsWrapper from '@/components/analytics/analytics-wrapper';
 import CommentsList from '@/components/feedback/hub/comments-list';
 
@@ -45,30 +45,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// Status options
-const statusOptions = [
-  {
-    label: 'Backlog',
-    icon: CircleDashed,
-  },
-  {
-    label: 'Planned',
-    icon: CircleDotDashed,
-  },
-  {
-    label: 'In Progress',
-    icon: CircleDot,
-  },
-  {
-    label: 'Completed',
-    icon: CheckCircle2,
-  },
-  {
-    label: 'Rejected',
-    icon: XCircle,
-  },
-];
-
 export default async function FeedbackDetails({ params }: Props) {
   const { data: feedbackList, error } = await getPublicWorkspaceFeedback(
     params.workspace,
@@ -89,18 +65,6 @@ export default async function FeedbackDetails({ params }: Props) {
     notFound();
   }
 
-  // Get comments
-  const { data: comments, error: commentsError } = await getCommentsForFeedbackById(
-    params.id,
-    params.workspace,
-    'server',
-    false
-  );
-
-  if (commentsError) {
-    return <div>{commentsError.message}</div>;
-  }
-
   // Get current user
   const { data: user } = await getCurrentUser('server');
 
@@ -112,7 +76,7 @@ export default async function FeedbackDetails({ params }: Props) {
           {/* Back Button */}
           <div className='relative flex'>
             <div className='flex w-full pb-4 lg:w-[200px] lg:pb-0'>
-              <Link href='/feedback' className='h-fit w-fit select-none'>
+              <Link href='/' className='h-fit w-fit select-none'>
                 <p className='text-foreground/60 hover:text-foreground w-full text-sm  transition-colors'>
                   ← Back to Posts
                 </p>
@@ -150,9 +114,9 @@ export default async function FeedbackDetails({ params }: Props) {
                   {(() => {
                     if (feedback.status) {
                       const currentStatus =
-                        statusOptions.find(
+                        STATUS_OPTIONS.find(
                           (option) => option.label.toLowerCase() === feedback.status?.toLowerCase()
-                        ) || statusOptions[0];
+                        ) || STATUS_OPTIONS[0];
 
                       return (
                         <div className='text-foreground/60 flex flex-row items-center gap-2 '>
@@ -239,12 +203,7 @@ export default async function FeedbackDetails({ params }: Props) {
             </div>
 
             {/* Comments */}
-            <CommentsList
-              feedbackComments={comments}
-              feedbackId={feedback.id}
-              workspaceSlug={params.workspace}
-              user={user}
-            />
+            <CommentsList feedback={feedback} workspaceSlug={params.workspace} isLoggedIn={!!user} />
           </div>
         </div>
 
@@ -266,9 +225,9 @@ export default async function FeedbackDetails({ params }: Props) {
               {(() => {
                 if (feedback.status) {
                   const currentStatus =
-                    statusOptions.find(
+                    STATUS_OPTIONS.find(
                       (option) => option.label.toLowerCase() === feedback.status?.toLowerCase()
-                    ) || statusOptions[0];
+                    ) || STATUS_OPTIONS[0];
 
                   return (
                     <div className='text-foreground/60 flex flex-row items-center gap-2 '>

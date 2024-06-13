@@ -318,10 +318,10 @@ export default function CustomizeThemeModal({
           </div>
         </div>
         <ResponsiveDialogFooter>
-          <ResponsiveDialogClose asChild>
+          <ResponsiveDialogClose>
             <Button variant='outline'>Cancel</Button>
           </ResponsiveDialogClose>
-          <ResponsiveDialogClose asChild>
+          <ResponsiveDialogClose>
             <Button
               type='submit'
               disabled={Object.values(colorScheme).some((prop) => prop?.length ?? 0 < 4)}

@@ -1,21 +1,21 @@
 import { useParams } from 'next/navigation';
 import useSWR from 'swr';
-import { FeedbackWithUserProps } from '@/lib/types';
+import { CommentWithUserProps } from '@/lib/types';
 import { fetcher } from '../utils';
 
-export default function useFeedback(publicOnly?: boolean) {
+export default function useFeedbackComments(feedbackId: string) {
   const { slug, workspace } = useParams<{ slug: string; workspace: string }>();
 
   // Set workspace slug to whichever is not null
   const workspaceSlug = slug || workspace;
 
   const {
-    data: feedback,
+    data: comments,
     isValidating,
     error,
     mutate,
-  } = useSWR<FeedbackWithUserProps[]>(
-    publicOnly ? `/api/v1/${workspaceSlug}/feedback` : `/api/v1/workspaces/${workspaceSlug}/feedback`,
+  } = useSWR<CommentWithUserProps[]>(
+    `/api/v1/workspaces/${workspaceSlug}/feedback/${feedbackId}/comments`,
     fetcher,
     {
       revalidateOnFocus: false,
@@ -24,10 +24,10 @@ export default function useFeedback(publicOnly?: boolean) {
   );
 
   return {
-    feedback,
+    comments,
     error,
     mutate,
-    loading: !feedback,
+    loading: !comments,
     isValidating,
   };
 }

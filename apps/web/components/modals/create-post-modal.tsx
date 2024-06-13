@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { Button } from '@feedbase/ui/components/button';
 import { Input } from '@feedbase/ui/components/input';
 import { Label } from '@feedbase/ui/components/label';
@@ -13,67 +13,36 @@ import {
   ResponsiveDialogTrigger,
 } from '@feedbase/ui/components/responsive-dialog';
 import { toast } from 'sonner';
+import { useSWRConfig } from 'swr';
+import useSWRMutation from 'swr/mutation';
+import { actionFetcher, signInAnonymously } from '@/lib/utils';
 import { Icons } from '@/components/shared/icons/icons-static';
 import PostEditor from '@/components/shared/tiptap-editor';
 
-export default function CreatePostModal({
-  workspaceSlug,
-  children,
-}: {
-  workspaceSlug: string;
-  children: React.ReactNode;
-}) {
+export default function CreatePostModal({ children }: { children: React.ReactNode }) {
+  const { workspace: slug } = useParams<{ workspace: string }>();
   const [open, setOpen] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [content, setContent] = useState<string>('');
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const router = useRouter();
+  const { mutate } = useSWRConfig();
 
-  // Submit post
-  function onSubmit() {
-    // Set loading
-    setIsLoading(true);
+  // Create post
+  const { trigger: createPost, isMutating } = useSWRMutation(
+    `/api/v1/workspaces/${slug}/feedback`,
+    actionFetcher,
+    {
+      onSuccess: () => {
+        // Mutate feedback
+        mutate(`/api/v1/${slug}/feedback`);
 
-    // Create promise
-    const promise = new Promise((resolve, reject) => {
-      fetch(`/api/v1/workspaces/${workspaceSlug}/feedback`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title,
-          content,
-        }),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-            reject(data.error);
-          } else {
-            resolve(data);
-          }
-        })
-        .catch((err) => {
-          reject(err.message);
-        });
-    });
-
-    promise
-      .then(() => {
         // Close modal
         setOpen(false);
-
-        // Set loading
-        setIsLoading(false);
-
-        // Reload comments
-        router.refresh();
-      })
-      .catch((err) => {
+      },
+      onError: (err) => {
         toast.error(err);
-      });
-  }
+      },
+    }
+  );
 
   return (
     <ResponsiveDialog open={open} onOpenChange={setOpen}>
@@ -120,9 +89,15 @@ export default function CreatePostModal({
           <Button
             variant='default'
             type='submit'
-            onClick={onSubmit}
-            disabled={!title || content.replace(/<[^>]*>?/gm, '').length === 0 || isLoading}>
-            {isLoading ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
+            onClick={() => {
+              // Sign in anonymously
+              signInAnonymously();
+
+              // Create post
+              createPost({ title, content });
+            }}
+            disabled={!title || content.replace(/<[^>]*>?/gm, '').length === 0 || isMutating}>
+            {isMutating ? <Icons.Spinner className='mr-2 h-4 w-4 animate-spin' /> : null}
             Submit Post
           </Button>
         </ResponsiveDialogFooter>

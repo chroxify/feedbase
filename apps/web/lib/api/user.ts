@@ -37,16 +37,24 @@ export const getUserWorkspaces = withUserAuth<WorkspaceProps['Row'][]>(async (us
     return { data: null, error };
   }
 
-  // Get all workspaces for user
-  const { data: workspaces, error: workspacesError } = await supabase.from('workspace').select();
+  // Get all workspaces user is a member of
+  const { data: workspaces, error: workspacesError } = await supabase
+    .from('workspace_member')
+    .select('workspace (*)')
+    .eq('member_id', user!.id);
 
   // Check for errors
   if (workspacesError || !workspaces) {
     return { data: null, error: { message: workspacesError.message, status: 500 } };
   }
 
+  // Restructure workspaces data
+  const restructuredData = workspaces.map((item) =>
+    'workspace' in item ? item.workspace : item
+  ) as WorkspaceProps['Row'][];
+
   // Return workspaces
-  return { data: workspaces, error: null };
+  return { data: restructuredData, error: null };
 });
 
 // Update user profile

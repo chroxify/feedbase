@@ -52,14 +52,14 @@ export type Database = {
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'changelogs_project_id_fkey';
+            foreignKeyName: 'changelogs_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'changelogs_project_id_fkey';
+            foreignKeyName: 'changelogs_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace_view';
@@ -88,14 +88,14 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'changelog_subscribers_project_id_fkey';
+            foreignKeyName: 'changelog_subscribers_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'changelog_subscribers_project_id_fkey';
+            foreignKeyName: 'changelog_subscribers_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace_view';
@@ -240,21 +240,14 @@ export type Database = {
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'public_feedback_board_id_fkey';
-            columns: ['board_id'];
-            isOneToOne: false;
-            referencedRelation: 'feedback_board';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'public_feedback_workspace_id_fkey';
+            foreignKeyName: 'feedback_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'public_feedback_workspace_id_fkey';
+            foreignKeyName: 'feedback_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace_view';
@@ -286,14 +279,14 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'public_boards_workspace_id_fkey';
+            foreignKeyName: 'public_feedback_board_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'public_boards_workspace_id_fkey';
+            foreignKeyName: 'public_feedback_board_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace_view';
@@ -325,14 +318,14 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'feedback_tags_project_id_fkey';
+            foreignKeyName: 'feedback_tags_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'feedback_tags_project_id_fkey';
+            foreignKeyName: 'feedback_tags_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace_view';
@@ -430,14 +423,14 @@ export type Database = {
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'notifications_project_id_fkey';
+            foreignKeyName: 'notifications_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'notifications_project_id_fkey';
+            foreignKeyName: 'notifications_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace_view';
@@ -451,18 +444,21 @@ export type Database = {
           email: string;
           full_name: string;
           id: string;
+          is_anonymous: boolean;
         };
         Insert: {
           avatar_url?: string | null;
           email: string;
           full_name: string;
           id?: string;
+          is_anonymous?: boolean;
         };
         Update: {
           avatar_url?: string | null;
           email?: string;
           full_name?: string;
           id?: string;
+          is_anonymous?: boolean;
         };
         Relationships: [];
       };
@@ -471,7 +467,6 @@ export type Database = {
           created_at: string;
           custom_domain: string | null;
           custom_domain_verified: boolean;
-          default_board_id: string | null;
           icon: string | null;
           icon_radius: Database['public']['Enums']['icon_radius_type'];
           icon_redirect_url: string | null;
@@ -486,7 +481,6 @@ export type Database = {
           created_at?: string;
           custom_domain?: string | null;
           custom_domain_verified?: boolean;
-          default_board_id?: string | null;
           icon?: string | null;
           icon_radius?: Database['public']['Enums']['icon_radius_type'];
           icon_redirect_url?: string | null;
@@ -501,7 +495,6 @@ export type Database = {
           created_at?: string;
           custom_domain?: string | null;
           custom_domain_verified?: boolean;
-          default_board_id?: string | null;
           icon?: string | null;
           icon_radius?: Database['public']['Enums']['icon_radius_type'];
           icon_redirect_url?: string | null;
@@ -512,15 +505,7 @@ export type Database = {
           sso_auth_enabled?: boolean;
           sso_auth_url?: string | null;
         };
-        Relationships: [
-          {
-            foreignKeyName: 'public_workspace_default_board_fkey';
-            columns: ['default_board_id'];
-            isOneToOne: false;
-            referencedRelation: 'feedback_board';
-            referencedColumns: ['id'];
-          },
-        ];
+        Relationships: [];
       };
       workspace_api_key: {
         Row: {
@@ -555,38 +540,24 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'project_api_keys_creator_id_fkey';
+            foreignKeyName: 'workspace_api_keys_creator_id_fkey';
             columns: ['creator_id'];
             isOneToOne: false;
             referencedRelation: 'profile';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'project_api_keys_project_id_fkey';
+            foreignKeyName: 'workspace_api_keys_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'project_api_keys_project_id_fkey';
+            foreignKeyName: 'workspace_api_keys_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace_view';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'public_workspace_api_key_token_id_fkey';
-            columns: ['token_id'];
-            isOneToOne: false;
-            referencedRelation: 'decrypted_secrets';
-            referencedColumns: ['id'];
-          },
-          {
-            foreignKeyName: 'public_workspace_api_key_token_id_fkey';
-            columns: ['token_id'];
-            isOneToOne: false;
-            referencedRelation: 'secrets';
             referencedColumns: ['id'];
           },
         ];
@@ -666,21 +637,21 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'project_invites_creator_id_fkey';
+            foreignKeyName: 'workspace_invites_creator_id_fkey';
             columns: ['creator_id'];
             isOneToOne: false;
             referencedRelation: 'profile';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'project_invites_project_id_fkey';
+            foreignKeyName: 'workspace_invites_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'project_invites_project_id_fkey';
+            foreignKeyName: 'workspace_invites_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace_view';
@@ -709,21 +680,21 @@ export type Database = {
         };
         Relationships: [
           {
-            foreignKeyName: 'project_members_member_id_fkey';
+            foreignKeyName: 'workspace_members_member_id_fkey';
             columns: ['member_id'];
             isOneToOne: false;
             referencedRelation: 'profile';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'project_members_project_id_fkey';
+            foreignKeyName: 'workspace_members_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace';
             referencedColumns: ['id'];
           },
           {
-            foreignKeyName: 'project_members_project_id_fkey';
+            foreignKeyName: 'workspace_members_workspace_id_fkey';
             columns: ['workspace_id'];
             isOneToOne: false;
             referencedRelation: 'workspace_view';
@@ -737,7 +708,9 @@ export type Database = {
           changelog_preview_style: Database['public']['Enums']['changelog_style_type'];
           changelog_twitter_handle: string | null;
           created_at: string;
+          feedback_anon_posting: boolean;
           feedback_anon_upvoting: boolean;
+          feedback_default_board_id: string;
           id: string;
           workspace_id: string;
         };
@@ -746,7 +719,9 @@ export type Database = {
           changelog_preview_style?: Database['public']['Enums']['changelog_style_type'];
           changelog_twitter_handle?: string | null;
           created_at?: string;
+          feedback_anon_posting?: boolean;
           feedback_anon_upvoting?: boolean;
+          feedback_default_board_id: string;
           id?: string;
           workspace_id: string;
         };
@@ -755,11 +730,20 @@ export type Database = {
           changelog_preview_style?: Database['public']['Enums']['changelog_style_type'];
           changelog_twitter_handle?: string | null;
           created_at?: string;
+          feedback_anon_posting?: boolean;
           feedback_anon_upvoting?: boolean;
+          feedback_default_board_id?: string;
           id?: string;
           workspace_id?: string;
         };
         Relationships: [
+          {
+            foreignKeyName: 'public_workspace_module_feedback_default_board_id_fkey';
+            columns: ['feedback_default_board_id'];
+            isOneToOne: true;
+            referencedRelation: 'feedback_board';
+            referencedColumns: ['id'];
+          },
           {
             foreignKeyName: 'public_workspace_module_workspace_id_fkey';
             columns: ['workspace_id'];

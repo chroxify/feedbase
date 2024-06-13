@@ -158,7 +158,7 @@ export default function UpdateProfileModal({
           </div>
         </div>
         <ResponsiveDialogFooter>
-          <ResponsiveDialogClose asChild>
+          <ResponsiveDialogClose>
             <Button variant='secondary'>Cancel</Button>
           </ResponsiveDialogClose>
           <Button

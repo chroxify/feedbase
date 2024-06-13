@@ -50,7 +50,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         )}
         <SpeedInsights />
         <Toaster closeButton />
-        <NextThemeProvider attribute='class' enableSystem disableTransitionOnChange>
+        <NextThemeProvider attribute='class' defaultTheme='system' enableSystem disableTransitionOnChange>
           <main className={cn('bg-root flex min-h-screen w-full flex-col items-center', GeistSans.className)}>
             {children}
           </main>

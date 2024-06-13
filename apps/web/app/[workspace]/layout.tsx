@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound, redirect } from 'next/navigation';
 import { Separator } from '@feedbase/ui/components/separator';
+import { getWorkspaceBoards } from '@/lib/api/boards';
 import { getWorkspaceModuleConfig } from '@/lib/api/module';
 import { getWorkspaceTheme } from '@/lib/api/theme';
 import { getCurrentUser } from '@/lib/api/user';
@@ -13,6 +14,7 @@ import { ThemeProvider as NextThemeProvider } from '@/components/theme-provider'
 type Props = {
   children: React.ReactNode;
   params: { workspace: string };
+  searchParams: Record<string, string | string[] | undefined>;
 };
 
 // Metadata
@@ -42,9 +44,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-const tabs = [
+const tabs: { name: string; link: string; items?: { name: string; link: string }[] }[] = [
   {
-    name: 'Feedback',
+    name: 'Boards',
+    link: '/',
+    items: [],
+  },
+  {
+    name: 'Roadmap',
     link: '/feedback',
   },
   {
@@ -53,15 +60,10 @@ const tabs = [
   },
 ];
 
-export default async function HubLayout({ children, params }: Props) {
+export default async function HubLayout({ children, params, searchParams }: Props) {
   const headerList = headers();
   const pathname = headerList.get('x-pathname');
   const hostname = headerList.get('host');
-  const currentTab = tabs.find((tab) => tab.link === `/${pathname!.split('/')[1]}`);
-
-  if (!currentTab) {
-    redirect('/feedback');
-  }
 
   // Get workspace data
   const { data: workspace, error } = await getWorkspaceBySlug(params.workspace, 'server', true, false);
@@ -69,6 +71,24 @@ export default async function HubLayout({ children, params }: Props) {
   if (error?.status === 404 || !workspace) {
     notFound();
   }
+
+  // Get workspace boards
+  const { data: boards, error: boardsError } = await getWorkspaceBoards(
+    params.workspace,
+    'server',
+    true,
+    false
+  );
+
+  if (boardsError || !boards) {
+    notFound();
+  }
+
+  // Set workspace boards to tabs
+  tabs[0].items = boards.map((board) => ({
+    name: board.name,
+    link: `/board/${board.name.toLowerCase().replace(/\s+/g, '-')}`,
+  }));
 
   // Get workspace config
   const { data: config } = await getWorkspaceModuleConfig(params.workspace, 'server', true, false);
@@ -80,53 +100,53 @@ export default async function HubLayout({ children, params }: Props) {
     notFound();
   }
 
+  // Get current user
+  const { data: user } = await getCurrentUser('server');
+
   // Check if custom domain is set and redirect to it
   if (workspace.custom_domain && workspace.custom_domain_verified && hostname !== workspace.custom_domain) {
     redirect(`https://${workspace.custom_domain}`);
   }
+
+  // Get current tab
+  const currentTab = tabs.find((tab) => {
+    if (tab.link === pathname) {
+      return true;
+    }
+    if (tab.items) {
+      const subItem = tab.items.find((item) => item.link === pathname);
+      if (subItem) {
+        // Return the subitem directly
+        return subItem;
+      }
+    }
+    return false;
+  });
+
+  // Extract subItem if found, otherwise use the main tab
+  const foundItem = currentTab?.items?.find((item) => item.link === pathname) || currentTab;
 
   // Check if any modules are disabled and remove them from the tabs
   if (!config.changelog_enabled) {
     tabs.splice(1, 1);
   }
 
-  // Get current user
-  const { data: user } = await getCurrentUser('server');
-
   return (
     // <CustomThemeWrapper >
-    <NextThemeProvider
-      attribute='class'
-      defaultTheme={
-        workspaceTheme.theme === 'custom' ? undefined : workspaceTheme.theme === 'light' ? 'light' : 'dark'
-      }>
+    <div className='flex h-full w-full flex-col items-center'>
       {/* Header */}
-      <div className='flex h-full w-full flex-col items-center pt-5'>
-        {/* Header */}
-        {/* <Header tabs={tabs} intialTab={currentTab} workspace={workspace} user={user} config={config} /> */}
+      <Header
+        tabs={tabs}
+        intialTab={foundItem || tabs[0]}
+        workspace={workspace}
+        user={user}
+        workspaceTheme={workspaceTheme}
+      />
 
-        {/* Separator with max screen width */}
-        <Separator className='bg-border/60' />
-
-        {/* Main content */}
-        <div className='flex h-full w-full flex-col items-start justify-start pt-10 lg:max-w-screen-xl'>
-          {children}
-        </div>
+      {/* Main content */}
+      <div className='flex h-full w-full flex-col items-start justify-start py-8 pt-[5.5rem] lg:max-w-screen-xl'>
+        {children}
       </div>
-    </NextThemeProvider>
-
-    //    {/* Powered by */}
-    // {/* TODO: Improve */}
-    // {/* <div className='flex h-full w-full flex-col items-center justify-center gap-4 p-5 pb-9'>
-    // <Button
-    //       variant='secondary'
-    //       size='sm'
-    //       className={cn(
-    //         'text-foreground/80  inline-flex items-center rounded-lg px-3 py-1 w-fit text-md hover:text-foreground',
-    //       )}>
-    //       Powered by Feedbase
-    //   </Button>
-    // </div> */}
-    // </CustomThemeWrapper>
+    </div>
   );
 }

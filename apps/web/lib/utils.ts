@@ -1,3 +1,4 @@
+import { createBrowserClient } from '@supabase/ssr';
 import { SupabaseClient } from '@supabase/supabase-js';
 import { ApiResponse } from './types';
 
@@ -215,8 +216,9 @@ export function formatTimeAgo(date: Date): string {
 
   let interval = seconds / 31536000;
 
-  if (interval > 1) {
-    return `${Math.floor(interval)}y`;
+  // Show the date if it's more than 6 months
+  if (interval > 0.5) {
+    return date.toLocaleDateString();
   }
   interval = seconds / 2592000;
   if (interval > 1) {
@@ -290,4 +292,27 @@ export async function uploadToSupabaseStorage(
     data: publicUrlData?.publicUrl,
     error: null,
   };
+}
+
+export async function signInAnonymously() {
+  // Create a new Supabase client
+  const supabase = createBrowserClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  );
+
+  // Check if user is already logged in
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // If user is already logged in, return
+  if (user) {
+    return { data: user, error: null };
+  }
+
+  // If not, log user in anonymously
+  const { data, error } = await supabase.auth.signInAnonymously();
+
+  return { data, error };
 }

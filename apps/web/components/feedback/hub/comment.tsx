@@ -257,7 +257,7 @@ export default function Comment({ commentData, workspaceSlug, user, children, ..
           {/* Bottom Row */}
           <div className='flex w-full flex-row items-center justify-start gap-1.5'>
             {/* Upvote Button */}
-            <AuthModal workspaceSlug={workspaceSlug} disabled={user !== null}>
+            <AuthModal disabled={user !== null}>
               <Button
                 variant='ghost'
                 className={cn(
@@ -283,7 +283,7 @@ export default function Comment({ commentData, workspaceSlug, user, children, ..
             </AuthModal>
 
             {/* Reply Button */}
-            <AuthModal workspaceSlug={workspaceSlug} disabled={user !== null}>
+            <AuthModal disabled={user !== null}>
               <Button
                 variant='ghost'
                 className='text-foreground/60 hover:text-highlight -ml-2 text-sm  hover:bg-transparent'

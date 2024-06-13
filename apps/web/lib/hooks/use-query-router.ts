@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
-import { ReadonlyURLSearchParams } from 'next/navigation'; // Import only what you need
+import { ReadonlyURLSearchParams } from 'next/navigation';
+
+type QueryParam = [string, string];
 
 const useQueryParamRouter = (
   router: AppRouterInstance,
@@ -8,18 +10,26 @@ const useQueryParamRouter = (
   searchParams: ReadonlyURLSearchParams
 ) =>
   useCallback(
-    (name: string, value: string): void => {
-      // If value is empty, remove the query param
-      if (!value) {
-        const params = new URLSearchParams(searchParams);
-        params.delete(name.toLowerCase());
-        router.push(`${pathname}?${params.toString()}`);
+    (nameOrParams: string | QueryParam[], value?: string): void => {
+      const params = new URLSearchParams(searchParams);
+
+      const updateParam = (name: string, value: string) => {
+        if (!value) {
+          params.delete(name.toLowerCase());
+        } else {
+          params.set(name.toLowerCase(), value.toLowerCase());
+        }
+      };
+
+      if (Array.isArray(nameOrParams)) {
+        nameOrParams.forEach(([name, value]) => {
+          updateParam(name, value);
+        });
+      } else if (typeof nameOrParams === 'string' && value !== undefined) {
+        updateParam(nameOrParams, value);
+      } else {
         return;
       }
-
-      // Set the query param
-      const params = new URLSearchParams(searchParams);
-      params.set(name.toLowerCase(), value.toLowerCase());
 
       // Push the new query string to the router
       router.push(`${pathname}?${params.toString()}`);

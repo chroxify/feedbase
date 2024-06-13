@@ -36,7 +36,7 @@ export async function POST(req: Request, context: { params: { slug: string } }) 
     GET /api/v1/workspaces/:slug/feedback/tags
 */
 export async function GET(req: Request, context: { params: { slug: string } }) {
-  const { data: tags, error } = await getAllFeedbackTags(context.params.slug, 'route');
+  const { data: tags, error } = await getAllFeedbackTags(context.params.slug, 'route', true, false);
 
   // If any errors thrown, return error
   if (error) {

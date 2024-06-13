@@ -1,27 +1,27 @@
 import { useParams } from 'next/navigation';
 import useSWR from 'swr';
-import { WorkspaceThemeProps } from '@/lib/types';
+import { FeedbackBoardProps } from '@/lib/types';
 import { fetcher } from '../utils';
 
-export default function useWorkspaceTheme() {
+export default function useFeedbackBoards() {
   const { slug, workspace } = useParams<{ slug: string; workspace: string }>();
 
   // Set workspace slug to whichever is not null
   const workspaceSlug = slug || workspace;
 
   const {
-    data: workspaceTheme,
+    data: feedbackBoards,
     isValidating,
     error,
     mutate,
-  } = useSWR<WorkspaceThemeProps['Row']>(`/api/v1/workspaces/${workspaceSlug}/theme`, fetcher, {
+  } = useSWR<FeedbackBoardProps['Row'][]>(`/api/v1/workspaces/${workspaceSlug}/boards`, fetcher, {
     revalidateOnFocus: false,
     errorRetryInterval: 30000,
   });
 
   return {
-    workspaceTheme,
-    loading: !workspaceTheme,
+    feedbackBoards,
+    loading: !feedbackBoards,
     mutate,
     error,
     isValidating,
